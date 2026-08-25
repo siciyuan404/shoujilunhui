@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手机回收 · 查价 + 验机 - 志和环保</title>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #666;
+  --accent: #1677ff;
+  --accent-light: #e6f4ff;
+  --border: #e8e8e8;
+  --price-color: #cf1322;
+  --price-bg: #fff1f0;
+  --tab-active: #1677ff;
+  --tab-inactive: #8c8c8c;
+  --hover-bg: #fafafa;
+  --shadow: 0 2px 12px rgba(0,0,0,.08);
+  --radius: 10px;
+  --danger: #d4380d;
+  --danger-bg: #fff2e8;
+  --chip-bg: #f6ffed;
+  --chip-color: #389e0d;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+  color: #fff; padding: 22px 20px 16px; text-align: center;
+}
+.header h1 { font-size: 21px; font-weight: 700; letter-spacing: 1px; }
+.header .subtitle { font-size: 13px; opacity: .85; margin-top: 4px; }
+.header .update-info {
+  display: inline-block; margin-top: 8px; padding: 3px 14px;
+  background: rgba(255,255,255,.18); border-radius: 20px; font-size: 12px;
+}
+.mode-switch { display: inline-flex; margin-top: 14px; background: rgba(255,255,255,.16); border-radius: 24px; padding: 4px; }
+.mode-btn {
+  border: none; background: transparent; color: #fff; cursor: pointer; padding: 7px 22px;
+  border-radius: 20px; font-size: 14px; font-weight: 600; transition: all .2s; font-family: inherit;
+}
+.mode-btn.active { background: #fff; color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+
+/* Search */
+.search-bar { max-width: 800px; margin: -16px auto 0; position: relative; z-index: 10; }
+.search-bar input {
+  width: 100%; padding: 13px 46px 13px 20px; border: none; border-radius: 28px;
+  font-size: 15px; box-shadow: var(--shadow); outline: none; transition: box-shadow .25s;
+}
+.search-bar input:focus { box-shadow: 0 4px 20px rgba(22,119,255,.2); }
+.search-bar .search-icon {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px; fill: var(--text-secondary);
+}
+
+/* Tabs */
+.tabs-wrap { max-width: 900px; margin: 20px auto 0; padding: 0 12px; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0; padding: 7px 16px; border-radius: 20px; cursor: pointer; font-size: 13.5px; font-weight: 500;
+  white-space: nowrap; background: var(--card); color: var(--tab-inactive); border: 1px solid var(--border);
+  transition: all .2s; user-select: none;
+}
+.tab:hover { border-color: var(--accent); color: var(--accent); }
+.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Stats bar */
+.stats-bar {
+  max-width: 900px; margin: 14px auto 0; padding: 0 12px; display: flex; justify-content: space-between;
+  align-items: center; font-size: 13px; color: var(--text-secondary); gap: 8px; flex-wrap: wrap;
+}
+.stats-bar .count { font-weight: 600; color: var(--accent); }
+.stats-bar .sort-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+.sort-btn {
+  padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card);
+  cursor: pointer; font-size: 12px; color: var(--text-secondary); transition: all .15s; font-family: inherit;
+}
+.sort-btn:hover { border-color: var(--accent); color: var(--accent); }
+.sort-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+.bomb-toggle.active { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+
+/* Main content */
+.main { max-width: 900px; margin: 12px auto 40px; padding: 0 12px; }
+
+/* Category section */
+.category-section { margin-bottom: 24px; }
+.category-title {
+  font-size: 15px; font-weight: 700; color: var(--text); padding: 8px 0 6px 4px;
+  border-left: 3px solid var(--accent); padding-left: 10px; margin-bottom: 8px;
+}
+.table-wrap { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: #fafafa; }
+th {
+  padding: 11px 14px; text-align: left; font-size: 12.5px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+}
+td { padding: 10px 14px; font-size: 14px; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--hover-bg); }
+.model-name { font-weight: 550; color: var(--text); }
+.model-link { cursor: pointer; color: var(--text); text-decoration: none; border-bottom: 1px dashed transparent; transition: all .15s; }
+.model-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.price-cell {
+  font-weight: 700; font-size: 15px; color: var(--price-color); background: var(--price-bg);
+  padding: 4px 10px; border-radius: 6px; display: inline-block; min-width: 56px; text-align: center;
+}
+.price-unit { font-size: 11px; font-weight: 400; margin-left: 2px; color: var(--text-secondary); }
+.note-cell { font-size: 12px; color: var(--text-secondary); max-width: 200px; }
+
+/* ===== Verify mode ===== */
+.spec-card {
+  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  margin-bottom: 14px; overflow: hidden; border-left: 4px solid var(--accent);
+}
+.spec-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 16px;
+  background: linear-gradient(90deg, #f7fbff 0%, #ffffff 100%); border-bottom: 1px solid var(--border); gap: 10px; flex-wrap: wrap; }
+.spec-head .spec-title { font-size: 16px; font-weight: 700; }
+.spec-head .spec-title .spec-brand { font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-right: 6px; }
+.spec-head .spec-title .model-link { border-bottom: 1px dashed var(--accent); }
+.chip-badge { background: var(--chip-bg); color: var(--chip-color); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.spec-body { padding: 12px 16px; }
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-bottom: 10px; }
+.spec-item { font-size: 13px; }
+.spec-item .k { color: var(--text-secondary); margin-right: 6px; }
+.spec-item .v { font-weight: 600; }
+.spec-item .v.todo { color: #bfbfbf; font-weight: 500; font-style: italic; }
+.spec-feat { font-size: 13px; color: var(--text); margin-bottom: 10px; line-height: 1.6; }
+.spec-feat .k { color: var(--text-secondary); margin-right: 6px; }
+.bomb-row { margin-top: 6px; }
+.bomb-row .k { font-size: 12.5px; color: var(--danger); font-weight: 700; display: block; margin-bottom: 6px; }
+.bomb-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.bomb-tag { background: var(--danger-bg); color: var(--danger); font-size: 12px; padding: 3px 10px; border-radius: 14px; border: 1px solid #ffccc7; }
+.spec-note { margin-top: 10px; padding: 9px 12px; background: #fafafa; border-radius: 8px; font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Bomb guide */
+.bomb-guide { background: #fff7f5; border: 1px solid #ffccc7; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+.bomb-guide.hidden { display: none; }
+.bomb-guide h3 { font-size: 15px; color: var(--danger); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.bomb-guide-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+.bomb-guide-item { font-size: 12.5px; line-height: 1.5; }
+.bomb-guide-item .bg-type { font-weight: 700; color: var(--danger); }
+.bomb-guide-item .bg-desc { color: var(--text-secondary); display: block; margin-top: 2px; }
+
+/* ===== DETAIL VIEW (redesigned) ===== */
+.detail-back { margin-bottom: 16px; }
+.detail-back button {
+  border: 1px solid var(--border); background: var(--card); color: var(--accent); cursor: pointer;
+  padding: 8px 18px; border-radius: 22px; font-size: 13px; font-weight: 600; font-family: inherit;
+  box-shadow: var(--shadow); transition: all .2s;
+}
+.detail-back button:hover { background: var(--accent-light); transform: translateX(-2px); }
+.detail-card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+
+/* Hero */
+.detail-hero {
+  position: relative; padding: 28px 24px; color: #fff; overflow: hidden;
+  background: linear-gradient(135deg, var(--accent) 0%, #0958d9 100%);
+}
+.detail-hero::after {
+  content: ''; position: absolute; right: -50px; top: -50px; width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%); border-radius: 50%;
+}
+.detail-hero .d-brand { font-size: 13px; opacity: .85; font-weight: 500; letter-spacing: .5px; position: relative; z-index: 1; }
+.detail-hero h2 { font-size: 28px; font-weight: 800; margin: 5px 0 16px; position: relative; z-index: 1; }
+.detail-hero .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; }
+.hero-chip {
+  background: rgba(255,255,255,.2); color: #fff; padding: 6px 15px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,.28); backdrop-filter: blur(4px);
+}
+.hero-year {
+  background: rgba(255,255,255,.14); color: #fff; padding: 6px 15px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,.2);
+}
+.hero-year b { font-size: 15px; }
+
+/* Body grid */
+.detail-body { display: grid; grid-template-columns: 320px 1fr; gap: 18px; padding: 20px 24px 26px; }
+@media (max-width: 720px) { .detail-body { grid-template-columns: 1fr; padding: 16px; } }
+.detail-left { display: flex; flex-direction: column; gap: 14px; }
+@media (min-width: 721px) { .detail-left { position: sticky; top: 16px; align-self: start; } }
+
+/* Appearance card */
+.appearance-card {
+  background: linear-gradient(160deg, #f7f9fc 0%, #eef2f8 100%); border-radius: 14px;
+  border: 1px solid var(--border); padding: 16px; text-align: center;
+}
+.appearance-main {
+  width: 100%; aspect-ratio: 3 / 4; max-height: 380px; border-radius: 10px; background: #fff;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+.appearance-main img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }
+.appearance-placeholder { color: #b0b7c3; font-size: 13px; text-align: center; padding: 30px 10px; }
+.appearance-placeholder .ico { font-size: 46px; display: block; margin-bottom: 10px; opacity: .35; }
+.gallery { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; justify-content: center; }
+.gallery img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; transition: all .15s; }
+.gallery img:hover { border-color: var(--accent); transform: scale(1.06); }
+
+/* Quick stats */
+.quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.qs { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.qs .qs-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.qs .qs-value { font-size: 18px; font-weight: 800; }
+.qs .qs-value.price { color: var(--price-color); }
+.qs .qs-value.todo { color: #bfbfbf; font-weight: 500; font-style: italic; font-size: 14px; }
+
+/* Right column cards */
+.detail-right { display: flex; flex-direction: column; gap: 16px; }
+.info-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.info-card h3 {
+  font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.info-card h3 .bar { width: 4px; height: 16px; background: var(--accent); border-radius: 3px; display: inline-block; }
+.d-spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.d-spec-item { background: #f8fafc; border-radius: 10px; padding: 10px 12px; }
+.d-spec-item .k { color: var(--text-secondary); font-size: 12px; display: block; margin-bottom: 4px; }
+.d-spec-item .v { font-weight: 700; font-size: 14.5px; }
+.d-spec-item .v.todo { color: #bfbfbf; font-weight: 500; font-style: italic; }
+.d-feat { font-size: 14px; line-height: 1.75; color: var(--text); }
+
+/* Motherboard */
+.mb-img { width: 100%; border-radius: 10px; background: #f5f7fa; min-height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px; }
+.mb-img img { width: 100%; height: auto; display: block; cursor: zoom-in; }
+.mb-desc { font-size: 14px; line-height: 1.85; color: var(--text); background: #fafcff; border: 1px solid #e6f0ff; border-radius: 10px; padding: 14px 16px; }
+.mb-desc.empty { color: var(--text-secondary); background: #fafafa; border-color: var(--border); }
+
+/* Bomb card */
+.bomb-card { border-color: #ffccc7; background: #fff7f5; }
+.bomb-card h3 { color: var(--danger); }
+.bomb-card h3 .bar { background: var(--danger); }
+.bomb-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.bomb-tag {
+  background: #fff; color: var(--danger); font-size: 12.5px; font-weight: 600; padding: 6px 12px;
+  border-radius: 8px; border: 1px solid #ffccc7; box-shadow: 0 1px 3px rgba(212,56,13,.08);
+}
+
+/* Note & sources */
+.note-card { background: #fffbe6; border-color: #ffe58f; }
+.note-card h3 { color: #ad6800; }
+.note-card h3 .bar { background: #faad14; }
+.sources { font-size: 12.5px; color: var(--text-secondary); line-height: 1.9; }
+.sources a { color: var(--accent); word-break: break-all; }
+
+/* Lightbox (click image to enlarge) */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,.88); display: none;
+  align-items: center; justify-content: center; z-index: 1000; padding: 24px; cursor: zoom-out;
+}
+.lightbox.open { display: flex; animation: lbFade .2s ease-out; }
+.lightbox.can-scroll { overflow: auto; justify-content: flex-start; align-items: flex-start; cursor: default; }
+.lightbox img {
+  max-width: 95vw; max-height: 90vh; width: auto; height: auto; border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5); cursor: zoom-in; transition: transform .12s;
+}
+.lightbox img.zoom { max-width: none; max-height: none; cursor: grab; }
+.lightbox .lb-close {
+  position: absolute; top: 16px; right: 20px; width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.16); color: #fff; border: none; font-size: 22px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; z-index: 2;
+}
+.lightbox .lb-close:hover { background: rgba(255,255,255,.32); }
+.lightbox .lb-hint {
+  position: absolute; bottom: 16px; left: 0; right: 0; text-align: center;
+  color: rgba(255,255,255,.6); font-size: 12px; pointer-events: none;
+}
+@keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: .3; }
+.empty-state p { font-size: 15px; }
+
+.footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 12px; line-height: 1.8; }
+.footer a { color: var(--accent); text-decoration: none; }
+
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.category-section, .spec-card, .detail-card { animation: fadeInUp .35s ease-out both; }
+.category-section:nth-child(2) { animation-delay: .05s; }
+.category-section:nth-child(3) { animation-delay: .1s; }
+.category-section:nth-child(4) { animation-delay: .15s; }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 18px; }
+  .spec-grid, .d-spec-grid, .bomb-guide-list { grid-template-columns: 1fr; }
+  th { padding: 9px 10px; font-size: 11.5px; }
+  td { padding: 8px 10px; font-size: 13px; }
+  .model-name { font-size: 13px; }
+  .price-cell { font-size: 14px; padding: 3px 8px; }
+  .note-cell { max-width: 120px; font-size: 11px; word-break: break-all; }
+  .stats-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+  .detail-hero h2 { font-size: 20px; }
+}
+mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📱 手机回收 · 查价 + 验机</h1>
+  <div class="subtitle">志和环保手机 · 每日更新 · 快速查价 / 验机防炸弹机</div>
+  <div class="update-info" id="updateInfo">加载中...</div>
+  <div class="mode-switch">
+    <button class="mode-btn active" id="modePrice" onclick="navTo('#price')">💰 查价</button>
+    <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
+  </div>
+</div>
+
+<div class="search-bar" id="searchBar">
+  <input type="text" id="searchInput" placeholder="搜索型号，如：iPhone 15、Mate60、Find X9..." autocomplete="off">
+  <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div class="tabs-wrap" id="tabsWrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <span>共找到 <span class="count" id="resultCount">0</span> 条</span>
+  <div class="sort-btns" id="sortBtns">
+    <button class="sort-btn active" data-sort="default" onclick="setSort('default')">默认排序</button>
+    <button class="sort-btn" data-sort="price-desc" onclick="setSort('price-desc')">价格↓</button>
+    <button class="sort-btn" data-sort="price-asc" onclick="setSort('price-asc')">价格↑</button>
+    <button class="sort-btn" data-sort="name" onclick="setSort('name')">型号A-Z</button>
+  </div>
+  <div class="sort-btns" id="verifyBtns" style="display:none">
+    <button class="sort-btn bomb-toggle active" onclick="toggleBombGuide()">🛡 炸弹机避坑指南</button>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<div class="footer">
+  <p>数据来源：志和环保手机回收报价单 | 收件地址：深圳市福田区华强北兴华大厦A座12楼12Q</p>
+  <p>联系人：张俊勇 13430027367 | 每日图片解析自动更新</p>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="event.stopPropagation();closeLightbox()" aria-label="关闭">×</button>
+  <img id="lightboxImg" src="" alt="放大查看" onclick="event.stopPropagation();toggleZoom(this)">
+  <div class="lb-hint">点击图片放大 / 缩小 · 滚动查看细节 · 点击空白处关闭</div>
+</div>
+
+<script>
+// ===== GLOBAL STATE =====
+let allData = [];
+let specsData = null;
+let currentMode = 'price';
+let lastMode = 'price';
+let currentBrand = '全部';
+let currentSearch = '';
+let currentSort = 'default';
+let bombGuideOpen = true;
+
+// ===== LOAD =====
+Promise.all([
+  fetch('./data.json').then(r => r.json()),
+  fetch('./phone-specs.json').then(r => r.json()).catch(() => null)
+]).then(([priceData, specData]) => {
+  allData = priceData;
+  specsData = specData;
+  document.getElementById('updateInfo').textContent = '📅 报价日期：2026-08-22';
+  route();
+}).catch(err => {
+  document.getElementById('mainContent').innerHTML =
+    '<div class="empty-state"><p>数据加载失败，请检查 data.json / phone-specs.json 文件</p></div>';
+});
+
+// ===== ROUTING (hash based, shareable detail pages) =====
+function navTo(hash) { location.hash = hash; }
+window.addEventListener('hashchange', route);
+
+function route() {
+  const h = location.hash || '';
+  if (h.startsWith('#detail|')) {
+    const parts = h.slice(8).split('|');
+    const brand = decodeURIComponent((parts[0] || '').replace(/\+/g, ' '));
+    const model = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
+    showListControls(false);
+    renderDetail(brand, model);
+    return;
+  }
+  // list mode
+  const mode = (h === '#verify') ? 'verify' : 'price';
+  currentMode = mode;
+  lastMode = mode;
+  currentBrand = '全部';
+  showListControls(true);
+  updateModeButtons();
+  initTabs();
+  render();
+}
+
+function showListControls(show) {
+  document.getElementById('searchBar').style.display = show ? 'block' : 'none';
+  document.getElementById('tabsWrap').style.display = show ? 'block' : 'none';
+  document.getElementById('statsBar').style.display = show ? 'flex' : 'none';
+}
+function updateModeButtons() {
+  document.getElementById('modePrice').classList.toggle('active', currentMode === 'price');
+  document.getElementById('modeVerify').classList.toggle('active', currentMode === 'verify');
+  document.getElementById('sortBtns').style.display = currentMode === 'price' ? 'flex' : 'none';
+  document.getElementById('verifyBtns').style.display = currentMode === 'verify' ? 'flex' : 'none';
+  document.getElementById('searchInput').placeholder =
+    currentMode === 'price' ? '搜索型号，如：iPhone 15、Mate60、Find X9...'
+                            : '搜索机型，如：iPhone 15、Mate70、Find X9...';
+}
+function goBack() { navTo('#' + lastMode); }
+
+// ===== BOMB GUIDE TOGGLE =====
+function toggleBombGuide() {
+  bombGuideOpen = !bombGuideOpen;
+  document.querySelector('.bomb-toggle').classList.toggle('active', bombGuideOpen);
+  render();
+}
+
+// ===== TABS (rebuilt per mode) =====
+function initTabs() {
+  const tabsEl = document.getElementById('tabs');
+  let brands = ['全部'];
+  if (currentMode === 'price') {
+    const seen = new Set();
+    allData.forEach(item => { if (!seen.has(item.brand)) { brands.push(item.brand); seen.add(item.brand); } });
+  } else {
+    if (specsData && specsData.specs) {
+      const seen = new Set();
+      specsData.specs.forEach(s => { if (!seen.has(s.brand)) { brands.push(s.brand); seen.add(s.brand); } });
+    }
+  }
+  if (!brands.includes(currentBrand)) currentBrand = '全部';
+  tabsEl.innerHTML = brands.map(b =>
+    `<div class="tab${b === currentBrand ? ' active' : ''}" onclick="selectBrand('${b}')">${b}</div>`
+  ).join('');
+}
+function selectBrand(brand) {
+  currentBrand = brand;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent === brand));
+  render();
+}
+
+// ===== SEARCH =====
+const searchInput = document.getElementById('searchInput');
+let searchTimer;
+searchInput.addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { currentSearch = e.target.value.trim().toLowerCase(); render(); }, 200);
+});
+
+// ===== SORT (price mode) =====
+function setSort(sort) {
+  currentSort = sort;
+  document.querySelectorAll('#sortBtns .sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sort));
+  render();
+}
+
+// ===== RENDER =====
+function render() {
+  if (currentMode === 'price') renderPrice();
+  else renderVerify();
+}
+
+// ---------- PRICE MODE ----------
+function renderPrice() {
+  let filtered = [];
+  allData.forEach(group => {
+    if (currentBrand !== '全部' && group.brand !== currentBrand) return;
+    group.models.forEach(m => {
+      if (currentSearch && !m.model.toLowerCase().includes(currentSearch)) return;
+      filtered.push({ brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '' });
+    });
+  });
+  if (currentSort === 'price-desc') filtered.sort((a, b) => parseInt(b.price) - parseInt(a.price));
+  else if (currentSort === 'price-asc') filtered.sort((a, b) => parseInt(a.price) - parseInt(b.price));
+  else if (currentSort === 'name') filtered.sort((a, b) => a.model.localeCompare(b.model, 'zh-CN'));
+
+  document.getElementById('resultCount').textContent = filtered.length;
+  if (filtered.length === 0) {
+    document.getElementById('mainContent').innerHTML =
+      `<div class="empty-state"><div class="icon">🔍</div><p>没有找到匹配的型号</p><p style="font-size:13px;margin-top:6px">试试其他关键词或切换品牌</p></div>`;
+    return;
+  }
+  const byCategory = {};
+  filtered.forEach(item => { (byCategory[item.category] = byCategory[item.category] || []).push(item); });
+  let html = '';
+  Object.keys(byCategory).forEach(cat => {
+    html += `<div class="category-section"><div class="category-title">${cat}</div>`;
+    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(点数)</th><th>备注</th></tr></thead><tbody>`;
+    byCategory[cat].forEach(item => {
+      const modelName = highlightMatch(item.model, currentSearch);
+      const noteHtml = item.note ? highlightMatch(item.note, currentSearch) : '-';
+      const link = `onclick="navTo('#detail|${enc(item.brand)}|${enc(item.model)}')"`;
+      html += `<tr>
+        <td><span class="model-name"><span class="model-link" ${link}>${modelName}</span></span></td>
+        <td><span class="price-cell">${item.price}<span class="price-unit">点</span></span></td>
+        <td class="note-cell">${noteHtml}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+// ---------- VERIFY MODE ----------
+function renderVerify() {
+  if (!specsData || !specsData.specs) {
+    document.getElementById('mainContent').innerHTML = '<div class="empty-state"><p>验机资料加载失败</p></div>';
+    return;
+  }
+  let list = specsData.specs.filter(s => {
+    if (currentBrand !== '全部' && s.brand !== currentBrand) return false;
+    if (currentSearch && !s.model.toLowerCase().includes(currentSearch)) return false;
+    return true;
+  });
+  document.getElementById('resultCount').textContent = list.length;
+  if (list.length === 0) {
+    document.getElementById('mainContent').innerHTML =
+      `<div class="empty-state"><div class="icon">🔍</div><p>没有找到匹配的机型</p><p style="font-size:13px;margin-top:6px">试试其他关键词或切换品牌</p></div>`;
+    return;
+  }
+  let html = '';
+  if (bombGuideOpen && specsData.meta && specsData.meta.bombGuide) {
+    html += `<div class="bomb-guide" id="bombGuide"><h3>🛡 炸弹机避坑指南（验机前必看）</h3><div class="bomb-guide-list">`;
+    specsData.meta.bombGuide.forEach(g => {
+      html += `<div class="bomb-guide-item"><span class="bg-type">${g.type}</span><span class="bg-desc">${g.desc}</span></div>`;
+    });
+    html += `</div></div>`;
+  }
+  list.forEach(s => {
+    const modelName = highlightMatch(s.model, currentSearch);
+    const currentRef = s.currentRef && s.currentRef.trim() ? s.currentRef : '待实测';
+    const refClass = (s.currentRef && s.currentRef.trim()) ? 'v' : 'v todo';
+    const bombTags = (s.bombLines || []).map(b => `<span class="bomb-tag">${b}</span>`).join('');
+    const link = `onclick="navTo('#detail|${enc(s.brand)}|${enc(s.model)}')"`;
+    html += `<div class="spec-card">
+      <div class="spec-head">
+        <div class="spec-title"><span class="spec-brand">${s.brand}</span><span class="model-link" ${link}>${modelName}</span></div>
+        <div class="chip-badge">${s.chip}</div>
+      </div>
+      <div class="spec-body">
+        <div class="spec-grid">
+          <div class="spec-item"><span class="k">发布年份</span><span class="v">${s.releaseYear || '-'}</span></div>
+          <div class="spec-item"><span class="k">电流参考</span><span class="${refClass}">${currentRef}</span></div>
+        </div>
+        <div class="spec-feat"><span class="k">识别特征</span>${s.features || '-'}</div>
+        <div class="bomb-row"><span class="k">炸弹机红线（逐条排查）</span><div class="bomb-tags">${bombTags}</div></div>
+        ${s.note ? `<div class="spec-note">💡 ${s.note}</div>` : ''}
+      </div>
+    </div>`;
+  });
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+// ---------- DETAIL MODE ----------
+function renderDetail(brand, model) {
+  const spec = (specsData && specsData.specs)
+    ? specsData.specs.find(s => s.brand === brand && s.model === model)
+    : null;
+  const price = findPrice(brand, model);
+
+  const heroBrand = spec ? spec.brand : brand;
+  const heroModel = spec ? spec.model : model;
+  const heroChip = spec ? spec.chip : '—';
+  const heroYear = spec ? (spec.releaseYear || '—') : '—';
+  const gal = (spec && spec.gallery && spec.gallery.length) ? spec.gallery : [];
+  const ref = (spec && spec.currentRef && spec.currentRef.trim()) ? spec.currentRef : '待实测';
+  const refCls = (spec && spec.currentRef && spec.currentRef.trim()) ? 'qs-value' : 'qs-value todo';
+
+  let html = `<div class="detail-back"><button onclick="goBack()">← 返回列表</button></div>`;
+  html += `<div class="detail-card">`;
+
+  // Hero
+  html += `<div class="detail-hero">
+    <div class="d-brand">${heroBrand}</div>
+    <h2>${heroModel}</h2>
+    <div class="hero-badges">
+      <span class="hero-chip">${heroChip}</span>
+      <span class="hero-year">发布年份 <b>${heroYear}</b></span>
+    </div>
+  </div>`;
+
+  // Body
+  html += `<div class="detail-body"><div class="detail-left">`;
+
+  // Appearance card
+  html += `<div class="appearance-card">`;
+  if (spec && spec.appearanceImg) {
+    html += `<div class="appearance-main"><img src="${spec.appearanceImg}" alt="${heroModel} 外观" loading="lazy" onclick="openLightbox('${spec.appearanceImg}')" onerror="this.parentNode.innerHTML='<div class=\\'appearance-placeholder\\'><span class=\\'ico\\'>📱</span>图片加载失败</div>'"></div>`;
+    if (gal.length) {
+      html += `<div class="gallery">` + gal.map(u => `<img src="${u}" alt="外观图" loading="lazy" onclick="openLightbox('${u}')" onerror="this.style.display='none'">`).join('') + `</div>`;
+    }
+  } else {
+    html += `<div class="appearance-main"><div class="appearance-placeholder"><span class="ico">📱</span>暂无网络外观图片</div></div>`;
+  }
+  html += `</div>`;
+
+  // Quick stats
+  html += `<div class="quick-stats">
+    <div class="qs"><div class="qs-label">回收报价</div><div class="qs-value price">${price ? price + ' 点' : '查价页'}</div></div>
+    <div class="qs"><div class="qs-label">电流参考</div><div class="${refCls}">${ref}</div></div>
+  </div>`;
+
+  html += `</div>`; // end left
+
+  // Right column
+  html += `<div class="detail-right">`;
+
+  // Specs
+  if (spec) {
+    html += `<div class="info-card"><h3><span class="bar"></span>规格速览</h3><div class="d-spec-grid">
+      <div class="d-spec-item"><span class="k">芯片 / 处理器</span><span class="v">${spec.chip || '-'}</span></div>
+      <div class="d-spec-item"><span class="k">发布年份</span><span class="v">${spec.releaseYear || '-'}</span></div>
+    </div>`;
+    if (spec.features) {
+      html += `<div class="d-feat" style="margin-top:14px"><span style="color:var(--text-secondary);font-weight:600;font-size:12.5px">识别特征</span><br>${spec.features}</div>`;
+    }
+    html += `</div>`;
+  } else {
+    html += `<div class="info-card"><h3><span class="bar"></span>说明</h3><div class="d-feat">该机型暂无详细档案，仅有报价信息。点击「💰 查价」页可查看行情。</div></div>`;
+  }
+
+  // Motherboard
+  html += `<div class="info-card"><h3><span class="bar"></span>🧩 主板结构</h3>`;
+  if (spec && spec.motherboardImg) {
+    html += `<div class="mb-img"><img src="${spec.motherboardImg}" alt="${heroModel} 主板" loading="lazy" onclick="openLightbox('${spec.motherboardImg}')" onerror="this.parentNode.innerHTML='<div class=\\'appearance-placeholder\\'><span class=\\'ico\\'>🔧</span>主板图加载失败</div>'"></div>`;
+  }
+  if (spec && spec.motherboardDesc) {
+    html += `<div class="mb-desc">${spec.motherboardDesc}</div>`;
+  } else if (!(spec && spec.motherboardImg)) {
+    html += `<div class="mb-desc empty">暂无主板结构资料，待补充。</div>`;
+  }
+  html += `</div>`;
+
+  // Bomb lines
+  if (spec && spec.bombLines && spec.bombLines.length) {
+    html += `<div class="info-card bomb-card"><h3><span class="bar"></span>⚠️ 炸弹机红线</h3><div class="bomb-tags">` +
+      spec.bombLines.map(b => `<span class="bomb-tag">${b}</span>`).join('') + `</div></div>`;
+  }
+
+  // Note
+  if (spec && spec.note) {
+    html += `<div class="info-card note-card"><h3><span class="bar"></span>💡 验机备注</h3><div class="d-feat" style="margin-top:0">${spec.note}</div></div>`;
+  }
+
+  // Sources
+  if (spec && spec.sources && spec.sources.length) {
+    html += `<div class="info-card"><h3><span class="bar"></span>🔗 数据来源</h3><div class="sources">` +
+      spec.sources.map(s => `<div>• ${s}</div>`).join('') + `</div></div>`;
+  }
+
+  html += `</div>`; // end right
+  html += `</div>`; // end body
+  html += `</div>`; // end card
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+function swapDetailImg(src) {
+  const m = document.querySelector('.appearance-main');
+  if (m) m.innerHTML = '<img src="' + src + '" alt="外观图" loading="lazy">';
+}
+
+/* Lightbox: click to enlarge, click again for full-res, scroll to inspect detail */
+function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  img.src = src;
+  img.classList.remove('zoom');
+  lb.classList.remove('can-scroll');
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open', 'can-scroll');
+  document.body.style.overflow = '';
+}
+function toggleZoom(img) {
+  const zoomed = img.classList.toggle('zoom');
+  img.parentNode.classList.toggle('can-scroll', zoomed);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+function findPrice(brand, model) {
+  let exact = null, fuzzy = null;
+  allData.forEach(g => {
+    g.models.forEach(m => {
+      const ml = m.model.toLowerCase();
+      if (ml === model.toLowerCase()) exact = m.price;
+      else if (!fuzzy && (ml.includes(model.toLowerCase()) || model.toLowerCase().includes(ml))) fuzzy = m.price;
+    });
+  });
+  return exact || fuzzy;
+}
+
+function enc(s) { return encodeURIComponent(s); }
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const idx = text.toLowerCase().indexOf(query);
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+}
+</script>
+</body>
+</html>

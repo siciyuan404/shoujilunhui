@@ -1,0 +1,2063 @@
+{
+  "meta": {
+    "title": "手机验机知识库",
+    "updated": "2026-08-25",
+    "note": "芯片数据经联网核对（ZOL、厂商官网、devices-arena 等）。电流参考(安培)留空，待你实测后回填。炸弹机红线为回收界通用陷阱，验机时逐条排查。",
+    "bombGuide": [
+      {
+        "type": "扩容机",
+        "desc": "存储芯片被更换，设置里显示的容量与实际不符（如显示256G实为64G）。验机：设置-关于本机-容量 与 电脑读取/AT命令 核对，或用验机软件读出真实 NAND。"
+      },
+      {
+        "type": "改版/改码机",
+        "desc": "通过软件或换字库把低配/有锁机改成高配/无锁国行（型号号码、监管状态被篡改）。验机：查型号号码(MODEL)与序列号是否匹配销售地，GSX/爱思/沙漏全绿仍可能改码，需核对底层。"
+      },
+      {
+        "type": "ID锁/激活锁",
+        "desc": "苹果机主未退出 Apple ID，刷机后无法激活。验机：设置-Apple ID 是否已退出，或还原后能否激活。"
+      },
+      {
+        "type": "监管机",
+        "desc": "企业/机构管控设备，含远程锁、丢失可锁死。验机：设置-通用-设备管理/VPN与设备管理 有无配置描述文件；苹果查配置锁(configuration lock)。"
+      },
+      {
+        "type": "卡贴机/有锁机",
+        "desc": "美版/日版等有网络锁的机器，靠卡贴伪装无锁。验机：拔卡重启能否直接信号，关于本机运营商锁状态；卡贴机收购价大幅折价。"
+      },
+      {
+        "type": "鼓包/电池异常",
+        "desc": "电池鼓包顶屏、有起火风险（即“炸弹机”字面风险）。验机：看屏幕是否顶起、后盖是否翘起，测电池健康与内阻，鼓包一律拒收。"
+      },
+      {
+        "type": "进水/腐蚀",
+        "desc": "进水导致主板腐蚀、后期必坏。验机：SIM卡槽/螺丝/防水标是否变红，主板有无霉点，气密性测试（防水机型）。"
+      },
+      {
+        "type": "黑名单/丢失模式",
+        "desc": "被盗抢报失设备，IMEI 入网黑名单无法使用。验机：查 IMEI 黑白名单，苹果查激活锁/丢失模式。"
+      },
+      {
+        "type": "故障/暗病机",
+        "desc": "隐藏的触摸失灵、信号弱、面容坏、无基带等。验机：逐项功能测试+测电流（待机/开机/负载不同阶段的电流曲线是否异常）。"
+      }
+    ]
+  },
+  "specs": [
+    {
+      "brand": "苹果",
+      "model": "iPhone 15",
+      "chip": "A16 仿生",
+      "releaseYear": 2023,
+      "features": "6.1″ OLED 60Hz；灵动岛；USB-C(USB2.0)；铝中框",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "15/15 Plus 用 A16；Pro 系列用 A17 Pro。验机重点：关于本机容量是否与实际一致、Apple ID 是否已退出。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/About_iPhone_15_Blue.jpg/500px-About_iPhone_15_Blue.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Apple_iPhone_15.jpeg/500px-Apple_iPhone_15.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Apple_iPhone_15.jpg/500px-Apple_iPhone_15.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Apple_iPhone_15_Pro.jpg/500px-Apple_iPhone_15_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用单层（非Pro叠层三明治）逻辑板，由5颗立柱螺丝固定、9个按压连接器与中框相连；A16 SoC与SK海力士LPDDR5内存采用PoP叠封，配Kioxia NAND、高通/苹果电源管理IC、TI充电/充电IC、Broadcom无线充电控制器、NXP NFC与USI Wi‑Fi/蓝牙模块。面容ID原深感模组、前置传感器、听筒扬声器及L形电池拉环均通过按压排线连接，背板玻璃可独立拆下。iFixit曾因软件部件配对限制对15系列给出偏低临时评分（约4/10），但机械结构本身模块化。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/iPhone+15+Logic+Board+Replacement/165728",
+        "https://www.allpcb.com/allelectrohub/iphone-15-series-teardown-highlights"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 15 Plus",
+      "chip": "A16 仿生",
+      "releaseYear": 2023,
+      "features": "6.7″ OLED 60Hz；灵动岛；USB-C",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 15，仅屏幕/电池更大。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/IPhone_15_%26_iPhone_15_Plus.jpg/500px-IPhone_15_%26_iPhone_15_Plus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/IPhone_15_Plus.jpeg/500px-IPhone_15_Plus.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/IPhone_15_and_15_Plus_in_Apple_Store_-_1.jpg/500px-IPhone_15_and_15_Plus_in_Apple_Store_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "与iPhone 15同平台，采用单层逻辑板（非Pro叠层结构），由立柱螺丝固定、多个按压连接器连接；A16 SoC配SK海力士LPDDR5（PoP叠封），Kioxia NAND、高通PMIC、TI充电IC、Broadcom无线充电、NXP NFC、USI Wi‑Fi/蓝牙。面容ID原深感模组、前置传感器、听筒、L形电池拉环等以排线连接，背板玻璃可独立更换。无Pro的石墨散热膜与叠层主板，散热以中框+石墨贴为主；iFixit曾对15系列给出受部件配对影响的偏低临时评分（约4/10）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/iPhone+15+Logic+Board+Replacement/165728",
+        "https://www.ifixit.com/Device/iPhone_16_Plus?revisionid=1289777"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 15 Pro",
+      "chip": "A17 Pro",
+      "releaseYear": 2023,
+      "features": "6.1″ OLED 120Hz；钛金属中框；Action Button；USB-C(USB3.0)",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "首款 3nm 芯片 A17 Pro。注意面容/灵动岛排线暗病。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/About_iPhone_15_Pro_Max_Natural_Titanium.jpg/500px-About_iPhone_15_Pro_Max_Natural_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Apple_iPhone_15_Pro.jpg/500px-Apple_iPhone_15_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Back_view_of_iPhone_15_Pro_Natural_titanium.jpg/500px-Back_view_of_iPhone_15_Pro_Natural_titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Front_of_iPhone_15_Pro_Max.jpg/500px-Front_of_iPhone_15_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用双层叠板（sandwich）逻辑板，A17 Pro SoC位于三明治中央、下方叠封SK海力士8GB LPDDR5，正面为Kioxia NAND；覆盖更大面积的石墨散热膜（实测散热改善有限），L形电池带拉环。主板含高通骁龙X70基带、USI Wi‑Fi/蓝牙、NXP NFC、UWB、ST eSIM安全芯片及多颗电源管理IC，面容ID原深感模组与激光雷达集中于灵动岛/后置区域。PBKreviews拆解评分7/10，iFixit因软件部件配对限制给出临时评分4/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.techspot.com/news/100251-teardown-shows-off-iphone-15-pro-internal-hardware.html",
+        "https://wccftech.com/first-iphone-15-pro-teardown-gets-published/",
+        "https://www.allpcb.com/allelectrohub/iphone-15-series-teardown-highlights"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 15 Pro Max",
+      "chip": "A17 Pro",
+      "releaseYear": 2023,
+      "features": "6.7″ OLED 120Hz；钛金属中框；5x 长焦",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 15 Pro，长焦升级。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/About_iPhone_15_Pro_Max_Natural_Titanium.jpg/500px-About_iPhone_15_Pro_Max_Natural_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Back_view_of_iPhone_15_Pro_Max_Natural_Titanium.jpg/500px-Back_view_of_iPhone_15_Pro_Max_Natural_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Back_view_of_iPhone_15_Pro_Max_Natural_titanium.jpg/500px-Back_view_of_iPhone_15_Pro_Max_Natural_titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Front_of_iPhone_15_Pro_Max.jpg/500px-Front_of_iPhone_15_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "与15 Pro同款双层叠板逻辑板，A17 Pro（APL1V02）叠封SK海力士8GB LPDDR5，背面Kioxia 256GB NAND；高通骁龙X70基带、USI Wi‑Fi/蓝牙、NXP NFC、Apple UWB、ST eSIM安全元件，并配备5倍四棱镜长焦与激光雷达。L形电池带拉环，石墨散热膜面积更大。可维修性与15 Pro一致：PBKreviews约7/10，iFixit临时4/10（部件配对限制）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/iPhone+15+Pro+Max+Chip+ID/165320",
+        "https://www.techspot.com/news/100251-teardown-shows-off-iphone-15-pro-internal-hardware.html"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 16",
+      "chip": "A18",
+      "releaseYear": 2024,
+      "features": "6.1″ OLED 60Hz；相机控制键；USB-C",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "16/16 Plus/16e 均为 A18；Pro 系列为 A18 Pro。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/About_iPhone_16_Ultramarine.jpg/500px-About_iPhone_16_Ultramarine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/About_iPhone_16_in_Pink.jpg/500px-About_iPhone_16_in_Pink.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Back_view_of_iPhone_16_Ultramarine.jpg/500px-Back_view_of_iPhone_16_Ultramarine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Back_view_of_iPhone_16_in_Pink.jpg/500px-Back_view_of_iPhone_16_in_Pink.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用两块双面PCB组成的叠层逻辑板（RF板+主板），A18（APL1V08）叠封SK海力士8GB LPDDR5X于主板正面，背面Kioxia 128GB NAND；高通SDX71M调制解调器、USI Wi‑Fi/蓝牙、NXP NFC+UWB、Broadcom前端模块、TI充电/USB-C控制器。新增铁磁性散热片（焊接在RF半板内侧、覆盖约一半SoC的Neural Engine），配合导热硅脂散热；背板玻璃与屏幕均可独立拆下（双入口设计）。iFixit可维修性约7/10，相机控制键激光焊接于中框（损坏需换中框）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://ifixit.com/Guide/iPhone+16+Chip+ID/177222",
+        "https://www.ifixit.com/News/100352/we-hot-wired-the-iphone-16"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 16 Plus",
+      "chip": "A18",
+      "releaseYear": 2024,
+      "features": "6.7″ OLED 60Hz；相机控制键",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 16。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/About_iPhone_16_Plus_Teal.jpg/500px-About_iPhone_16_Plus_Teal.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/About_iPhone_16_Plus_in_Pink.jpg/500px-About_iPhone_16_Plus_in_Pink.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/About_iPhone_16_Plus_in_dark_mode.jpg/500px-About_iPhone_16_Plus_in_dark_mode.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Back_view_of_iPhone_16_Plus_Black.jpg/500px-Back_view_of_iPhone_16_Plus_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "与iPhone 16同平台，采用两块双面PCB叠层逻辑板，A18叠封SK海力士8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙、NXP NFC/UWB、Broadcom/Skyworks/Qorvo前端模块、TI充电与USB-C控制器。散热为A18+铁磁散热片方案，背板/屏幕双入口可独立拆。可维修性约7/10，与16一致。",
+      "motherboardImg": null,
+      "sources": [
+        "https://ifixit.com/Guide/iPhone+16+Chip+ID/177222",
+        "https://www.ifixit.com/Device/iPhone_16_Plus?revisionid=1289777"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 16e",
+      "chip": "A18",
+      "releaseYear": 2025,
+      "features": "6.1″ OLED 60Hz；单摄；Apple C1 基带",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "入门款，C1 自研基带。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/IPhone_16e.png/500px-IPhone_16e.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/IPhone_16e_-_1.jpg/500px-IPhone_16e_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/IPhone_16e_-_2.jpg/500px-IPhone_16e_-_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/IPhone_16e_2025.jpg/500px-IPhone_16e_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用双层主板（逻辑板+射频板），A18（APL1V08）叠封SK海力士8GB LPDDR5X，主板背面Kioxia 128GB NAND；最大亮点是首发苹果自研C1 5G基带（APL1114），配USI Wi‑Fi/蓝牙、NXP SN300 NFC（含eSIM安全元件）、Broadcom前端、Renesas/ST无线充电与PMIC。内部结构与iPhone 15相似，无灵动岛、单摄无LiDAR，电池采用通电脱胶粘合剂（无拉环），容量4005mAh。iFixit可维修性评分约7/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://zh.ifixit.com/Guide/Identificaci%C3%B3n+del+chip+del+iPhone+16e/182268",
+        "https://zh.ifixit.com/Teardown/iPhone+16e+%E6%8B%86%E8%A7%A3%E6%95%99%E7%A8%8B/182375"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 16 Pro",
+      "chip": "A18 Pro",
+      "releaseYear": 2024,
+      "features": "6.3″ OLED 120Hz；钛中框；相机控制键；5x 长焦",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "A18 Pro 性能更强。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/About_iPhone_16_Pro_White_Titanium.jpg/500px-About_iPhone_16_Pro_White_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Back_view_of_iPhone_16_Pro_White_Titanium.jpg/500px-Back_view_of_iPhone_16_Pro_White_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Compare_iPhone_16_Pro_with_the_iPhone_15_Pro.jpg/500px-Compare_iPhone_16_Pro_with_the_iPhone_15_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/IPhone_16_Pro_Max_Desert_Titanium_Rear.png/500px-IPhone_16_Pro_Max_Desert_Titanium_Rear.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用两块双面PCB叠层逻辑板（RF板+主板），A18 Pro（APL1V07）叠封美光8GB LPDDR5X于主板正面，背面Kioxia 128GB NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙、NXP NFC+UWB（USI 339M00326）、Broadcom/Skyworks/Qorvo前端、TI充电/USB-C/显示电源、ST eSIM安全芯片。双入口（背板/屏幕均可拆）设计，Taptic Engine可不拆电池更换，相机控制键置于中框。iFixit可维修性评分约7/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://zh.ifixit.com/Guide/%D0%98%D0%B4%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%B8+%D1%87%D0%B8%D0%BF%D0%BE%D0%B2+iPhone+16+Pro/177358",
+        "https://www.ifixit.com/News/100693/more-modular-than-ever-before-iphone-16-pro-and-pro-max-teardown"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 16 Pro Max",
+      "chip": "A18 Pro",
+      "releaseYear": 2024,
+      "features": "6.9″ OLED 120Hz；钛中框；相机控制键；5x 长焦",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "最大屏旗舰。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/About_iPhone_16_Pro_Max_Natural_Titanium.jpg/500px-About_iPhone_16_Pro_Max_Natural_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Back_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg/500px-Back_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/IPhone_16_Pro_Max_Desert_Titanium_Rear.png/500px-IPhone_16_Pro_Max_Desert_Titanium_Rear.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/IPhone_16_Pro_Max_White_256g.jpg/500px-IPhone_16_Pro_Max_White_256g.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "与16 Pro同款叠层逻辑板，A18 Pro（APL1V07）叠封美光8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙与UWB、NXP NFC、Broadcom/Skyworks/Qorvo前端、TI充电/USB-C/显示电源、ST eSIM安全芯片、激光雷达。钛金属中框，双入口设计，5倍四棱镜长焦。可维修性约7/10（与16 Pro一致）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/News/100693/more-modular-than-ever-before-iphone-16-pro-and-pro-max-teardown",
+        "https://www.ifixit.com/Guide/iPhone+16+Pro+Chip+ID/177358"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 17",
+      "chip": "A19",
+      "releaseYear": 2025,
+      "features": "6.3″ OLED 120Hz(标准版首上高刷)；相机控制键",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "17/17e 用 A19；Pro 系列及 Air 用 A19 Pro。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Black_iPhone_17.jpg/500px-Black_iPhone_17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Cosmic_Orange_iPhone_17_Pro_Max.jpg/500px-Cosmic_Orange_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Deep_Blue_iPhone_17_Pro_Max.jpg/500px-Deep_Blue_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/IPhone_17%2C_Air%2C_17_Pro%2C_and_Pro_max.jpg/500px-IPhone_17%2C_Air%2C_17_Pro%2C_and_Pro_max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用紧凑的叠层/双层逻辑板，A19（3nm）叠封LPDDR5X内存，配苹果自研C1蜂窝基带与N1 Wi‑Fi 7/蓝牙6/Thread无线芯片、USI模块、NXP NFC、高通前端与PMIC。面容ID原深感模组、前置Center Stage摄像头、听筒扬声器、电池拉环（通电脱胶）等以按压排线连接，eSIM-only无实体SIM。可维修性约6/10（iFixit屏幕维修评分偏低，主因胶黏与部件配对）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://tech.news.am/eng/print/6420/",
+        "https://iphonewired.com/industry/1046059/",
+        "https://pt.ifixit.com/Device/iPhone_17"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 17e",
+      "chip": "A19",
+      "releaseYear": 2026,
+      "features": "6.1″ OLED；入门定位",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "17 系列入门款。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/IPhone_17e.png/500px-IPhone_17e.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/IPhone_17e_%28Soft_Pink%29.png/500px-IPhone_17e_%28Soft_Pink%29.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/IPhone_17e_Soft_Pink_Model_-_1.jpg/500px-IPhone_17e_Soft_Pink_Model_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/IPhone_17e_Soft_Pink_Model_-_2.jpg/500px-IPhone_17e_Soft_Pink_Model_-_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "内部结构与iPhone 16e高度相似，采用双层主板（逻辑板+射频板），A19（APL1V13，台积电第三代3nm）PoP叠封SK海力士8GB LPDDR5，射频板换用苹果自研C1X基带（APL1114，较C1提速约一倍、更省电）、USI Wi‑Fi/蓝牙、Broadcom/Skyworks/Murata前端、NXP SN300 NFC（含eSIM）、ST/Renesas无线充电与PMIC。单摄无LiDAR，电池采用通电脱胶粘合剂、4005mAh，背板新增MagSafe磁吸环。iFixit可维修性评分约7/10，多数零件与16e跨代兼容（面容ID模组除外）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.toutiao.com/a7671128551302709802",
+        "https://iphonewired.com/news/1115797/",
+        "https://www.sina.cn/news/detail/5329242995036518.html"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 17 Pro",
+      "chip": "A19 Pro",
+      "releaseYear": 2025,
+      "features": "6.3″ OLED 120Hz；后置横向摄像头模组",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "A19 Pro。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Cosmic_Orange_iPhone_17_Pro_Max.jpg/500px-Cosmic_Orange_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Deep_Blue_iPhone_17_Pro_Max.jpg/500px-Deep_Blue_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/IPhone_17_Pro.png/500px-IPhone_17_Pro.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/IPhone_17_Pro_%282025-12-28%29.jpg/500px-IPhone_17_Pro_%282025-12-28%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用更紧凑的叠层逻辑板（处理器板+射频板），A19 Pro（APL1V12）叠封三星12GB LPDDR5X于处理器板内侧，外侧Kioxia 256GB NAND；高通SDX80M基带、USI 339M00399 Wi‑Fi 7/蓝牙6/Thread（含Apple N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、USI UWB（含U2）、TI充电/USB-C/显示电源、Broadcom无线充电。新增VC均热板+铝合金机身导热（取消前代双面拆机、改必须拆屏），后置横向摄像头模组需先拆下才能取主板。iFixit可维修性评分7/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/iPhone+17+Pro+Chip+ID/196117",
+        "https://www.ithinkdiff.com/iphone-17-pro-teardown/",
+        "https://iphonewired.com/news/1021555/"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone 17 Pro Max",
+      "chip": "A19 Pro",
+      "releaseYear": 2025,
+      "features": "6.9″ OLED 120Hz；后置横向摄像头模组",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "A19 Pro 顶配。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Cosmic_Orange_iPhone_17_Pro_Max.jpg/500px-Cosmic_Orange_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Deep_Blue_iPhone_17_Pro_Max.jpg/500px-Deep_Blue_iPhone_17_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/IPhone_17_Pro_Max_%281%29.jpg/500px-IPhone_17_Pro_Max_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/IPhone_17_Pro_Max_%28Cosmic_Orange%29_-_Backside.jpg/500px-IPhone_17_Pro_Max_%28Cosmic_Orange%29_-_Backside.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "与17 Pro同款叠层逻辑板（处理器板+射频板），A19 Pro叠封三星12GB LPDDR5X，外侧Kioxia NAND（最高2TB）；高通SDX80M基带、USI Wi‑Fi 7/蓝牙6/Thread（含N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、USI UWB、TI/Qualcomm PMIC、Broadcom无线充电。采用螺丝固定电池托盘+通电脱胶粘合剂、VC均热板导入铝合金一体中框散热，后置三摄48MP Fusion（8x光变）。iFixit临时可维修性评分7/10（电池更易换但整体需拆屏、USB-C更复杂）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Device/iPhone_17_Pro_Max?revisionid=1421822",
+        "https://wccftech.com/iphone-17-pro-internal-changes-battery-replacement-repairs/amp/"
+      ]
+    },
+    {
+      "brand": "苹果",
+      "model": "iPhone Air",
+      "chip": "A19 Pro",
+      "releaseYear": 2025,
+      "features": "超薄机身；单摄；6.5″ 左右 OLED",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改码机",
+        "ID锁/激活锁",
+        "监管机",
+        "卡贴机/有锁机",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "主打轻薄，A19 Pro。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Light_Gold_iPhone_Air.jpg/500px-Light_Gold_iPhone_Air.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Sky_Blue_iPhone_Air.jpg/500px-Sky_Blue_iPhone_Air.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Space_Black_iPhone_Air.jpg/500px-Space_Black_iPhone_Air.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "超薄（5.64mm）设计，将逻辑板移至顶部摄像头“plateau”区域（而非堆叠于电池之上），主板为叠层三明治结构，集成A19 Pro、自研C1X基带与全新N1 Wi‑Fi芯片；机身中部几乎为电池（12.26Wh、钢壳、与MagSafe电池包同款），采用通电脱胶粘合剂、可从背板独立拆下。取消底部扬声器与副摄，钛金属中框+3D打印钛合金USB-C支架，双入口（背板）可维修。iFixit可维修性评分7/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/News/113171/iphone-air-teardown",
+        "https://www.ithinkdiff.com/iphone-air-teardown/",
+        "https://www.cultofmac.com/news/iphone-air-teardown"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 60",
+      "chip": "麒麟9000s",
+      "releaseYear": 2023,
+      "features": "6.69″ OLED 曲屏；卫星通话；HarmonyOS",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "麒麟9000s 为回归首代。验机注意：关于本机-处理器 是否显示麒麟；改版机（把旧麒麟当9000s卖）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/About_Huawei_Mate_60_Pro.jpg/500px-About_Huawei_Mate_60_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Back_view_of_Huawei_Mate_60_Pro.jpg/500px-Back_view_of_Huawei_Mate_60_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Huawei_Mate_60.jpg/500px-Huawei_Mate_60.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Huawei_Mate_60_%281%29.jpg/500px-Huawei_Mate_60_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "标准版沿用麒麟9000S平台，主板采用双叠板设计，SoC（Hi36A0/GFCV120）位于下层、上方通过PoP堆叠SK海力士LPDDR5（部分为LPDDR5X）DRAM，下方为闪存；华为海思提供Wi‑Fi/蓝牙、电源管理与射频功放等核心芯片。散热为屏下大面积VC均热板（Pro同代约7000mm²级），主板薄弱处金属片加固、屏蔽罩覆铜箔；标准版仅支持双向北斗卫星消息（无天通卫星通话芯片满血开启）。维修性较差：屏幕粘合极紧、电池无快拆，PBKreviews对Pro给出5/10评分，拆屏易损显示。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.cls.cn/detail/1450057",
+        "https://www.electronicspecifier.com/?p=30810",
+        "https://www.gizmochina.com/page/1445/?attachment_id"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 60 Pro",
+      "chip": "麒麟9000s",
+      "releaseYear": 2023,
+      "features": "6.82″ OLED 曲屏；卫星通话+消息；前置三挖孔",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9000s。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/About_Huawei_Mate_60_Pro%2B_Black.jpg/500px-About_Huawei_Mate_60_Pro%2B_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/About_Huawei_Mate_60_Pro.jpg/500px-About_Huawei_Mate_60_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/About_Huawei_Mate_60_Pro_Black.jpg/500px-About_Huawei_Mate_60_Pro_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Back_view_of_Huawei_Mate_60_Pro%2B_Black.jpg/500px-Back_view_of_Huawei_Mate_60_Pro%2B_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板为双层叠板（多段独立双层）结构，麒麟9000S SoC位于下层，上方PoP堆叠SK海力士LPDDR5/LPDDR5X DRAM、下方为闪存；华为海思负责Wi‑Fi/蓝牙、电源管理IC与射频功放，并搭载独立卫星通信芯片（中电科54所MSC06A）实现天通卫星通话。散热为屏下约7000mm²超大铜合金VC均热板+铜箔/石墨烯，屏下光学指纹，NFC线圈置于Deco内侧，3D深感/前摄/红外/顶部麦克风均集成于主板。维修性：屏幕粘合极紧、电池无快拆，PBKreviews评分5/10，拆屏极易损坏显示。",
+      "motherboardImg": null,
+      "sources": [
+        "https://cdn.naimei.com.tw/posts/64f0a485b84f39415df819e0",
+        "https://www.coolapk.com/feed/48902640",
+        "https://m.gsmarena.com/newsdetail.php3?idNews=59720",
+        "https://gizchina.com/news/unveiling-the-inner-secrets-of-the-huawei-mate-60-pro-a-teardown-experience"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 60 Pro+",
+      "chip": "麒麟9000s",
+      "releaseYear": 2023,
+      "features": "6.82″ OLED；玄武钢化玻璃",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9000s。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/About_Huawei_Mate_60_Pro%2B_Black.jpg/500px-About_Huawei_Mate_60_Pro%2B_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Back_view_of_Huawei_Mate_60_Pro%2B_Black.jpg/500px-Back_view_of_Huawei_Mate_60_Pro%2B_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板设计与Mate 60 Pro完全相同（双叠板），核心均为麒麟9000S + 海力士LPDDR5X + 中电科54所MSC06A卫星通信芯片，差异仅在影像模组（主摄/超广角更大、欧菲光可变光圈）与歌尔双振膜扬声器，且北斗卫星消息为满血开启。TechInsights列出主板上另有Maxscend射频调谐/开关、海思包络电源追踪与PMIC、AWINIC音频放大、OnMicro功放、SGMicro LDO、Bosch六轴与Goertek气压计，并有独立副板与电池管理板。维修同Pro：屏幕与电池更换困难、无快拆。",
+      "motherboardImg": null,
+      "sources": [
+        "https://electronics360.globalspec.com/article/21039/techinsights-teardown-huawei-mate-60-pro",
+        "https://www.eet-china.com/mp/a255136.html",
+        "https://dy.163.com/article/IFM70BOB055652DD.html"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 70",
+      "chip": "麒麟9020",
+      "releaseYear": 2024,
+      "features": "6.7″ OLED 直屏；红枫原色影像；HarmonyOS NEXT",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "麒麟9020。验机：关于本机-处理器 应为麒麟9020，警惕 9000s 改版冒充。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/HUAWEI_Mate_70_Air_20251112_001.jpg/500px-HUAWEI_Mate_70_Air_20251112_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/HUAWEI_Mate_70_Air_20251112_002.jpg/500px-HUAWEI_Mate_70_Air_20251112_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/HUAWEI_Mate_70_Pro%2B_001.jpg/500px-HUAWEI_Mate_70_Pro%2B_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/HUAWEI_Mate_70_Pro%2B_002.jpg/500px-HUAWEI_Mate_70_Pro%2B_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "标准版采用玄武架构（钛合金/铝合金中框），主板为双层叠板，麒麟9020（代号Hi36C0）面积较上代更大、厚度增加，与RAM/ROM采用PoP堆叠并将CPU/GPU/NPU/基带/卫星模块集成于SoC内部。散热为屏下约7000mm² VC均热板+多层石墨+导热凝胶，主板夹层灌导热凝胶将SoC热量导至另一面；因屏下空间被VC占据改用侧边指纹。官方换电池价格较低（70/Pro约199元），但电池无快拆需拆屏+后盖。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.toutiao.com/article/7444707906135540251",
+        "https://www.toutiao.com/article/7644439846647251490",
+        "https://www.phoneworld.com.pk/huawei-mate-70-rs-ultimate-disassembled-to-extract-kirin-9020"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 70 Pro",
+      "chip": "麒麟9020",
+      "releaseYear": 2024,
+      "features": "6.9″ OLED 曲屏；红枫影像",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9020。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/HUAWEI_Mate_70_Pro%2B_001.jpg/500px-HUAWEI_Mate_70_Pro%2B_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/HUAWEI_Mate_70_Pro%2B_002.jpg/500px-HUAWEI_Mate_70_Pro%2B_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/HUAWEI_Mate_70_Pro%2B_003.jpg/500px-HUAWEI_Mate_70_Pro%2B_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板为双层叠板，上层板（奥特斯0.45mm）与下层板（华通电脑0.6mm），麒麟9020（Hi36C0）面积大于9010；RAM/ROM表面有导热镀层，主摄“破板下沉”直触屏后散热膜，潜望与ROM背对背放置。散热系统为屏下约7000mm² VC均热板+中框近5000mm²石墨散热膜，SoC区域镂空直触VC并注导热凝胶；侧边指纹、NFC线圈绕后摄、3D深感前摄模组集成于主板。电池单电芯双接口无快拆，需拆屏+后盖，但官方换电便宜。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.toutiao.com/article/7648226828045402667",
+        "https://tsight.io/articles/17535265",
+        "微机分（酷安/什么值得买）Mate 70 Pro+ 深度拆解：双层叠板、上层奥特斯0.45mm/下层华通0.6mm、麒麟9020 Hi36C0、约7000mm² VC、侧边指纹"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 70 Pro+",
+      "chip": "麒麟9020",
+      "releaseYear": 2024,
+      "features": "6.9″ OLED 曲屏；高亮钛中框",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9020。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/HUAWEI_Mate_70_Pro%2B_001.jpg/500px-HUAWEI_Mate_70_Pro%2B_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/HUAWEI_Mate_70_Pro%2B_002.jpg/500px-HUAWEI_Mate_70_Pro%2B_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/HUAWEI_Mate_70_Pro%2B_003.jpg/500px-HUAWEI_Mate_70_Pro%2B_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "拆解显示主板设计与Pro一致（双层叠板，上层奥特斯/下层华通电脑），核心麒麟9020 + 海力士/国产RAM/ROM，主板薄弱处金属片加固、屏蔽罩覆铜箔、SoC/ROM/潜望位涂导热材料，夹层灌导热凝胶把热量导至另一面。玄武架构中框将电池反包在屏幕侧；VC均热板约7000mm²、中框贴近5000mm²散热膜，侧边指纹、NFC绕后摄、80W无线充。电池单电芯双接口无快拆，整体与Pro同平台、做工更考究。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.toutiao.com/article/7648226828045402667",
+        "微机分（酷安/什么值得买）Mate 70 Pro+ 深度拆解：双层叠板、麒麟9020 Hi36C0、约7000mm² VC、侧边指纹、玄武架构电池反包"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Mate 80",
+      "chip": "麒麟9030",
+      "releaseYear": 2025,
+      "features": "新一代麒麟；N+1 增强工艺；泰山V3+马良930 GPU",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "麒麟9030（N+1 增强，2025年底量产）。验机以关于本机-处理器 为准，警惕旧麒麟改版。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Huawei_Mate_80.jpg/500px-Huawei_Mate_80.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Huawei_Mate_80_Pro.jpg/500px-Huawei_Mate_80_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Huawei_Mate_80_Pro_Max.jpg/500px-Huawei_Mate_80_Pro_Max.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Huawei_Mate_80_Pro_Max_rear.jpg/500px-Huawei_Mate_80_Pro_Max_rear.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "公开拆机（如Mate80 Pro Max首拆）显示主板将核心芯片区域做成单层并下沉以给镜头腾空间，麒麟9030（Pro版1+4+4九核）被散热金属柱/石墨烯膜包裹，超薄VC均热板覆盖CPU与5G基带；部分工程机传闻有微型风扇主动风冷（未完全确认）。拆机资料仍较少，平台级预期为延续双叠板+PoP堆叠、海思自研Wi‑Fi/蓝牙/电源及卫星通信模块，VC均热板+石墨烯散热；电池接口带密封胶圈、IP68防水。维修性参照前代，屏幕与电池更换均不便捷。",
+      "motherboardImg": null,
+      "sources": [
+        "https://m.toutiao.com/article/7581028264936751666",
+        "https://c.m.163.com/news/a/KFB2QQCK0556722C.html",
+        "https://tsight.io/articles/18468756",
+        "https://m.toutiao.com/article/7573692172713607730/"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Pura 70",
+      "chip": "麒麟9010",
+      "releaseYear": 2024,
+      "features": "6.6″ OLED 直屏；超聚光伸缩摄像头",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "麒麟9010。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/About_Huawei_Pura_70_Black.jpg/500px-About_Huawei_Pura_70_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/About_Huawei_Pura_70_White.jpg/500px-About_Huawei_Pura_70_White.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Back_view_of_Huawei_Pura_70_Black.jpg/500px-Back_view_of_Huawei_Pura_70_Black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Back_view_of_Huawei_Pura_70_White.jpg/500px-Back_view_of_Huawei_Pura_70_White.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "标准版主板为叠层PCB设计（核心芯片分上下两层、部分接口叠层垫高），麒麟9010（Hi36A0 GFCV121）位于SK海力士LPDDR5 DRAM下方（PoP堆叠），与Mate 60系列共享型号基底；海思Hi1105提供Wi‑Fi6/蓝牙/GNSS/红外，南芯SC8565快充IC、立锜/圣邦微等电源管理。散热为屏下约6000mm²复合材料VC均热板+铜箔，主摄为超聚光可变光圈（伸缩结构为Ultra独有）。电池单电芯双接口无快拆，标准版具体主板图公开较少，以上基于Pura 70同代平台。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.eet-china.com/mp/a312840.html",
+        "https://www.cnbeta.com.tw/articles/tech/1431334.htm",
+        "老戴（抖音）Pura 70 Ultra 拆解：双层主板、VC约6000mm²、麒麟9010 under 海力士DRAM"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Pura 70 Pro",
+      "chip": "麒麟9010",
+      "releaseYear": 2024,
+      "features": "6.8″ OLED 曲屏",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9010。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/HUAWEI_Pura_70_Pro_Black_Back.jpg/500px-HUAWEI_Pura_70_Pro_Black_Back.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Huawei_Pura_70_Pro.jpg/500px-Huawei_Pura_70_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "iFixit/TechInsights拆解详实：主板SoC面，麒麟9010（Hi36A0 GFCV121）堆叠在12GB SK海力士LPDDR5下方；另一面为海思Hi6421/Hi6423 PMIC、海思Hi1105 Wi‑Fi6/蓝牙/GNSS/红外、南芯SC8565开关电容电源转换、立锜RT9471D充电IC、圣邦微升压、艾为触觉/音频、Bosch BMI270六轴、维普无线充。RF子板含海思射频收发/前端模块与昂瑞微多模功放。散热为屏下约6000mm²复合材料VC均热板+铜箔，主摄破板下沉直触；电池单电芯双接口无快拆。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.cnbeta.com.tw/articles/tech/1431334.htm",
+        "https://www.gamingdeputy.com/huawei-pura-70-pro-disassembly-90-of-internal-components-are-made-in-china-fast-technology-technology-changes-the-future/",
+        "https://zh.ifixit.com/Guide/Pura+70+Pro+Chip+ID/172264",
+        "https://electronics360.globalspec.com/article/21569/techinsights-teadown-huawei-pura-70-pro"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Pura 70 Pro+",
+      "chip": "麒麟9010",
+      "releaseYear": 2024,
+      "features": "6.8″ OLED 曲屏；高亮钛",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "同 9010。",
+      "motherboardDesc": "拆解显示主板为叠层PCB，PCB对应后置三摄做破板下沉、大面积镂空，核心芯片分布上下两层、部分接口叠层垫高；B面海力士LPDDR5 DRAM下方压着麒麟9010（点胶固定），旁有南芯SC8565快充IC，国产/长存NAND（CN标识）。TechInsights列主板上含长存1TB NAND、Maxscend Wi‑Fi FEM/RF开关、海思Wi‑Fi6/蓝牙/PMIC/平均功率追踪、昂瑞微功放、3Peak开关、Tsingteng NFC、Bosch六轴；RF板含海思前端模块。散热为VC均热板+散热膜，镜头与SoC直触；无屏下指纹（短焦/侧边）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://electronics360.globalspec.com/article/21569/techinsights-teadown-huawei-pura-70-pro",
+        "https://www.eet-china.com/mp/a312840.html",
+        "iMobile/微机分 Pura 70 Pro+ 拆解：叠层PCB、破板下沉、麒麟9010 under 海力士DRAM、南芯SC8565"
+      ]
+    },
+    {
+      "brand": "华为",
+      "model": "Pura 80",
+      "chip": "麒麟9010S",
+      "releaseYear": 2025,
+      "features": "6.8″ OLED 曲屏；一英寸主摄",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "ID锁/账号锁",
+        "鼓包",
+        "进水",
+        "黑名单/丢失模式",
+        "暗病机"
+      ],
+      "note": "麒麟9010S（9010 小改）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Huawei_Pura_80_Pro.jpg/500px-Huawei_Pura_80_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Huawei_Pura_80_Pro_Glazed_Red.jpg/500px-Huawei_Pura_80_Pro_Glazed_Red.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Huawei_Pura_80_Pro_backside.jpg/500px-Huawei_Pura_80_Pro_backside.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "标准版（麒麟9010S）拆机资料较少，平台级预期为延续Pura 70系列的叠层PCB+PoP堆叠（海力士/国产LPDDR5X+UFS）、海思自研Wi‑Fi/蓝牙/电源与北斗卫星消息模块，散热为全域VC液冷均热板+石墨烯。公开三连拆主要覆盖Pro/Pro+/Ultra（均用麒麟9020、双层叠板、约5700mm² VC、侧边指纹、无屏下指纹），标准版主摄为一英寸可变光圈。维修性：电池无快拆、需拆屏+后盖，具体主板图未充分公开，以上为基于同代平台的合理预期。",
+      "motherboardImg": null,
+      "sources": [
+        "https://tsight.io/articles/7102684",
+        "https://nanoreview.net/en/phone/huawei-pura-80",
+        "https://www.toutiao.com/a7656365509205557795",
+        "微机分 Pura 80 Pro/Pro+/Ultra 三连拆：双层叠板、麒麟9020、约5700mm² VC、侧边指纹、主摄破板下沉"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米15",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2024,
+      "features": "6.36″ OLED 直屏 120Hz；徕卡影像；台积电3nm",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Elite（台积电3nm，2024-10）。验机：关于手机-处理器 应为骁龙8 Elite至尊版。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Xiaomi_15_%281%29.jpg/500px-Xiaomi_15_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Xiaomi_15_%282%29.jpg/500px-Xiaomi_15_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Xiaomi_15_Pro_%281%29.jpg/500px-Xiaomi_15_Pro_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Xiaomi_15_Pro_%282%29.jpg/500px-Xiaomi_15_Pro_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用传统三段式结构，主板为单层设计（0.65mm板材，方正代工），骁龙8 Elite与海力士LPDDR5X内存、UFS4.0闪存以PoP方式堆叠（RAM位于SoC下方）。充电IC为小米自研澎湃P3，WiFi/蓝牙由WCN7861承担（前代WCN7851），射频IC为SDR753，信号增强仅一颗澎湃T1S；NFC线圈置于后摄模组右下角，前摄因空间受限集成在主板盖板内。散热为环形冷泵VC均热板（面积较Pro小但大于14 Pro），金沙江电池为单电芯双接口、带快拆拉胶设计，保护板SiP封装内含澎湃G1。维修性：前摄/传感器小板为独立模块化便于更换，但BTB基座无泡棉圈、接口四周无防护，仅少数小元件封胶，后盖与电池靠胶粘固定。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分 拆机（公众号）",
+        "MyMobileIndia 小米15/15 Ultra 报道 (mymobileindia.com)",
+        "今日头条 小米15拆机评测 (m.toutiao.com/article/7626744398855930411)"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米15 Ultra",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2025,
+      "features": "6.73″ OLED 曲屏；2亿长焦；徕卡",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "同 8 Elite。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Xiaomi_15_Ultra.jpg/500px-Xiaomi_15_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Xiaomi_15_Ultra_001.jpg/500px-Xiaomi_15_Ultra_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Xiaomi_15_Ultra_002.jpg/500px-Xiaomi_15_Ultra_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Xiaomi_15_Ultra_003.jpg/500px-Xiaomi_15_Ultra_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用传统三段式结构，主板为双层叠板设计（下层0.65mm板材，方正+鹏鼎控股代工），主摄/潜望/直立长焦三颗后摄破板下沉直触中框以压缩厚度，广角与SoC背靠背。骁龙8 Elite与海力士LPDDR5X、UFS4.1以PoP堆叠，右下角为小米自研澎湃P3充电IC，上层板集成中电五十四所MSC06A卫星通信基带及两颗澎湃T1S+一颗T1信号增强芯片。散热为不锈钢环形冷泵VC（约5300mm²，双路独立SoC/主摄通道），金沙江单电芯双接口6000mAh电池带快拆拉胶、SiP保护板含澎湃G2，并配上下双NFC线圈。维修性：装配复杂（大量螺丝+塑料固定件+点胶），拆解与更换难度高。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分 拆机（公众号）",
+        "Gizmochina 小米15 Ultra teardown (gizmochina.com/2025/03/03)",
+        "MyMobileIndia (mymobileindia.com)",
+        "小米香港官网规格 (mi.com/hk/xiaomi-15-ultra)"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米14",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2023,
+      "features": "6.36″ OLED 直屏 120Hz；徕卡",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Xiaomi_14_%28July_10%2C_2026%29.jpg/500px-Xiaomi_14_%28July_10%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Xiaomi_14_rear_%28July_10%2C_2026%29.jpg/500px-Xiaomi_14_rear_%28July_10%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Moscow%2C_Xiaomi_SU7_max%2C_Aug_2025_14.jpg/500px-Moscow%2C_Xiaomi_SU7_max%2C_Aug_2025_14.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Xiaomi_flagship_store_at_SM_Seaside_City_%282024-12-14%29.jpg/500px-Xiaomi_flagship_store_at_SM_Seaside_City_%282024-12-14%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板为单层设计、PCB较薄，利于控制厚度与散热；骁龙8 Gen3下方PoP堆叠海力士LPDDR5X（16GB），旁为三星UFS4.0闪存，右下角为小米自研澎湃P2充电IC，射频IC为高通SDR753、WiFi/蓝牙为WCN7851、电源IC为pm8550bh、功放为高通77042。B面大范围覆铜箔并加硅脂辅助散热，主摄/长焦通过破板下沉或金属框架镂空直触VC均热板；前摄与环境光传感器为独立小板模块化。电池4610mAh以胶粘不可拆，配澎湃P2+G1。维修性：单层主板散热好，但BTB基座无泡棉圈、电容等小元件未点胶，防护不如OV细致，后盖与电池靠胶固定。",
+      "motherboardImg": null,
+      "sources": [
+        "网易 小米14标准版拆解 (163.com/dy/article/ITIL4JT005119FS5.html)",
+        "EET-China 小米14供应商/主板元件 (eet-china.com/mp/a269423.html)",
+        "小米香港官网规格 (mi.com/hk/product/xiaomi-14)"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K80",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2024,
+      "features": "6.67″ OLED 2K 直屏；金属中框；澎湃OS",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3（2024-11）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/2025%E5%B9%B4%E6%98%A5%EF%BC%8C%E5%A4%A7%E9%A3%8E%E5%A4%A9%E6%B0%94%EF%BC%8C%E5%9C%A8%E5%8C%97%E4%BA%AC%E7%AB%99%E6%97%81%E7%94%A8REDMI_K80_Pro_%E6%8B%8D%E6%91%84%E5%88%97%E8%BD%A6.jpg/500px-2025%E5%B9%B4%E6%98%A5%EF%BC%8C%E5%A4%A7%E9%A3%8E%E5%A4%A9%E6%B0%94%EF%BC%8C%E5%9C%A8%E5%8C%97%E4%BA%AC%E7%AB%99%E6%97%81%E7%94%A8REDMI_K80_Pro_%E6%8B%8D%E6%91%84%E5%88%97%E8%BD%A6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/REDMI_K80_Pro_Xiaomi_Store.jpg/500px-REDMI_K80_Pro_Xiaomi_Store.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Redmi_K80.jpg/500px-Redmi_K80.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Redmi_K80_Pro.jpg/500px-Redmi_K80_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "未找到详细拆机主板布局图，按骁龙8 Gen3平台预期为三段式、单层/叠板混合结构。已核实配置：骁龙8 Gen3搭配LPDDR5x+UFS4.0，标配小米自研澎湃P3充电芯片与澎湃G1电量计芯片，支持90W有线快充、6550mAh金沙江单电芯（无无线充），并搭载澎湃T1S信号增强芯片与汇顶超声波屏下指纹。散热采用5400mm²双环路不锈钢VC均热板兼顾SoC与摄像头。维修性：电池胶粘不可拆，整机IP68/IP69，后盖与中框亦靠胶/卡扣固定，拆解需加热。",
+      "motherboardImg": null,
+      "sources": [
+        "小米官方规格 (mi.com/prod/redmi-k80/specs)",
+        "GSMArena Redmi K80 (gsmarena.com)",
+        "爱搞机/igao7 红米K80发布报道 (igao7.com)"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K70",
+      "chip": "高通 骁龙8 Gen2",
+      "releaseYear": 2023,
+      "features": "6.67″ OLED 2K 直屏；金属中框",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen2。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_01.jpg/500px-Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_02.jpg/500px-Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "未找到详细拆机主板布局图，按骁龙8 Gen2平台预期为三段式结构。已核实配置：骁龙8 Gen2搭配LPDDR5x+UFS4.0，采用小米自研澎湃P2快充芯片与澎湃G1电池管理芯片，双电芯串联支持120W有线快充、5000mAh电池，屏幕为光学屏下指纹（非超声波）。散热为5000mm²环形冷泵VC液冷，金属中框+玻璃后盖。维修性：电池与后盖胶粘不可拆，标准版无无线充、无IP68防护，拆解需加热且BTB/小元件防护一般。",
+      "motherboardImg": null,
+      "sources": [
+        "IT之家 红米K70参数 (ku.ithome.com/item/22519/canshu.html)",
+        "Kimovil 小米Redmi K70 (kimovil.com)",
+        "ThePhoneTalks Redmi K70 (thephonetalks.com)"
+      ]
+    },
+    {
+      "brand": "vivo",
+      "model": "vivo X200",
+      "chip": "联发科 天玑9400",
+      "releaseYear": 2024,
+      "features": "6.67″ OLED 曲屏 120Hz；蔡司影像；台积电3nm",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/vivo账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑9400（2024-10）。验机：设置-关于手机-处理器 应为天玑9400。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Vivo_X200_Pro_blue.png/500px-Vivo_X200_Pro_blue.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Vivo_X200_Pro_mini_pink.png/500px-Vivo_X200_Pro_mini_pink.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "vivo X200 搭载蓝晶×天玑9400（台积电3nm全大核）SoC，内存/存储为 LPDDR5X Ultra Pro + UFS 4.0（SoC 与内存通常为 PoP 堆叠）。拆机资料显示采用大面积 VC 均热板 + 多层石墨烯散热，主板 CPU 区域与电池分离布局；官方说明其平台支持 V2 影像芯片能力。未找到详细拆机图示确认主板具体形状，按旗舰平台预期为单主板、SoC 区覆盖 VC；5800mAh 单电芯、90W 闪充，非可拆卸，可维修性一般（胶封后盖、螺丝固定主板、电池需加热分离）。",
+      "motherboardImg": null,
+      "sources": [
+        "今日头条拆机综述 https://m.toutiao.com/article/7626747314098504202/",
+        "vivo 官网 X200 页面 https://m.vivo.com.cn/vivo/x200/",
+        "Cellspare 主板配件页 https://www.cellspare.com/vivo-x200-512gb-12gb-motherboard-pcb-module"
+      ]
+    },
+    {
+      "brand": "vivo",
+      "model": "vivo X300",
+      "chip": "联发科 天玑9500",
+      "releaseYear": 2025,
+      "features": "6.7″ OLED 直屏 120Hz；蔡司；新一代旗舰",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/vivo账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑9500（2025-10）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/The_back_of_the_colorful_vivo_X300.jpg/500px-The_back_of_the_colorful_vivo_X300.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/The_back_of_the_vivo_X300_Pro.jpg/500px-The_back_of_the_vivo_X300_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/The_front_of_the_unreleased_vivo_X300_Pro.jpg/500px-The_front_of_the_unreleased_vivo_X300_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Vivo_X300_Ultra.jpg/500px-Vivo_X300_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "vivo X300 搭载天玑9500（台积电 N3P 3nm，1+3+4 全大核，Mali-G1 Ultra MC12），RAM 为 LPDDR5X Ultra 四通道、ROM 为 UFS 4.1（SoC+内存 PoP）。据官网/社区资料，散热为覆盖主板约 85% 区域的双芯散热系统（航天级相变材料 + 石墨烯复合散热片），并集成自研寰宇信号放大模组（1 颗通信增强芯片 + 4 颗 Wi‑Fi 增强芯片）。未找到具体拆机确认主板形状或独立成像芯片型号，按平台预期为单主板 + 大 VC，X 旗舰通常配 V 系列影像芯片但本来源未明确；电池 6040mAh、90W 有线 + 40W 无线，可维修性一般。",
+      "motherboardImg": null,
+      "sources": [
+        "vivo 官网 X300 参数页 https://www.vivo.com.cn/vivo/param/x300",
+        "vivo 社区 X300 散热/信号介绍 https://bbs.vivo.com.cn/newbbs/thread/38791603",
+        "NotebookCheck Vivo X300 https://www.notebookcheck.info/Vivo-X300.1178914.0.html"
+      ]
+    },
+    {
+      "brand": "vivo",
+      "model": "vivo X100",
+      "chip": "联发科 天玑9300",
+      "releaseYear": 2023,
+      "features": "6.78″ OLED 曲屏 120Hz；蔡司",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/vivo账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑9300。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/VIVO_X100_and_X100_Pro%2C_January_28%2C_2024.jpg/500px-VIVO_X100_and_X100_Pro%2C_January_28%2C_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Vivo_X100.jpg/500px-Vivo_X100.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Vivo_X100_pic2.jpg/500px-Vivo_X100_pic2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Vivo_X100_pic3.jpg/500px-Vivo_X100_pic3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "vivo X100（V2309A，主板平台代号 k6989v1_64）搭载天玑9300，SoC 与 LPDDR5X/UFS 4.0 内存通常为 PoP 堆叠。TechInsights 拆解确认主板上联发科共提供 13 颗芯片：天玑9300 应用/基带处理器、电源管理与音频编解码、6 颗电源管理 IC、RF 收发器、Wi‑Fi 7/蓝牙 SoC、2 颗包络跟踪器、GPS 接收器；射频前端含 Qorvo 3 颗 FEM、Maxscend 1 颗 RxD FEM 及多家开关。影像由天玑9300 ISP 与 vivo 自研影像芯片（平台级 V2 类）协同，但拆机未单独标出该芯片；电池双电芯 5000mAh、120W 闪充，非可拆卸，可维修性一般。",
+      "motherboardImg": null,
+      "sources": [
+        "TechInsights Vivo X100 拆解 https://techinsights.com/ko/node/54698",
+        "FirmwaresPro 拆解步骤 https://firmwarespro.com/disassemble/vivo-x100-detail",
+        "vivo X100s 官网（V2 影像芯片说明） https://www.vivo.com.cn/vivo/x100s/"
+      ]
+    },
+    {
+      "brand": "iQOO",
+      "model": "iQOO 13",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2024,
+      "features": "6.82″ OLED 直屏 144Hz；电竞",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/vivo账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Elite（2024-10）。",
+      "motherboardDesc": "iQOO 13 搭载蓝晶×骁龙8 至尊版（Snapdragon 8 Elite，台积电3nm，2+6 全大核，Adreno 830），配自研电竞芯片 Q2 与 LPDDR5X Ultra + UFS 4.0（SoC+内存 PoP）。官方资料明确为单层主板设计，散热采用冰穹双驱散热系统：多层石墨烯 + 7K 超大面积 VC 均热板（约 7000mm²），金属中框辅助导热。无独立 V 系列影像芯片，影像依靠蓝厂旗舰算法 + Q2 处理；电池 6150mAh 双电芯、120W 闪充，非可拆卸，可维修性一般。",
+      "motherboardImg": null,
+      "sources": [
+        "IT之家 iQOO 13 配置曝光 https://www.ithome.com/0/804/266.htm",
+        "vivo 官方 iQOO 13 常见问题 https://m.vivo.com.cn/service/questions/all?categoryId=73&questionId=1849",
+        "百度百科 iQOO 13 https://baike.baidu.com/en/item/iQOO%2013/1490334"
+      ]
+    },
+    {
+      "brand": "iQOO",
+      "model": "iQOO 12",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2023,
+      "features": "6.78″ OLED 直屏 144Hz",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/vivo账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3。",
+      "motherboardDesc": "iQOO 12（I2220）搭载骁龙8 Gen3（集成 X75 5G 基带），配自研超算芯片 Q1（Novatek 定制，BGA 4.3×3.9mm），内存 LPDDR5X + UFS 4.0 与 SoC 以 BGA‑POP 堆叠封装。TechInsights 与拆解均确认其采用超薄单层主板 + 经典三段式结构，配备约 6010mm²（112.86×62.01mm）铜质 VC 均热板，辅以石墨、铜箔与导热硅脂覆盖 PoP 封装。无独立 V 系列影像芯片；电池 5000mAh、120W 闪充，非可拆卸，可维修性一般。",
+      "motherboardImg": null,
+      "sources": [
+        "TechInsights iQOO 12 拆解 https://www.techinsights.com/ja/node/57077",
+        "今日头条 iQOO 12 拆解评测 https://m.toutiao.com/w/1782050042009732/",
+        "淘宝百科 iQOO12 拆机主板 https://bk.taobao.com/k/shoujilingbujian_4478/a3bef1083bead41d5fc4a1c44ab2e35b"
+      ]
+    },
+    {
+      "brand": "荣耀",
+      "model": "荣耀 Magic6",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2024,
+      "features": "6.78″ OLED 曲屏 120Hz；鹰眼相机",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/荣耀账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3。",
+      "motherboardDesc": "荣耀 Magic6 采用主+副板结构，主板核心区域为单层 PCB、仅右上角一小块做叠层处理；骁龙8 Gen3 与美光 LPDDR5X 内存、美光 UFS 4.0 闪存以 PoP 方式堆叠，处理器区涂硅脂并对应中框下沉凹槽散热，整机配 VC 均热板+石墨。副板集成 USB-C、麦克风与瑞声振动马达，指纹为短焦镜头方案；射频侧搭载自研 HONOR C1+ 增强芯片及独立 Wi-Fi/蓝牙前端。后盖为四曲面点胶内嵌需加热拆，电池为单电芯双接口、易拉胶快拆（5450mAh 青海湖电芯）。拆机资料显示主副板 BTB 基座未加泡棉、元器件未点胶，做工从简；未查到 iFixit 维修分数。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.evolife.cn/mobile/315085.html",
+        "https://www.vopmart.com/blog/post/honor-magic6-teardown.html",
+        "https://nanoreview.net/en/phone/honor-magic-6"
+      ]
+    },
+    {
+      "brand": "荣耀",
+      "model": "荣耀 Magic7",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2024,
+      "features": "6.78″ OLED 曲屏 120Hz；AI 鹰眼",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/荣耀账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Elite。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Honor_Magic7_RSR_Porsche_Design_%28May_1%2C_2025%29.jpg/500px-Honor_Magic7_RSR_Porsche_Design_%28May_1%2C_2025%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Honor_Magic7_RSR_Porsche_Design_backside_%28May_1%2C_2025%29.jpg/500px-Honor_Magic7_RSR_Porsche_Design_backside_%28May_1%2C_2025%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Honor_Magic7_RSR_Porsche_Design_frontside_%28May_1%2C_2025%29.jpg/500px-Honor_Magic7_RSR_Porsche_Design_frontside_%28May_1%2C_2025%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Honor_Magic7_Series_%28May_1%2C_2025%29.jpg/500px-Honor_Magic7_Series_%28May_1%2C_2025%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "荣耀 Magic7 采用单层主板+双飞线+斜置顶部扬声器的主+副板布局（拆机指其与 GT Pro 同宗同源），骁龙8 Elite 与三星 LPDDR5X、海力士 UFS 4.0 以 PoP 堆叠，配 VC 均热板并做外部点胶密封与主板封胶。射频侧搭载自研 HONOR C1+ 射频增强芯片，支持 Wi-Fi 7、BT5.4、NFC；第三代青海湖硅碳电池 5650mAh，100W 有线+80W 无线，电池与后盖均以胶固定（后者需加热）。维修资料未给出 iFixit 分数；单层主板利于维修，但后盖胶封与封胶增加拆机难度。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.toutiao.com/article/7500388979431997993/",
+        "https://www.honor.com/cn/phones/honor-magic7/spec/",
+        "http://nanoreview.net/en/phone/honor-magic-7"
+      ]
+    },
+    {
+      "brand": "荣耀",
+      "model": "荣耀300",
+      "chip": "高通 骁龙7 Gen3",
+      "releaseYear": 2024,
+      "features": "6.7″ OLED 直屏 120Hz；轻薄",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/荣耀账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙7 Gen3（中端）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Honor_300_%2854238414382%29.jpg/500px-Honor_300_%2854238414382%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Honor_300_%2854239543329%29.jpg/500px-Honor_300_%2854239543329%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Honor_300_%2854239551278%29.jpg/500px-Honor_300_%2854239551278%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honor_300_%28May_1%2C_2025%29.jpg/500px-Honor_300_%28May_1%2C_2025%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "荣耀 300 的公开拆机资料较少；按骁龙7 Gen3 平台与其数字系列惯例，应为典型主+副板结构，骁龙7 Gen3（台积电4nm）与 LPDDR5、UFS 3.1 以 PoP 堆叠，并配 VC 均热板+石墨散热（NanoReview 标注 vapor chamber）。副板集成 USB-C、SIM 卡槽与指纹/振动马达，射频侧通常沿用荣耀自研 C1+ 射频增强芯片；5300mAh 硅碳电池与后盖均以胶固定，电池应为易拉胶快拆。维修性无 iFixit 公开评分，结构常规、难度中等。",
+      "motherboardImg": null,
+      "sources": [
+        "https://nanoreview.net/en/phone-compare/honor-300-vs-honor-200",
+        "拆机资料稀少（仅平台级与参数推断）"
+      ]
+    },
+    {
+      "brand": "荣耀",
+      "model": "荣耀200",
+      "chip": "高通 骁龙7 Gen3",
+      "releaseYear": 2024,
+      "features": "6.7″ OLED 曲屏 120Hz；雅顾影像",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/荣耀账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙7 Gen3。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Honor_200_and_200_Pro_at_Parkmall_%282025-01-26%29.jpg/500px-Honor_200_and_200_Pro_at_Parkmall_%282025-01-26%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "motherboardDesc": "荣耀 200（ELI-NX9）拆机显示为标准主+副板布局：后盖加热软胶拆下后可见顶盖触点，副板集成 USB-C 充电口、麦克风与卡槽，主副板由互连排线+两条同轴电缆连接。骁龙7 Gen3 与 LPDDR5、UFS 3.1 以 PoP 堆叠；后置三摄置于独立小框、可整体取下，前置/后置摄像头断开 BTB 后取出，主板由螺丝固定。电池 HB4965590EIW 为 5200mAh 青海湖硅碳电芯，采用易拉胶快拆；指纹为屏下短焦方案。无 iFixit 评分，整体结构常规、后盖需加热、电池易拉胶便于更换。",
+      "motherboardImg": null,
+      "sources": [
+        "https://vrm24.com/instructions/how-to-disassemble-honor-200/",
+        "https://de.ifixit.com/Device/HONOR_200",
+        "https://nanoreview.net/en/phone-compare/honor-300-vs-honor-200"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S25",
+      "chip": "高通 骁龙8 Elite for Galaxy",
+      "releaseYear": 2025,
+      "features": "6.2″ AMOLED 120Hz；超频版 8 Elite",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Elite for Galaxy（2025-02 超频版）。验机查 SM-S931 型号与地区版本。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Samsung_Galaxy_S25%2B.jpg/500px-Samsung_Galaxy_S25%2B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Samsung_Galaxy_S25_Ultra.jpg/500px-Samsung_Galaxy_S25_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg/500px-Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/%E7%AC%AC%E4%B8%80%E6%89%8B%EF%BC%81Samsung_Galaxy_S25%E7%B3%BB%E5%88%97%E6%8B%BF%E5%88%B0%E4%BA%86%EF%BC%9A5%E4%B8%AA%E5%8D%87%E7%BA%A7%EF%BC%81S_Pen%E4%B8%8D%E6%94%AF%E6%8C%81%E8%93%9D%E7%89%99%E4%BA%86%EF%BC%9F_%282160p_50fps_VP9-96kbit_AAC%29-00.00.05.200.png/500px-%E7%AC%AC%E4%B8%80%E6%89%8B%EF%BC%81Samsung_Galaxy_S25%E7%B3%BB%E5%88%97%E6%8B%BF%E5%88%B0%E4%BA%86%EF%BC%9A5%E4%B8%AA%E5%8D%87%E7%BA%A7%EF%BC%81S_Pen%E4%B8%8D%E6%94%AF%E6%8C%81%E8%93%9D%E7%89%99%E4%BA%86%EF%BC%9F_%282160p_50fps_VP9-96kbit_AAC%29-00.00.05.200.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "三星 Galaxy S25 采用分体式双层主板（处理器板+射频板），骁龙8 Elite for Galaxy 与 LPDDR5X 内存以 PoP 堆叠、配 UFS 4.0；电源管理含 ADI（MAX77751/MAX77775P）USB-C 充电器、Silicon Mitus SM5443 开关电容电池充电、Qualcomm PM8550 系列与 Samsung S2MPB 系列 PMIC。射频侧为 Qualcomm SDR875-004 收发器、WCN7851-101 Wi-Fi 7/BT5.4、NXP SN300 NFC+SE、NXP SR200D UWB 及各频段前端模块（与 Ultra 同平台，但标准版无 S Pen、故无 Wacom 数字化控制器）。电池 4000mAh 用易拉胶固定（同代 Ultra 实测四条拉胶），后盖胶封需加热；相机为三颗模块化可单独更换。iFixit 未单独给 S25 分数，但同代 S25 Ultra 暂定 5/10（电池/相机友好，屏幕与后盖胶难拆）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
+        "https://www.ifixit.com/Device/Samsung_Galaxy_S25",
+        "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S25+",
+      "chip": "高通 骁龙8 Elite for Galaxy",
+      "releaseYear": 2025,
+      "features": "6.7″ AMOLED 120Hz",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "SM-S936。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Samsung_Galaxy_S25%2B.jpg/500px-Samsung_Galaxy_S25%2B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "motherboardDesc": "三星 Galaxy S25+ 与 S25 同属骁龙8 Elite for Galaxy 平台，采用分体式双层主板（处理器板+射频板）：骁龙8 Elite 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 ADI USB-C 充电器+Silicon Mitus 开关电容充电+Qualcomm/Samsung 系列 PMIC。射频/连接同 S25（SDR875-004、WCN7851-101 Wi-Fi7/BT5.4、NXP NFC+UWB、多频段 FEM），无 S Pen 故无 Wacom 控制器；相机三摄模块化。区别仅在电池容量 4900mAh（同样易拉胶固定）与机身尺寸，后盖胶封需加热。维修性同代设计，参考 S25 Ultra 的 iFixit 暂定 5/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
+        "https://www.ifixit.com/Device/Samsung_Galaxy_S25",
+        "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S25 Ultra",
+      "chip": "高通 骁龙8 Elite for Galaxy",
+      "releaseYear": 2025,
+      "features": "6.9″ AMOLED 120Hz；S Pen；2亿主摄",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "SM-S938。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Rear_view_of_the_Samsung_Galaxy_S25_Ultra_smartphone.jpg/500px-Rear_view_of_the_Samsung_Galaxy_S25_Ultra_smartphone.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Samsung_Galaxy_S25_Ultra.jpg/500px-Samsung_Galaxy_S25_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg/500px-Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Samsung_Galaxy_S25_Ultra_phone%27s_screen.jpg/500px-Samsung_Galaxy_S25_Ultra_phone%27s_screen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "三星 Galaxy S25 Ultra 主板为分体式双层（处理器板+射频板）：处理器板正面为骁龙8 Elite + 美光 12GB LPDDR5X（PoP 堆叠）+ Samsung 256GB UFS 4.0，以及 ADI MAX77751/MAX77775P USB-C 充电器、Silicon Mitus SM5443 开关电容充电、Samsung S2MPBA3 与 TI 音频放大；背面含 Qualcomm PM8550VE/VS、Samsung S2MPB02 电源管理、ST 无线充收发、Cirrus Logic 触觉驱动。射频板集成 Wacom WEZ02 S Pen 数字化控制器、Samsung S2DOS07 显示 PM，以及 Qualcomm SDR875-004 收发器、NXP SN300 NFC+SE、NXP SR200D UWB、WCN7851-101 Wi-Fi7/BT5.4、Skyworks/Murata/Qualcomm/Infineon 前端模块与 ST/Bosch/AKM 传感器。5000mAh 电池用四条易拉胶固定（iFixit 好评），后盖胶封需加热；2亿主摄等四摄独立模块化可单换。iFixit 暂定维修性 5/10（电池/相机友好，屏幕与后盖胶难拆、官方文档差）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
+        "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability",
+        "https://m.gsmarena.com/newsdetail.php3?idNews=66507&c=10001"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S24",
+      "chip": "高通 骁龙8 Gen3 for Galaxy",
+      "releaseYear": 2024,
+      "features": "6.2″ AMOLED 120Hz；超频版 8 Gen3",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3 for Galaxy。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/SAMSUNG_Galaxy_S24_Ultra.jpg/500px-SAMSUNG_Galaxy_S24_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/SAMSUNG_Galaxy_S24_Ultra_%282%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/SAMSUNG_Galaxy_S24_Ultra_%283%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%283%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/SAMSUNG_Galaxy_S24_Ultra_%284%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%284%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "三星 Galaxy S24 采用分体式双层主板（处理器板+射频板），骁龙8 Gen3 for Galaxy（SM8650-AC）与 LPDDR5X 内存 PoP 堆叠、UFS 4.0，电源管理为骁龙平台配套的 Qualcomm PM855x 与 Samsung S2MPB 系列 PMIC、ADI USB-C 充电器及 Silicon Mitus 开关电容充电 IC。射频/连接：集成骁龙 X75 调制解调器、Wi-Fi 6E、BT5.3、NXP NFC+SE、UWB 及各频段前端模块；标准版无 S Pen、无 Wacom 控制器。4000mAh 电池易拉胶固定，后盖胶封需加热；VC 均热板+石墨散热，相机三摄模块化。维修性资料：iFixit 未给 S24 正式分数，但同代 S24 Ultra 被 PBKReviews 评为 9/10（易拉胶电池、易接近），同系列设计利于维修。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Device/Samsung_Galaxy_S24",
+        "https://www.ifixit.com/Guide/Motherboard+Removal/175781",
+        "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S24+",
+      "chip": "高通 骁龙8 Gen3 for Galaxy",
+      "releaseYear": 2024,
+      "features": "6.7″ AMOLED 120Hz",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3 for Galaxy。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Samsung_Galaxy_S24%2B.jpg/500px-Samsung_Galaxy_S24%2B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Samsung_Galaxy_S24%2B_01.jpg/500px-Samsung_Galaxy_S24%2B_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "三星 Galaxy S24+ 与 S24 同属骁龙8 Gen3 for Galaxy 平台，分体式双层主板（处理器板+射频板）：骁龙8 Gen3 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 Qualcomm/Samsung 系列 PMIC、ADI USB-C 充电与 Silicon Mitus 开关电容充电。射频侧集成骁龙 X75 基带、Wi-Fi 6E、BT5.3、NFC+UWB 与多频段 FEM，无 S Pen 故无 Wacom 控制器；相机三摄模块化。与 S24 仅电池 4900mAh（易拉胶固定）与机身尺寸不同，后盖胶封需加热，配 VC 均热+石墨。维修性同 S24 系列，参考 S24 Ultra 的 PBKReviews 9/10。",
+      "motherboardImg": null,
+      "sources": [
+        "https://www.ifixit.com/Device/Samsung_Galaxy_S24",
+        "https://www.ifixit.com/Guide/Motherboard+Removal/175781",
+        "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html"
+      ]
+    },
+    {
+      "brand": "三星",
+      "model": "Galaxy S24 Ultra",
+      "chip": "高通 骁龙8 Gen3 for Galaxy",
+      "releaseYear": 2024,
+      "features": "6.8″ AMOLED 120Hz；S Pen；2亿主摄",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机(SM型号)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3 for Galaxy。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/SAMSUNG_Galaxy_S24_Ultra.jpg/500px-SAMSUNG_Galaxy_S24_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/SAMSUNG_Galaxy_S24_Ultra_%282%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/SAMSUNG_Galaxy_S24_Ultra_%283%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%283%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/SAMSUNG_Galaxy_S24_Ultra_%284%29.jpg/500px-SAMSUNG_Galaxy_S24_Ultra_%284%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "三星 Galaxy S24 Ultra 采用分体式双层主板（处理器板+射频板），骁龙8 Gen3 for Galaxy（SM8650-AB）与 12GB LPDDR5X PoP 堆叠、UFS 4.0（至1TB），电源管理为 Qualcomm PM855x 与 Samsung S2MPB 系列 PMIC、ADI USB-C 充电器及 Silicon Mitus 开关电容充电 IC。Ultra 专属：主板含 Wacom S Pen 数字化控制器（拆机可见手写笔端口），射频侧集成骁龙 X75 基带、Wi-Fi 6E、BT5.3、NXP NFC+SE、UWB 与多频段 FEM；2亿主摄等四摄独立模块化。5000mAh 电池易拉胶固定（PBK 好评），大面积 VC 均热板+石墨散热，后盖胶封需加热。维修性：PBKReviews 给 S24 Ultra 9/10；iFixit 未给正式分，但同代 S25 Ultra 为 5/10（标准差异）。",
+      "motherboardImg": null,
+      "sources": [
+        "https://tr.ifixit.com/Guide/Motherboard+Removal/175781",
+        "https://zh.ifixit.com/Guide/Samsung+Galaxy+S24+Ultra+%E5%90%8E%E7%BD%AE%E6%91%84%E5%83%8F%E5%A4%B4%E6%9B%B4%E6%8D%A2/175785",
+        "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html",
+        "https://wap.zol.com.cn/1466/1465383/index.html"
+      ]
+    },
+    {
+      "brand": "realme",
+      "model": "realme GT6",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2024,
+      "features": "6.78″ OLED 直屏 120Hz；GT 性能",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(realme/OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3。",
+      "motherboardDesc": "主板为传统三段式结构、单层薄 PCB 设计（约50%面积镂空以容纳镜头），正反屏蔽罩均覆铜箔并涂硅脂/导热硅胶片。核心三大件为海力士 LPDDR5X 内存（PoP 叠于 SoC 之上）+ 三星 UFS 4.0 闪存 + 高通第三代骁龙 8；已确认电源管理为高通 PM8550BH/PM8550VS、射频 SDR753、Wi-Fi/蓝牙 WCN7851。不锈钢 VC 均热板双层堆叠（官方宣传 11472mm²），5800mAh 硅碳电池支持 120W SuperVOOC 且可快拆，接口/小元件普遍点胶、BTB 配橡胶圈，防护到位、可维修性较好。",
+      "motherboardImg": null,
+      "sources": [
+        "搜狐 微机分《深入剖析真我 GT6:拆机后的惊艳发现》https://www.sohu.com/a/792220802_121876672",
+        "FoneArena realme GT 6 review (散热/充电说明) https://www.fonearena.com/blog/?p=426709"
+      ]
+    },
+    {
+      "brand": "realme",
+      "model": "realme GT7",
+      "chip": "联发科 天玑9400e（国际）/ 天玑9400+（国行）",
+      "releaseYear": 2025,
+      "features": "6.8″ OLED 直屏 144Hz；大电池",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(realme/OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "芯片因地区而异：国际版天玑9400e，国行版天玑9400+。验机以实际关于手机-处理器 为准。",
+      "motherboardDesc": "主板采用双层叠板设计（0.7mm 板材，仅接口区叠层、核心区仍为单层），主摄“破板下沉”直触中框、超广角架于主板但未与核心重叠；核心为海力士 LPDDR5X + 三星 UFS 4.0 + 联发科天玑 9400+（国行）/9400e（国际版）。屏蔽罩覆铜箔、SoC 涂导热材料，7700mm² 不锈钢 VC 均热板覆盖主板与电池区；7200mAh 硅碳单电芯双接口电池配 100W SuperVOOC。整机通过 IP69，副板防护规格高于主板，小元件封胶与接口胶圈到位。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分 realme GT7 拆解（搜狐/今日头条）",
+        "MyMobileIndia《Realme GT 7 Repair Costs Revealed》https://mymobileindia.com/web-stories/realme-gt-7-repair-costs-revealed-display-battery-cameras-more/",
+        "realme 官网规格 https://www.realme.com/ph/realme-gt-7-5g/specs"
+      ]
+    },
+    {
+      "brand": "一加",
+      "model": "一加13",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2024,
+      "features": "6.82″ OLED 直屏 120Hz；哈苏影像",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(一加/OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Elite。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OnePlus_13_back.jpg/500px-OnePlus_13_back.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/OnePlus_13_volume_slider.jpg/500px-OnePlus_13_volume_slider.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/OnePlus_AC2003_with_a_broken_screen%2C_13.jpg/500px-OnePlus_AC2003_with_a_broken_screen%2C_13.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板为双层叠板设计（下层 0.7mm PCB），夹层针对 SoC 与核心区注入导热凝胶（经注胶孔灌充）强化散热；核心为海力士 LPDDR5X + UFS 4.0 + 高通骁龙 8 至尊版，Wi-Fi/蓝牙为 WCN7861、射频 SDR753。潜望长焦采用 Find X8 同款 CMOS 倒置“舰式”结构，主摄/潜望均“破板下沉”直触 VC；不锈钢 VC 约 5600mm²（官方 9925mm²）。6000mAh 硅碳电池支持 100W 有线 + 50W 无线，USB 3.2 Gen1，IP68+IP69，哈苏影像；电池快拆、前置传感器小板模块化，可维修性尚可。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分/什么值得买《【享拆】一加 13 拆解》https://post.m.smzdm.com/zz/p/azz40pgo/",
+        "今日头条《一加 13 首发拆解》https://m.toutiao.com/zixun/7511549857715439666",
+        "iFixit OnePlus 13 专题 https://it.ifixit.com/Topic/OnePlus_13"
+      ]
+    },
+    {
+      "brand": "一加",
+      "model": "一加Ace 5",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2024,
+      "features": "6.78″ OLED 直屏 120Hz",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(一加/OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "骁龙8 Gen3。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/OnePlus_Ace_5_Back.png/500px-OnePlus_Ace_5_Back.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/OnePlus_Ace_5_Front.png/500px-OnePlus_Ace_5_Front.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "公开实测拆机资料较少，以下为按骁龙 8 Gen3 平台与一加/OPPO 同代方案的预期：传统三段式机身、likely 双层叠板主板，SoC 与 LPDDR5X 内存（PoP）+ UFS 4.0 闪存堆叠，并配不锈钢 VC 均热板（天工散热系统）。6415mAh 硅碳电池支持 80W SuperVOOC，无无线充电；影像为索尼 IMX906 主摄 + 超广角 + 微距，ColorOS 算法加持。具体 PMIC、射频与 Wi-Fi 芯片型号未见实测拆机确认，验机/维修时以实物为准。",
+      "motherboardImg": null,
+      "sources": [
+        "NanoReview OnePlus Ace 5 https://www.nanoreview.net/en/phone/oneplus-ace-5",
+        "RepairFully OnePlus Ace 5 https://repairfully.com/devices/oneplus/ace/ace-5",
+        "Beebom 规格 https://gadgets.beebom.com/mobile/oneplus-ace-5?view=specs"
+      ]
+    },
+    {
+      "brand": "OPPO",
+      "model": "Find X9",
+      "chip": "联发科 天玑9500",
+      "releaseYear": 2025,
+      "features": "6.59″ OLED 直屏 120Hz；哈苏；台积电3nm",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑9500（2025-10-16）。验机：关于手机-处理器 应为天玑9500。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Oppo_Find_X9_Titanium_Grey.jpg/500px-Oppo_Find_X9_Titanium_Grey.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Oppo_Find_X9_Ultra.jpg/500px-Oppo_Find_X9_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板为双层叠板方案，主摄与潜望长焦采用“破板下沉”设计直触中框与 VC 均热板；核心为联发科天玑 9500，搭配 LPDDR5X + UFS 4.1（内存以 PoP 叠于 SoC 之上）。不锈钢 VC 约 4100mm²，7025mAh 单电芯单接口硅碳电池配 80W SuperVOOC + 50W 无线充电，USB 2.0。哈苏影像（LUMO 引擎/丹霞色彩还原镜头），IP68+IP69 满级防水；中框纳米注塑+CNC 一体，接口与小元件封胶、部分 BTB 配胶圈，可维修性中等。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分 Find X9 系列对比拆解（搜狐/今日头条）",
+        "GridMobile OPPO Find X9 规格 https://gridmobile.com.sg/phone/oppo-find-x9",
+        "OPPO 官网 Find X9 Pro 规格（同平台参考）https://www.oppo.com/au/smartphones/series-find-x/find-x9-pro/specs/"
+      ]
+    },
+    {
+      "brand": "OPPO",
+      "model": "Find X9 Pro",
+      "chip": "联发科 天玑9500",
+      "releaseYear": 2025,
+      "features": "6.78″ OLED 曲屏 120Hz；哈苏；2亿长焦",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "同 天玑9500。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Oppo_Find_X9_Titanium_Grey.jpg/500px-Oppo_Find_X9_Titanium_Grey.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "motherboardDesc": "采用 OPPO“浮动堆叠（floating stack）”架构，主板环绕相机模组并比常规缩短约 7mm，为 0.6mm 下层板的双层叠板；主摄/潜望“破板下沉”直触中框与 VC，夹层 SoC 区域填充导热凝胶（Z 字涂布）。核心为联发科天玑 9500 + 三星 LPDDR5X + UFS 4.1，另含自研山海通信增强芯片（OPPO R100）与哈苏 LUMO 影像相关协处理。7500mAh 单电芯硅碳电池 80W 有线 + 50W 无线，USB 3.2 Gen1，不锈钢 VC 约 4300mm²（0.32mm 厚）；四麦克风、IP66/68/69，实体快捷按键模块化可换，整体偏可维修。",
+      "motherboardImg": null,
+      "sources": [
+        "微机分 OPPO Find X9 Pro 拆解（搜狐/今日头条）",
+        "Phone Repair Guru《Oppo Find X9 Pro Teardown》https://www.phonerepairguru.com/news/i-tore-down-the-oppo-find-x9-pro-in-china-and-it-completely-blew-my-mind",
+        "今日头条《OPPO Find X9 Pro拆解曝光》https://m.toutiao.com/article/7562233905441456675/",
+        "OPPO 官网规格 https://www.oppo.com/au/smartphones/series-find-x/find-x9-pro/specs/"
+      ]
+    },
+    {
+      "brand": "OPPO",
+      "model": "Reno15",
+      "chip": "联发科 天玑8450",
+      "releaseYear": 2025,
+      "features": "6.3″ OLED 直屏 120Hz；ColorOS 16；Android 16；Mali-G720",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑8450（2025-11-17 发布，ZOL 与 devices-arena 均确认联发科天玑8450；部分渠道曾误标骁龙7 Gen4，以本库为准）。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Back_side_OPPO_Reno15_2026-08-10_smartphone_03.jpg/500px-Back_side_OPPO_Reno15_2026-08-10_smartphone_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/OPPO_Reno15_2026-08-10_smartphone_01.jpg/500px-OPPO_Reno15_2026-08-10_smartphone_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/OPPO_Reno15_2026-08-10_smartphone_02.jpg/500px-OPPO_Reno15_2026-08-10_smartphone_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Oppo_Reno15_Aurora_White.jpg/500px-Oppo_Reno15_Aurora_White.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "公开拆解资料偏少，以下为基于天玑 8450 平台与 Reno 系列的推断：典型三段式机身、双层叠板主板，SoC 联发科天玑 8450 与 LPDDR5X + UFS 3.1 堆叠，配不锈钢 VC 均热板；有拆机视频指出其影像模组采用独立散热结构以控制 4K 录像发热。6200mAh 电池支持 80W SuperVOOC（含 UFCS），IP66/68/69；后置 2 亿主摄 + 5000 万超广角 + 5000 万潜望长焦，前置 5000 万。具体 PMIC/射频/Wi-Fi 芯片型号未见实测确认，需以实物为准。",
+      "motherboardImg": null,
+      "sources": [
+        "网易《OPPO Reno15 性能提升不少尤其拍照》https://www.163.com/dy/article/KDUERMQ60556ANEM.html",
+        "今日头条《OPPO Reno15全面评测|硬核拆机》https://www.toutiao.com/article/7626744135080329782/",
+        "OPPO 官方参数 https://support.oppo.com/cn/answer/?aid=2260833",
+        "OPPO India Reno15 系列规格 https://www.oppo.com/in/newsroom/press/oppo-india-launches-all-new-reno-15-series/"
+      ]
+    },
+    {
+      "brand": "OPPO",
+      "model": "Reno16",
+      "chip": "联发科 天玑8550 SUPER",
+      "releaseYear": 2026,
+      "features": "6.3″ OLED 直屏 120Hz；ColorOS；Mali-G720",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁(OPPO)",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机"
+      ],
+      "note": "天玑8550 SUPER（2026-05-25 发布）。",
+      "motherboardDesc": "公开拆机信息极少，以下为按天玑 8550 SUPER 平台与 Reno 系列的通用预期：三段式机身、双层叠板主板，SoC 联发科天玑 8550 SUPER 与 LPDDR5X + UFS 3.1 堆叠，配不锈钢 VC 均热板与 80W SuperVOOC 充电；6700mAh 电池、后置 2 亿主摄 + 双 5000 万副摄、IP66/68/69。具体电源管理/射频/无线芯片型号及主板形状未见可靠实测拆机确认，验机/维修时以实物为准。",
+      "motherboardImg": null,
+      "sources": [
+        "OPPO 商城 Reno16 规格 https://store.oppo.com/cn/web/products/40712.html",
+        "GeekWills OPPO Reno 16 https://www.geekwills.com/oppo-reno-16.html",
+        "Gizmochina Oppo Reno 16 https://www.gizmochina.com/product/oppo-reno-16/"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米15 Pro",
+      "chip": "高通 骁龙8 Elite",
+      "releaseYear": 2024,
+      "features": "6.73″ 2K 直屏 120Hz、徕卡潜望长焦三摄(光影猎人900)、骁龙8至尊版(台积电3nm)、6100mAh金沙江电池+90W、3D超声波指纹。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "后摄潜望长焦非原装",
+        "指纹模组更换"
+      ],
+      "note": "关于手机-处理器应显示「骁龙8至尊版」(即骁龙8 Elite)；核对 *#06# IMEI 与 设置-关于手机-状态信息/入网型号(2410DPN6CC)一致。改版/扩容鉴别：对比 关于手机 型号与入网型号、用 *#*#6485#*#* 查电池循环、设置-存储核对实际容量。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Xiaomi_15_Pro_%281%29.jpg/500px-Xiaomi_15_Pro_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Xiaomi_15_Pro_%282%29.jpg/500px-Xiaomi_15_Pro_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "小米15 Pro 采用典型旗舰双层堆叠主板，骁龙8至尊版(台积电3nm)与 LPDDR5X 运行内存 PoP 叠封、UFS 4.0 闪存焊接于主板。6100mAh 单电芯金沙江电池，支持 90W 有线+50W 无线，配小米澎湃充电/电源管理芯片。散热为大面 VC 均热板。主板集成 WiFi7、蓝牙5.4、NFC、红外及 3D 超声波指纹。详细的芯片级拆解图来源较少，以上为平台级预期；回收重点核对 3D 超声波指纹模组与后摄潜望长焦是否原装。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米15 Pro",
+        "小米官网 mi.com/prod/xiaomi-15-pro",
+        "京东 小米15 Pro 商品页"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米14 Pro",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2023,
+      "features": "6.73″ 2K 全等深微曲屏、徕卡1024级可变光圈三摄(光影猎人900)、骁龙8 Gen3(台积电4nm)、120W澎湃有线秒充+50W无线。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "后摄可变光圈模组非原装",
+        "钛金属特别版鉴别"
+      ],
+      "note": "关于手机-处理器应显示「第三代骁龙8」(即骁龙8 Gen3)。核对 *#06# IMEI 与入网型号一致；钛金属特别版(卫星通讯)需额外确认卫星功能正常。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对容量、*#*#6485#*#* 查电池健康。",
+      "appearanceImg": null,
+      "gallery": [],
+      "motherboardDesc": "小米14 Pro 主板为骁龙8 Gen3(台积电4nm) 与 LPDDR5X 内存 PoP 叠封、UFS 4.0 闪存方案。充电管理采用小米澎湃 P2 快充芯片 + 澎湃 G1 电池管理芯片，支持 120W 有线/50W 无线。散热为小米环形冷泵(Mi IceLoop)。6.73″ 2K 全等深微曲屏，4880mAh 单电芯，主板集成 WiFi7、蓝牙5.4、NFC、红外及屏下指纹。详细拆解中 RF/WiFi/BT/NFC 模组为平台方案，逐项芯片型号未找到；维修需加热分离屏幕与后盖。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米14 Pro",
+        "小米官网 mi.com/xiaomi-14-pro",
+        "快懂百科 小米14 Pro"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米14 Ultra",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2024,
+      "features": "6.73″ 2K 全等深微曲屏、一英寸 LYT-900 徕卡四摄、骁龙8 Gen3(台积电4nm)、90W有线+80W无线、双通道环形冷泵散热。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "一英寸主摄/徕卡四摄非原装",
+        "钛金属卫星版鉴别"
+      ],
+      "note": "关于手机-处理器应显示「第三代骁龙8」(即骁龙8 Gen3)。核对 *#06# IMEI 与入网型号一致；钛金属版支持双向卫星通信需确认。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对容量、*#*#6485#*#* 查电池；巨大圆环四摄务必鉴别原装。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/HK_%E4%B8%AD%E7%92%B0_Central_%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%AD_33_Queen%27s_Road_Central_shop_%E8%B1%90%E6%BE%A4%E9%9B%BB%E5%99%A8_Fortress_Store_%E6%89%8B%E6%A9%9F_smartphone_XiaoMi_14_Ultra_watch_May_2024_R12S_02.jpg/500px-HK_%E4%B8%AD%E7%92%B0_Central_%E7%9A%87%E5%90%8E%E5%A4%A7%E9%81%93%E4%B8%AD_33_Queen%27s_Road_Central_shop_%E8%B1%90%E6%BE%A4%E9%9B%BB%E5%99%A8_Fortress_Store_%E6%89%8B%E6%A9%9F_smartphone_XiaoMi_14_Ultra_watch_May_2024_R12S_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [],
+      "motherboardDesc": "小米14 Ultra 主板集成骁龙8 Gen3(台积电4nm) + LPDDR5X PoP + UFS 4.0，采用小米澎湃 P2 充电芯片与澎湃 G1 电池管理芯片，90W 有线/80W 无线。配备双通道环形冷泵散热系统(含独立相机导热回路)。6.73″ 2K 曲屏，5300mAh 电池，USB-C 3.2 Gen 2。巨大圆环徕卡四摄(一英寸 LYT-900 + 三颗 IMX858)使后盖与主板相机区结构复杂，维修/原装鉴别难度高。详细芯片级板图来源有限，以上为平台级预期。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米14 Ultra",
+        "小米台湾官网 mi.com/tw/product/xiaomi-14-ultra",
+        "中关村在线 小米14 Ultra 参数页"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米13",
+      "chip": "高通 骁龙8 Gen2",
+      "releaseYear": 2022,
+      "features": "6.36″ FHD+ OLED 直屏 120Hz、徕卡三摄(索尼IMX800 主摄)、骁龙8 Gen2(台积电4nm)、67W有线+50W无线、小屏旗舰。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "后摄IMX800非原装"
+      ],
+      "note": "关于手机-处理器应显示「第二代骁龙8」(即骁龙8 Gen2)。核对 *#06# IMEI 与入网型号一致。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对实际容量、*#*#6485#*#* 查电池健康；后摄主摄 IMX800 需鉴别原装。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Xiaomi_13_front.jpg/960px-Xiaomi_13_front.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [],
+      "motherboardDesc": "小米13 为小尺寸直屏旗舰，主板为骁龙8 Gen2(台积电4nm) + LPDDR5X 满血版 PoP + UFS 4.0。散热采用 4642mm² 大 VC 液冷。4500mAh 单电芯，67W 有线/50W 无线，配小米澎湃电池管理系统。6.36″ 三星 OLED 直屏，屏下指纹。主板集成 WiFi6 增强版、蓝牙5.3、NFC、红外。详细芯片级拆解图来源较少，以上为平台级预期。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米13",
+        "小米官网(新加坡) mi.com/sg/product/xiaomi-13/specs",
+        "小米中国官网 小米13 规格页",
+        "Wikimedia Commons: File:Xiaomi 13 front.jpg"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米13 Pro",
+      "chip": "高通 骁龙8 Gen2",
+      "releaseYear": 2022,
+      "features": "6.73″ 2K 三星E6 曲面屏、一英寸 IMX989 徕卡三摄、骁龙8 Gen2(台积电4nm)、120W有线+50W无线。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "一英寸主摄非原装",
+        "陶瓷/素皮后盖更换"
+      ],
+      "note": "关于手机-处理器应显示「第二代骁龙8」(即骁龙8 Gen2)。核对 *#06# IMEI 与入网型号(2210132C)一致。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对容量；一英寸 IMX989 主摄与陶瓷/素皮后盖务必鉴别原装更换。",
+      "appearanceImg": null,
+      "gallery": [],
+      "motherboardDesc": "小米13 Pro 主板为骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0 旗舰方案。6.73″ 三星 E6 2K 曲面屏，散热为 3400mm² 大 VC 液冷。4820mAh 电池，120W 有线/50W 无线，配小米澎湃充电/电源管理芯片。一英寸 IMX989 主摄模组体积大，主板相机区元件密集。详细主板芯片级资料较少，以上为平台级预期；回收需重点鉴别一英寸主摄原装性及陶瓷/素皮后盖是否更换。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米13 Pro 参数/行情",
+        "中关村在线 小米13 Pro 问答",
+        "京东 小米13 Pro 商品页(入网型号2210132C)"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米13 Ultra",
+      "chip": "高通 骁龙8 Gen2",
+      "releaseYear": 2023,
+      "features": "6.73″ 2K C7 LTPO 曲屏、一英寸 IMX989 徕卡四摄、骁龙8 Gen2(台积电4nm)、90W有线+50W无线、环形冷泵散热。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "一英寸主摄/徕卡四摄非原装"
+      ],
+      "note": "关于手机-处理器应显示「第二代骁龙8」(即骁龙8 Gen2)。核对 *#06# IMEI 与入网型号一致。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对容量、*#*#6485#*#* 查电池；巨大圆环四摄(IMX989+三颗IMX858)务必鉴别原装。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Xiaomi_13_Ultra.jpg/500px-Xiaomi_13_Ultra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Xiaomi_13_Ultra_20240220.jpg/500px-Xiaomi_13_Ultra_20240220.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "小米13 Ultra 主板集成骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0，配备小米澎湃 P2 快充芯片与澎湃 G1 电池管理芯片，90W 有线/50W 无线。散热为小米环形冷泵(Mi IceLoop)。6.73″ C7 2K 曲屏，5000mAh 单电芯。巨大圆环徕卡四摄使后盖与主板相机座结构复杂，原装鉴别与维修难度高。详细芯片级板图来源有限，以上为平台级预期。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米13 Ultra",
+        "小米官网 mi.com/xiaomi-13-ultra",
+        "小米官网(新加坡) mi.com/sg/product/xiaomi-13-ultra/specs"
+      ]
+    },
+    {
+      "brand": "小米",
+      "model": "小米Civi 4 Pro",
+      "chip": "高通 骁龙8s Gen3",
+      "releaseYear": 2024,
+      "features": "6.55″ 1.5K C8 全等深微曲屏、徕卡三摄(光影猎人800 主摄)、骁龙8s Gen3(台积电4nm)、67W有线、轻薄179g。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "徕卡三摄拼装",
+        "科纳皮/素皮后盖更换"
+      ],
+      "note": "关于手机-处理器应显示「第三代骁龙8s」(即骁龙8s Gen3)。核对 *#06# IMEI 与入网型号一致。改版/扩容鉴别：对比 关于手机 型号与入网型号、设置-存储核对容量；徕卡三摄(光影猎人800/三星人像/超广角)需鉴别是否原装拼装，后盖科纳皮/素皮是否更换。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_Civi_4_Pro_%281%29.jpg/500px-Xiaomi_Civi_4_Pro_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Xiaomi_Civi_4_Pro_%282%29.jpg/500px-Xiaomi_Civi_4_Pro_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "小米Civi 4 Pro 主板为骁龙8s Gen3(台积电4nm) + LPDDR5X + UFS 4.0 轻薄方案，布板面积更小以适配 7.45mm 机身。配备自研小米澎湃 T1 信号增强芯片。散热为 4184mm² 环形冷泵。4700mAh 单电芯，67W 有线。6.55″ C8 1.5K 全等深微曲屏，前后双微弧。主板集成 WiFi6、蓝牙5.4、NFC、红外。详细芯片级拆解图来源较少，以上为平台级预期。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线(ZOL) 小米Civi 4 Pro",
+        "小米官网 mi.com/prod/xiaomi-civi-4-pro",
+        "新浪财经 小米Civi 4 Pro 发布报道"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K70 Pro",
+      "chip": "高通 骁龙8 Gen3",
+      "releaseYear": 2023,
+      "features": "6.67英寸2K OLED直屏(华星C8,3200×1440,120Hz),5000万光影猎人800主摄+5000万2X人像,骁龙8 Gen3(台积电4nm),高亮金属中框+屏下指纹,120W/5000mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "金属中框磕伤掉漆",
+        "屏下指纹失效"
+      ],
+      "note": "关于手机-处理器应显示\"第三代骁龙8 / 骁龙8 Gen3\";回收核验看设置内处理器名称与实机跑分是否匹配,IMEI(拨号*#06#)与包装/卡槽标贴是否一致,警惕把骁龙8+ Gen1 改标成 8 Gen3 的改版机及扩容存储机。",
+      "appearanceImg": null,
+      "gallery": [],
+      "motherboardDesc": "主板为典型 Redmi K 系列矩形堆叠,骁龙8 Gen3 与 LPDDR5X 内存采用 PoP 叠层封装于主板正面,散热为 5000mm² 冰封循环冷泵 VC。充电采用小米澎湃 P2 快充芯片 + G1 电池管理芯片,无额外独立电源 IC;WiFi7(高通 FastConnect)/蓝牙5.4/NFC/屏下指纹集成于主板,电池经触点连接。可维修性中等:屏幕与电池可换,主板芯片多焊死。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线 wap.zol.com.cn/1611/1610864",
+        "小米官网 www.mi.com/redmi-k70-pro",
+        "TechSpecs www.techspecs.info/xiaomi-redmi-k70-pro"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K70 至尊版",
+      "chip": "联发科 天玑9300+",
+      "releaseYear": 2024,
+      "features": "6.67英寸1.5K AMOLED直屏(2712×1220,144Hz,龙晶玻璃),5000万索尼IMX906主摄OIS,天玑9300+(台积电4nm)外挂狂暴游戏独显D1,金属中框+IP68,120W/5500mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "IP68进水机(防水胶老化)",
+        "独显D1芯片造假/屏蔽"
+      ],
+      "note": "关于手机-处理器应显示\"天玑9300+\";回收核验确认处理器名与跑分匹配,IMEI 与卡槽/包装标贴一致,注意至尊版 IP68 密封机进水后易暗病,以及把普通 K 系列改标成至尊版(无独显D1/无T1信号芯片)的改版机。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_01.jpg/500px-Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_02.jpg/500px-Redmi_K70_%E8%87%B3%E5%B0%8A%E7%89%88_-_2024-09-27_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板集成天玑9300+ 与 LPDDR5X 内存 PoP 叠层,并外挂狂暴游戏独显 D1 芯片与小米澎湃 T1 信号增强芯片;散热为 5000mm² 3D 冰封循环冷泵(凹凸台设计)。充电采用澎湃 P2 + G1 双芯,IP68 机身密封使电池/屏幕更换难度略增;主板矩形、SoC 屏蔽罩下可见,可维修性中等偏难(密封胶+防水结构)。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线 wap.zol.com.cn/2082/2081390",
+        "小米官网 www.mi.com/prod/redmi-k70-ultra",
+        "快懂百科 www.baike.com/wikiid/7398360709355520035"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K60",
+      "chip": "高通 骁龙8+ Gen1",
+      "releaseYear": 2022,
+      "features": "6.67英寸2K AMOLED直屏(3200×1440,120Hz),6400万主摄OIS+800万超广角+200万微距,骁龙8+ Gen1(台积电4nm降频版),素皮/玻璃后壳,67W有线+30W无线/5500mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "无线充电线圈失效",
+        "骁龙8+改标8 Gen3"
+      ],
+      "note": "关于手机-处理器应显示\"骁龙8+ Gen1\";回收核验核对处理器名与跑分,IMEI 与卡槽/包装标贴一致,警惕把骁龙8+ Gen1 改标为 8 Gen3 的改版机及扩容存储机,并测试 30W 无线充电是否正常。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Redmi_K60_Pro.jpg/500px-Redmi_K60_Pro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Redmi_K60_Screen.jpg/500px-Redmi_K60_Screen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Redmi_K60_and_Redmi_Watch_3.jpg/500px-Redmi_K60_and_Redmi_Watch_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/The_Back_of_Redmi_K60.jpg/500px-The_Back_of_Redmi_K60.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "主板采用矩形液冷 VC(约5000mm²)覆盖骁龙8+ Gen1 与 LPDDR5 内存;公开拆解资料较少,按 K 系列平台预期其 SoC+RAM 为 PoP 叠层,充电为 67W 有线 + 30W 无线方案。RF/WiFi6/蓝牙5.3/NFC 集成于主板,屏下指纹居中;电池经排针连接,主板拆解需先卸屏,可维修性中等。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线 wap.zol.com.cn/1404/1403108",
+        "Newton百科 newton.com.tw/wiki/紅米K60",
+        "Gadgets360 www.gadgets360.com/redmi-k60-price-in-india-114959"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米K60 至尊版",
+      "chip": "联发科 天玑9200+",
+      "releaseYear": 2023,
+      "features": "6.67英寸1.5K AMOLED直屏(2712×1220,144Hz),5000万索尼主摄OIS,天玑9200+(台积电4nm)外挂独显X7,一体金属DECO+IP68,120W/5000mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "IP68进水机(防水胶老化)",
+        "独显X7芯片造假/屏蔽"
+      ],
+      "note": "关于手机-处理器应显示\"天玑9200+\";回收核验确认处理器名与跑分匹配,IMEI 与卡槽/包装标贴一致,注意至尊版 IP68 进水暗病,以及把普通 K60 改标成至尊版(无独显X7)的改版机。",
+      "appearanceImg": null,
+      "gallery": [],
+      "motherboardDesc": "主板集成天玑9200+ 与 LPDDR5X 内存 PoP 叠层,外挂 Pixelworks 独显 X7 芯片;散热为 5000mm² 不锈钢 VC + 石墨烯微纳腔导热膜。充电采用小米澎湃 P1 充电芯片 + G1 电池管理芯片,IP68 密封结构;主板矩形、SoC 屏蔽罩下可见,电池/屏幕更换因防水胶略难,可维修性中等偏难。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线 wap.zol.com.cn/1839/1838409",
+        "搜狗百科 baike.sogou.com/v216065704",
+        "GSMArena gsmarena.ae/product/xiaomi-redmi-k60-ultra"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米Note 14 Pro",
+      "chip": "联发科 天玑7300 Ultra",
+      "releaseYear": 2024,
+      "features": "6.67英寸1.5K AMOLED曲屏(2712×1220,120Hz,康宁Victus 2),2亿像素主摄OIS+800万超广角+200万微距,天玑7300 Ultra(台积电4nm),IP68,45W/5110mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "IP68进水机(防水胶老化)",
+        "2亿像素改标/后摄模组掉漆"
+      ],
+      "note": "关于手机-处理器应显示\"天玑7300-Ultra / 天玑7300 Ultra\";回收核验核对处理器名与跑分,IMEI 与卡槽/包装标贴一致,注意 Note 14 Pro 为曲屏且支持 IP68,进水与碎屏暗病高发,警惕把 Note 13 Pro/其他机型改标成 Note 14 Pro 的改版机。",
+      "appearanceImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Redmi_Note_14_Pro%2B_%281%29.jpg/500px-Redmi_Note_14_Pro%2B_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "gallery": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Redmi_Note_14_Pro%2B_%282%29.jpg/500px-Redmi_Note_14_Pro%2B_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Redmi_Note_14_ProPlus.jpg/500px-Redmi_Note_14_ProPlus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Redmi_Note_14_Pro_%281%29.jpg/500px-Redmi_Note_14_Pro_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      ],
+      "motherboardDesc": "采用\"金刚骨骼\"强化结构,主板有 0.8mm 加厚设计及吸能硅胶垫、金属补强以提升抗冲击;天玑7300 Ultra 与内存 PoP 叠层。充电为 45W + 5110mAh,未见独立澎湃充电芯片的公开确认;IP68 防水、康宁 Victus 2 玻璃。本机型详细主板/芯片级拆解资料稀疏,以上部分为平台级预期。",
+      "motherboardImg": null,
+      "sources": [
+        "小米台湾 www.mi.com/tw/product/redmi-note-14-pro-5g",
+        "Cashify compare xiaomi-redmi-note-14r-pro-vs-xiaomi-redmi-note-14-pro"
+      ]
+    },
+    {
+      "brand": "红米",
+      "model": "红米Note 13 Pro",
+      "chip": "高通 骁龙7s Gen2",
+      "releaseYear": 2023,
+      "features": "6.67英寸1.5K AMOLED直屏(2712×1220,120Hz,康宁Victus),2亿像素三星HP3主摄OIS+800万超广角+200万微距,骁龙7s Gen2(台积电4nm),金刚骨骼+IP54,67W/5100mAh。",
+      "currentRef": "",
+      "bombLines": [
+        "扩容机",
+        "改版机",
+        "账号锁/小米账号",
+        "FRP锁(谷歌)",
+        "鼓包",
+        "进水",
+        "黑名单",
+        "暗病机",
+        "IP54仅防溅(易进水暗病)",
+        "2亿像素改标/后摄模组掉漆"
+      ],
+      "note": "关于手机-处理器应显示\"第二代骁龙7s / 骁龙7s Gen2\";回收核验核对处理器名与跑分,IMEI 与卡槽/包装标贴一致,注意 Note 13 Pro 仅 IP54(防溅不防水)进水易暗病,警惕把 Note 12 Pro 等改标成 Note 13 Pro(无2亿像素)的改版机。",
+      "appearanceImg": null,
+      "gallery": [],
+      "motherboardDesc": "采用\"金刚骨骼\"架构,主板为 0.8mm 加厚设计并有吸能硅胶垫、多处金属补强与中框四角加高;骁龙7s Gen2 与内存 PoP 叠层。充电为 67W + 5100mAh(电池管理为软件算法,未见独立澎湃芯片公开确认);IP54 防护、康宁 Victus 玻璃,屏下指纹居中。本机型芯片级拆解资料稀疏,主板形状与加固为官方披露,具体 PMIC 未逐一核实。",
+      "motherboardImg": null,
+      "sources": [
+        "中关村在线 wap.zol.com.cn/1796/1795866",
+        "小米官网 www.mi.com/redmi-note-13-pro",
+        "小米香港 www.mi.com/hk/product/redmi-note-13-pro-5g/specs"
+      ]
+    }
+  ]
+}
