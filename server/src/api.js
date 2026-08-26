@@ -10,6 +10,13 @@ const EXT_BY_CT = {
   'image/avif': 'avif',
 };
 
+// 可写入的规格字段（除基础 brand/category/model/price/note/images 外）
+const SPEC_FIELDS = [
+  'release_date', 'cpu_brand', 'cpu_model', 'ram', 'rom',
+  'back_camera', 'front_camera', 'screen_size', 'screen_type', 'refresh',
+  'battery', 'charge', 'network', 'os', 'variants',
+];
+
 function json(res, code, data) {
   const body = JSON.stringify(data);
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -61,6 +68,8 @@ const SORTS = {
   updated: 'updated_at DESC',
   brand: 'brand ASC, category ASC, id ASC',
   id: 'id ASC',
+  release_desc: "substr(release_date,1,4) DESC, id ASC",
+  release_asc: "substr(release_date,1,4) ASC, id ASC",
 };
 
 function listModels(db, q) {
@@ -69,12 +78,27 @@ function listModels(db, q) {
   if (q.get('brand') && q.get('brand') !== '全部') { where.push('brand = ?'); args.push(q.get('brand')); }
   if (q.get('category')) { where.push('category = ?'); args.push(q.get('category')); }
   if (q.get('search')) {
-    where.push('(model LIKE ? OR note LIKE ? OR brand LIKE ? OR category LIKE ?)');
+    where.push('(model LIKE ? OR note LIKE ? OR brand LIKE ? OR category LIKE ? OR cpu_model LIKE ? OR release_date LIKE ?)');
     const s = '%' + q.get('search') + '%';
-    args.push(s, s, s, s);
+    args.push(s, s, s, s, s, s);
   }
   if (q.get('min_price')) { where.push('CAST(price AS REAL) >= ?'); args.push(Number(q.get('min_price'))); }
   if (q.get('max_price')) { where.push('CAST(price AS REAL) <= ?'); args.push(Number(q.get('max_price'))); }
+  // ---------- 规格细节筛选 ----------
+  if (q.get('year') && q.get('year') !== '全部') { where.push("substr(release_date, 1, 4) = ?"); args.push(q.get('year')); }
+  if (q.get('cpu_brand') && q.get('cpu_brand') !== '全部') { where.push('cpu_brand = ?'); args.push(q.get('cpu_brand')); }
+  if (q.get('ram')) { where.push('ram LIKE ?'); args.push('%' + q.get('ram') + '%'); }
+  if (q.get('rom')) { where.push('rom LIKE ?'); args.push('%' + q.get('rom') + '%'); }
+  if (q.get('network') && q.get('network') !== '全部') { where.push('network LIKE ?'); args.push('%' + q.get('network') + '%'); }
+  if (q.get('screen_type') && q.get('screen_type') !== '全部') { where.push('screen_type = ?'); args.push(q.get('screen_type')); }
+  if (q.get('camera_min')) {
+    where.push("(CASE WHEN back_camera LIKE '%万%' THEN CAST(substr(back_camera, 1, instr(back_camera, '万') - 1) AS REAL) ELSE 0 END) >= ?");
+    args.push(Number(q.get('camera_min')));
+  }
+  if (q.get('camera_max')) {
+    where.push("(CASE WHEN back_camera LIKE '%万%' THEN CAST(substr(back_camera, 1, instr(back_camera, '万') - 1) AS REAL) ELSE 0 END) <= ?");
+    args.push(Number(q.get('camera_max')));
+  }
   const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
 
   const total = db.prepare(`SELECT COUNT(*) AS c FROM models ${whereSql}`).get(...args).c;
@@ -94,6 +118,29 @@ function listModels(db, q) {
   const limitUsed = limit > 0 ? limit : rows.length;
   const page = limit > 0 ? Math.max(1, parseInt(q.get('page') || '1', 10)) : 1;
   return { total, page, limit: limitUsed, items: rows };
+}
+
+// 把 variants JSON 字符串解析成数组（列表返回时便于前端直接使用）
+function parseVariants(row) {
+  if (!row) return row;
+  let v = [];
+  try { v = JSON.parse(row.variants || '[]'); } catch (e) { v = []; }
+  return Object.assign({}, row, { variants: v });
+}
+
+// 各筛选维度的可选值（供前端构建筛选器）
+function filters(db) {
+  const one = (sql) => db.prepare(sql).all().map((r) => r.v).filter(Boolean);
+  return {
+    years: one("SELECT DISTINCT substr(release_date,1,4) AS v FROM models WHERE release_date != '' ORDER BY v DESC"),
+    cpu_brands: one("SELECT DISTINCT cpu_brand AS v FROM models WHERE cpu_brand != '' ORDER BY v"),
+    cpus: one("SELECT DISTINCT cpu_model AS v FROM models WHERE cpu_model != '' ORDER BY v"),
+    rams: one("SELECT DISTINCT ram AS v FROM models WHERE ram != '' ORDER BY v"),
+    roms: one("SELECT DISTINCT rom AS v FROM models WHERE rom != '' ORDER BY v"),
+    networks: one("SELECT DISTINCT network AS v FROM models WHERE network != '' ORDER BY v"),
+    screen_types: one("SELECT DISTINCT screen_type AS v FROM models WHERE screen_type != '' ORDER BY v"),
+    cameras: one("SELECT DISTINCT back_camera AS v FROM models WHERE back_camera != '' ORDER BY v"),
+  };
 }
 
 function validateModel(body, partial) {
@@ -124,8 +171,32 @@ function validateModel(body, partial) {
     }
     out.images = JSON.stringify(arr.map((x) => String(x).trim()).filter(Boolean));
   }
+  // 规格字段：普通字符串
+  for (const f of SPEC_FIELDS.filter((f) => f !== 'variants')) {
+    if (body[f] !== undefined) out[f] = String(body[f] ?? '').trim();
+  }
+  // variants：JSON 数组 [{spec, price}]
+  if (body.variants !== undefined) {
+    let arr = body.variants;
+    if (typeof arr === 'string') { try { arr = JSON.parse(arr); } catch (e) { arr = []; } }
+    if (!Array.isArray(arr)) arr = [];
+    arr = arr
+      .filter((v) => v && typeof v === 'object')
+      .map((v) => ({ spec: String(v.spec ?? '').trim(), price: String(v.price ?? '').trim() }))
+      .filter((v) => v.spec || v.price);
+    out.variants = JSON.stringify(arr);
+  }
   if (err.length) throw new Error(err.join('; '));
   return out;
+}
+
+// INSERT 用完整列
+const INSERT_COLS = ['brand', 'category', 'model', 'price', 'note', 'images',
+  ...SPEC_FIELDS];
+const INSERT_PLACE = INSERT_COLS.map(() => '?').join(', ');
+
+function rowValues(f) {
+  return INSERT_COLS.map((c) => (f[c] !== undefined ? f[c] : (c === 'images' || c === 'variants' ? '[]' : '')));
 }
 
 function createRouter(db, cfg) {
@@ -145,7 +216,8 @@ function createRouter(db, cfg) {
 
     if (method === 'GET' && pathname === '/api/health') {
       const c = db.prepare('SELECT COUNT(*) AS c FROM models').get().c;
-      return json(res, 200, { ok: true, db: 'phone.db', models: c, time: new Date().toISOString() });
+      const withSpec = db.prepare("SELECT COUNT(*) AS c FROM models WHERE cpu_brand != '' OR release_date != ''").get().c;
+      return json(res, 200, { ok: true, db: 'phone.db', models: c, withSpec, time: new Date().toISOString() });
     }
 
     if (method === 'GET' && pathname === '/api/stats') {
@@ -153,7 +225,8 @@ function createRouter(db, cfg) {
       const brands = db.prepare('SELECT COUNT(DISTINCT brand) AS c FROM models').get().c;
       const cats = db.prepare("SELECT COUNT(DISTINCT brand || '|' || category) AS c FROM models").get().c;
       const last = db.prepare('SELECT MAX(updated_at) AS t FROM models').get().t;
-      return json(res, 200, { total, brands, categories: cats, lastUpdated: last });
+      const withSpec = db.prepare("SELECT COUNT(*) AS c FROM models WHERE cpu_brand != '' OR release_date != ''").get().c;
+      return json(res, 200, { total, brands, categories: cats, lastUpdated: last, withSpec });
     }
 
     if (method === 'GET' && pathname === '/api/brands') {
@@ -169,8 +242,14 @@ function createRouter(db, cfg) {
       return json(res, 200, { items: rows, total: rows.length });
     }
 
+    if (method === 'GET' && pathname === '/api/filters') {
+      return json(res, 200, filters(db));
+    }
+
     if (method === 'GET' && pathname === '/api/models') {
-      return json(res, 200, listModels(db, q));
+      const result = listModels(db, q);
+      result.items = result.items.map(parseVariants);
+      return json(res, 200, result);
     }
 
     let m = pathname.match(/^\/api\/models\/(\d+)$/);
@@ -179,7 +258,7 @@ function createRouter(db, cfg) {
       if (method === 'GET') {
         const row = db.prepare('SELECT * FROM models WHERE id = ?').get(id);
         if (!row) return json(res, 404, { error: 'not found' });
-        return json(res, 200, row);
+        return json(res, 200, parseVariants(row));
       }
       if (method === 'PUT' || method === 'PATCH') {
         const body = await readBody(req);
@@ -190,7 +269,7 @@ function createRouter(db, cfg) {
         db.prepare(`UPDATE models SET ${sets}, updated_at = datetime('now','localtime') WHERE id = ?`).run(...keys.map((k) => fields[k]), id);
         const row = db.prepare('SELECT * FROM models WHERE id = ?').get(id);
         if (!row) return json(res, 404, { error: 'not found' });
-        return json(res, 200, row);
+        return json(res, 200, parseVariants(row));
       }
       if (method === 'DELETE') {
         const r = db.prepare('DELETE FROM models WHERE id = ?').run(id);
@@ -234,23 +313,22 @@ function createRouter(db, cfg) {
       if (method === 'POST' && pathname === '/api/models') {
         const body = await readBody(req);
         const f = validateModel(body, false);
-        f.price = f.price ?? ''; f.note = f.note ?? ''; f.images = f.images ?? '[]';
-        const r = db.prepare('INSERT INTO models (brand, category, model, price, note, images) VALUES (?, ?, ?, ?, ?, ?)')
-          .run(f.brand, f.category, f.model, f.price, f.note, f.images);
-        return json(res, 201, db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid));
+        const vals = rowValues(f);
+        const r = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`).run(...vals);
+        return json(res, 201, parseVariants(db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid)));
       }
 
       if (method === 'POST' && pathname === '/api/models/bulk') {
         const body = await readBody(req);
         const items = Array.isArray(body.items) ? body.items : body;
         if (!Array.isArray(items) || !items.length) return json(res, 400, { error: 'items 数组必填' });
-        const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images) VALUES (?, ?, ?, ?, ?, ?)');
+        const ins = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`);
         let n = 0;
         db.exec('BEGIN');
         try {
           for (const it of items) {
             const f = validateModel(it, false);
-            ins.run(f.brand, f.category, f.model, f.price ?? '', f.note ?? '', f.images ?? '[]');
+            ins.run(...rowValues(f));
             n++;
           }
           db.exec('COMMIT');
@@ -262,7 +340,7 @@ function createRouter(db, cfg) {
         const body = await readBody(req);
         const data = Array.isArray(body) ? body : body.data;
         if (!Array.isArray(data)) return json(res, 400, { error: '需要 [{brand,category,models:[...]}] 格式数组' });
-        const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images) VALUES (?, ?, ?, ?, ?, ?)');
+        const ins = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`);
         let n = 0;
         db.exec('BEGIN');
         try {
@@ -270,7 +348,11 @@ function createRouter(db, cfg) {
           for (const g of data) {
             for (const mm of (g.models || [])) {
               const imgs = Array.isArray(mm.images) ? JSON.stringify(mm.images) : (mm.images ? String(mm.images) : '[]');
-              ins.run(g.brand, g.category, mm.model, String(mm.price ?? ''), mm.note || '', imgs);
+              const vars = Array.isArray(mm.variants) ? JSON.stringify(mm.variants) : '[]';
+              ins.run(g.brand, g.category, mm.model, String(mm.price ?? ''), mm.note || '', imgs,
+                mm.release_date || '', mm.cpu_brand || '', mm.cpu_model || '', mm.ram || '', mm.rom || '',
+                mm.back_camera || '', mm.front_camera || '', mm.screen_size || '', mm.screen_type || '', mm.refresh || '',
+                mm.battery || '', mm.charge || '', mm.network || '', mm.os || '', vars);
               n++;
             }
           }
@@ -293,14 +375,18 @@ function createRouter(db, cfg) {
       if (!requireKey(req, cfg)) return json(res, 401, { error: '未授权' });
       const body = await readBody(req);
       const data = Array.isArray(body) ? body : [];
-      const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images) VALUES (?, ?, ?, ?, ?, ?)');
+      const ins = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`);
       let n = 0;
       db.exec('BEGIN');
       try {
         db.exec('DELETE FROM models');
         for (const g of data) for (const mm of (g.models || [])) {
           const imgs = Array.isArray(mm.images) ? JSON.stringify(mm.images) : (mm.images ? String(mm.images) : '[]');
-          ins.run(g.brand, g.category, mm.model, String(mm.price ?? ''), mm.note || '', imgs);
+          const vars = Array.isArray(mm.variants) ? JSON.stringify(mm.variants) : '[]';
+          ins.run(g.brand, g.category, mm.model, String(mm.price ?? ''), mm.note || '', imgs,
+            mm.release_date || '', mm.cpu_brand || '', mm.cpu_model || '', mm.ram || '', mm.rom || '',
+            mm.back_camera || '', mm.front_camera || '', mm.screen_size || '', mm.screen_type || '', mm.refresh || '',
+            mm.battery || '', mm.charge || '', mm.network || '', mm.os || '', vars);
           n++;
         }
         db.exec('COMMIT');

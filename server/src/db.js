@@ -29,6 +29,40 @@ function loadConfig() {
   return cfg;
 }
 
+// 规格相关字段（与筛选维度一一对应）
+const SPEC_COLS = [
+  // 上市时间（统一存 YYYY-MM，可筛选年份）
+  ['release_date', "TEXT NOT NULL DEFAULT ''"],
+  // CPU 厂商：高通/联发科/苹果/海思/三星/紫光展锐/谷歌
+  ['cpu_brand', "TEXT NOT NULL DEFAULT ''"],
+  // CPU 型号：骁龙8 Gen3 / 天玑9400 / A16 仿生
+  ['cpu_model', "TEXT NOT NULL DEFAULT ''"],
+  // 运行内存：8GB
+  ['ram', "TEXT NOT NULL DEFAULT ''"],
+  // 存储容量：256GB
+  ['rom', "TEXT NOT NULL DEFAULT ''"],
+  // 后置主摄像素：5000万
+  ['back_camera', "TEXT NOT NULL DEFAULT ''"],
+  // 前置摄像头：1600万
+  ['front_camera', "TEXT NOT NULL DEFAULT ''"],
+  // 屏幕尺寸：6.67英寸
+  ['screen_size', "TEXT NOT NULL DEFAULT ''"],
+  // 屏幕材质：LCD/OLED
+  ['screen_type', "TEXT NOT NULL DEFAULT ''"],
+  // 刷新率：120Hz
+  ['refresh', "TEXT NOT NULL DEFAULT ''"],
+  // 电池容量：5000mAh
+  ['battery', "TEXT NOT NULL DEFAULT ''"],
+  // 快充功率：120W
+  ['charge', "TEXT NOT NULL DEFAULT ''"],
+  // 网络制式：5G/4G
+  ['network', "TEXT NOT NULL DEFAULT ''"],
+  // 操作系统：Android / iOS / HarmonyOS
+  ['os', "TEXT NOT NULL DEFAULT ''"],
+  // 分容分版本价格：[{"spec":"128G","price":"100"},{"spec":"256G","price":"130"}]
+  ['variants', "TEXT NOT NULL DEFAULT '[]'"],
+];
+
 function openDb() {
   ensureDir(DB_DIR);
   const db = new DatabaseSync(DB_FILE);
@@ -41,6 +75,21 @@ function openDb() {
       price TEXT NOT NULL DEFAULT '',
       note TEXT NOT NULL DEFAULT '',
       images TEXT NOT NULL DEFAULT '[]',
+      release_date TEXT NOT NULL DEFAULT '',
+      cpu_brand TEXT NOT NULL DEFAULT '',
+      cpu_model TEXT NOT NULL DEFAULT '',
+      ram TEXT NOT NULL DEFAULT '',
+      rom TEXT NOT NULL DEFAULT '',
+      back_camera TEXT NOT NULL DEFAULT '',
+      front_camera TEXT NOT NULL DEFAULT '',
+      screen_size TEXT NOT NULL DEFAULT '',
+      screen_type TEXT NOT NULL DEFAULT '',
+      refresh TEXT NOT NULL DEFAULT '',
+      battery TEXT NOT NULL DEFAULT '',
+      charge TEXT NOT NULL DEFAULT '',
+      network TEXT NOT NULL DEFAULT '',
+      os TEXT NOT NULL DEFAULT '',
+      variants TEXT NOT NULL DEFAULT '[]',
       created_at TEXT NOT NULL DEFAULT (datetime('now','localtime')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
@@ -48,11 +97,15 @@ function openDb() {
     CREATE INDEX IF NOT EXISTS idx_models_cat ON models(brand, category);
     CREATE INDEX IF NOT EXISTS idx_models_model ON models(model);
   `);
-  // 老库迁移：补 images 列
+  // 老库迁移：补齐缺失列（images + 规格字段）
   const cols = db.prepare('PRAGMA table_info(models)').all();
-  if (!cols.some((c) => c.name === 'images')) {
-    db.exec(`ALTER TABLE models ADD COLUMN images TEXT NOT NULL DEFAULT '[]'`);
-    console.log('[db] 已为 models 表补充 images 列（参考图片，JSON 数组）');
+  const names = new Set(cols.map((c) => c.name));
+  const addCols = [['images', "TEXT NOT NULL DEFAULT '[]'"], ...SPEC_COLS];
+  for (const [col, def] of addCols) {
+    if (!names.has(col)) {
+      db.exec(`ALTER TABLE models ADD COLUMN ${col} ${def}`);
+      console.log(`[db] 已为 models 表补充 ${col} 列`);
+    }
   }
   return db;
 }
@@ -63,14 +116,18 @@ function autoMigrate(db) {
   if (cnt > 0) return false;
   if (!fs.existsSync(LEGACY_JSON)) return false;
   const data = JSON.parse(fs.readFileSync(LEGACY_JSON, 'utf-8'));
-  const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images) VALUES (?, ?, ?, ?, ?, ?)');
+  const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images, release_date, cpu_brand, cpu_model, ram, rom, back_camera, front_camera, screen_size, screen_type, refresh, battery, charge, network, os, variants) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
   let n = 0;
   const tx = () => {
     db.exec('BEGIN');
     for (const g of data) {
       for (const m of (g.models || [])) {
         const imgs = Array.isArray(m.images) ? JSON.stringify(m.images) : (m.images ? String(m.images) : '[]');
-        ins.run(g.brand, g.category, m.model, String(m.price ?? ''), m.note || '', imgs);
+        const vars = Array.isArray(m.variants) ? JSON.stringify(m.variants) : '[]';
+        ins.run(g.brand, g.category, m.model, String(m.price ?? ''), m.note || '', imgs,
+          m.release_date || '', m.cpu_brand || '', m.cpu_model || '', m.ram || '', m.rom || '',
+          m.back_camera || '', m.front_camera || '', m.screen_size || '', m.screen_type || '', m.refresh || '',
+          m.battery || '', m.charge || '', m.network || '', m.os || '', vars);
         n++;
       }
     }

@@ -8,7 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +41,13 @@ class MainActivity : AppCompatActivity() {
     private var apiKey = ""
     private var currentBrand = "全部"
     private var search = ""
+    private lateinit var spCpuBrand: Spinner
+    private lateinit var spYear: Spinner
+    private lateinit var spCamera: Spinner
+    private var filterCpuBrand = "全部"
+    private var filterYear = "全部"
+    private var filterCamera = 0
+    private var spinnerReady = false
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
 
@@ -65,6 +74,10 @@ class MainActivity : AppCompatActivity() {
 
         chipGroup = findViewById(R.id.chipGroup)
         emptyView = findViewById(R.id.emptyView)
+        spCpuBrand = findViewById(R.id.spCpuBrand)
+        spYear = findViewById(R.id.spYear)
+        spCamera = findViewById(R.id.spCamera)
+        setupSpecSpinners()
         errorView = findViewById(R.id.errorView)
         tvCount = findViewById(R.id.tvCount)
         findViewById<TextView>(R.id.tvCount)
@@ -132,6 +145,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSpecSpinners() {
+        val cpuOpts = listOf("全部") + listOf("高通", "联发科", "苹果", "海思", "三星", "紫光展锐", "谷歌")
+        val yearOpts = listOf("全部") + (2026 downTo 2015).map { it.toString() }
+        val camOpts = listOf("全部", "≥5000万", "≥3000万", "≥2000万", "≥1000万", "≥800万", "≥500万")
+        spCpuBrand.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cpuOpts)
+        spYear.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, yearOpts)
+        spCamera.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, camOpts)
+        spCpuBrand.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: android.widget.AdapterView<*>?, v: View?, pos: Int, id: Long) {
+                filterCpuBrand = if (pos == 0) "全部" else cpuOpts[pos]
+                if (spinnerReady) loadModels()
+            }
+            override fun onNothingSelected(p: android.widget.AdapterView<*>?) {}
+        }
+        spYear.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: android.widget.AdapterView<*>?, v: View?, pos: Int, id: Long) {
+                filterYear = if (pos == 0) "全部" else yearOpts[pos]
+                if (spinnerReady) loadModels()
+            }
+            override fun onNothingSelected(p: android.widget.AdapterView<*>?) {}
+        }
+        spCamera.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: android.widget.AdapterView<*>?, v: View?, pos: Int, id: Long) {
+                filterCamera = if (pos == 0) 0 else camOpts[pos].removePrefix("≥").removeSuffix("万").toInt()
+                if (spinnerReady) loadModels()
+            }
+            override fun onNothingSelected(p: android.widget.AdapterView<*>?) {}
+        }
+        spinnerReady = true
+    }
+
     private fun loadModels() {
         if (baseUrl.isBlank()) return
         refresh.isRefreshing = true
@@ -139,7 +183,12 @@ class MainActivity : AppCompatActivity() {
             try {
                 val brand = if (currentBrand == "全部") null else currentBrand
                 val s = search.ifBlank { null }
-                val resp = ApiClient.api(baseUrl).getModels(brand = brand, search = s, sort = "brand")
+                val resp = ApiClient.api(baseUrl).getModels(
+                    brand = brand, search = s, sort = "brand",
+                    year = if (filterYear == "全部") null else filterYear,
+                    cpuBrand = if (filterCpuBrand == "全部") null else filterCpuBrand,
+                    cameraMin = if (filterCamera <= 0) null else filterCamera
+                )
                 adapter.submit(resp.items)
                 tvCount.text = "共 ${resp.total} 款机型"
                 refresh.isRefreshing = false
@@ -160,6 +209,55 @@ class MainActivity : AppCompatActivity() {
         errorView.findViewById<TextView>(R.id.tvError).text = msg
     }
 
+    private fun fillSpecs(v: View, row: ModelRow) {
+        val specContainer = v.findViewById<android.widget.LinearLayout>(R.id.specContainer)
+        val items = listOf(
+            "上市时间" to row.releaseDate,
+            "CPU品牌" to row.cpuBrand,
+            "CPU型号" to row.cpuModel,
+            "运行内存" to row.ram,
+            "存储" to row.rom,
+            "后置主摄" to row.backCamera,
+            "前置" to row.frontCamera,
+            "屏幕" to row.screenSize,
+            "屏幕材质" to row.screenType,
+            "刷新率" to row.refresh,
+            "电池" to row.battery,
+            "快充" to row.charge,
+            "网络" to row.network,
+            "系统" to row.os
+        ).filter { !it.second.isNullOrBlank() }
+        if (items.isEmpty()) {
+            val tv = TextView(this)
+            tv.text = "待补充"
+            tv.setTextColor(resources.getColor(R.color.textSecondary, null))
+            tv.textSize = 13f
+            specContainer.addView(tv)
+        } else {
+            items.forEach { (k, vv) ->
+                val tv = TextView(this)
+                tv.text = "$k：${vv}"
+                tv.setTextColor(resources.getColor(R.color.text, null))
+                tv.textSize = 13f
+                tv.setPadding(0, 4, 0, 4)
+                specContainer.addView(tv)
+            }
+        }
+        val variantContainer = v.findViewById<android.widget.LinearLayout>(R.id.variantContainer)
+        val vars = row.variants ?: emptyList()
+        if (vars.isNotEmpty()) {
+            v.findViewById<TextView>(R.id.dVariantTitle).visibility = View.VISIBLE
+            vars.forEach { vv ->
+                val tv = TextView(this)
+                tv.text = "${vv.spec}   ${vv.price} 元"
+                tv.setTextColor(resources.getColor(R.color.priceColor, null))
+                tv.textSize = 14f
+                tv.setPadding(0, 4, 0, 4)
+                variantContainer.addView(tv)
+            }
+        }
+    }
+
     private fun showDetail(row: ModelRow) {
         val dialog = BottomSheetDialog(this)
         val v = LayoutInflater.from(this).inflate(R.layout.sheet_detail, null)
@@ -167,6 +265,7 @@ class MainActivity : AppCompatActivity() {
         v.findViewById<TextView>(R.id.dBrand).text = row.brand
         v.findViewById<TextView>(R.id.dCategory).text = row.category
         v.findViewById<TextView>(R.id.dPrice).text = "${row.price} 元"
+        fillSpecs(v, row)
         v.findViewById<TextView>(R.id.dNote).text = if (row.note.isNullOrBlank()) "无" else row.note
         v.findViewById<TextView>(R.id.dUpdated).text = "更新于 ${row.updatedAt ?: "-"}"
         v.findViewById<MaterialButton>(R.id.btnEdit).setOnClickListener {

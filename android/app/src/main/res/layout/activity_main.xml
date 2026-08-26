@@ -111,6 +111,48 @@
                 app:chipSpacingHorizontal="6dp" />
         </HorizontalScrollView>
 
+        <!-- 规格筛选 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="筛选"
+                android:textColor="@color/textSecondary"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/spCpuBrand"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
         <!-- 内容区 -->
         <FrameLayout
             android:layout_width="match_parent"

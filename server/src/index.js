@@ -56,7 +56,7 @@ http.createServer(async (req, res) => {
     }
     fs.readFile(p, (e, d) => {
       if (e) { res.writeHead(500); return res.end('500'); }
-      res.writeHead(200, { 'Content-Type': mime[path.extname(p).toLowerCase()] || 'application/octet-stream' });
+      res.writeHead(200, { 'Content-Type': mime[path.extname(p).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
       res.end(d);
     });
     return;
@@ -71,7 +71,7 @@ http.createServer(async (req, res) => {
   }
   fs.readFile(p, (e, d) => {
     if (e) { res.writeHead(500); return res.end('500'); }
-    res.writeHead(200, { 'Content-Type': mime[path.extname(p).toLowerCase()] || 'application/octet-stream' });
+    res.writeHead(200, { 'Content-Type': mime[path.extname(p).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
     res.end(d);
   });
 }).listen(cfg.port, '0.0.0.0', () => {

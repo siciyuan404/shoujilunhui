@@ -91,7 +91,13 @@
    {
     "model": "苹果15",
     "price": "120",
-    "note": ""
+    "note": "",
+    "release_date": "2023",
+    "cpu_brand": "苹果",
+    "cpu_model": "A16 仿生",
+    "screen_size": "6.1英寸",
+    "screen_type": "OLED",
+    "refresh": "60Hz"
    },
    {
     "model": "苹果11pro",
@@ -101,7 +107,13 @@
    {
     "model": "苹果15plus",
     "price": "160",
-    "note": ""
+    "note": "",
+    "release_date": "2023",
+    "cpu_brand": "苹果",
+    "cpu_model": "A16 仿生",
+    "screen_size": "6.7英寸",
+    "screen_type": "OLED",
+    "refresh": "60Hz"
    },
    {
     "model": "苹果11promax",
@@ -111,7 +123,13 @@
    {
     "model": "苹果15pro",
     "price": "200",
-    "note": ""
+    "note": "",
+    "release_date": "2023",
+    "cpu_brand": "苹果",
+    "cpu_model": "A17 Pro",
+    "screen_size": "6.1英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "苹果12",
@@ -121,7 +139,13 @@
    {
     "model": "苹果16pro",
     "price": "200",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "苹果",
+    "cpu_model": "A18 Pro",
+    "screen_size": "6.3英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "苹果12mini",
@@ -131,7 +155,13 @@
    {
     "model": "苹果16",
     "price": "200",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "苹果",
+    "cpu_model": "A18",
+    "screen_size": "6.1英寸",
+    "screen_type": "OLED",
+    "refresh": "60Hz"
    },
    {
     "model": "苹果12pro",
@@ -141,7 +171,13 @@
    {
     "model": "苹果16promax",
     "price": "200",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "苹果",
+    "cpu_model": "A18 Pro",
+    "screen_size": "6.9英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "苹果12promax",
@@ -254,7 +290,13 @@
    {
     "model": "find x9pro",
     "price": "900",
-    "note": "不开不靓板坏相250"
+    "note": "不开不靓板坏相250",
+    "release_date": "2025",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9500",
+    "screen_size": "6.78英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "Reno7【8/12+256】",
@@ -274,7 +316,13 @@
    {
     "model": "find x9",
     "price": "800",
-    "note": "不开不靓板坏相250"
+    "note": "不开不靓板坏相250",
+    "release_date": "2025",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9500",
+    "screen_size": "6.59英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "Reno6pro+",
@@ -794,7 +842,13 @@
    {
     "model": "reno16",
     "price": "800",
-    "note": "不开不靓板220"
+    "note": "不开不靓板220",
+    "release_date": "2026",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑8550 SUPER",
+    "screen_size": "6.3英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "Reno中配【6+256】",
@@ -814,7 +868,13 @@
    {
     "model": "reno15",
     "price": "450",
-    "note": "不开不靓板150"
+    "note": "不开不靓板150",
+    "release_date": "2025",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑8450",
+    "screen_size": "6.3英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "Reno低配【6+128】",
@@ -1435,7 +1495,13 @@
    {
     "model": "x300",
     "price": "1000",
-    "note": "不开不靓板相坏300"
+    "note": "不开不靓板相坏300",
+    "release_date": "2025",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9500",
+    "screen_size": "6.7英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "IQoo3",
@@ -1495,7 +1561,13 @@
    {
     "model": "x200",
     "price": "600",
-    "note": "不开不靓板相坏150"
+    "note": "不开不靓板相坏150",
+    "release_date": "2024",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9400",
+    "screen_size": "6.67英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "IQoo neo10",
@@ -1595,7 +1667,13 @@
    {
     "model": "x100",
     "price": "500",
-    "note": "不开不靓板相坏150"
+    "note": "不开不靓板相坏150",
+    "release_date": "2023",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9300",
+    "screen_size": "6.78英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "IQoo neo9",
@@ -2515,7 +2593,13 @@
    {
     "model": "Iqoo13",
     "price": "450",
-    "note": "不开不靓板200"
+    "note": "不开不靓板200",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Elite",
+    "screen_size": "6.82英寸",
+    "screen_type": "OLED",
+    "refresh": "144Hz"
    },
    {
     "model": "Z6",
@@ -2555,7 +2639,13 @@
    {
     "model": "Iqoo12",
     "price": "350",
-    "note": "不开不靓板200"
+    "note": "不开不靓板200",
+    "release_date": "2023",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Gen3",
+    "screen_size": "6.78英寸",
+    "screen_type": "OLED",
+    "refresh": "144Hz"
    },
    {
     "model": "Z5i",
@@ -2971,7 +3061,13 @@
    {
     "model": "红米note14pro",
     "price": "250",
-    "note": "不开不靓板120"
+    "note": "不开不靓板120",
+    "release_date": "2024",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑7300 Ultra",
+    "screen_size": "6.67英寸",
+    "screen_type": "AMOLED",
+    "refresh": "120Hz"
    },
    {
     "model": "红米note5",
@@ -3031,7 +3127,13 @@
    {
     "model": "红米note13pro",
     "price": "250",
-    "note": "不开不靓板120"
+    "note": "不开不靓板120",
+    "release_date": "2023",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙7s Gen2",
+    "screen_size": "6.67英寸",
+    "screen_type": "AMOLED",
+    "refresh": "120Hz"
    },
    {
     "model": "红米note3",
@@ -3872,7 +3974,11 @@
    {
     "model": "小米14pro",
     "price": "240",
-    "note": ""
+    "note": "",
+    "release_date": "2023",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Gen3",
+    "screen_size": "6.73英寸"
    },
    {
     "model": "小米9",
@@ -3882,7 +3988,11 @@
    {
     "model": "小米civi4pro",
     "price": "250",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8s Gen3",
+    "screen_size": "6.55英寸"
    },
    {
     "model": "小米黑鲨",
@@ -4065,7 +4175,13 @@
    {
     "model": "Realme GT7",
     "price": "190",
-    "note": ""
+    "note": "",
+    "release_date": "2025",
+    "cpu_brand": "联发科",
+    "cpu_model": "天玑9400e（国际）/ 天玑9400+（国行）",
+    "screen_size": "6.8英寸",
+    "screen_type": "OLED",
+    "refresh": "144Hz"
    },
    {
     "model": "Realme X7",
@@ -4080,7 +4196,13 @@
    {
     "model": "Realme GT6",
     "price": "190",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Gen3",
+    "screen_size": "6.78英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "Realme X50PRO",
@@ -5455,7 +5577,13 @@
    {
     "model": "1+13",
     "price": "300",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Elite",
+    "screen_size": "6.82英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "1+8t",
@@ -5560,7 +5688,13 @@
    {
     "model": "一加ACE5",
     "price": "300",
-    "note": ""
+    "note": "",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙8 Gen3",
+    "screen_size": "6.78英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "一加ACE竞速版",
@@ -6376,7 +6510,12 @@
    {
     "model": "mate70pro",
     "price": "260",
-    "note": "废板整机"
+    "note": "废板整机",
+    "release_date": "2024",
+    "cpu_brand": "海思",
+    "cpu_model": "麒麟9020",
+    "screen_size": "6.9英寸",
+    "screen_type": "OLED"
    },
    {
     "model": "nova14",
@@ -6406,7 +6545,12 @@
    {
     "model": "mate60pro+",
     "price": "200",
-    "note": "废板整机"
+    "note": "废板整机",
+    "release_date": "2023",
+    "cpu_brand": "海思",
+    "cpu_model": "麒麟9000s",
+    "screen_size": "6.82英寸",
+    "screen_type": "OLED"
    },
    {
     "model": "nova12pro【12+256】",
@@ -6421,7 +6565,12 @@
    {
     "model": "mate60pro",
     "price": "200",
-    "note": "废板整机"
+    "note": "废板整机",
+    "release_date": "2023",
+    "cpu_brand": "海思",
+    "cpu_model": "麒麟9000s",
+    "screen_size": "6.82英寸",
+    "screen_type": "OLED"
    },
    {
     "model": "nova12pro【12+512】",
@@ -6436,7 +6585,12 @@
    {
     "model": "mate60",
     "price": "400",
-    "note": "不开不靓板180"
+    "note": "不开不靓板180",
+    "release_date": "2023",
+    "cpu_brand": "海思",
+    "cpu_model": "麒麟9000s",
+    "screen_size": "6.69英寸",
+    "screen_type": "OLED"
    },
    {
     "model": "nova12活力版",
@@ -7637,7 +7791,13 @@
    {
     "model": "荣耀300",
     "price": "350",
-    "note": "不开不靓板150"
+    "note": "不开不靓板150",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙7 Gen3",
+    "screen_size": "6.7英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "荣耀v20低配",
@@ -7667,7 +7827,13 @@
    {
     "model": "荣耀200",
     "price": "280",
-    "note": "不开不靓板150"
+    "note": "不开不靓板150",
+    "release_date": "2024",
+    "cpu_brand": "高通",
+    "cpu_model": "骁龙7 Gen3",
+    "screen_size": "6.7英寸",
+    "screen_type": "OLED",
+    "refresh": "120Hz"
    },
    {
     "model": "荣耀v9play",

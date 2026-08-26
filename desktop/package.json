@@ -21,7 +21,9 @@
     },
     "files": ["main.js", "preload.js", "assets/**"],
     "extraResources": [
-      { "from": "../server", "to": "server", "filter": ["**/*", "!config.json"] }
+      { "from": "../server", "to": "server", "filter": ["**/*", "!config.json", "!db/*.db", "!db/*.db-journal"] },
+      { "from": "../web", "to": "web", "filter": ["**/*"] },
+      { "from": "../phone-price", "to": "phone-price", "filter": ["data.json", "phone-specs.json"] }
     ],
     "nsis": {
       "oneClick": false,

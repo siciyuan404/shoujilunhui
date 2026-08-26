@@ -412,6 +412,98 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   padding: 3px 10px; border-radius: 14px; cursor: pointer; margin-left: auto; font-family: inherit;
 }
 .img-edit-mini:hover { background: var(--accent-light); }
+
+/* ===== 高级筛选面板 ===== */
+.filter-panel {
+  max-width: 900px; margin: 12px auto 0; padding: 14px 16px; background: var(--card);
+  border-radius: var(--radius); box-shadow: var(--shadow); display: none; gap: 10px 14px;
+  flex-wrap: wrap; align-items: flex-end; animation: fadeInUp .25s ease-out both;
+}
+.filter-panel.open { display: flex; }
+.filter-panel .fp-item { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-secondary); }
+.filter-panel select, .filter-panel input[type=number] {
+  padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
+  outline: none; background: #fff; font-family: inherit; color: var(--text); min-width: 96px;
+}
+.filter-panel select:focus, .filter-panel input:focus { border-color: var(--accent); }
+.filter-panel .fp-price { display: flex; align-items: center; gap: 4px; }
+.filter-panel .fp-price input { width: 72px; }
+.filter-panel .fp-price span { font-size: 12px; color: var(--text-secondary); }
+.filter-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--card); cursor: pointer; font-size: 12px;
+  color: var(--text-secondary); font-family: inherit; transition: all .15s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+.filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: none; }
+.filter-btn.has-filter .dot { display: inline-block; }
+.filter-clear {
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff;
+  cursor: pointer; font-size: 12.5px; color: var(--text-secondary); font-family: inherit; margin-left: auto;
+}
+.filter-clear:hover { color: var(--danger); border-color: var(--danger); }
+.fp-hint { font-size: 11px; color: #bfbfbf; width: 100%; }
+
+/* ===== 规格徽标（列表） ===== */
+.spec-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+.spec-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #f0f5ff; color: #2f54eb;
+  border: 1px solid #d6e4ff; white-space: nowrap;
+}
+.spec-badge.empty { background: #fafafa; color: #bfbfbf; border-color: var(--border); font-style: italic; }
+.spec-badge.cpu { background: #f6ffed; color: #389e0d; border-color: #b7eb8f; }
+.spec-badge.year { background: #fff7e6; color: #d46b08; border-color: #ffd591; }
+.spec-badge.cam { background: #fff0f6; color: #c41d7f; border-color: #ffadd2; }
+
+/* ===== variants 分容分版本 ===== */
+.price-stack { display: inline-flex; flex-direction: column; gap: 2px; vertical-align: middle; }
+.v-price-row { display: inline-flex; align-items: center; gap: 6px; }
+.v-price-row .v-spec { font-size: 11px; color: var(--text-secondary); background: #f5f5f5; padding: 1px 6px; border-radius: 4px; }
+.v-more {
+  font-size: 11px; color: var(--accent); cursor: pointer; border: 1px dashed var(--accent);
+  border-radius: 10px; padding: 0 6px; display: inline-block; background: var(--accent-light);
+}
+.v-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.v-table th, .v-table td { padding: 6px 10px; font-size: 13px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+.v-table th { color: var(--text-secondary); font-weight: 600; background: #fafafa; }
+.v-table .v-price { color: var(--price-color); font-weight: 700; }
+
+/* ===== 详情页规格表格 ===== */
+.spec-full { width: 100%; border-collapse: collapse; }
+.spec-full td { padding: 7px 8px; font-size: 13px; border-bottom: 1px solid #f5f5f5; }
+.spec-full tr td:first-child { color: var(--text-secondary); width: 104px; white-space: nowrap; }
+.spec-full tr td:last-child { font-weight: 600; }
+.spec-full .todo { color: #bfbfbf; font-weight: 400; font-style: italic; }
+.spec-full td .k-multi { display: inline-block; }
+
+/* ===== 编辑规格弹窗 ===== */
+.spec-modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1600; display: flex; align-items: center; justify-content: center; }
+.spec-modal { width: min(720px, 94vw); max-height: 88vh; background: #fff; border-radius: 14px; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,0,.3); animation: fadeInUp .2s ease-out; }
+.spec-modal-head { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; }
+.spec-modal-head b { color: var(--accent); }
+.spec-modal-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 2px 6px; }
+.spec-modal-body { padding: 16px 18px; overflow-y: auto; }
+.spec-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.spec-form-item { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; color: var(--text-secondary); }
+.spec-form-item input, .spec-form-item select {
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; color: var(--text);
+}
+.spec-form-item input:focus, .spec-form-item select:focus { border-color: var(--accent); }
+.spec-form-section { grid-column: 1 / -1; font-size: 13px; font-weight: 700; color: var(--text); border-bottom: 1px solid var(--border); padding: 8px 0 6px; margin-top: 6px; }
+.variant-editor { margin-top: 10px; }
+.variant-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.variant-row input { flex: 1; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
+.variant-row input:focus { border-color: var(--accent); }
+.variant-row .v-del { border: none; background: transparent; color: #ff4d4f; font-size: 16px; cursor: pointer; padding: 4px 8px; }
+.variant-add {
+  border: 1px dashed var(--accent); color: var(--accent); background: var(--accent-light); border-radius: 8px;
+  padding: 7px 14px; font-size: 12.5px; cursor: pointer; font-family: inherit;
+}
+.spec-modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 13px 18px; border-top: 1px solid var(--border); }
+.spec-modal-foot button { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
+.spec-modal-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.spec-modal-foot button.primary:hover { background: #0958d9; }
 </style>
 </head>
 <body>
@@ -431,12 +523,33 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
 </div>
 
+<div class="filter-panel" id="filterPanel">
+  <div class="fp-item"><label>上市年份</label><select id="fYear"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>CPU品牌</label><select id="fCpuBrand"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>后置摄像头 ≥</label><select id="fCamera">
+    <option value="全部">全部</option><option value="5000">5000万</option><option value="3000">3000万</option>
+    <option value="2000">2000万</option><option value="1000">1000万</option><option value="800">800万</option>
+    <option value="500">500万</option>
+  </select></div>
+  <div class="fp-item"><label>运行内存</label><select id="fRam"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>存储</label><select id="fRom"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>网络制式</label><select id="fNetwork"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>屏幕材质</label><select id="fScreenType"><option value="全部">全部</option></select></div>
+  <div class="fp-item"><label>回收价(元)</label><div class="fp-price">
+    <input type="number" id="fMinPrice" placeholder="最低" min="0"><span>~</span>
+    <input type="number" id="fMaxPrice" placeholder="最高" min="0">
+  </div></div>
+  <button class="filter-clear" onclick="clearFilters()">清空筛选</button>
+  <div class="fp-hint">组合筛选同时生效 · 规格逐步补录中，未标注规格的机型会随补录自动进入筛选结果</div>
+</div>
+
 <div class="tabs-wrap" id="tabsWrap">
   <div class="tabs" id="tabs"></div>
 </div>
 
 <div class="stats-bar" id="statsBar">
   <span>共找到 <span class="count" id="resultCount">0</span> 条</span>
+  <button class="filter-btn" id="filterToggle" onclick="toggleFilterPanel()"><span>⚙ 筛选</span><span class="dot"></span></button>
   <div class="sort-btns" id="sortBtns">
     <button class="sort-btn active" data-sort="default" onclick="setSort('default')">默认排序</button>
     <button class="sort-btn" data-sort="price-desc" onclick="setSort('price-desc')">价格↓</button>
@@ -493,6 +606,52 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   </div>
 </div>
 
+<!-- 规格编辑弹窗 -->
+<div class="spec-modal-mask" id="specModal" style="display:none" onclick="if(event.target===this)closeSpecEditor()">
+  <div class="spec-modal">
+    <div class="spec-modal-head">
+      <span>编辑规格 — <b id="specModalTitle"></b></span>
+      <button class="spec-modal-close" onclick="closeSpecEditor()">×</button>
+    </div>
+    <div class="spec-modal-body">
+      <div class="spec-form-grid">
+        <div class="spec-form-section">💻 硬件</div>
+        <div class="spec-form-item"><label>上市时间 (年或年-月)</label><input id="spRelease" placeholder="如 2024 / 2024-09"></div>
+        <div class="spec-form-item"><label>CPU品牌</label><select id="spCpuBrand">
+          <option value="">未知</option><option>高通</option><option>联发科</option><option>苹果</option>
+          <option>海思</option><option>三星</option><option>紫光展锐</option><option>谷歌</option>
+        </select></div>
+        <div class="spec-form-item"><label>CPU型号</label><input id="spCpuModel" placeholder="如 骁龙8 Gen3 / 天玑9400 / A16"></div>
+        <div class="spec-form-item"><label>运行内存</label><input id="spRam" placeholder="如 8GB / 12GB"></div>
+        <div class="spec-form-item"><label>存储容量</label><input id="spRom" placeholder="如 256GB / 512GB"></div>
+        <div class="spec-form-section">📷 摄像头</div>
+        <div class="spec-form-item"><label>后置主摄</label><input id="spBackCam" placeholder="如 5000万"></div>
+        <div class="spec-form-item"><label>前置摄像头</label><input id="spFrontCam" placeholder="如 1600万"></div>
+        <div class="spec-form-section">🖥 屏幕</div>
+        <div class="spec-form-item"><label>屏幕尺寸</label><input id="spScreenSize" placeholder="如 6.67英寸"></div>
+        <div class="spec-form-item"><label>屏幕材质</label><select id="spScreenType"><option value="">未知</option><option>OLED</option><option>LCD</option><option>AMOLED</option></select></div>
+        <div class="spec-form-item"><label>刷新率</label><input id="spRefresh" placeholder="如 120Hz"></div>
+        <div class="spec-form-section">🔋 电池网络</div>
+        <div class="spec-form-item"><label>电池容量</label><input id="spBattery" placeholder="如 5000mAh"></div>
+        <div class="spec-form-item"><label>快充功率</label><input id="spCharge" placeholder="如 120W"></div>
+        <div class="spec-form-item"><label>网络制式</label><input id="spNetwork" placeholder="如 5G / 4G"></div>
+        <div class="spec-form-item"><label>操作系统</label><input id="spOs" placeholder="如 Android 15 / iOS 18"></div>
+        <div class="spec-form-section">💰 分容分版本价格</div>
+        <div class="spec-form-item" style="grid-column:1/-1">
+          <label style="color:var(--text-secondary);font-weight:400">同一型号不同容量/版本的回收价（如 128G / 256G 价不同）。主价保留在列表【报价】列。</label>
+          <div class="variant-editor" id="variantEditor"></div>
+          <button class="variant-add" onclick="addVariantRow()">+ 添加一个版本</button>
+        </div>
+      </div>
+    </div>
+    <div class="spec-modal-foot">
+      <span class="img-tip" style="margin-right:auto;font-size:12px;color:var(--text-secondary)">填多少存多少，留空即未知</span>
+      <button type="button" onclick="closeSpecEditor()">取消</button>
+      <button type="button" class="primary" onclick="saveSpecEditor()">保存规格</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== GLOBAL STATE =====
 let allData = [];
@@ -506,6 +665,8 @@ let bombGuideOpen = true;
 let apiKey = '';
 let canEdit = false;
 let pendingSaves = 0;
+// 高级筛选状态（全部=不限）
+let filters = { year:'全部', cpuBrand:'全部', camera:'全部', ram:'全部', rom:'全部', network:'全部', screenType:'全部', minPrice:'', maxPrice:'' };
 
 // ===== API =====
 function api(path, opts) {
@@ -535,12 +696,22 @@ Promise.all([
     }
     let imgs = [];
     try { imgs = JSON.parse(it.images || '[]'); } catch (e) {}
-    idx.get(key).models.push({ id: it.id, model: it.model, price: it.price, note: it.note || '', images: imgs });
+    let vars = [];
+    try { vars = JSON.parse(it.variants || '[]'); } catch (e) {}
+    idx.get(key).models.push({
+      id: it.id, model: it.model, price: it.price, note: it.note || '', images: imgs,
+      release_date: it.release_date || '', cpu_brand: it.cpu_brand || '', cpu_model: it.cpu_model || '',
+      ram: it.ram || '', rom: it.rom || '', back_camera: it.back_camera || '', front_camera: it.front_camera || '',
+      screen_size: it.screen_size || '', screen_type: it.screen_type || '', refresh: it.refresh || '',
+      battery: it.battery || '', charge: it.charge || '', network: it.network || '', os: it.os || '',
+      variants: vars
+    });
   }
   specsData = specData;
   if (cfg && cfg.apiKey) { apiKey = cfg.apiKey; canEdit = true; }
   const total = result.total || 0;
   document.getElementById('updateInfo').textContent = '📅 已收录 ' + total + ' 款机型 · 数据库实时更新';
+  loadFilterOptions();
   route();
 }).catch(err => {
   document.getElementById('mainContent').innerHTML =
@@ -632,6 +803,105 @@ function setSort(sort) {
   currentSort = sort;
   document.querySelectorAll('#sortBtns .sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sort));
   render();
+}
+
+// ===== 高级筛选 =====
+function loadFilterOptions() {
+  fetch('/api/filters').then(r => r.json()).then(d => {
+    fillSel('fYear', d.years);
+    fillSel('fCpuBrand', d.cpu_brands);
+    fillSel('fRam', d.rams);
+    fillSel('fRom', d.roms);
+    fillSel('fNetwork', d.networks);
+    fillSel('fScreenType', d.screen_types);
+  }).catch(() => {});
+  initFilterBindings();
+}
+function fillSel(id, vals) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const cur = el.value;
+  el.innerHTML = '<option value="全部">全部</option>' + (vals || []).map(v => `<option value="${escAttr(v)}">${escAttr(v)}</option>`).join('');
+  el.value = cur;
+}
+function hasActiveFilters() {
+  return Object.values(filters).some(v => v !== '' && v !== '全部');
+}
+function toggleFilterPanel() {
+  const p = document.getElementById('filterPanel');
+  const open = p.classList.toggle('open');
+  const btn = document.getElementById('filterToggle');
+  btn.classList.toggle('active', open);
+  btn.classList.toggle('has-filter', hasActiveFilters());
+}
+function bindFilter(id, key, transform) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+  el.addEventListener(evt, () => {
+    filters[key] = transform ? transform(el.value) : el.value;
+    document.getElementById('filterToggle').classList.toggle('has-filter', hasActiveFilters());
+    render();
+  });
+}
+function initFilterBindings() {
+  bindFilter('fYear', 'year');
+  bindFilter('fCpuBrand', 'cpuBrand');
+  bindFilter('fCamera', 'camera', v => (v === '全部' ? '全部' : Number(v)));
+  bindFilter('fRam', 'ram');
+  bindFilter('fRom', 'rom');
+  bindFilter('fNetwork', 'network');
+  bindFilter('fScreenType', 'screenType');
+  bindFilter('fMinPrice', 'minPrice');
+  bindFilter('fMaxPrice', 'maxPrice');
+}
+function clearFilters() {
+  filters = { year:'全部', cpuBrand:'全部', camera:'全部', ram:'全部', rom:'全部', network:'全部', screenType:'全部', minPrice:'', maxPrice:'' };
+  ['fYear','fCpuBrand','fCamera','fRam','fRom','fNetwork','fScreenType'].forEach(id => { const el = document.getElementById(id); if (el) el.value = '全部'; });
+  document.getElementById('fMinPrice').value = '';
+  document.getElementById('fMaxPrice').value = '';
+  document.getElementById('filterToggle').classList.toggle('has-filter', false);
+  render();
+}
+function matchSpecs(m) {
+  if (filters.year !== '全部' && String(m.release_date || '').slice(0, 4) !== String(filters.year)) return false;
+  if (filters.cpuBrand !== '全部' && (m.cpu_brand || '') !== filters.cpuBrand) return false;
+  if (filters.camera !== '全部') {
+    const camMatch = String(m.back_camera || '').match(/(\d+)/);
+    const cam = camMatch ? parseInt(camMatch[1], 10) : 0;
+    if (cam < filters.camera) return false;
+  }
+  if (filters.ram !== '全部' && !(m.ram || '').includes(filters.ram)) return false;
+  if (filters.rom !== '全部' && !(m.rom || '').includes(filters.rom)) return false;
+  if (filters.network !== '全部' && !(m.network || '').includes(filters.network)) return false;
+  if (filters.screenType !== '全部' && (m.screen_type || '') !== filters.screenType) return false;
+  if (filters.minPrice !== '' && parseInt(m.price, 10) < Number(filters.minPrice)) return false;
+  if (filters.maxPrice !== '' && parseInt(m.price, 10) > Number(filters.maxPrice)) return false;
+  return true;
+}
+// 列表规格徽标
+function specBadgesHtml(m) {
+  const parts = [];
+  if (m.cpu_model) parts.push(`<span class="spec-badge cpu" title="CPU: ${escAttr(m.cpu_model)}">${escAttr(m.cpu_model)}</span>`);
+  if (m.cpu_brand && !m.cpu_model) parts.push(`<span class="spec-badge cpu">${escAttr(m.cpu_brand)}</span>`);
+  if (m.release_date) parts.push(`<span class="spec-badge year" title="上市: ${escAttr(m.release_date)}">${escAttr(String(m.release_date).slice(0,4))}年</span>`);
+  if (m.back_camera) parts.push(`<span class="spec-badge cam" title="后置: ${escAttr(m.back_camera)}">${escAttr(m.back_camera)}</span>`);
+  if (!parts.length) return '<span class="spec-badge empty">规格待补</span>';
+  return parts.join('');
+}
+// 列表价格单元格（支持分容分版本）
+function priceCellHtml(item) {
+  const vars = item.variants || [];
+  if (!vars.length) {
+    const editAttr = canEdit ? ' contenteditable="true"' : '';
+    return `<span class="edit-price"${editAttr} data-field="price" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${item.price}</span><span class="price-unit">元</span>`;
+  }
+  const first = vars[0];
+  const rest = vars.length - 1;
+  return `<span class="price-stack">
+    <span class="v-price-row"><span class="v-spec">${escAttr(first.spec)}</span><span class="v-price">${escAttr(first.price)}</span><span class="price-unit">元</span></span>
+    ${rest > 0 ? `<span class="v-more" title="共 ${vars.length} 个版本，详情页可查看编辑">+${rest} 版本</span>` : ''}
+  </span>`;
 }
 
 // ===== RENDER =====
@@ -864,6 +1134,92 @@ async function saveImgEditor() {
   } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
 }
 
+// ---------- 规格 / 分版本价格 编辑 ----------
+let specEditId = null;
+let specEditVariants = [];
+async function openSpecEditor(id) {
+  if (!canEdit) { showToast('远程只读模式，无法编辑规格', 'error'); return; }
+  // 编辑前先拉取数据库最新数据，避免本地缓存过期导致误清空已有规格/分版本价格
+  let m = null;
+  try { const fresh = await api('/api/models/' + id); if (fresh && fresh.model) m = fresh; } catch (e) {}
+  if (!m) { const found = findModelById(id); if (found) m = found.m; }
+  if (!m) return;
+  specEditId = Number(id);
+  document.getElementById('specModalTitle').textContent = m.model;
+  const set = (el, v) => { const node = document.getElementById(el); if (node) node.value = v || ''; };
+  set('spRelease', m.release_date); set('spCpuBrand', m.cpu_brand); set('spCpuModel', m.cpu_model);
+  set('spRam', m.ram); set('spRom', m.rom); set('spBackCam', m.back_camera); set('spFrontCam', m.front_camera);
+  set('spScreenSize', m.screen_size); set('spScreenType', m.screen_type); set('spRefresh', m.refresh);
+  set('spBattery', m.battery); set('spCharge', m.charge); set('spNetwork', m.network); set('spOs', m.os);
+  specEditVariants = (m.variants || []).slice();
+  renderVariantEditor();
+  document.getElementById('specModal').style.display = 'flex';
+}
+function renderVariantEditor() {
+  const box = document.getElementById('variantEditor');
+  if (!specEditVariants.length) {
+    box.innerHTML = '<div class="img-empty">暂无分版本价格 · 点击下方按钮添加</div>';
+    return;
+  }
+  box.innerHTML = specEditVariants.map((v, i) => `
+    <div class="variant-row">
+      <input id="vv_spec_${i}" value="${escAttr(v.spec)}" placeholder="版本，如 128G / 8+256">
+      <input id="vv_price_${i}" value="${escAttr(v.price)}" placeholder="回收价(元)">
+      <button class="v-del" onclick="removeVariantRow(${i})" title="删除该版本">×</button>
+    </div>`).join('');
+}
+function addVariantRow() {
+  specEditVariants.push({ spec: '', price: '' });
+  renderVariantEditor();
+}
+function removeVariantRow(i) {
+  specEditVariants.splice(i, 1);
+  renderVariantEditor();
+}
+function closeSpecEditor() {
+  document.getElementById('specModal').style.display = 'none';
+  specEditId = null;
+}
+async function saveSpecEditor() {
+  if (specEditId == null) return;
+  const vars = specEditVariants.map((v, i) => ({
+    spec: ((document.getElementById('vv_spec_' + i) || {}).value || '').trim() || v.spec,
+    price: ((document.getElementById('vv_price_' + i) || {}).value || '').trim() || v.price,
+  })).filter(v => v.spec || v.price);
+  const patch = {
+    release_date: document.getElementById('spRelease').value.trim(),
+    cpu_brand: document.getElementById('spCpuBrand').value,
+    cpu_model: document.getElementById('spCpuModel').value.trim(),
+    ram: document.getElementById('spRam').value.trim(),
+    rom: document.getElementById('spRom').value.trim(),
+    back_camera: document.getElementById('spBackCam').value.trim(),
+    front_camera: document.getElementById('spFrontCam').value.trim(),
+    screen_size: document.getElementById('spScreenSize').value.trim(),
+    screen_type: document.getElementById('spScreenType').value,
+    refresh: document.getElementById('spRefresh').value.trim(),
+    battery: document.getElementById('spBattery').value.trim(),
+    charge: document.getElementById('spCharge').value.trim(),
+    network: document.getElementById('spNetwork').value.trim(),
+    os: document.getElementById('spOs').value.trim(),
+    variants: vars,
+  };
+  try {
+    const row = await api('/api/models/' + specEditId, { method: 'PATCH', body: JSON.stringify(patch) });
+    const found = findModelById(specEditId);
+    if (found) {
+      const m = found.m;
+      m.release_date = row.release_date || ''; m.cpu_brand = row.cpu_brand || ''; m.cpu_model = row.cpu_model || '';
+      m.ram = row.ram || ''; m.rom = row.rom || ''; m.back_camera = row.back_camera || ''; m.front_camera = row.front_camera || '';
+      m.screen_size = row.screen_size || ''; m.screen_type = row.screen_type || ''; m.refresh = row.refresh || '';
+      m.battery = row.battery || ''; m.charge = row.charge || ''; m.network = row.network || ''; m.os = row.os || '';
+      m.variants = vars;
+    }
+    closeSpecEditor();
+    route();
+    showToast('规格已保存 ✓', 'success');
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
+}
+
 function dec(s) { return decodeURIComponent((s || '').replace(/\+/g, ' ')); }
 
 function showToast(msg, type) {
@@ -887,7 +1243,8 @@ function renderPrice() {
     if (currentBrand !== '全部' && group.brand !== currentBrand) return;
     group.models.forEach(m => {
       if (currentSearch && !m.model.toLowerCase().includes(currentSearch)) return;
-      filtered.push({ id: m.id, brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '', images: m.images || [] });
+      if (!matchSpecs(m)) return;
+      filtered.push({ id: m.id, brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '', images: m.images || [], release_date: m.release_date || '', cpu_brand: m.cpu_brand || '', cpu_model: m.cpu_model || '', back_camera: m.back_camera || '', variants: m.variants || [] });
     });
   });
   if (currentSort === 'price-desc') filtered.sort((a, b) => parseInt(b.price) - parseInt(a.price));
@@ -905,21 +1262,22 @@ function renderPrice() {
   let html = '';
   Object.keys(byCategory).forEach(cat => {
     html += `<div class="category-section"><div class="category-title">${cat}</div>`;
-    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>备注</th><th>参考图</th><th style="width:36px"></th></tr></thead><tbody>`;
+    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>规格</th><th>备注</th><th>参考图</th><th style="width:36px"></th></tr></thead><tbody>`;
     byCategory[cat].forEach(item => {
       const modelName = highlightMatch(item.model, currentSearch);
       const noteText = item.note || '';
-      const link = `onclick="navTo('#detail|${enc(item.brand)}|${enc(item.model)}')"`;
       const editAttr = canEdit ? ' contenteditable="true"' : '';
+      const editSpecBtn = canEdit ? `<button class="img-edit-mini" style="margin-left:4px" onclick="openSpecEditor(${item.id})" title="编辑规格 / 分容量版本价格">规格✎</button>` : '';
       html += `<tr>
-        <td><span class="edit-model"${editAttr} data-field="model" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span></td>
-        <td><span class="edit-price"${editAttr} data-field="price" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${item.price}</span><span class="price-unit">元</span></td>
+        <td><span class="edit-model"${editAttr} data-field="model" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span>${editSpecBtn}</td>
+        <td>${priceCellHtml(item)}</td>
+        <td>${specBadgesHtml(item)}</td>
         <td class="note-cell"><span class="edit-note"${editAttr} data-field="note" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${noteText || ''}</span></td>
         <td>${imgCellHtml(item)}</td>
         <td>${canEdit ? `<button class="del-btn" onclick="delModel('${item.id}')" title="删除">×</button>` : ''}</td>
       </tr>`;
     });
-    if (canEdit) html += `<tr class="add-row" onclick="addModel('${enc(cat)}')"><td colspan="5">+ 添加型号</td></tr>`;
+    if (canEdit) html += `<tr class="add-row" onclick="addModel('${enc(cat)}')"><td colspan="6">+ 添加型号</td></tr>`;
     html += `</tbody></table></div></div>`;
   });
   document.getElementById('mainContent').innerHTML = html;
@@ -1030,6 +1388,28 @@ function renderDetail(brand, model) {
 
   // Right column
   html += `<div class="detail-right">`;
+
+  // 机型档案（完整规格，来自 models 表）
+  if (dbModel) {
+    const d = dbModel;
+    const editBtn = canEdit ? `<button class="img-edit-mini" onclick="openSpecEditor(${d.id})">✎ 编辑规格</button>` : '';
+    const todo = (v) => (v && String(v).trim()) ? `<span class="v">${escAttr(v)}</span>` : '<span class="todo">待补充</span>';
+    html += `<div class="info-card"><h3><span class="bar"></span>📋 机型档案${editBtn}</h3><table class="spec-full">
+      <tr><td>上市时间</td><td>${todo(d.release_date)}</td><td>CPU品牌</td><td>${todo(d.cpu_brand)}</td></tr>
+      <tr><td>CPU型号</td><td>${todo(d.cpu_model)}</td><td>运行内存</td><td>${todo(d.ram)}</td></tr>
+      <tr><td>存储</td><td>${todo(d.rom)}</td><td>后置主摄</td><td>${todo(d.back_camera)}</td></tr>
+      <tr><td>前置</td><td>${todo(d.front_camera)}</td><td>屏幕</td><td>${todo(d.screen_size)}</td></tr>
+      <tr><td>屏幕材质</td><td>${todo(d.screen_type)}</td><td>刷新率</td><td>${todo(d.refresh)}</td></tr>
+      <tr><td>电池</td><td>${todo(d.battery)}</td><td>快充</td><td>${todo(d.charge)}</td></tr>
+      <tr><td>网络</td><td>${todo(d.network)}</td><td>系统</td><td>${todo(d.os)}</td></tr>
+    </table>`;
+    const vars = d.variants || [];
+    if (vars.length) {
+      html += `<h3 style="margin-top:14px"><span class="bar" style="background:#faad14"></span>💰 分容分版本价格</h3><table class="v-table"><tr><th>版本</th><th>回收价(元)</th></tr>` +
+        vars.map(v => `<tr><td>${escAttr(v.spec)}</td><td class="v-price">${escAttr(v.price)}</td></tr>`).join('') + `</table>`;
+    }
+    html += `</div>`;
+  }
 
   // Specs
   if (spec) {

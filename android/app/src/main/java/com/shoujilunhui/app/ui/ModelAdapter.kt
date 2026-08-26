@@ -56,6 +56,17 @@ class ModelAdapter(
             holder.tvNote.visibility = View.GONE
         }
         holder.tvPrice.text = if (row.price.isNotBlank()) "${row.price} 元" else "面议"
+        val specs = buildList {
+            if (!row.cpuModel.isNullOrBlank()) add(row.cpuModel)
+            if (!row.releaseDate.isNullOrBlank()) add(row.releaseDate!!.take(4) + "年")
+            if (!row.backCamera.isNullOrBlank()) add(row.backCamera)
+        }
+        if (specs.isNotEmpty()) {
+            holder.tvSpec.visibility = View.VISIBLE
+            holder.tvSpec.text = specs.joinToString(" · ")
+        } else {
+            holder.tvSpec.visibility = View.GONE
+        }
         holder.itemView.setOnClickListener { onClick(row) }
         holder.itemView.setOnLongClickListener { onLongClick(row); true }
     }
@@ -65,5 +76,6 @@ class ModelAdapter(
         val tvBrand: TextView = v.findViewById(R.id.tvBrand)
         val tvNote: TextView = v.findViewById(R.id.tvNote)
         val tvPrice: TextView = v.findViewById(R.id.tvPrice)
+        val tvSpec: TextView = v.findViewById(R.id.tvSpec)
     }
 }
