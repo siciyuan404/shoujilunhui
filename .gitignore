@@ -9,3 +9,7 @@ server/config.json
 __pycache__/
 .claude/
 .workbuddy/
+
+# 本地构建产物与临时脚本
+builds/
+
