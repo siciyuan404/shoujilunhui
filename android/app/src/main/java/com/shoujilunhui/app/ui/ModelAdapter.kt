@@ -45,19 +45,19 @@ class ModelAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val it = items[position]
-        holder.tvModel.text = it.model
-        holder.tvBrand.text = "${it.brand} · ${it.category}"
-        val note = it.note ?: ""
+        val row = items[position]
+        holder.tvModel.text = row.model
+        holder.tvBrand.text = "${row.brand} · ${row.category}"
+        val note = row.note ?: ""
         if (note.isNotBlank()) {
             holder.tvNote.visibility = View.VISIBLE
             holder.tvNote.text = note
         } else {
             holder.tvNote.visibility = View.GONE
         }
-        holder.tvPrice.text = if (it.price.isNotBlank()) "${it.price} 元" else "面议"
-        holder.itemView.setOnClickListener { onClick(it) }
-        holder.itemView.setOnLongClickListener { onLongClick(it); true }
+        holder.tvPrice.text = if (row.price.isNotBlank()) "${row.price} 元" else "面议"
+        holder.itemView.setOnClickListener { onClick(row) }
+        holder.itemView.setOnLongClickListener { onLongClick(row); true }
     }
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
