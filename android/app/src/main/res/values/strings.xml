@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">回收查价</string>
+    <string name="app_title">手机回收查价</string>
+    <string name="settings">设置</string>
+    <string name="back">返回</string>
+    <string name="edit">编辑</string>
+    <string name="search_hint">搜索型号，如：Mate70、iPhone 16</string>
+    <string name="no_result">没有找到匹配的型号</string>
+    <string name="add_model">添加型号</string>
+</resources>

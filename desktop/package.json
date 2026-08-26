@@ -1,0 +1,31 @@
+{
+  "name": "phone-recycle-desktop",
+  "version": "1.0.0",
+  "description": "手机回收价格数据库 - 桌面端",
+  "main": "main.js",
+  "author": "shoujilunhui",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.shoujilunhui.price",
+    "productName": "手机回收查价",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.png"
+    },
+    "files": ["main.js", "preload.js", "assets/**"],
+    "extraResources": [
+      { "from": "../server", "to": "server", "filter": ["**/*", "!config.json"] }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

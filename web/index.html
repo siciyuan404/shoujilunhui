@@ -140,20 +140,20 @@ tr:hover td { background: var(--hover-bg); }
 
 .save-bar {
   position: fixed; bottom: 20px; right: 20px; z-index: 999;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 8px;
   background: #fff; border-radius: 28px; box-shadow: 0 4px 20px rgba(0,0,0,.15);
-  padding: 8px 8px 8px 18px; transition: all .25s; opacity: 0; pointer-events: none; transform: translateY(10px);
+  padding: 9px 18px; transition: all .25s; opacity: 0; pointer-events: none; transform: translateY(10px);
 }
-.save-bar.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-.save-bar .save-count { font-size: 13px; color: #fa8c16; font-weight: 600; white-space: nowrap; }
-.save-btn {
-  border: none; background: var(--accent); color: #fff; cursor: pointer;
-  padding: 8px 22px; border-radius: 20px; font-size: 14px; font-weight: 600;
-  transition: all .2s; font-family: inherit;
-}
-.save-btn:hover { background: #0958d9; box-shadow: 0 2px 10px rgba(22,119,255,.3); }
-.save-btn:disabled { background: #d9d9d9; cursor: not-allowed; }
-.save-btn.saving { background: #52c41a; }
+.save-bar.show { opacity: 1; transform: translateY(0); }
+.save-bar .save-dot { width: 8px; height: 8px; border-radius: 50%; background: #fa8c16; animation: pulse 1s infinite; }
+.save-bar.state-saved .save-dot { background: #52c41a; animation: none; }
+.save-bar.state-error .save-dot { background: #ff4d4f; animation: none; }
+@keyframes pulse { 50% { opacity: .3; } }
+.save-bar .save-count { font-size: 13px; color: #595959; font-weight: 600; white-space: nowrap; }
+.save-bar.state-saved .save-count { color: #52c41a; }
+.save-bar.state-error .save-count { color: #ff4d4f; }
+.edit-price.saving-flash { box-shadow: 0 0 0 2px #fa8c16 !important; }
+.edit-price.saved-flash, .edit-note.saved-flash, .edit-model.saved-flash { box-shadow: 0 0 0 2px #52c41a !important; background: #f6ffed !important; }
 
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px);
@@ -349,6 +349,69 @@ tr:hover td { background: var(--hover-bg); }
   .detail-hero h2 { font-size: 20px; }
 }
 mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; }
+
+/* ===== 参考图片 ===== */
+.img-thumb {
+  position: relative; width: 52px; height: 52px; border-radius: 8px; overflow: hidden; cursor: pointer;
+  display: inline-block; background: #f5f7fa; border: 1px solid var(--border); vertical-align: middle;
+}
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.img-thumb .img-edit-badge {
+  position: absolute; right: 2px; bottom: 2px; background: rgba(0,0,0,.55); color: #fff;
+  font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.img-add-btn {
+  display: inline-flex; width: 52px; height: 52px; border: 1px dashed var(--accent); color: var(--accent);
+  border-radius: 8px; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;
+  background: var(--accent-light); vertical-align: middle;
+}
+.img-add-btn:hover { background: #d6ecff; }
+.img-none { color: #bfbfbf; font-size: 12px; }
+
+.img-modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+.img-modal { width: min(680px, 92vw); max-height: 86vh; background: #fff; border-radius: 14px; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,0,.3); animation: fadeInUp .2s ease-out; }
+.img-modal-head { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; }
+.img-modal-head .img-title b { color: var(--accent); }
+.img-modal-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 2px 6px; }
+.img-modal-body { padding: 16px 18px; overflow-y: auto; }
+.img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.img-item { position: relative; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fafafa; }
+.img-item img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.img-item-tools { display: flex; position: absolute; top: 4px; right: 4px; gap: 3px; }
+.img-item-tools button {
+  width: 22px; height: 22px; border: none; border-radius: 5px; background: rgba(0,0,0,.55); color: #fff;
+  font-size: 11px; cursor: pointer; line-height: 1; padding: 0;
+}
+.img-item-tools button:hover { background: var(--danger); }
+.img-main-tag { position: absolute; left: 4px; top: 4px; background: var(--accent); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; }
+.img-item .img-url {
+  position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.6); color: #fff;
+  font-size: 10px; padding: 3px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.img-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); }
+.img-actions input[type=text] { flex: 1; min-width: 180px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
+.img-actions input[type=text]:focus { border-color: var(--accent); }
+.img-actions button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
+.img-actions button:hover { border-color: var(--accent); color: var(--accent); }
+.img-actions .primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.img-actions .primary:hover { background: #0958d9; color: #fff; }
+.img-uploading { color: var(--accent); font-size: 12.5px; }
+.img-modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 13px 18px; border-top: 1px solid var(--border); }
+.img-modal-foot button { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
+.img-modal-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.img-modal-foot button.primary:hover { background: #0958d9; }
+.img-modal-foot .img-tip { font-size: 12px; color: var(--text-secondary); margin-right: auto; align-self: center; }
+.img-empty { color: var(--text-secondary); font-size: 13px; padding: 20px; text-align: center; grid-column: 1 / -1; }
+
+/* detail 参考图片 */
+.d-img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 10px; }
+.d-img-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: zoom-in; border: 1px solid var(--border); }
+.d-img-empty { grid-column: 1 / -1; color: var(--text-secondary); font-size: 12.5px; text-align: center; padding: 16px 0; }
+.img-edit-mini {
+  border: 1px solid var(--border); background: #fff; color: var(--accent); font-size: 12px;
+  padding: 3px 10px; border-radius: 14px; cursor: pointer; margin-left: auto; font-family: inherit;
+}
+.img-edit-mini:hover { background: var(--accent-light); }
 </style>
 </head>
 <body>
@@ -393,8 +456,8 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 </div>
 
 <div class="save-bar" id="saveBar">
-  <span class="save-count" id="saveCount">0 项修改</span>
-  <button class="save-btn" id="saveBtn" onclick="saveData()">保存</button>
+  <span class="save-dot"></span>
+  <span class="save-count" id="saveCount">保存中...</span>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -404,10 +467,35 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   <div class="lb-hint">点击图片放大 / 缩小 · 滚动查看细节 · 点击空白处关闭</div>
 </div>
 
+<!-- 参考图片编辑弹窗 -->
+<div class="img-modal-mask" id="imgModal" style="display:none" onclick="if(event.target===this)closeImgEditor()">
+  <div class="img-modal">
+    <div class="img-modal-head">
+      <span class="img-title">📷 参考图片管理 — <b id="imgModalTitle"></b></span>
+      <button class="img-modal-close" onclick="closeImgEditor()">×</button>
+    </div>
+    <div class="img-modal-body">
+      <div class="img-grid" id="imgGrid"></div>
+      <div class="img-actions">
+        <button type="button" onclick="document.getElementById('imgFile').click()">⬆ 上传图片</button>
+        <input type="file" id="imgFile" accept="image/*" multiple style="display:none">
+        <span>或粘贴图片 URL：</span>
+        <input type="text" id="imgUrlInput" placeholder="https://... 或 /uploads/xxx.jpg" onkeydown="if(event.key==='Enter')addImgByUrl()">
+        <button type="button" class="primary" onclick="addImgByUrl()">添加</button>
+      </div>
+      <div class="img-uploading" id="imgUploading"></div>
+    </div>
+    <div class="img-modal-foot">
+      <span class="img-tip">首图为列表主图 · 仅本机/有 Key 可编辑</span>
+      <button type="button" onclick="closeImgEditor()">取消</button>
+      <button type="button" class="primary" onclick="saveImgEditor()">保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== GLOBAL STATE =====
 let allData = [];
-let originalData = '';
 let specsData = null;
 let currentMode = 'price';
 let lastMode = 'price';
@@ -415,21 +503,48 @@ let currentBrand = '全部';
 let currentSearch = '';
 let currentSort = 'default';
 let bombGuideOpen = true;
-let dirtyCount = 0;
+let apiKey = '';
+let canEdit = false;
+let pendingSaves = 0;
+
+// ===== API =====
+function api(path, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  if (apiKey) opts.headers['X-API-Key'] = apiKey;
+  return fetch(path, opts).then(async r => {
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || ('HTTP ' + r.status));
+    return r.json();
+  });
+}
 
 // ===== LOAD =====
 Promise.all([
-  fetch('./data.json').then(r => r.json()),
-  fetch('./phone-specs.json').then(r => r.json()).catch(() => null)
-]).then(([priceData, specData]) => {
-  allData = priceData;
-  originalData = JSON.stringify(priceData);
+  fetch('/api/models?limit=0').then(r => r.json()),
+  fetch('./phone-specs.json').then(r => r.json()).catch(() => null),
+  fetch('/api/config').then(r => r.json()).catch(() => null)
+]).then(([result, specData, cfg]) => {
+  // API items -> 分组结构（每个 model 带 id）
+  const idx = new Map();
+  allData = [];
+  for (const it of (result.items || [])) {
+    const key = it.brand + '||' + it.category;
+    if (!idx.has(key)) {
+      idx.set(key, { brand: it.brand, category: it.category, models: [] });
+      allData.push(idx.get(key));
+    }
+    let imgs = [];
+    try { imgs = JSON.parse(it.images || '[]'); } catch (e) {}
+    idx.get(key).models.push({ id: it.id, model: it.model, price: it.price, note: it.note || '', images: imgs });
+  }
   specsData = specData;
-  document.getElementById('updateInfo').textContent = '📅 报价日期：2026-08-22';
+  if (cfg && cfg.apiKey) { apiKey = cfg.apiKey; canEdit = true; }
+  const total = result.total || 0;
+  document.getElementById('updateInfo').textContent = '📅 已收录 ' + total + ' 款机型 · 数据库实时更新';
   route();
 }).catch(err => {
   document.getElementById('mainContent').innerHTML =
-    '<div class="empty-state"><p>数据加载失败，请检查 data.json / phone-specs.json 文件</p></div>';
+    '<div class="empty-state"><p>数据加载失败：' + err.message + '</p><p style="font-size:13px;margin-top:6px">请确认 API 服务已启动 (node server/src/index.js)</p></div>';
 });
 
 // ===== ROUTING (hash based, shareable detail pages) =====
@@ -525,19 +640,14 @@ function render() {
   else renderVerify();
 }
 
-// ---------- INLINE EDIT ----------
-function getOriginalValue(brand, cat, model, field) {
-  try {
-    const orig = JSON.parse(originalData);
-    for (const g of orig) {
-      if (g.brand === brand && g.category === cat) {
-        for (const m of g.models) {
-          if (m.model === model) return String(m[field] || '');
-        }
-      }
+// ---------- INLINE EDIT（实时保存到 API） ----------
+function findModelById(id) {
+  for (const g of allData) {
+    for (const m of g.models) {
+      if (m.id === Number(id)) return { g, m };
     }
-  } catch(e) {}
-  return '';
+  }
+  return null;
 }
 
 function editFocus(el) {
@@ -548,35 +658,49 @@ function editFocus(el) {
   };
 }
 
+function setSaveState(state, msg) {
+  const bar = document.getElementById('saveBar');
+  const cnt = document.getElementById('saveCount');
+  bar.className = 'save-bar show state-' + state;
+  cnt.textContent = msg;
+  if (state === 'saved') setTimeout(() => { if (pendingSaves === 0) bar.classList.remove('show'); }, 1600);
+}
+
+async function persistModel(id, patch) {
+  if (!canEdit) { showToast('远程只读模式，无法修改（需本机或 API Key）', 'error'); throw new Error('readonly'); }
+  pendingSaves++;
+  setSaveState('saving', '保存中...');
+  try {
+    const row = await api('/api/models/' + id, { method: 'PUT', body: JSON.stringify(patch) });
+    pendingSaves--;
+    setSaveState('saved', '已保存 ✓');
+    return row;
+  } catch (e) {
+    pendingSaves--;
+    setSaveState('error', '保存失败');
+    showToast('保存失败: ' + e.message, 'error');
+    throw e;
+  }
+}
+
 function editBlur(el) {
   const newVal = el.textContent.trim();
   const oldVal = el.dataset.oldVal || '';
   if (newVal === oldVal) return;
-  const brand = dec(el.dataset.brand);
-  const cat = dec(el.dataset.category);
-  const model = dec(el.dataset.model);
   const field = el.dataset.field;
-  for (const g of allData) {
-    if (g.brand === brand && g.category === cat) {
-      for (const m of g.models) {
-        if (m.model === model) {
-          m[field] = newVal;
-          if (field === 'model') {
-            el.dataset.model = enc(newVal);
-            const row = el.closest('tr');
-            if (row) row.querySelectorAll('[data-model]').forEach(c => c.dataset.model = enc(newVal));
-          }
-          break;
-        }
-      }
-    }
-  }
-  updateDirtyCount();
-  const isDirty = newVal !== getOriginalValue(brand, cat, model, field);
-  el.classList.toggle('dirty', isDirty);
+  const id = el.dataset.id;
+  const found = findModelById(id);
+  if (!found) return;
+  found.m[field] = newVal;
+  el.classList.add('saving-flash');
+  persistModel(id, { [field]: newVal }).then(() => {
+    el.classList.remove('saving-flash');
+    el.classList.add('saved-flash');
+    setTimeout(() => el.classList.remove('saved-flash'), 800);
+  }).catch(() => el.classList.remove('saving-flash'));
 }
 
-function addModel(cat) {
+async function addModel(cat) {
   cat = dec(cat);
   const brand = currentBrand !== '全部' ? currentBrand : null;
   let target = null;
@@ -584,76 +708,163 @@ function addModel(cat) {
     if (g.category === cat && (brand === null || g.brand === brand)) { target = g; break; }
   }
   if (!target) return;
-  const newModel = { model: '新型号', price: '0', note: '' };
-  target.models.push(newModel);
-  updateDirtyCount();
-  renderPrice();
-  const cells = document.querySelectorAll('.new-row .edit-model');
-  if (cells.length) { const last = cells[cells.length - 1]; last.focus(); document.execCommand('selectAll', false, null); }
+  try {
+    const row = await api('/api/models', {
+      method: 'POST',
+      body: JSON.stringify({ brand: target.brand, category: cat, model: '新型号', price: '0', note: '' })
+    });
+    target.models.push({ id: row.id, model: row.model, price: row.price, note: row.note || '' });
+    renderPrice();
+    const cells = document.querySelectorAll('.edit-model[data-id="' + row.id + '"]');
+    if (cells.length) { cells[0].focus(); document.execCommand('selectAll', false, null); }
+  } catch (e) { showToast('添加失败: ' + e.message, 'error'); }
 }
 
-function delModel(brand, cat, model) {
-  brand = dec(brand); cat = dec(cat); model = dec(model);
-  for (const g of allData) {
-    if (g.brand === brand && g.category === cat) {
-      g.models = g.models.filter(m => m.model !== model);
+async function delModel(id) {
+  id = Number(id);
+  const found = findModelById(id);
+  if (!found) return;
+  if (!confirm('确定删除「' + found.m.model + '」？')) return;
+  try {
+    await api('/api/models/' + id, { method: 'DELETE' });
+    found.g.models = found.g.models.filter(m => m.id !== id);
+    renderPrice();
+    showToast('已删除', 'success');
+  } catch (e) { showToast('删除失败: ' + e.message, 'error'); }
+}
+
+// ---------- 参考图片编辑 ----------
+function escAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// 列表单元格：主图缩略图 / 添加按钮 / 空占位
+function imgCellHtml(item) {
+  const imgs = item.images || [];
+  if (imgs.length) {
+    const main = imgs[0];
+    const badge = canEdit ? '<span class="img-edit-badge">✎</span>' : '';
+    const act = canEdit
+      ? `onclick="openImgEditor(${item.id})"`
+      : `onclick="openLightbox('${escAttr(main)}')"`;
+    return `<span class="img-thumb" title="${imgs.length} 张参考图" ${act}><img src="${escAttr(main)}" loading="lazy" onerror="this.closest('.img-thumb').style.display='none'">${badge}</span>`;
+  }
+  if (canEdit) return `<span class="img-add-btn" onclick="openImgEditor(${item.id})" title="添加参考图片">+图</span>`;
+  return '<span class="img-none">—</span>';
+}
+
+let imgEdit = null; // { id, modelName, images: [] }
+
+function openImgEditor(id) {
+  const found = findModelById(id);
+  if (!found) return;
+  if (!canEdit) { showToast('远程只读模式，无法编辑图片', 'error'); return; }
+  imgEdit = { id: Number(id), modelName: found.m.model, images: (found.m.images || []).slice() };
+  document.getElementById('imgModalTitle').textContent = found.m.model;
+  document.getElementById('imgUrlInput').value = '';
+  document.getElementById('imgUploading').textContent = '';
+  document.getElementById('imgModal').style.display = 'flex';
+  renderImgGrid();
+}
+
+function closeImgEditor() {
+  document.getElementById('imgModal').style.display = 'none';
+  imgEdit = null;
+}
+
+function renderImgGrid() {
+  const grid = document.getElementById('imgGrid');
+  if (!imgEdit) return;
+  const list = imgEdit.images;
+  if (!list.length) {
+    grid.innerHTML = '<div class="img-empty">暂无参考图片 · 上传本地图片或粘贴 URL 添加</div>';
+    return;
+  }
+  grid.innerHTML = list.map((u, i) => `
+    <div class="img-item">
+      <img src="${escAttr(u)}" loading="lazy" onclick="openLightbox('${escAttr(u)}')" onerror="this.closest('.img-item').style.opacity=.35">
+      ${i === 0 ? '<span class="img-main-tag">主图</span>' : ''}
+      <div class="img-item-tools">
+        <button onclick="moveImg(${i},-1)" title="左移/设为前一张">◀</button>
+        <button onclick="moveImg(${i},1)" title="右移">▶</button>
+        <button onclick="removeImg(${i})" title="删除">×</button>
+      </div>
+      <span class="img-url">${escAttr(u)}</span>
+    </div>`).join('');
+}
+
+function moveImg(idx, dir) {
+  if (!imgEdit) return;
+  const to = idx + dir;
+  if (to < 0 || to >= imgEdit.images.length) return;
+  const arr = imgEdit.images;
+  [arr[idx], arr[to]] = [arr[to], arr[idx]];
+  renderImgGrid();
+}
+
+function removeImg(idx) {
+  if (!imgEdit) return;
+  imgEdit.images.splice(idx, 1);
+  renderImgGrid();
+}
+
+function addImgByUrl() {
+  if (!imgEdit) return;
+  const val = document.getElementById('imgUrlInput').value.trim();
+  if (!val) { showToast('请输入图片 URL', 'error'); return; }
+  imgEdit.images.push(val);
+  document.getElementById('imgUrlInput').value = '';
+  renderImgGrid();
+}
+
+async function uploadRaw(file) {
+  if (!canEdit) throw new Error('只读');
+  const h = {};
+  if (apiKey) h['X-API-Key'] = apiKey;
+  const r = await fetch('/api/upload', { method: 'POST', headers: Object.assign({ 'Content-Type': file.type }, h), body: file });
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || ('HTTP ' + r.status));
+  return r.json();
+}
+
+document.getElementById('imgFile').addEventListener('change', async function (e) {
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  if (!files.length || !imgEdit) return;
+  const tip = document.getElementById('imgUploading');
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) { showToast('跳过非图片文件: ' + f.name, 'error'); continue; }
+    tip.textContent = '正在上传 ' + f.name + ' ...';
+    try {
+      const d = await uploadRaw(f);
+      imgEdit.images.push(d.url);
+      tip.textContent = '已上传 ' + d.url;
+      renderImgGrid();
+    } catch (err) {
+      tip.textContent = '上传失败: ' + err.message;
+      showToast('上传失败: ' + err.message, 'error');
     }
   }
-  updateDirtyCount();
-  renderPrice();
+  setTimeout(() => { if (tip.textContent.startsWith('已上传')) tip.textContent = ''; }, 1500);
+});
+
+async function saveImgEditor() {
+  if (!imgEdit) return;
+  const id = imgEdit.id;
+  try {
+    const row = await api('/api/models/' + id, { method: 'PUT', body: JSON.stringify({ images: imgEdit.images }) });
+    const found = findModelById(id);
+    if (found) {
+      let imgs = [];
+      try { imgs = JSON.parse(row.images || '[]'); } catch (e) {}
+      found.m.images = imgs;
+    }
+    closeImgEditor();
+    renderPrice();
+    showToast('参考图片已保存 ✓', 'success');
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
 }
 
 function dec(s) { return decodeURIComponent((s || '').replace(/\+/g, ' ')); }
-
-function updateDirtyCount() {
-  let count = 0;
-  for (const g of allData) {
-    for (const m of g.models) {
-      const orig = getOriginalValue(g.brand, g.category, m.model, 'price');
-      const origNote = getOriginalValue(g.brand, g.category, m.model, 'note');
-      if (String(m.price) !== orig) count++;
-      if ((m.note || '') !== origNote) count++;
-    }
-  }
-  dirtyCount = count;
-  const bar = document.getElementById('saveBar');
-  const cnt = document.getElementById('saveCount');
-  if (count > 0) {
-    bar.classList.add('show');
-    cnt.textContent = count + ' 项修改';
-  } else {
-    bar.classList.remove('show');
-  }
-}
-
-async function saveData() {
-  const btn = document.getElementById('saveBtn');
-  btn.classList.add('saving');
-  btn.textContent = '保存中...';
-  btn.disabled = true;
-  try {
-    const resp = await fetch('/api/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(allData)
-    });
-    const result = await resp.json();
-    if (result.success) {
-      originalData = JSON.stringify(allData);
-      dirtyCount = 0;
-      document.getElementById('saveBar').classList.remove('show');
-      showToast('保存成功', 'success');
-      renderPrice();
-    } else {
-      showToast('保存失败: ' + (result.error || '未知错误'), 'error');
-    }
-  } catch(e) {
-    showToast('保存失败: ' + e.message, 'error');
-  }
-  btn.classList.remove('saving');
-  btn.textContent = '保存';
-  btn.disabled = false;
-}
 
 function showToast(msg, type) {
   const t = document.getElementById('toast');
@@ -663,9 +874,9 @@ function showToast(msg, type) {
 }
 
 window.addEventListener('beforeunload', function(e) {
-  if (dirtyCount > 0) {
+  if (pendingSaves > 0) {
     e.preventDefault();
-    e.returnValue = '有未保存的修改，确定离开？';
+    e.returnValue = '有正在保存的修改，确定离开？';
   }
 });
 
@@ -676,7 +887,7 @@ function renderPrice() {
     if (currentBrand !== '全部' && group.brand !== currentBrand) return;
     group.models.forEach(m => {
       if (currentSearch && !m.model.toLowerCase().includes(currentSearch)) return;
-      filtered.push({ brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '' });
+      filtered.push({ id: m.id, brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '', images: m.images || [] });
     });
   });
   if (currentSort === 'price-desc') filtered.sort((a, b) => parseInt(b.price) - parseInt(a.price));
@@ -694,23 +905,21 @@ function renderPrice() {
   let html = '';
   Object.keys(byCategory).forEach(cat => {
     html += `<div class="category-section"><div class="category-title">${cat}</div>`;
-    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>备注</th><th style="width:36px"></th></tr></thead><tbody>`;
+    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>备注</th><th>参考图</th><th style="width:36px"></th></tr></thead><tbody>`;
     byCategory[cat].forEach(item => {
       const modelName = highlightMatch(item.model, currentSearch);
       const noteText = item.note || '';
       const link = `onclick="navTo('#detail|${enc(item.brand)}|${enc(item.model)}')"`;
-      const priceDirty = String(item.price) !== getOriginalValue(item.brand, item.category, item.model, 'price') ? ' dirty' : '';
-      const noteDirty = noteText !== getOriginalValue(item.brand, item.category, item.model, 'note') ? ' dirty' : '';
-      const modelDirty = item.model !== getOriginalValue(item.brand, item.category, item.model, 'model') ? ' dirty' : '';
-      const isNew = !getOriginalValue(item.brand, item.category, item.model, 'price') && !getOriginalValue(item.brand, item.category, item.model, 'model') ? ' new-row' : '';
-      html += `<tr class="${isNew}">
-        <td><span class="edit-model${modelDirty}" contenteditable="true" data-field="model" data-brand="${enc(item.brand)}" data-category="${enc(item.category)}" data-model="${enc(item.model)}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span></td>
-        <td><span class="edit-price${priceDirty}" contenteditable="true" data-field="price" data-brand="${enc(item.brand)}" data-category="${enc(item.category)}" data-model="${enc(item.model)}" onfocus="editFocus(this)" onblur="editBlur(this)">${item.price}</span><span class="price-unit">元</span></td>
-        <td class="note-cell"><span class="edit-note${noteDirty}" contenteditable="true" data-field="note" data-brand="${enc(item.brand)}" data-category="${enc(item.category)}" data-model="${enc(item.model)}" onfocus="editFocus(this)" onblur="editBlur(this)">${noteText || ''}</span></td>
-        <td><button class="del-btn" onclick="delModel('${enc(item.brand)}','${enc(item.category)}','${enc(item.model)}')">×</button></td>
+      const editAttr = canEdit ? ' contenteditable="true"' : '';
+      html += `<tr>
+        <td><span class="edit-model"${editAttr} data-field="model" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span></td>
+        <td><span class="edit-price"${editAttr} data-field="price" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${item.price}</span><span class="price-unit">元</span></td>
+        <td class="note-cell"><span class="edit-note"${editAttr} data-field="note" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${noteText || ''}</span></td>
+        <td>${imgCellHtml(item)}</td>
+        <td>${canEdit ? `<button class="del-btn" onclick="delModel('${item.id}')" title="删除">×</button>` : ''}</td>
       </tr>`;
     });
-    html += `<tr class="add-row" onclick="addModel('${enc(cat)}')"><td colspan="4">+ 添加型号</td></tr>`;
+    if (canEdit) html += `<tr class="add-row" onclick="addModel('${enc(cat)}')"><td colspan="5">+ 添加型号</td></tr>`;
     html += `</tbody></table></div></div>`;
   });
   document.getElementById('mainContent').innerHTML = html;
@@ -772,6 +981,8 @@ function renderDetail(brand, model) {
     ? specsData.specs.find(s => s.brand === brand && s.model === model)
     : null;
   const price = findPrice(brand, model);
+  const dbModel = findModelByName(brand, model);
+  const dbImages = (dbModel && dbModel.images) || [];
 
   const heroBrand = spec ? spec.brand : brand;
   const heroModel = spec ? spec.model : model;
@@ -832,6 +1043,15 @@ function renderDetail(brand, model) {
     html += `</div>`;
   } else {
     html += `<div class="info-card"><h3><span class="bar"></span>说明</h3><div class="d-feat">该机型暂无详细档案，仅有报价信息。点击「💰 查价」页可查看行情。</div></div>`;
+  }
+
+  // Reference images (来自数据库 models.images)
+  if (dbImages.length || (canEdit && dbModel)) {
+    const editBtn = (canEdit && dbModel) ? `<button class="img-edit-mini" onclick="openImgEditor(${dbModel.id})">✎ 编辑</button>` : '';
+    const imgs = dbImages.length
+      ? dbImages.map(u => `<img src="${escAttr(u)}" loading="lazy" onclick="openLightbox('${escAttr(u)}')">`).join('')
+      : '<div class="d-img-empty">暂无参考图片，点击「编辑」添加</div>';
+    html += `<div class="info-card"><h3><span class="bar"></span>📷 参考图片${editBtn}</h3><div class="d-img-grid">${imgs}</div></div>`;
   }
 
   // Motherboard
@@ -908,6 +1128,16 @@ function findPrice(brand, model) {
     });
   });
   return exact || fuzzy;
+}
+
+function findModelByName(brand, model) {
+  for (const g of allData) {
+    if (g.brand !== brand) continue;
+    for (const m of g.models) {
+      if (m.model === model) return m;
+    }
+  }
+  return null;
 }
 
 function enc(s) { return encodeURIComponent(s); }

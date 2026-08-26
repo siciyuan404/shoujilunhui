@@ -1,0 +1,11 @@
+{
+  "name": "phone-recycle-api",
+  "version": "1.0.0",
+  "description": "手机回收价格数据库 API（NodeJS + SQLite，零依赖）",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": { "node": ">=22.5.0" }
+}
