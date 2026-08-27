@@ -116,10 +116,15 @@ class MainActivity : AppCompatActivity() {
             loadAll()
         }
 
-        // 基于 GitHub tag 的版本更新检查（延迟 3 秒，避免打断首屏）
+        // 无感更新：后台静默检查（灰度滚动更新由服务端 /api/update 控制），延迟 5 秒避免占用首屏
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 100)
+        }
         Handler(Looper.getMainLooper()).postDelayed({
-            Updater.check(this, BuildConfig.VERSION_NAME)
-        }, 3000)
+            Updater.checkSilently(this, BuildConfig.VERSION_NAME, baseUrl)
+        }, 5000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
