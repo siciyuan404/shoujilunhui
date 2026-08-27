@@ -20,8 +20,12 @@ class SettingsActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("config", MODE_PRIVATE)
         val etUrl = findViewById<TextInputEditText>(R.id.etUrl)
         val etKey = findViewById<TextInputEditText>(R.id.etKey)
+        val etArkKey = findViewById<TextInputEditText>(R.id.etArkKey)
+        val etArkModel = findViewById<TextInputEditText>(R.id.etArkModel)
         etUrl.setText(prefs.getString("baseUrl", ""))
         etKey.setText(prefs.getString("apiKey", ""))
+        etArkKey.setText(prefs.getString("arkApiKey", ""))
+        etArkModel.setText(prefs.getString("arkModel", RecognizeActivity.DEFAULT_ARK_MODEL))
 
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
@@ -50,6 +54,8 @@ class SettingsActivity : AppCompatActivity() {
             prefs.edit()
                 .putString("baseUrl", url)
                 .putString("apiKey", etKey.text.toString().trim())
+                .putString("arkApiKey", etArkKey.text.toString().trim())
+                .putString("arkModel", etArkModel.text.toString().trim().ifBlank { RecognizeActivity.DEFAULT_ARK_MODEL })
                 .apply()
             Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show()
             finish()

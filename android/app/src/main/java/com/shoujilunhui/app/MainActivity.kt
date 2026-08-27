@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(Intent(this, SettingsActivity::class.java), 1)
         }
 
+        findViewById<View>(R.id.btnRecognize).setOnClickListener {
+            startActivity(Intent(this, RecognizeActivity::class.java))
+        }
+
         adapter = ModelAdapter(baseUrl, onClick = { showDetail(it) }, onLongClick = { confirmDelete(it) })
         recycler = findViewById(R.id.recycler)
         recycler.layoutManager = LinearLayoutManager(this)

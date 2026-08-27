@@ -91,6 +91,19 @@
                     android:paddingBottom="12dp"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRecognize"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="拍照识别手机报价"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp"
+                app:strokeColor="#66FFFFFF"
+                app:strokeWidth="1dp" />
         </LinearLayout>
 
         <!-- 品牌筛选 -->
