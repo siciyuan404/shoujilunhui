@@ -283,7 +283,7 @@ class MainActivity : AppCompatActivity() {
         val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
         if (imgs.isNotEmpty()) {
             imageSection.visibility = View.VISIBLE
-            pager.adapter = DetailImageAdapter(imgs)
+            pager.adapter = DetailImageAdapter(imgs, baseUrl)
             if (imgs.size > 1) {
                 buildDots(dotContainer, imgs.size)
                 pager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
@@ -329,8 +329,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
 
-    private inner class DetailImageAdapter(private val urls: List<String>) :
-        androidx.recyclerview.widget.RecyclerView.Adapter<DetailImageAdapter.VH>() {
+    private class DetailImageAdapter(
+        private val urls: List<String>,
+        private val baseUrl: String
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<DetailImageAdapter.VH>() {
         class VH(val imageView: ImageView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(imageView)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
