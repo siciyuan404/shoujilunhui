@@ -1,5 +1,6 @@
 package com.shoujilunhui.app
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -283,7 +285,7 @@ class MainActivity : AppCompatActivity() {
         val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
         if (imgs.isNotEmpty()) {
             imageSection.visibility = View.VISIBLE
-            pager.adapter = DetailImageAdapter(imgs, baseUrl)
+            pager.adapter = DetailImageAdapter(imgs, baseUrl) { pos -> showImageViewer(imgs, pos) }
             if (imgs.size > 1) {
                 buildDots(dotContainer, imgs.size)
                 pager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
@@ -331,7 +333,8 @@ class MainActivity : AppCompatActivity() {
 
     private class DetailImageAdapter(
         private val urls: List<String>,
-        private val baseUrl: String
+        private val baseUrl: String,
+        private val onImageClick: (Int) -> Unit
     ) : androidx.recyclerview.widget.RecyclerView.Adapter<DetailImageAdapter.VH>() {
         class VH(val imageView: ImageView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(imageView)
 
@@ -351,7 +354,58 @@ class MainActivity : AppCompatActivity() {
                 placeholder(ColorDrawable(0xFFEEEEEE.toInt()))
                 error(ColorDrawable(0xFFDDDDDD.toInt()))
             }
+            holder.imageView.setOnClickListener { onImageClick(position) }
         }
+    }
+
+    private class ImageViewerAdapter(
+        private val urls: List<String>,
+        private val baseUrl: String,
+        private val onImageClick: () -> Unit
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<ImageViewerAdapter.VH>() {
+        class VH(val imageView: ImageView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(imageView)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+            val iv = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_viewer_image, parent, false) as ImageView
+            iv.setOnClickListener { onImageClick() }
+            return VH(iv)
+        }
+
+        override fun getItemCount(): Int = urls.size
+
+        override fun onBindViewHolder(holder: VH, position: Int) {
+            val raw = urls[position]
+            val full = if (raw.startsWith("http")) raw else baseUrl.trimEnd('/') + "/" + raw.trimStart('/')
+            holder.imageView.load(full) {
+                crossfade(true)
+                placeholder(ColorDrawable(0xFF111111.toInt()))
+                error(ColorDrawable(0xFF111111.toInt()))
+            }
+        }
+    }
+
+    private fun showImageViewer(urls: List<String>, startIndex: Int) {
+        val dialog = Dialog(this)
+        val v = LayoutInflater.from(this).inflate(R.layout.dialog_image_viewer, null)
+        dialog.setContentView(v)
+        dialog.window?.apply {
+            setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawable(ColorDrawable(android.graphics.Color.BLACK))
+        }
+        val pager = v.findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewerPager)
+        val tvPage = v.findViewById<TextView>(R.id.tvViewerPage)
+        pager.adapter = ImageViewerAdapter(urls, baseUrl) { dialog.dismiss() }
+        pager.setCurrentItem(startIndex, false)
+        tvPage.text = "${startIndex + 1}/${urls.size}"
+        pager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                tvPage.text = "${position + 1}/${urls.size}"
+            }
+        })
+        // 点击图片或空白区域关闭全屏
+        v.findViewById<View>(R.id.viewerRoot).setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     private fun showEditDialog(row: ModelRow) {
