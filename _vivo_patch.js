@@ -111,9 +111,14 @@ async function main() {
   }
   // 1. 上传：仅对存在"无图机型"的 key 上传图片
   const uploaded = {};
+  const hasImg = (it) => {
+    const v = it.images;
+    if (Array.isArray(v)) return v.length > 0;
+    return !!(v && v !== '[]' && v !== '');
+  };
   for (const [key, s] of Object.entries(SPEC)) {
     const targets = keyTargets[key] || [];
-    const needImg = targets.some((t) => !t.it.images || t.it.images === '[]' || t.it.images === '');
+    const needImg = targets.some((t) => !hasImg(t.it));
     if (!needImg) { uploaded[key] = null; continue; }
     const buf = await download(s.img, 0);
     const st = sniff(buf);
