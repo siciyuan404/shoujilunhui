@@ -715,9 +715,9 @@ Promise.all([
       allData.push(idx.get(key));
     }
     let imgs = [];
-    try { imgs = JSON.parse(it.images || '[]'); } catch (e) {}
+    try { imgs = Array.isArray(it.images) ? it.images : JSON.parse(it.images || '[]'); } catch (e) {}
     let vars = [];
-    try { vars = JSON.parse(it.variants || '[]'); } catch (e) {}
+    try { vars = Array.isArray(it.variants) ? it.variants : JSON.parse(it.variants || '[]'); } catch (e) {}
     idx.get(key).models.push({
       id: it.id, model: it.model, price: it.price, note: it.note || '', images: imgs,
       release_date: it.release_date || '', cpu_brand: it.cpu_brand || '', cpu_model: it.cpu_model || '',

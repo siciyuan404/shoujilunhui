@@ -120,12 +120,13 @@ function listModels(db, q) {
   return { total, page, limit: limitUsed, items: rows };
 }
 
-// 把 variants JSON 字符串解析成数组（列表返回时便于前端直接使用）
+// 把 variants/images JSON 字符串解析成数组（列表返回时便于前端直接使用）
 function parseVariants(row) {
   if (!row) return row;
-  let v = [];
+  let v = [], im = [];
   try { v = JSON.parse(row.variants || '[]'); } catch (e) { v = []; }
-  return Object.assign({}, row, { variants: v });
+  try { im = JSON.parse(row.images || '[]'); } catch (e) { im = []; }
+  return Object.assign({}, row, { variants: v, images: im });
 }
 
 // 各筛选维度的可选值（供前端构建筛选器）
