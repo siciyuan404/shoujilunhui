@@ -37,7 +37,9 @@ import java.util.concurrent.TimeUnit
 class RecognizeActivity : AppCompatActivity() {
 
     companion object {
-        const val DEFAULT_ARK_MODEL = "doubao-1.5-vision-pro-32k-250115"
+        // 火山方舟当前推荐的多模态视觉模型（未下线）。旧模型 doubao-1.5-vision-pro-32k-250115 已下线/停用会导致 404。
+        // 若账号未开通，请到火山方舟控制台「开通管理」开通后再填准确模型 ID。
+        const val DEFAULT_ARK_MODEL = "doubao-seed-2-1-turbo-260628"
         private const val ARK_BASE = "https://ark.cn-beijing.volces.com/api/v3"
         private const val RECOGNIZE_PROMPT =
             "请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：" +
@@ -210,7 +212,19 @@ class RecognizeActivity : AppCompatActivity() {
             .readTimeout(60, TimeUnit.SECONDS)
             .build()
             .newCall(request).execute().use { resp ->
-                if (!resp.isSuccessful) throw Exception("识别服务错误（${resp.code}），请检查 API Key/模型名")
+                if (!resp.isSuccessful) {
+                    val detail = try {
+                        JSONObject(resp.body?.string())
+                            .optJSONObject("error")?.optString("message")
+                    } catch (_: Exception) { null }
+                    if (resp.code == 404) {
+                        throw Exception(
+                            "识别服务错误（404）模型不存在或未开通：" +
+                                (detail ?: "请到火山方舟控制台「开通管理」开通视觉模型，并在设置中填写准确模型 ID（如 $DEFAULT_ARK_MODEL）")
+                        )
+                    }
+                    throw Exception("识别服务错误（${resp.code}）：${detail ?: "请检查 API Key 与模型名"}")
+                }
                 val json = JSONObject(resp.body?.string() ?: throw Exception("识别无响应"))
                 val content = json.getJSONArray("choices").getJSONObject(0)
                     .getJSONObject("message").getString("content")

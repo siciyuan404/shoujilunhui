@@ -14,8 +14,8 @@ const EXT_BY_CT = {
 //   { "update": { "gray": 30 } }
 // gray: 0-100 灰度比例；forceBelow: 低于此版本强制更新（即使不在灰度内）。
 const UPDATE_POLICY = {
-  latest: '1.5.0',
-  url: 'https://github.com/siciyuan404/shoujilunhui/releases/download/v1.5.0/shoujilunhui-v1.5.0.apk',
+  latest: '1.5.1',
+  url: 'https://github.com/siciyuan404/shoujilunhui/releases/download/v1.5.1/shoujilunhui-v1.5.1.apk',
   gray: 100,
   forceBelow: '1.0.0',
 };
