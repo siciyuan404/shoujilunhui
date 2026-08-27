@@ -1,0 +1,326 @@
+AIHub站点全新升级：支持豆包账号一键登录，原火山引擎账号请前往火山引擎继续使用
+模型
+文档
+控制台
+模型广场
+语言模型
+视频生成
+图像创作
+语音模型
+语言模型
+doubao-seed-evolving-latest-version
+复制
+Doubao-Seed-Evolving
+
+Seed 最新 Coding & Agent 模型，持续升级
+
+API 接入
+输入/输出
+输入价格
+6 元/百万 tokens
+输出价格
+30 元/百万 tokens
+上下文窗口
+256k
+最大输出
+256k
+doubao-seed-2-1-pro-260628
+复制
+Doubao-Seed-2.1-pro
+
+面向生产级任务，全面升级编程、智能体与多模态能力
+
+API 接入
+输入/输出
+输入价格
+6 元/百万 tokens
+输出价格
+30 元/百万 tokens
+上下文窗口
+256k
+最大输出
+256k
+doubao-seed-2-1-turbo-260628
+复制
+Doubao-Seed-2.1-turbo
+
+效果与成本均衡，全面升级编程、智能体与多模态能力
+
+API 接入
+输入/输出
+输入价格
+3 元/百万 tokens
+输出价格
+15 元/百万 tokens
+上下文窗口
+256k
+最大输出
+256k
+doubao-seed-2-0-lite-260428
+复制
+Doubao-Seed-2.0-lite
+
+豆包首款全模态理解模型，音视图文统一理解
+
+API 接入
+输入/输出
+推理输入
+0.6-1.8 元/百万 tokens
+推理输出
+3.6-10.8 元/百万 tokens
+上下文窗口
+256k
+最大输出
+128k
+doubao-seed-2-0-mini-260428
+复制
+Doubao-Seed-2.0-mini
+
+低时延、低成本、四档位思考与多模态理解能力
+
+API 接入
+输入/输出
+推理输入
+0.2-0.8 元/百万 tokens
+推理输出
+2-8 元/百万 tokens
+上下文窗口
+256k
+最大输出
+128k
+glm-5-2-260617
+复制
+GLM-5.2
+
+GLM-5.2 编码能力大幅升级，适合复杂开发
+
+API 接入
+输入/输出
+输入价格
+8 元/百万 tokens
+输出价格
+28 元/百万 tokens
+上下文窗口
+1024k
+最大输出
+128k
+deepseek-v4-pro-260425
+复制
+DeepSeek-V4-pro
+
+全新旗舰混合推理模型，推理精度与响应速度显著提升
+
+API 接入
+输入/输出
+输入价格
+12 元/百万 tokens
+输出价格
+24 元/百万 tokens
+上下文窗口
+1024k
+最大输出
+384k
+deepseek-v4-flash-260425
+复制
+DeepSeek-V4-flash
+
+全新旗舰混合推理模型，推理精度与响应速度显著提升
+
+API 接入
+输入/输出
+输入价格
+1 元/百万 tokens
+输出价格
+2 元/百万 tokens
+上下文窗口
+1024k
+最大输出
+384k
+视频生成
+doubao-seedance-2-0-260128
+复制
+Doubao-Seedance-2.0
+
+超强的参考一致性，极致拟真的视听稳定性
+
+API 接入
+输入/输出
+输入价格
+16-31 元/百万 tokens
+输出价格
+26-51 元/百万 tokens
+视频分辨率
+480P, 720P, 1080P, 4K
+RPM
+非4k: 0.6k, 4k: 0.15k
+doubao-seedance-2-0-fast-260128
+复制
+Doubao-Seedance-2.0-fast
+
+音视图文参考，更快，继承 2.0 核心优势
+
+API 接入
+输入/输出
+输入价格
+14 元/百万 tokens
+输出价格
+23 元/百万 tokens
+视频分辨率
+480P, 720P
+RPM
+0.6k
+doubao-seedance-2-0-mini-260615
+复制
+Doubao-Seedance-2.0-mini
+
+音视图文参考，高性价比
+
+API 接入
+输入/输出
+输入价格
+22 元/百万 tokens
+输出价格
+37 元/百万 tokens
+视频分辨率
+480P, 720P
+RPM
+0.6k
+图像创作
+doubao-seedream-5-0-pro-260628
+复制
+Doubao-Seedream-5.0-pro
+
+精准图像编辑，解锁图层自由
+
+API 接入
+输入/输出
+输入价格
+0.02 元/张
+输出价格
+0.3 元/张
+IPM
+500
+doubao-seedream-5-0-260128
+复制
+Doubao-Seedream-5.0-Lite
+
+更智能可控创作，实时检索，更强一致性保持
+
+API 接入
+输入/输出
+文生图
+0.22 元/张
+图生图
+0.22 元/张
+IPM
+500
+doubao-seedream-4-5-251128
+复制
+Doubao-Seedream-4.5
+
+多图稳定融合，超强编辑一致性，4k 超高清
+
+API 接入
+输入/输出
+输入价格
+0.25 元/张
+输出价格
+0.25 元/张
+语音模型
+SeedAudio1.0
+复制
+Doubao-音频生成-1.0
+
+全要素影视级音频生成
+
+API 接入
+输入/输出
+模型限制
+QPS 5
+Doubao_scene_SLM_Doubao_Podcast_model
+复制
+Doubao-语音播客
+
+对话自然，秒级创作
+
+API 接入
+输入/输出
+输入价格
+120 元/百万 token
+输出价格
+100 元/百万 token
+模型限制
+QPM 60 / TPM 100000
+Doubao_Seed_ASR_Streaming_2.0
+复制
+Doubao-流式语音识别
+
+豆包语音识别模型，支持流式语音识别
+
+API 接入
+输入/输出
+推理定价
+4.5 元/小时
+模型限制
+QPS 10
+Doubao_Seed_ASR_AUC_2.0
+复制
+Doubao-录音文件识别2.0
+
+支持多模态信息理解能力
+
+API 接入
+输入/输出
+推理定价
+0.8 元/小时
+模型限制
+QPS 20
+Doubao_scene_SLM_Doubao_realtime_voice_model
+复制
+Doubao-实时语音交互
+
+豆包实时语音模型，更拟人和更低时延的语音对话效果
+
+API 接入
+输入/输出
+输入价格
+80 元/百万 token
+输出价格
+80 元/百万 Token
+模型限制
+QPM 60 / TPM 100000
+意见反馈
+大模型
+
+Doubao-Seed-Evolving
+
+Doubao-Seed-2.1-pro
+
+Doubao-Seed-2.1-turbo
+
+Doubao Seedance 2.0
+
+Doubao-Seedream-5.0-pro
+
+Doubao-音频生成-1.0
+
+特惠活动
+
+豆包大模型特惠
+
+Seedance 2.5上新
+
+Agent Plan 首月9.9元
+
+个人中心
+
+我的订阅
+
+API Key管理
+
+账单管理
+
+版权所有 © 北京火山引擎科技有限公司2026
+增值电信业务经营许可证：牌照京B2-20202418
+京公网安备 11010802032137号
+京ICP备20018813号-3
