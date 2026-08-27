@@ -1,4 +1,4 @@
-package com.shoujilunhui.app.data
+package com.shoujilunhui.app
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.shoujilunhui.app.data.GitHubRelease
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
