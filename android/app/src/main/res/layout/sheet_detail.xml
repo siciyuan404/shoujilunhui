@@ -49,6 +49,15 @@
             android:textSize="28sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/dImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="机型外观图"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/dSpecTitle"
             android:layout_width="wrap_content"

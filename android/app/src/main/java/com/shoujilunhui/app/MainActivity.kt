@@ -1,6 +1,7 @@
 package com.shoujilunhui.app
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,12 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
@@ -63,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(Intent(this, SettingsActivity::class.java), 1)
         }
 
-        adapter = ModelAdapter(onClick = { showDetail(it) }, onLongClick = { confirmDelete(it) })
+        adapter = ModelAdapter(baseUrl, onClick = { showDetail(it) }, onLongClick = { confirmDelete(it) })
         recycler = findViewById(R.id.recycler)
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
@@ -112,6 +115,7 @@ class MainActivity : AppCompatActivity() {
             val prefs = getSharedPreferences("config", MODE_PRIVATE)
             baseUrl = prefs.getString("baseUrl", "") ?: ""
             apiKey = prefs.getString("apiKey", "") ?: ""
+            adapter.updateBaseUrl(baseUrl)
             if (baseUrl.isNotBlank()) loadAll()
         }
     }
@@ -265,6 +269,21 @@ class MainActivity : AppCompatActivity() {
         v.findViewById<TextView>(R.id.dBrand).text = row.brand
         v.findViewById<TextView>(R.id.dCategory).text = row.category
         v.findViewById<TextView>(R.id.dPrice).text = "${row.price} 元"
+        // 详情主图
+        val dImage = v.findViewById<ImageView>(R.id.dImage)
+        val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
+        if (imgs.isNotEmpty()) {
+            dImage.visibility = View.VISIBLE
+            val first = imgs.first()
+            val full = if (first.startsWith("http")) first else baseUrl.trimEnd('/') + "/" + first.trimStart('/')
+            dImage.load(full) {
+                crossfade(true)
+                placeholder(ColorDrawable(0xFFEEEEEE.toInt()))
+                error(ColorDrawable(0xFFDDDDDD.toInt()))
+            }
+        } else {
+            dImage.visibility = View.GONE
+        }
         fillSpecs(v, row)
         v.findViewById<TextView>(R.id.dNote).text = if (row.note.isNullOrBlank()) "无" else row.note
         v.findViewById<TextView>(R.id.dUpdated).text = "更新于 ${row.updatedAt ?: "-"}"

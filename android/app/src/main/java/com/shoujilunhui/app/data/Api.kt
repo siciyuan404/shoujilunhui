@@ -36,6 +36,7 @@ data class ModelRow(
     val charge: String?,
     val network: String?,
     val os: String?,
+    val images: List<String>?,
     val variants: List<VariantItem>?,
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?

@@ -64,6 +64,16 @@
                 android:ellipsize="end" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/ivThumb"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_price"
+            android:contentDescription="机型图"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"

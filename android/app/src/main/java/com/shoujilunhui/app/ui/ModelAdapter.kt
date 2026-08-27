@@ -1,17 +1,25 @@
 package com.shoujilunhui.app.ui
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.shoujilunhui.app.R
 import com.shoujilunhui.app.data.ModelRow
 
 class ModelAdapter(
+    private var baseUrl: String,
     private val onClick: (ModelRow) -> Unit,
     private val onLongClick: (ModelRow) -> Unit
 ) : RecyclerView.Adapter<ModelAdapter.VH>() {
+
+    fun updateBaseUrl(url: String) {
+        baseUrl = url
+    }
 
     private val items = mutableListOf<ModelRow>()
 
@@ -67,6 +75,20 @@ class ModelAdapter(
         } else {
             holder.tvSpec.visibility = View.GONE
         }
+        // 缩略图
+        val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
+        if (imgs.isNotEmpty()) {
+            holder.ivThumb.visibility = View.VISIBLE
+            val first = imgs.first()
+            val full = if (first.startsWith("http")) first else baseUrl.trimEnd('/') + "/" + first.trimStart('/')
+            holder.ivThumb.load(full) {
+                crossfade(true)
+                placeholder(ColorDrawable(0xFFEEEEEE.toInt()))
+                error(ColorDrawable(0xFFDDDDDD.toInt()))
+            }
+        } else {
+            holder.ivThumb.visibility = View.GONE
+        }
         holder.itemView.setOnClickListener { onClick(row) }
         holder.itemView.setOnLongClickListener { onLongClick(row); true }
     }
@@ -77,5 +99,6 @@ class ModelAdapter(
         val tvNote: TextView = v.findViewById(R.id.tvNote)
         val tvPrice: TextView = v.findViewById(R.id.tvPrice)
         val tvSpec: TextView = v.findViewById(R.id.tvSpec)
+        val ivThumb: ImageView = v.findViewById(R.id.ivThumb)
     }
 }
