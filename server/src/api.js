@@ -10,6 +10,16 @@ const EXT_BY_CT = {
   'image/avif': 'avif',
 };
 
+// 滚动更新策略（默认值）。可在 config.json 中用 update 字段覆盖，例如只放 30% 灰度：
+//   { "update": { "gray": 30 } }
+// gray: 0-100 灰度比例；forceBelow: 低于此版本强制更新（即使不在灰度内）。
+const UPDATE_POLICY = {
+  latest: '1.5.0',
+  url: 'https://github.com/siciyuan404/shoujilunhui/releases/download/v1.5.0/shoujilunhui-v1.5.0.apk',
+  gray: 100,
+  forceBelow: '1.0.0',
+};
+
 // 可写入的规格字段（除基础 brand/category/model/price/note/images 外）
 const SPEC_FIELDS = [
   'release_date', 'cpu_brand', 'cpu_model', 'ram', 'rom',
@@ -229,6 +239,18 @@ function createRouter(db, cfg) {
       const isLocalHost = /^localhost(:\d+)?$/.test(host) || /^127\.0\.0\.1(:\d+)?$/.test(host) || /^\[::1\]:\d+$/.test(host);
       const isLocal = isLoopback && isLocalHost;
       return json(res, 200, { ok: true, readOnly: !!cfg.readOnly, apiKey: isLocal ? cfg.apiKey : null, local: isLocal });
+    }
+
+    if (method === 'GET' && pathname === '/api/update') {
+      // 无感更新 + 滚动更新（灰度）策略接口，供 APP 启动后台静默检查
+      const upd = Object.assign({}, UPDATE_POLICY, cfg.update || {});
+      return json(res, 200, {
+        enabled: true,
+        latest: String(upd.latest),
+        url: String(upd.url || ''),
+        gray: Math.max(0, Math.min(100, Number(upd.gray) || 100)),
+        forceBelow: String(upd.forceBelow || ''),
+      });
     }
 
     if (method === 'GET' && pathname === '/api/health') {
