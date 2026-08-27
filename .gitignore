@@ -3,6 +3,7 @@ desktop/dist/
 desktop/assets/icon.jpg
 server/db/*.db
 server/db/*.db-journal
+server/phone.db
 server/config.json
 *.log
 __pycache__/
