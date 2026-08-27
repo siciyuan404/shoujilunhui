@@ -13,3 +13,6 @@ __pycache__/
 # 本地构建产物与临时脚本
 builds/
 
+
+# 签名密钥（严禁提交）
+android/keys/

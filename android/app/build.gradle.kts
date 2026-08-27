@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -11,14 +13,33 @@ android {
         applicationId = "com.shoujilunhui.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 8
-        versionName = "1.5.1"
+        versionCode = 9
+        versionName = "1.5.2"
+    }
+
+    signingConfigs {
+        // 固定 release 签名：由 GitHub Actions 通过 Secrets 注入（KEYSTORE_BASE64/KEYSTORE_PASSWORD/KEY_ALIAS/KEY_PASSWORD），
+        // 保证每次构建签名一致，避免覆盖安装时"证书不一致"。
+        // 本地开发未注入环境变量时，release 构建回退 debug 签名，便于本机构建调试。
+        create("release") {
+            val b64 = System.getenv("KEYSTORE_BASE64")
+            if (!b64.isNullOrBlank()) {
+                val ks = file("$buildDir/release.p12")
+                ks.parentFile?.mkdirs()
+                ks.writeBytes(Base64.getDecoder().decode(b64))
+                storeFile = ks
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (System.getenv("KEYSTORE_BASE64").isNullOrBlank())
+                signingConfigs.getByName("debug") else signingConfigs.getByName("release")
         }
     }
     buildFeatures {
