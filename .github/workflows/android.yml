@@ -32,15 +32,15 @@ jobs:
 
       - name: Rename APK
         working-directory: android/app/build/outputs/apk/release
-        run: cp app-release.apk 回收查价.apk
+        run: cp app-release.apk shoujilunhui-${{ github.ref_name }}.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: phone-recycle-android
-          path: android/app/build/outputs/apk/release/回收查价.apk
+          path: android/app/build/outputs/apk/release/shoujilunhui-*.apk
 
       - name: Release to GitHub (tag)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/回收查价.apk
+          files: android/app/build/outputs/apk/release/shoujilunhui-*.apk
