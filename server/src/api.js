@@ -120,12 +120,28 @@ function listModels(db, q) {
   return { total, page, limit: limitUsed, items: rows };
 }
 
-// 把 variants/images JSON 字符串解析成数组（列表返回时便于前端直接使用）
-function parseVariants(row) {
+// 根据请求派生对外基础地址（本地 http://127.0.0.1:8760，穿透 https://sj.6200052.xyz）
+function requestBase(req) {
+  const proto = String(req.headers['x-forwarded-proto'] || 'http').split(',')[0].trim() || 'http';
+  const host = req.headers.host || '127.0.0.1:8760';
+  return proto + '://' + host;
+}
+
+// 把 variants/images JSON 字符串解析成数组，并把 images 相对路径拼成完整 URL
+// （列表返回时便于前端直接使用，手机端无需再拼 baseUrl）
+function parseVariants(row, base) {
   if (!row) return row;
   let v = [], im = [];
   try { v = JSON.parse(row.variants || '[]'); } catch (e) { v = []; }
   try { im = JSON.parse(row.images || '[]'); } catch (e) { im = []; }
+  if (base && Array.isArray(im)) {
+    im = im.map((x) => {
+      x = String(x).trim();
+      if (!x) return x;
+      if (/^https?:\/\//i.test(x)) return x;
+      return base.replace(/\/+$/, '') + '/' + x.replace(/^\/+/, '');
+    });
+  }
   return Object.assign({}, row, { variants: v, images: im });
 }
 
@@ -249,7 +265,7 @@ function createRouter(db, cfg) {
 
     if (method === 'GET' && pathname === '/api/models') {
       const result = listModels(db, q);
-      result.items = result.items.map(parseVariants);
+      result.items = result.items.map((it) => parseVariants(it, requestBase(req)));
       return json(res, 200, result);
     }
 
@@ -259,7 +275,7 @@ function createRouter(db, cfg) {
       if (method === 'GET') {
         const row = db.prepare('SELECT * FROM models WHERE id = ?').get(id);
         if (!row) return json(res, 404, { error: 'not found' });
-        return json(res, 200, parseVariants(row));
+        return json(res, 200, parseVariants(row, requestBase(req)));
       }
       if (method === 'PUT' || method === 'PATCH') {
         const body = await readBody(req);
@@ -270,7 +286,7 @@ function createRouter(db, cfg) {
         db.prepare(`UPDATE models SET ${sets}, updated_at = datetime('now','localtime') WHERE id = ?`).run(...keys.map((k) => fields[k]), id);
         const row = db.prepare('SELECT * FROM models WHERE id = ?').get(id);
         if (!row) return json(res, 404, { error: 'not found' });
-        return json(res, 200, parseVariants(row));
+        return json(res, 200, parseVariants(row, requestBase(req)));
       }
       if (method === 'DELETE') {
         const r = db.prepare('DELETE FROM models WHERE id = ?').run(id);
@@ -316,7 +332,7 @@ function createRouter(db, cfg) {
         const f = validateModel(body, false);
         const vals = rowValues(f);
         const r = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`).run(...vals);
-        return json(res, 201, parseVariants(db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid)));
+        return json(res, 201, parseVariants(db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
       }
 
       if (method === 'POST' && pathname === '/api/models/bulk') {
