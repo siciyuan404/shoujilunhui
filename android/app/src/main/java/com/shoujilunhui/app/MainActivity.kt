@@ -9,9 +9,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -274,20 +276,24 @@ class MainActivity : AppCompatActivity() {
         v.findViewById<TextView>(R.id.dBrand).text = row.brand
         v.findViewById<TextView>(R.id.dCategory).text = row.category
         v.findViewById<TextView>(R.id.dPrice).text = "${row.price} 元"
-        // 详情主图
-        val dImage = v.findViewById<ImageView>(R.id.dImage)
+        // 详情图片：多图左右滑动 + 完整展示
+        val imageSection = v.findViewById<View>(R.id.imageSection)
+        val pager = v.findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.dImagePager)
+        val dotContainer = v.findViewById<LinearLayout>(R.id.dotIndicator)
         val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
         if (imgs.isNotEmpty()) {
-            dImage.visibility = View.VISIBLE
-            val first = imgs.first()
-            val full = if (first.startsWith("http")) first else baseUrl.trimEnd('/') + "/" + first.trimStart('/')
-            dImage.load(full) {
-                crossfade(true)
-                placeholder(ColorDrawable(0xFFEEEEEE.toInt()))
-                error(ColorDrawable(0xFFDDDDDD.toInt()))
+            imageSection.visibility = View.VISIBLE
+            pager.adapter = DetailImageAdapter(imgs)
+            if (imgs.size > 1) {
+                buildDots(dotContainer, imgs.size)
+                pager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        updateDots(dotContainer, position)
+                    }
+                })
             }
         } else {
-            dImage.visibility = View.GONE
+            imageSection.visibility = View.GONE
         }
         fillSpecs(v, row)
         v.findViewById<TextView>(R.id.dNote).text = if (row.note.isNullOrBlank()) "无" else row.note
@@ -298,6 +304,52 @@ class MainActivity : AppCompatActivity() {
         }
         dialog.setContentView(v)
         dialog.show()
+    }
+
+    private fun buildDots(container: LinearLayout, count: Int) {
+        container.removeAllViews()
+        repeat(count) {
+            val dot = View(this)
+            val size = dp(6)
+            val lp = LinearLayout.LayoutParams(size, size)
+            lp.setMargins(dp(3), 0, dp(3), 0)
+            dot.layoutParams = lp
+            container.addView(dot)
+        }
+        updateDots(container, 0)
+    }
+
+    private fun updateDots(container: LinearLayout, active: Int) {
+        for (i in 0 until container.childCount) {
+            container.getChildAt(i).background = resources.getDrawable(
+                if (i == active) R.drawable.bg_dot_active else R.drawable.bg_dot_inactive, null
+            )
+        }
+    }
+
+    private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
+
+    private inner class DetailImageAdapter(private val urls: List<String>) :
+        androidx.recyclerview.widget.RecyclerView.Adapter<DetailImageAdapter.VH>() {
+        class VH(val imageView: ImageView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(imageView)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+            val iv = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_detail_image, parent, false) as ImageView
+            return VH(iv)
+        }
+
+        override fun getItemCount(): Int = urls.size
+
+        override fun onBindViewHolder(holder: VH, position: Int) {
+            val raw = urls[position]
+            val full = if (raw.startsWith("http")) raw else baseUrl.trimEnd('/') + "/" + raw.trimStart('/')
+            holder.imageView.load(full) {
+                crossfade(true)
+                placeholder(ColorDrawable(0xFFEEEEEE.toInt()))
+                error(ColorDrawable(0xFFDDDDDD.toInt()))
+            }
+        }
     }
 
     private fun showEditDialog(row: ModelRow) {

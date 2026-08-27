@@ -49,14 +49,28 @@
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/dImage"
+        <FrameLayout
+            android:id="@+id/imageSection"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="机型外观图"
-            android:visibility="gone" />
+            android:visibility="gone">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/dImagePager"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:overScrollMode="never" />
+
+            <LinearLayout
+                android:id="@+id/dotIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/dSpecTitle"
