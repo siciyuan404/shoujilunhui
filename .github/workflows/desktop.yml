@@ -2,12 +2,14 @@ name: Build Desktop App
 
 on:
   push:
-    paths:
-      - 'desktop/**'
-      - 'web/**'
-      - 'server/**'
-      - '.github/workflows/desktop.yml'
+    branches:
+      - main
+    tags:
+      - 'v*'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -32,3 +34,9 @@ jobs:
         with:
           name: phone-recycle-desktop
           path: desktop/dist/*.exe
+
+      - name: Release to GitHub (tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: desktop/dist/*.exe

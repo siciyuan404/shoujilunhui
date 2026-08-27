@@ -1,9 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const http = require('http');
+const https = require('https');
 
 const PORT = 8760;
+const GITHUB_REPO = 'siciyuan404/shoujilunhui';
+const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
 const SERVER_JS = app.isPackaged
   ? path.join(process.resourcesPath, 'server', 'src', 'index.js')
   : path.join(__dirname, '..', 'server', 'src', 'index.js');
@@ -16,6 +19,78 @@ function checkServer() {
     req.on('error', () => resolve(false));
     req.setTimeout(1200, () => { req.destroy(); resolve(false); });
   });
+}
+
+// ===== 基于 GitHub tag 的版本更新检查 =====
+function parseVersion(v) {
+  return String(v || '').replace(/^v/i, '').split(/[.\-]/).map((x) => parseInt(x, 10) || 0);
+}
+function isNewer(latestTag, cur) {
+  const a = parseVersion(latestTag), b = parseVersion(cur);
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    const x = a[i] || 0, y = b[i] || 0;
+    if (x !== y) return x > y;
+  }
+  return false;
+}
+
+function fetchLatestRelease() {
+  return new Promise((resolve) => {
+    const req = https.get(GITHUB_API, {
+      headers: { 'User-Agent': 'phone-recycle-desktop', 'Accept': 'application/vnd.github+json' },
+    }, (res) => {
+      let d = '';
+      res.on('data', (c) => (d += c));
+      res.on('end', () => {
+        try {
+          const j = JSON.parse(d);
+          if (j && j.tag_name) {
+            resolve({
+              tag: j.tag_name,
+              url: j.html_url,
+              publishedAt: j.published_at,
+              body: j.body || '',
+              assets: (j.assets || []).map((a) => ({ name: a.name, url: a.browser_download_url, size: a.size })),
+            });
+          } else { resolve(null); }
+        } catch (e) { resolve(null); }
+      });
+    });
+    req.on('error', () => resolve(null));
+    req.setTimeout(8000, () => { req.destroy(); resolve(null); });
+  });
+}
+
+async function checkUpdate() {
+  const rel = await fetchLatestRelease();
+  if (!rel) return null;
+  const currentVersion = app.getVersion();
+  return {
+    latestTag: rel.tag,
+    currentVersion,
+    hasUpdate: isNewer(rel.tag, currentVersion),
+    url: rel.url,
+    publishedAt: rel.publishedAt,
+    body: rel.body,
+    assets: rel.assets,
+  };
+}
+
+function maybePromptUpdate() {
+  checkUpdate().then((info) => {
+    if (!info || !info.hasUpdate || !mainWindow || mainWindow.isDestroyed()) return;
+    const btn = dialog.showMessageBoxSync(mainWindow, {
+      type: 'info',
+      title: '发现新版本',
+      message: `发现新版本 v${info.latestTag}`,
+      detail: `当前版本 v${info.currentVersion}\n是否前往 GitHub 下载更新？`,
+      buttons: ['去下载', '暂不更新'],
+      defaultId: 0,
+      cancelId: 1,
+    });
+    if (btn === 0) shell.openExternal(info.url);
+  }).catch(() => {});
 }
 
 async function ensureServer() {
@@ -142,6 +217,12 @@ async function createWindow() {
     if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize();
   });
   ipcMain.handle('win:close', () => mainWindow && mainWindow.close());
+  ipcMain.handle('update:check', () => checkUpdate());
+  ipcMain.handle('app:version', () => app.getVersion());
+  ipcMain.handle('shell:open', (_e, url) => shell.openExternal(url));
+
+  // 启动 4 秒后检查更新（避免打断首屏）
+  setTimeout(maybePromptUpdate, 4000);
 }
 
 app.whenReady().then(createWindow);

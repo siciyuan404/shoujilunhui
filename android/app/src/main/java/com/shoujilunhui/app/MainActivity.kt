@@ -107,6 +107,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             loadAll()
         }
+
+        // 基于 GitHub tag 的版本更新检查（延迟 3 秒，避免打断首屏）
+        Handler(Looper.getMainLooper()).postDelayed({
+            Updater.check(this, BuildConfig.VERSION_NAME)
+        }, 3000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

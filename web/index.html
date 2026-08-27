@@ -42,6 +42,21 @@ body {
   display: inline-block; margin-top: 8px; padding: 3px 14px;
   background: rgba(255,255,255,.18); border-radius: 20px; font-size: 12px;
 }
+.header .app-update-bar {
+  display: inline-flex; align-items: center; gap: 8px; margin: 8px auto 0;
+  padding: 5px 14px; background: #fff7e6; border: 1px solid #ffd591; border-radius: 22px;
+  font-size: 12.5px; color: #ad6800;
+}
+.header .app-update-bar .aub-btn {
+  border: none; background: #fa8c16; color: #fff; border-radius: 12px; padding: 3px 12px;
+  font-size: 12px; cursor: pointer; font-family: inherit;
+}
+.header .app-update-bar .aub-btn:hover { background: #d46b08; }
+.header .app-update-bar .aub-close {
+  border: none; background: transparent; color: #ad6800; cursor: pointer; font-size: 15px; line-height: 1;
+  padding: 0 2px; font-family: inherit;
+}
+.header .app-update-bar .aub-close:hover { color: #d4380d; }
 .mode-switch { display: inline-flex; margin-top: 14px; background: rgba(255,255,255,.16); border-radius: 24px; padding: 4px; }
 .mode-btn {
   border: none; background: transparent; color: #fff; cursor: pointer; padding: 7px 22px;
@@ -512,6 +527,11 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   <h1>📱 手机回收 · 查价 + 验机</h1>
   <div class="subtitle">志和环保手机 · 每日更新 · 快速查价 / 验机防炸弹机</div>
   <div class="update-info" id="updateInfo">加载中...</div>
+  <div class="app-update-bar" id="appUpdateBar" style="display:none">
+    <span class="aub-text" id="appUpdateText"></span>
+    <button class="aub-btn" id="appUpdateBtn" onclick="downloadUpdate()">立即下载</button>
+    <button class="aub-close" onclick="hideUpdateBar()" title="忽略本次">×</button>
+  </div>
   <div class="mode-switch">
     <button class="mode-btn active" id="modePrice" onclick="navTo('#price')">💰 查价</button>
     <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
@@ -713,10 +733,38 @@ Promise.all([
   document.getElementById('updateInfo').textContent = '📅 已收录 ' + total + ' 款机型 · 数据库实时更新';
   loadFilterOptions();
   route();
+  setupDesktopUpdate();
 }).catch(err => {
   document.getElementById('mainContent').innerHTML =
     '<div class="empty-state"><p>数据加载失败：' + err.message + '</p><p style="font-size:13px;margin-top:6px">请确认 API 服务已启动 (node server/src/index.js)</p></div>';
 });
+
+// ===== 桌面端：基于 GitHub tag 的版本更新检查 =====
+let appUpdateInfo = null;
+function setupDesktopUpdate() {
+  if (!window.__desktop || !window.__desktop.checkUpdate) return; // 仅 Electron 桌面端
+  window.__desktop.getVersion().then(v => {
+    const infoEl = document.getElementById('updateInfo');
+    if (v && infoEl && !infoEl.textContent.includes('桌面端')) {
+      infoEl.textContent += ' · 桌面端 v' + v;
+    }
+  }).catch(() => {});
+  window.__desktop.checkUpdate().then(info => {
+    if (info && info.hasUpdate) { appUpdateInfo = info; showUpdateBar(info); }
+  }).catch(() => {});
+}
+function showUpdateBar(info) {
+  const bar = document.getElementById('appUpdateBar');
+  const txt = document.getElementById('appUpdateText');
+  txt.textContent = '发现新版本 v' + info.latestTag + '（当前 v' + info.currentVersion + '）';
+  bar.style.display = 'inline-flex';
+}
+function hideUpdateBar() { document.getElementById('appUpdateBar').style.display = 'none'; }
+function downloadUpdate() {
+  if (appUpdateInfo && window.__desktop && window.__desktop.openExternal) {
+    window.__desktop.openExternal(appUpdateInfo.url);
+  }
+}
 
 // ===== ROUTING (hash based, shareable detail pages) =====
 function navTo(hash) { location.hash = hash; }
