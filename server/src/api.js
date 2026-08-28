@@ -253,6 +253,62 @@ function createRouter(db, cfg) {
       });
     }
 
+    // ---------- 拍照识别代理：转发豆包视觉大模型，规避浏览器跨域限制 ----------
+    if (method === 'POST' && pathname === '/api/recognize') {
+      const body = await readBody(req);
+      const apiKey = String(body.apiKey || '').trim();
+      const model = String(body.model || '').trim() || 'doubao-seed-2-1-turbo-260628';
+      const b64 = String(body.imageBase64 || '').trim();
+      if (!apiKey) return json(res, 400, { error: '未配置豆包 API Key，请在识别设置中填写' });
+      if (!b64) return json(res, 400, { error: '缺少图片数据' });
+      const prompt =
+        '请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：' +
+        '{"phones":[{"model":"手机具体型号"}]}。' +
+        '注意：1) 一台一台列出，图中出现几台就列几台；' +
+        '2) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；' +
+        '3) 如果图中有手机但看不清型号，根据外观给出最可能的型号；' +
+        '4) 如果图中没有手机，返回 {"phones":[]}。不要输出任何其他内容。';
+      let arkResp;
+      try {
+        arkResp = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+          body: JSON.stringify({
+            model,
+            messages: [{ role: 'user', content: [
+              { type: 'text', text: prompt },
+              { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,' + b64 } },
+            ] }],
+            temperature: 0.1,
+            response_format: { type: 'json_object' },
+          }),
+        });
+      } catch (e) {
+        return json(res, 502, { error: '无法连接识别服务：' + e.message });
+      }
+      const text = await arkResp.text();
+      if (!arkResp.ok) {
+        let msg = '识别服务错误（' + arkResp.status + '）';
+        try {
+          const e = JSON.parse(text);
+          if (e && e.error && e.error.message) msg += '：' + e.error.message;
+        } catch (_) {}
+        return json(res, 502, { error: msg });
+      }
+      try {
+        const j = JSON.parse(text);
+        const content = j.choices && j.choices[0] && j.choices[0].message
+          ? j.choices[0].message.content : '';
+        const parsed = JSON.parse(content);
+        const phones = Array.isArray(parsed.phones)
+          ? parsed.phones.map((p) => String((p && p.model) || '').trim()).filter(Boolean)
+          : [];
+        return json(res, 200, { phones });
+      } catch (e) {
+        return json(res, 502, { error: '识别结果解析失败：' + e.message });
+      }
+    }
+
     if (method === 'GET' && pathname === '/api/health') {
       const c = db.prepare('SELECT COUNT(*) AS c FROM models').get().c;
       const withSpec = db.prepare("SELECT COUNT(*) AS c FROM models WHERE cpu_brand != '' OR release_date != ''").get().c;

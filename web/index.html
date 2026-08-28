@@ -365,6 +365,93 @@ tr:hover td { background: var(--hover-bg); }
 }
 mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; }
 
+/* ===== 拍照识别 ===== */
+.recognize-panel { max-width: 920px; margin: 0 auto; padding: 18px 16px 30px; }
+.rec-card { background: var(--card); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+.rec-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+}
+.rec-head h2 { font-size: 18px; }
+.rec-sub { font-size: 13px; color: var(--text-secondary); margin-top: 5px; line-height: 1.7; }
+.rec-settings-btn {
+  padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff;
+  cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text);
+}
+.rec-settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+.rec-body { padding: 20px; }
+.rec-drop {
+  border: 2px dashed #c6d8f0; border-radius: 12px; padding: 42px 20px; text-align: center;
+  cursor: pointer; background: #fafcff; transition: border-color .15s, background .15s;
+}
+.rec-drop:hover, .rec-drop.drag { border-color: var(--accent); background: var(--accent-light); }
+.rec-drop-icon { font-size: 42px; margin-bottom: 10px; }
+.rec-drop-text { font-size: 15px; font-weight: 600; }
+.rec-drop-sub { font-size: 12.5px; color: var(--text-secondary); margin-top: 8px; }
+.rec-preview { margin-top: 16px; }
+.rec-preview img {
+  max-width: 100%; max-height: 420px; border-radius: 10px; display: block; margin: 0 auto;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.rec-preview-tools { text-align: center; margin-top: 10px; }
+.rec-preview-tools button {
+  padding: 7px 16px; border-radius: 8px; border: 1px solid var(--border); background: #fff;
+  cursor: pointer; font-size: 13px; font-family: inherit;
+}
+.rec-preview-tools button:hover { border-color: var(--accent); color: var(--accent); }
+.rec-btn {
+  display: block; width: 100%; margin-top: 16px; padding: 12px; border: none; border-radius: 10px;
+  background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: background .15s;
+}
+.rec-btn:hover { background: #0958d9; }
+.rec-btn:disabled { background: #91caff; cursor: not-allowed; }
+.rec-status { margin-top: 12px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.8; }
+.rec-status.error { color: var(--danger); }
+.rec-results { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.rec-result-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 13px 16px; border: 1px solid var(--border); border-radius: 10px; background: #fff;
+}
+.rec-result-row .rr-model { font-weight: 600; font-size: 15px; }
+.rec-result-row .rr-recognized { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+.rec-result-row .rr-price { font-size: 20px; font-weight: 700; color: var(--price-color); }
+.rec-result-row .rr-price.none { color: #bfbfbf; font-size: 14px; font-weight: 500; }
+.rec-result-row .rr-brand-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--accent-light); color: var(--accent);
+  margin-left: 6px; vertical-align: 2px;
+}
+.rec-result-row .rr-matched { font-size: 12px; color: #389e0d; background: var(--chip-bg); padding: 2px 8px; border-radius: 6px; }
+.rec-result-row .rr-open {
+  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer;
+  font-size: 12.5px; font-family: inherit;
+}
+.rec-result-row .rr-open:hover { border-color: var(--accent); color: var(--accent); }
+.rec-summary { font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
+.rec-summary b { color: var(--accent); }
+.rec-modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+.rec-modal { width: min(520px, 92vw); max-height: 86vh; background: #fff; border-radius: 14px; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,0,.3); animation: fadeInUp .2s ease-out; }
+.rec-modal-head { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; }
+.rec-modal-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 2px 6px; }
+.rec-modal-body { padding: 16px 18px; overflow-y: auto; }
+.rec-form-item { margin-bottom: 16px; }
+.rec-form-item label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.rec-form-item input {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
+  outline: none; font-family: inherit;
+}
+.rec-form-item input:focus { border-color: var(--accent); }
+.rec-form-hint { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.6; }
+.rec-modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 13px 18px; border-top: 1px solid var(--border); }
+.rec-modal-foot button { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
+.rec-modal-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rec-modal-foot button.primary:hover { background: #0958d9; }
+@media (max-width: 600px) {
+  .rec-body { padding: 14px; }
+  .rec-head { padding: 14px; }
+  .rec-result-row .rr-price { font-size: 17px; }
+}
+
 /* ===== 参考图片 ===== */
 .img-thumb {
   position: relative; width: 52px; height: 52px; border-radius: 8px; overflow: hidden; cursor: pointer;
@@ -535,6 +622,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   <div class="mode-switch">
     <button class="mode-btn active" id="modePrice" onclick="navTo('#price')">💰 查价</button>
     <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
+    <button class="mode-btn" id="modeRecognize" onclick="navTo('#recognize')">📷 识别</button>
   </div>
 </div>
 
@@ -582,6 +670,67 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 </div>
 
 <div class="main" id="mainContent"></div>
+
+<!-- 拍照识别面板 -->
+<div class="recognize-panel" id="recognizePanel" style="display:none">
+  <div class="rec-card">
+    <div class="rec-head">
+      <div>
+        <h2>📷 拍照识别</h2>
+        <p class="rec-sub">上传手机照片，自动识别图中所有手机型号，并匹配回收报价（支持一张图多台手机）</p>
+      </div>
+      <button class="rec-settings-btn" onclick="openRecSettings()">⚙ 识别设置</button>
+    </div>
+    <div class="rec-body">
+      <div class="rec-drop" id="recDrop" onclick="document.getElementById('recFile').click()">
+        <input type="file" id="recFile" accept="image/*" style="display:none" onchange="onRecFile(this)">
+        <div class="rec-drop-icon">📷</div>
+        <div class="rec-drop-text" id="recDropText">点击选择图片，或拖拽图片到此处</div>
+        <div class="rec-drop-sub">单张图片 · 支持多台手机同时识别 · 识别结果自动匹配报价库</div>
+      </div>
+      <div class="rec-preview" id="recPreview" style="display:none">
+        <img id="recPreviewImg" alt="待识别图片">
+        <div class="rec-preview-tools">
+          <button onclick="clearRecPreview()">↺ 重新选择</button>
+        </div>
+      </div>
+      <button class="rec-btn" id="recBtn" onclick="startRecognize()">开始识别</button>
+      <div class="rec-status" id="recStatus"></div>
+      <div class="rec-results" id="recResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 识别设置弹窗 -->
+<div class="rec-modal-mask" id="recSettingsModal" style="display:none" onclick="if(event.target===this)closeRecSettings()">
+  <div class="rec-modal">
+    <div class="rec-modal-head">
+      <span>📷 识别设置</span>
+      <button class="rec-modal-close" onclick="closeRecSettings()">×</button>
+    </div>
+    <div class="rec-modal-body">
+      <div class="rec-form-item">
+        <label>豆包视觉模型 API Key（火山方舟）</label>
+        <input type="password" id="recArkKey" placeholder="sk-..." autocomplete="off">
+        <div class="rec-form-hint">在火山方舟控制台创建：console.volcengine.com/ark → API Key 管理</div>
+      </div>
+      <div class="rec-form-item">
+        <label>模型 ID</label>
+        <input type="text" id="recArkModel" placeholder="doubao-seed-2-1-turbo-260628" autocomplete="off">
+        <div class="rec-form-hint">需已在方舟开通，默认 doubao-seed-2-1-turbo-260628</div>
+      </div>
+      <div class="rec-form-item">
+        <label>服务地址（默认本机）</label>
+        <input type="text" id="recBaseUrl" placeholder="http://127.0.0.1:8760" autocomplete="off">
+        <div class="rec-form-hint">一般无需修改，识别请求经此服务转发到豆包</div>
+      </div>
+    </div>
+    <div class="rec-modal-foot">
+      <button onclick="closeRecSettings()">取消</button>
+      <button class="primary" onclick="saveRecSettings()">保存</button>
+    </div>
+  </div>
+</div>
 
 <div class="footer">
   <p>数据来源：志和环保手机回收报价单 | 收件地址：深圳市福田区华强北兴华大厦A座12楼12Q</p>
@@ -766,6 +915,170 @@ function downloadUpdate() {
   }
 }
 
+// ===== 拍照识别：豆包视觉 + 智能匹配报价 =====
+let recKey = localStorage.getItem('recArkKey') || '';
+let recModel = localStorage.getItem('recArkModel') || 'doubao-seed-2-1-turbo-260628';
+let recBase = localStorage.getItem('recBaseUrl') || '';
+let recImageB64 = '';
+
+function setRecStatus(msg, isErr) {
+  const el = document.getElementById('recStatus');
+  el.textContent = msg || '';
+  el.className = 'rec-status' + (isErr ? ' error' : '');
+}
+function onRecFile(input) {
+  const f = input.files && input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    recImageB64 = String(reader.result).split(',')[1] || '';
+    document.getElementById('recPreview').style.display = 'block';
+    document.getElementById('recPreviewImg').src = reader.result;
+    document.getElementById('recDrop').style.display = 'none';
+    setRecStatus('');
+    document.getElementById('recResults').innerHTML = '';
+  };
+  reader.readAsDataURL(f);
+}
+function clearRecPreview() {
+  recImageB64 = '';
+  document.getElementById('recPreview').style.display = 'none';
+  document.getElementById('recDrop').style.display = 'block';
+  document.getElementById('recFile').value = '';
+  setRecStatus('');
+  document.getElementById('recResults').innerHTML = '';
+}
+(function bindRecDrop() {
+  const drop = document.getElementById('recDrop');
+  if (!drop) return;
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+  drop.addEventListener('drop', (e) => {
+    e.preventDefault(); drop.classList.remove('drag');
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f && f.type && f.type.startsWith('image/')) {
+      const input = document.getElementById('recFile');
+      try {
+        const dt = new DataTransfer(); dt.items.add(f); input.files = dt.files;
+      } catch (_) {}
+      onRecFile(input);
+    }
+  });
+})();
+function openRecSettings() {
+  document.getElementById('recArkKey').value = recKey;
+  document.getElementById('recArkModel').value = recModel;
+  document.getElementById('recBaseUrl').value = recBase;
+  document.getElementById('recSettingsModal').style.display = 'flex';
+}
+function closeRecSettings() { document.getElementById('recSettingsModal').style.display = 'none'; }
+function saveRecSettings() {
+  recKey = document.getElementById('recArkKey').value.trim();
+  recModel = document.getElementById('recArkModel').value.trim() || 'doubao-seed-2-1-turbo-260628';
+  recBase = document.getElementById('recBaseUrl').value.trim();
+  localStorage.setItem('recArkKey', recKey);
+  localStorage.setItem('recArkModel', recModel);
+  localStorage.setItem('recBaseUrl', recBase);
+  closeRecSettings();
+  setRecStatus(recKey ? '识别设置已保存' : '尚未配置豆包 API Key，识别将无法进行', !recKey);
+}
+
+// ---- 智能匹配：把识别型号与报价库命名对齐（与手机端一致）----
+const REC_BRANDS = ['华为','荣耀','小米','红米','苹果','iphone','oppo','vivo','一加','真我','realme','三星','魅族','努比亚','金立','联想','360','美图','锤子','乐视','谷歌','google','智选','鼎桥','华硕','huawei','honor','xiaomi','samsung','meizu','oneplus','nubia','iqoo'];
+const REC_STRIP = ['256g','512g','128g','64g','32g','16g','1tb','黑色','白色','蓝色','金色','灰色','银色','紫色','绿色','红色','粉色','二手','国行','港版','美版','全新','拆封','未拆封','标配','高配','低配'];
+function recNorm(s) {
+  let t = String(s || '').trim().toLowerCase().replace(/[\s_\-·.．/（）()【】\[\]{}:：,，;；"'`~！!?？*&]/g, '');
+  REC_STRIP.forEach(w => { t = t.split(w).join(''); });
+  return t;
+}
+function recStripBrand(n) { for (const b of REC_BRANDS) { if (n.startsWith(b)) return n.slice(b.length); } return n; }
+function recMapBrand(n) { if (n.startsWith('iphone')) return '苹果' + n.slice('iphone'.length); return n; }
+function recCoreKeys(n) {
+  const k = [];
+  const m1 = n.match(/[\u4e00-\u9fa5]+\d+/g) || []; m1.forEach(x => k.push(x));
+  const m2 = n.match(/[a-z]+\d+/g) || []; m2.forEach(x => k.push(x));
+  return Array.from(new Set(k));
+}
+function recCandidates(raw) {
+  const norm = recNorm(raw);
+  const list = [norm];
+  const mapped = recMapBrand(norm);
+  if (mapped !== norm) list.push(mapped);
+  const st = recStripBrand(norm);
+  if (st && list.indexOf(st) < 0) list.push(st);
+  const sm = recMapBrand(st);
+  if (sm && list.indexOf(sm) < 0) list.push(sm);
+  recCoreKeys(norm).forEach(x => {
+    if (list.indexOf(x) < 0) list.push(x);
+    const mx = recMapBrand(x);
+    if (mx !== x && list.indexOf(mx) < 0) list.push(mx);
+  });
+  return list;
+}
+function recMatchOne(raw) {
+  for (const cand of recCandidates(raw)) {
+    const cn = recNorm(cand);
+    let best = null, bestLen = 1e9, bestBrand = '', bestCat = '';
+    for (const g of allData) {
+      for (const m of g.models) {
+        const mn = recNorm(m.model);
+        if (mn === cn) return Object.assign({ brand: g.brand, category: g.category }, m);
+        if (cn.length <= 2) continue;
+        if (mn.includes(cn)) {
+          if (mn.length < bestLen) { best = m; bestLen = mn.length; bestBrand = g.brand; bestCat = g.category; }
+        }
+      }
+    }
+    if (best) return Object.assign({ brand: bestBrand, category: bestCat }, best);
+  }
+  return null;
+}
+function renderRecResults(rows) {
+  const el = document.getElementById('recResults');
+  const matched = rows.filter(r => r.row).length;
+  const html = rows.map(r => {
+    if (r.row) {
+      const m = r.row;
+      return '<div class="rec-result-row">' +
+        '<div><div class="rr-model">' + escAttr(m.model) + '<span class="rr-brand-tag">' + escAttr(m.brand) + '</span><span class="rr-matched">已收录</span></div>' +
+        '<div class="rr-recognized">识别为：' + escAttr(r.recognized) + (m.category ? ' · ' + escAttr(m.category) : '') + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:10px"><span class="rr-price">' + escAttr(m.price) + ' 元</span>' +
+        '<button class="rr-open" onclick="location.hash=\'#detail|' + encodeURIComponent(m.brand) + '|' + encodeURIComponent(m.model) + '\'">详情</button></div>' +
+        '</div>';
+    }
+    return '<div class="rec-result-row">' +
+      '<div><div class="rr-model">' + escAttr(r.recognized) + '</div>' +
+      '<div class="rr-recognized">识别成功，但报价库未收录该型号</div></div>' +
+      '<span class="rr-price none">暂无报价</span></div>';
+  }).join('');
+  el.innerHTML = '<div class="rec-summary">识别 ' + rows.length + ' 台，其中 <b>' + matched + '</b> 台已匹配到报价</div>' + html;
+}
+async function startRecognize() {
+  const btn = document.getElementById('recBtn');
+  if (!recKey) { setRecStatus('尚未配置豆包 API Key，请先点击「⚙ 识别设置」填写', true); openRecSettings(); return; }
+  if (!recImageB64) { setRecStatus('请先选择要识别的图片', true); return; }
+  btn.disabled = true;
+  setRecStatus('识别中… 正在调用豆包视觉模型分析图片');
+  document.getElementById('recResults').innerHTML = '';
+  try {
+    const base = (recBase || location.origin).replace(/\/+$/, '');
+    const res = await api(base + '/api/recognize', {
+      method: 'POST',
+      body: JSON.stringify({ imageBase64: recImageB64, apiKey: recKey, model: recModel })
+    });
+    const phones = (res && res.phones) || [];
+    if (!phones.length) { setRecStatus('图片中未识别到手机，可换一张更清晰的照片重试'); btn.disabled = false; return; }
+    const rows = phones.map(p => ({ recognized: p, row: recMatchOne(p) }));
+    renderRecResults(rows);
+    const matched = rows.filter(r => r.row).length;
+    setRecStatus('识别 ' + phones.length + ' 台，其中 ' + matched + ' 台已匹配到报价');
+  } catch (e) {
+    setRecStatus('识别失败：' + e.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 // ===== ROUTING (hash based, shareable detail pages) =====
 function navTo(hash) { location.hash = hash; }
 window.addEventListener('hashchange', route);
@@ -777,7 +1090,18 @@ function route() {
     const brand = decodeURIComponent((parts[0] || '').replace(/\+/g, ' '));
     const model = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
     showListControls(false);
+    document.getElementById('recognizePanel').style.display = 'none';
     renderDetail(brand, model);
+    return;
+  }
+  if (h === '#recognize') {
+    currentMode = 'recognize';
+    lastMode = 'recognize';
+    document.getElementById('searchBar').style.display = 'none';
+    document.getElementById('tabsWrap').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('recognizePanel').style.display = 'block';
+    updateModeButtons();
     return;
   }
   // list mode
@@ -786,6 +1110,7 @@ function route() {
   lastMode = mode;
   currentBrand = '全部';
   showListControls(true);
+  document.getElementById('recognizePanel').style.display = 'none';
   updateModeButtons();
   initTabs();
   render();
@@ -799,6 +1124,7 @@ function showListControls(show) {
 function updateModeButtons() {
   document.getElementById('modePrice').classList.toggle('active', currentMode === 'price');
   document.getElementById('modeVerify').classList.toggle('active', currentMode === 'verify');
+  document.getElementById('modeRecognize').classList.toggle('active', currentMode === 'recognize');
   document.getElementById('sortBtns').style.display = currentMode === 'price' ? 'flex' : 'none';
   document.getElementById('verifyBtns').style.display = currentMode === 'verify' ? 'flex' : 'none';
   document.getElementById('searchInput').placeholder =
