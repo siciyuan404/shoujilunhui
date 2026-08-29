@@ -29,9 +29,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.BorderStroke
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -348,11 +347,6 @@ private fun BrandChipRow(brands: List<String>, selected: String, onSelect: (Stri
                     selectedContainerColor = Accent,
                     selectedLabelColor = Color.White,
                 ),
-                border = FilterChipDefaults.filterChipBorder(
-                    enabled = true, selected = b == selected,
-                    borderColor = Color(0xFFE0E0E0),
-                    selectedBorderColor = Accent,
-                ),
             )
         }
     }
@@ -376,7 +370,6 @@ private fun FilterEntryRow(
             label = { Text("筛选", fontSize = 12.sp) },
             modifier = Modifier.height(28.dp),
             shape = RoundedCornerShape(14.dp),
-            border = AssistChipDefaults.assistChipBorder(borderColor = Color(0xFFE0E0E0)),
         )
         if (active) {
             Spacer(Modifier.width(6.dp))

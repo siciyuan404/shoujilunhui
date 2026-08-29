@@ -151,7 +151,7 @@ object Updater {
     }
 
     /** 后台下载 APK 到缓存，完成后发通知栏"点击安装" */
-    private suspend fun downloadAndNotify(activity: AppCompatActivity, info: UpdateInfo) {
+    private suspend fun downloadAndNotify(activity: ComponentActivity, info: UpdateInfo) {
         val context = activity.applicationContext
         val file = File(context.cacheDir, "update_${info.latest}.apk")
         val ok = withContext(Dispatchers.IO) {
