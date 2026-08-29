@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
@@ -85,7 +85,7 @@ object Updater {
     }
 
     /** 主入口：后台静默检查更新并自动下载（不弹窗打断使用） */
-    fun checkSilently(activity: AppCompatActivity, currentVersion: String, baseUrl: String) {
+    fun checkSilently(activity: ComponentActivity, currentVersion: String, baseUrl: String) {
         activity.lifecycleScope.launch {
             try {
                 val info = fetchUpdateInfo(baseUrl) ?: return@launch
