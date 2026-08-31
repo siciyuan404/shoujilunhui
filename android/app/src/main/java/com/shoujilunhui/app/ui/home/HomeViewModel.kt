@@ -118,8 +118,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         loadModels()
     }
 
-    fun applyFilters(cpuBrand: String, year: String, cameraMin: Int) {
-        _ui.update { it.copy(cpuBrand = cpuBrand, year = year, cameraMin = cameraMin) }
+    fun applyFilters(brand: String, cpuBrand: String, year: String, cameraMin: Int) {
+        _ui.update { it.copy(brand = brand, cpuBrand = cpuBrand, year = year, cameraMin = cameraMin) }
         loadModels()
     }
 

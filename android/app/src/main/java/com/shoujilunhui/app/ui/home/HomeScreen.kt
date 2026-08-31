@@ -21,15 +21,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,6 +49,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -62,10 +63,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -75,7 +76,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.ui.theme.Accent
-import com.shoujilunhui.app.ui.theme.AccentDark
+import com.shoujilunhui.app.ui.theme.BgGray
 import com.shoujilunhui.app.ui.theme.PriceRed
 import com.shoujilunhui.app.ui.theme.TextPrimary
 import com.shoujilunhui.app.ui.theme.TextSecondary
@@ -133,13 +134,14 @@ fun HomeScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbar) },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = BgGray,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAdd = true },
                 containerColor = Accent,
                 elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 2.dp),
                 modifier = Modifier.size(52.dp),
+                shape = CircleShape,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "添加型号", tint = Color.White)
             }
@@ -153,15 +155,13 @@ fun HomeScreen(
                 onOpenSettings = onOpenSettings,
                 onOpenRecognize = onOpenRecognize,
             )
-            BrandChipRow(
-                brands = ui.brands,
-                selected = ui.brand,
-                onSelect = vm::onBrandChange,
-            )
             FilterEntryRow(
-                cpu = ui.cpuBrand, year = ui.year, cameraMin = ui.cameraMin,
+                brand = ui.brand,
+                cpu = ui.cpuBrand,
+                year = ui.year,
+                cameraMin = ui.cameraMin,
                 onOpen = { showFilter = true },
-                onClear = { vm.applyFilters("全部", "全部", 0) },
+                onClear = { vm.applyFilters("全部", "全部", "全部", 0) },
             )
             Box(Modifier.fillMaxSize().nestedScroll(ptr.nestedScrollConnection)) {
                 when {
@@ -230,9 +230,13 @@ fun HomeScreen(
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         ) {
             FilterSheet(
-                cpu = ui.cpuBrand, year = ui.year, cameraMin = ui.cameraMin,
-                onApply = { c, y, cam -> vm.applyFilters(c, y, cam); showFilter = false },
-                onReset = { vm.applyFilters("全部", "全部", 0); showFilter = false },
+                brands = ui.brands,
+                brand = ui.brand,
+                cpu = ui.cpuBrand,
+                year = ui.year,
+                cameraMin = ui.cameraMin,
+                onApply = { b, c, y, cam -> vm.applyFilters(b, c, y, cam); showFilter = false },
+                onReset = { vm.applyFilters("全部", "全部", "全部", 0); showFilter = false },
             )
         }
     }
@@ -247,7 +251,7 @@ fun HomeScreen(
     }
 }
 
-// ---------- 头部（紧凑） ----------
+// ---------- 头部（紧凑：搜索 + 拍照识别 + 设置） ----------
 
 @Composable
 private fun HomeHeader(
@@ -257,112 +261,87 @@ private fun HomeHeader(
     onOpenSettings: () -> Unit,
     onOpenRecognize: () -> Unit,
 ) {
-    Column(
+    Row(
         Modifier
             .fillMaxWidth()
-            .background(Brush.verticalGradient(listOf(Accent, AccentDark)))
             .statusBarsPadding()
-            .padding(start = 14.dp, end = 8.dp, top = 8.dp, bottom = 10.dp)
+            .padding(start = 14.dp, end = 10.dp, top = 10.dp, bottom = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text("手机回收查价", color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+        OutlinedTextField(
+            value = search,
+            onValueChange = onSearchChange,
+            modifier = Modifier.weight(1f).height(44.dp),
+            textStyle = TextStyle(fontSize = 13.sp),
+            placeholder = {
                 Text(
-                    count?.let { "共 $it 款机型" } ?: "共 - 款机型",
-                    color = Color.White.copy(alpha = 0.75f),
-                    fontSize = 11.sp,
+                    count?.let { "搜索型号 · 共 $it 款机型" } ?: "搜索型号",
+                    fontSize = 12.sp,
+                    color = TextSecondary,
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Search, contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = TextSecondary,
+                )
+            },
+            trailingIcon = {
+                if (search.isNotEmpty()) {
+                    IconButton(onClick = { onSearchChange("") }, modifier = Modifier.size(32.dp)) {
+                        Icon(Icons.Default.Close, contentDescription = "清空", modifier = Modifier.size(16.dp), tint = TextSecondary)
+                    }
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(22.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+            ),
+        )
+        // 拍照识别：仅图标圆形按钮
+        Surface(
+            onClick = onOpenRecognize,
+            shape = CircleShape,
+            color = Accent,
+            modifier = Modifier.size(44.dp),
+            shadowElevation = 2.dp,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    Icons.Default.PhotoCamera,
+                    contentDescription = "拍照识别",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp),
                 )
             }
-            IconButton(onClick = onOpenSettings, modifier = Modifier.size(40.dp)) {
-                Icon(Icons.Default.Settings, contentDescription = "设置", tint = Color.White)
-            }
         }
-
-        // 搜索 + 拍照识别：同一行，节省纵向空间
-        Row(
-            Modifier.fillMaxWidth().padding(end = 8.dp, top = 6.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            OutlinedTextField(
-                value = search,
-                onValueChange = onSearchChange,
-                modifier = Modifier.weight(1f).height(46.dp),
-                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 13.sp),
-                placeholder = { Text("搜索型号，如 Mate70、苹果16", fontSize = 13.sp) },
-                leadingIcon = {
-                    Icon(
-                        Icons.Default.Search, contentDescription = null,
-                        modifier = Modifier.size(18.dp),
-                    )
-                },
-                trailingIcon = {
-                    if (search.isNotEmpty()) {
-                        IconButton(onClick = { onSearchChange("") }, modifier = Modifier.size(32.dp)) {
-                            Icon(Icons.Default.Close, contentDescription = "清空", modifier = Modifier.size(16.dp))
-                        }
-                    }
-                },
-                singleLine = true,
-                shape = RoundedCornerShape(23.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                ),
-            )
-            OutlinedButton(
-                onClick = onOpenRecognize,
-                modifier = Modifier.height(46.dp),
-                shape = RoundedCornerShape(23.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp),
-                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.6f)),
-                colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
-                    contentColor = Color.White
-                ),
-            ) {
-                Text("拍照识别", fontSize = 13.sp)
-            }
+        // 设置入口
+        IconButton(onClick = onOpenSettings, modifier = Modifier.size(40.dp)) {
+            Icon(Icons.Default.Settings, contentDescription = "设置", tint = TextPrimary, modifier = Modifier.size(22.dp))
         }
     }
 }
 
-// ---------- 品牌筛选（紧凑 chip） ----------
-
-@Composable
-private fun BrandChipRow(brands: List<String>, selected: String, onSelect: (String) -> Unit) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-    ) {
-        items(brands) { b ->
-            FilterChip(
-                selected = b == selected,
-                onClick = { onSelect(b) },
-                label = { Text(b, fontSize = 12.sp) },
-                modifier = Modifier.height(30.dp),
-                shape = RoundedCornerShape(15.dp),
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Accent,
-                    selectedLabelColor = Color.White,
-                ),
-            )
-        }
-    }
-}
-
-// ---------- 规格筛选入口 ----------
+// ---------- 筛选入口（含品牌等已选条件） ----------
 
 @Composable
 private fun FilterEntryRow(
-    cpu: String, year: String, cameraMin: Int,
+    brand: String,
+    cpu: String,
+    year: String,
+    cameraMin: Int,
     onOpen: () -> Unit,
     onClear: () -> Unit,
 ) {
-    val active = cpu != "全部" || year != "全部" || cameraMin > 0
+    val active = brand != "全部" || cpu != "全部" || year != "全部" || cameraMin > 0
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 2.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AssistChip(
@@ -372,9 +351,10 @@ private fun FilterEntryRow(
             shape = RoundedCornerShape(14.dp),
         )
         if (active) {
-            Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(8.dp))
             Text(
                 buildList {
+                    if (brand != "全部") add(brand)
                     if (cpu != "全部") add(cpu)
                     if (year != "全部") add("${year}年")
                     if (cameraMin > 0) add("≥${cameraMin}万")
@@ -392,7 +372,7 @@ private fun FilterEntryRow(
     }
 }
 
-// ---------- 列表（紧凑卡片） ----------
+// ---------- 列表（卡片） ----------
 
 @Composable
 private fun ModelList(
@@ -402,8 +382,8 @@ private fun ModelList(
     onLongClick: (ModelRow) -> Unit,
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(start = 10.dp, end = 10.dp, top = 4.dp, bottom = 76.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 6.dp, bottom = 76.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(models, key = { it.id }) { row ->
             ModelCard(
@@ -419,14 +399,14 @@ private fun ModelList(
 @Composable
 private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLongClick: () -> Unit) {
     Card(
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     ) {
-        Row(Modifier.padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
             if (imgs.isNotEmpty()) {
                 AsyncImage(
@@ -434,15 +414,15 @@ private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLon
                     contentDescription = row.model,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(46.dp)
-                        .background(Color(0xFFEEEEEE), RoundedCornerShape(8.dp)),
+                        .size(52.dp)
+                        .background(Color(0xFFEEEEEE), RoundedCornerShape(10.dp)),
                 )
-                Spacer(Modifier.width(9.dp))
+                Spacer(Modifier.width(10.dp))
             }
             Column(Modifier.weight(1f)) {
                 Text(
                     row.model,
-                    fontSize = 14.sp,
+                    fontSize = 14.5.sp,
                     fontWeight = FontWeight.Medium,
                     color = TextPrimary,
                     maxLines = 1,
@@ -467,24 +447,26 @@ private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLon
                         color = TextSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = 1.dp),
                     )
                 }
             }
-            Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(8.dp))
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     if (row.price.isNotBlank()) "¥${row.price}" else "面议",
                     color = PriceRed,
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 if (!row.note.isNullOrBlank()) {
                     Text(
                         row.note,
                         fontSize = 10.sp,
-                        color = AccentDark,
+                        color = TextSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = 1.dp),
                     )
                 }
             }
@@ -498,7 +480,7 @@ private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLon
 private fun EmptyView() {
     Column(
         Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Center,
         verticalArrangement = Arrangement.Center,
     ) {
         Text("🔍", fontSize = 32.sp)
@@ -511,7 +493,7 @@ private fun EmptyView() {
 private fun ErrorView(msg: String, onRetry: () -> Unit) {
     Column(
         Modifier.fillMaxSize().padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Center,
         verticalArrangement = Arrangement.Center,
     ) {
         Text("⚠️", fontSize = 32.sp)

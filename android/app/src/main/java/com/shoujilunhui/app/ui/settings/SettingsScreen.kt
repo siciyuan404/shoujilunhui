@@ -3,6 +3,7 @@
 package com.shoujilunhui.app.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,10 +17,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shoujilunhui.app.BuildConfig
 import com.shoujilunhui.app.ui.theme.Accent
+import com.shoujilunhui.app.ui.theme.BgGray
 import com.shoujilunhui.app.ui.theme.Danger
 import com.shoujilunhui.app.ui.theme.TextPrimary
 import com.shoujilunhui.app.ui.theme.TextSecondary
@@ -71,91 +77,122 @@ fun SettingsScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbar) },
+        containerColor = BgGray,
         topBar = {
             TopAppBar(
-                title = { Text("设置", fontSize = 17.sp) },
+                title = { Text("设置", fontSize = 17.sp, fontWeight = FontWeight.Medium) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Accent,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White,
+                    containerColor = Color.White,
+                    titleContentColor = TextPrimary,
+                    navigationIconContentColor = TextPrimary,
                 ),
             )
         },
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            item { SectionTitle("服务器") }
+            // 服务器设置组
             item {
-                Field(
-                    value = url,
-                    onChange = { url = it },
-                    label = "服务器地址",
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-                )
-            }
-            item {
-                Field(
-                    value = key,
-                    onChange = { key = it },
-                    label = "管理 API Key（增删改需要）",
-                    password = true,
-                )
-            }
-            item {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
-                        onClick = { vm.test(url.trim()) },
-                        modifier = Modifier.weight(1f).height(40.dp),
-                        shape = RoundedCornerShape(10.dp),
-                    ) { Text("测试连接", fontSize = 13.sp) }
-                    Spacer(Modifier.weight(1f))
-                }
-            }
-            testResult?.let { (ok, text) ->
-                item {
-                    Text(
-                        text,
-                        color = if (ok) Accent else Danger,
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(vertical = 2.dp),
+                SettingsGroup(title = "服务器") {
+                    Field(
+                        value = url,
+                        onChange = { url = it },
+                        label = "服务器地址",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
                     )
+                    Spacer(Modifier.height(8.dp))
+                    Field(
+                        value = key,
+                        onChange = { key = it },
+                        label = "管理 API Key（增删改需要）",
+                        password = true,
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = { vm.test(url.trim()) },
+                            modifier = Modifier.height(40.dp),
+                            shape = RoundedCornerShape(10.dp),
+                        ) { Text("测试连接", fontSize = 13.sp) }
+                    }
+                    testResult?.let { (ok, text) ->
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text,
+                            color = if (ok) Accent else Danger,
+                            fontSize = 12.sp,
+                        )
+                    }
                 }
             }
 
-            item { SectionTitle("拍照识别（豆包视觉）") }
+            // 拍照识别设置组
             item {
-                Field(value = arkKey, onChange = { arkKey = it }, label = "豆包 API Key", password = true)
-            }
-            item {
-                Field(value = arkModel, onChange = { arkModel = it }, label = "视觉模型 ID")
+                SettingsGroup(title = "拍照识别（豆包视觉）") {
+                    Field(value = arkKey, onChange = { arkKey = it }, label = "豆包 API Key", password = true)
+                    Spacer(Modifier.height(8.dp))
+                    Field(value = arkModel, onChange = { arkModel = it }, label = "视觉模型 ID")
+                }
             }
 
+            // 保存按钮
             item {
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(4.dp))
                 Button(
                     onClick = { vm.save(url, key, arkKey, arkModel) },
-                    modifier = Modifier.fillMaxWidth().height(44.dp),
-                    shape = RoundedCornerShape(10.dp),
-                ) { Text("保存", fontSize = 14.sp) }
+                    modifier = Modifier.fillMaxWidth().height(46.dp),
+                    shape = RoundedCornerShape(12.dp),
+                ) { Text("保存", fontSize = 15.sp, fontWeight = FontWeight.Medium) }
             }
+
+            // 版本号
             item {
                 Text(
                     "版本 v${BuildConfig.VERSION_NAME}",
                     fontSize = 11.sp,
                     color = TextSecondary,
+                    modifier = Modifier.padding(top = 2.dp),
                 )
             }
         }
     }
 }
+
+// ---------- 分组卡片 ----------
+
+@Composable
+private fun SettingsGroup(
+    title: String,
+    content: @Composable () -> Unit,
+) {
+    Card(
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
+            Text(
+                title,
+                fontSize = 12.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextSecondary,
+                modifier = Modifier.padding(bottom = 10.dp),
+            )
+            content()
+        }
+    }
+}
+
+// ---------- 输入框 ----------
 
 @Composable
 private fun Field(
@@ -175,18 +212,11 @@ private fun Field(
         keyboardOptions = keyboardOptions,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(54.dp),
         shape = RoundedCornerShape(10.dp),
-    )
-}
-
-@Composable
-private fun SectionTitle(text: String) {
-    Text(
-        text,
-        fontSize = 12.5.sp,
-        fontWeight = FontWeight.Bold,
-        color = TextPrimary,
-        modifier = Modifier.padding(top = 4.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color(0xFFFAFAFA),
+            unfocusedContainerColor = Color(0xFFFAFAFA),
+        ),
     )
 }

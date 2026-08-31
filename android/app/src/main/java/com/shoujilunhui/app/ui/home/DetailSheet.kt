@@ -267,10 +267,15 @@ fun ImageViewerDialog(
 
 @Composable
 fun FilterSheet(
-    cpu: String, year: String, cameraMin: Int,
-    onApply: (String, String, Int) -> Unit,
+    brands: List<String>,
+    brand: String,
+    cpu: String,
+    year: String,
+    cameraMin: Int,
+    onApply: (brand: String, cpu: String, year: String, cameraMin: Int) -> Unit,
     onReset: () -> Unit,
 ) {
+    var selBrand by remember { mutableStateOf(brand) }
     var selCpu by remember { mutableStateOf(cpu) }
     var selYear by remember { mutableStateOf(year) }
     var selCam by remember { mutableStateOf(HomeViewModel.cameraOption(cameraMin)) }
@@ -283,8 +288,9 @@ fun FilterSheet(
             .navigationBarsPadding()
             .padding(bottom = 16.dp)
     ) {
-        Text("规格筛选", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text("筛选", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
+        FilterGroup("品牌", brands, selBrand) { selBrand = it }
         FilterGroup("CPU 品牌", HomeViewModel.CPU_OPTIONS, selCpu) { selCpu = it }
         FilterGroup("上市年份", HomeViewModel.YEAR_OPTIONS, selYear) { selYear = it }
         FilterGroup("后置主摄", HomeViewModel.CAMERA_OPTIONS, selCam) { selCam = it }
@@ -296,7 +302,7 @@ fun FilterSheet(
                 shape = RoundedCornerShape(10.dp),
             ) { Text("重置", fontSize = 13.sp) }
             Button(
-                onClick = { onApply(selCpu, selYear, HomeViewModel.cameraValue(selCam)) },
+                onClick = { onApply(selBrand, selCpu, selYear, HomeViewModel.cameraValue(selCam)) },
                 modifier = Modifier.weight(1f).height(42.dp),
                 shape = RoundedCornerShape(10.dp),
             ) { Text("完成", fontSize = 13.sp) }
