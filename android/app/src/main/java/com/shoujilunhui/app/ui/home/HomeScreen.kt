@@ -27,7 +27,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
@@ -64,6 +63,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -84,6 +86,46 @@ import com.shoujilunhui.app.ui.theme.TextSecondary
 /** 相对路径图片拼全地址 */
 fun fullImageUrl(baseUrl: String, raw: String): String =
     if (raw.startsWith("http")) raw else baseUrl.trimEnd('/') + "/" + raw.trimStart('/')
+
+/** 相机图标（核心图标集不含相机，这里内置一个 Material 风格相机） */
+private val CameraIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "Camera",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(fill = SolidColor(Color.Black)) {
+            moveTo(9f, 3f)
+            lineTo(7.17f, 5f)
+            horizontalLineTo(4f)
+            curveToRelative(-1.1f, 0f, -2f, 0.9f, -2f, 2f)
+            verticalLineToRelative(12f)
+            curveToRelative(0f, 1.1f, 0.9f, 2f, 2f, 2f)
+            horizontalLineToRelative(16f)
+            curveToRelative(1.1f, 0f, 2f, -0.9f, 2f, -2f)
+            verticalLineTo(7f)
+            curveToRelative(0f, -1.1f, -0.9f, -2f, -2f, -2f)
+            horizontalLineToRelative(-3.17f)
+            lineTo(15f, 3f)
+            horizontalLineTo(9f)
+            close()
+            moveTo(12f, 18f)
+            curveToRelative(-2.76f, 0f, -5f, -2.24f, -5f, -5f)
+            reflectiveCurveToRelative(2.24f, -5f, 5f, -5f)
+            reflectiveCurveToRelative(5f, 2.24f, 5f, 5f)
+            reflectiveCurveToRelative(-2.24f, 5f, -5f, 5f)
+            close()
+            moveTo(12f, 10f)
+            curveToRelative(-1.66f, 0f, -3f, 1.34f, -3f, 3f)
+            reflectiveCurveToRelative(1.34f, 3f, 3f, 3f)
+            reflectiveCurveToRelative(3f, -1.34f, 3f, -3f)
+            reflectiveCurveToRelative(-1.34f, -3f, -3f, -3f)
+            close()
+        }
+    }.build()
+}
 
 @Composable
 fun HomeScreen(
@@ -314,7 +356,7 @@ private fun HomeHeader(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
-                    Icons.Default.Camera,
+                    CameraIcon,
                     contentDescription = "拍照识别",
                     tint = Color.White,
                     modifier = Modifier.size(20.dp),
