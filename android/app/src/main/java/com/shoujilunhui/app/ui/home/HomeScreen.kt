@@ -27,7 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
@@ -314,7 +314,7 @@ private fun HomeHeader(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
-                    Icons.Default.PhotoCamera,
+                    Icons.Default.Camera,
                     contentDescription = "拍照识别",
                     tint = Color.White,
                     modifier = Modifier.size(20.dp),
@@ -480,7 +480,7 @@ private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLon
 private fun EmptyView() {
     Column(
         Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text("🔍", fontSize = 32.sp)
@@ -493,7 +493,7 @@ private fun EmptyView() {
 private fun ErrorView(msg: String, onRetry: () -> Unit) {
     Column(
         Modifier.fillMaxSize().padding(24.dp),
-        horizontalAlignment = Alignment.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text("⚠️", fontSize = 32.sp)
