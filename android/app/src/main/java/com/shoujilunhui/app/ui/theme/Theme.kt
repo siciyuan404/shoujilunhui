@@ -20,6 +20,10 @@ val PriceRed = Color(0xFFCF1322)
 val PriceBg = Color(0xFFFFF1F0)
 val Danger = Color(0xFFD4380D)
 
+/** 识别图上标注：已匹配报价（绿）/ 未收录（橙） */
+val MatchGreen = Color(0xFF389E0D)
+val MatchOrange = Color(0xFFFA8C16)
+
 private val Scheme = lightColorScheme(
     primary = Accent,
     onPrimary = Color.White,

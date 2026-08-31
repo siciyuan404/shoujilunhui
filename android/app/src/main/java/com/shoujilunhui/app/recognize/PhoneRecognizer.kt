@@ -19,6 +19,13 @@ import java.util.concurrent.TimeUnit
 /**
  * 豆包视觉识别 + 报价匹配（网络与图像逻辑与原 RecognizeActivity 完全一致）。
  */
+
+/** 识别结果中的手机位置框（0~1000 归一化坐标，左上角 x1,y1，右下角 x2,y2） */
+data class PhoneBox(val x1: Float, val y1: Float, val x2: Float, val y2: Float)
+
+/** 识别出的单台手机：型号 + 位置框（模型未返回框时为 null） */
+data class RecognizedPhone(val model: String, val box: PhoneBox?)
+
 class PhoneRecognizer(
     private val baseUrl: String,
     private val arkKey: String,
@@ -32,11 +39,12 @@ class PhoneRecognizer(
         private const val ARK_BASE = "https://ark.cn-beijing.volces.com/api/v3"
         private const val RECOGNIZE_PROMPT =
             "请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：" +
-                "{\"phones\":[{\"model\":\"手机具体型号\"}]}。" +
+                "{\"phones\":[{\"model\":\"手机具体型号\",\"box\":{\"x1\":0,\"y1\":0,\"x2\":1000,\"y2\":1000}}]}。" +
                 "注意：1) 一台一台列出，图中出现几台就列几台；" +
-                "2) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；" +
-                "3) 如果图中有手机但看不清型号，根据外观给出最可能的型号；" +
-                "4) 如果图中没有手机，返回 {\"phones\":[]}。不要输出任何其他内容。"
+                "2) box 用 0~1000 归一化坐标表示该手机在图片中的边界框（左上角x1,y1，右下角x2,y2），框要尽量紧贴手机主体；" +
+                "3) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；" +
+                "4) 如果图中有手机但看不清型号，根据外观给出最可能的型号；" +
+                "5) 如果图中没有手机，返回 {\"phones\":[]}。不要输出任何其他内容。"
     }
 
     suspend fun bitmapToBase64(context: Context, uri: Uri, maxDim: Int = 1280, quality: Int = 85): String =
@@ -59,7 +67,7 @@ class PhoneRecognizer(
         return Bitmap.createScaledBitmap(src, (w * ratio).toInt(), (h * ratio).toInt(), true)
     }
 
-    suspend fun recognizePhones(base64: String): List<String> = withContext(Dispatchers.IO) {
+    suspend fun recognizePhones(base64: String): List<RecognizedPhone> = withContext(Dispatchers.IO) {
         val body = JSONObject().apply {
             put("model", arkModel)
             val userMsg = JSONObject().apply {
@@ -105,7 +113,18 @@ class PhoneRecognizer(
                 val result = JSONObject(content)
                 val phones = result.optJSONArray("phones") ?: JSONArray()
                 (0 until phones.length()).mapNotNull { i ->
-                    phones.getJSONObject(i).optString("model").trim().takeIf { it.isNotBlank() }
+                    val obj = phones.getJSONObject(i)
+                    val model = obj.optString("model").trim().takeIf { it.isNotBlank() } ?: return@mapNotNull null
+                    val b = obj.optJSONObject("box")
+                    val box = if (b != null) {
+                        val x1 = b.optDouble("x1", Double.NaN)
+                        val y1 = b.optDouble("y1", Double.NaN)
+                        val x2 = b.optDouble("x2", Double.NaN)
+                        val y2 = b.optDouble("y2", Double.NaN)
+                        if (x1.isNaN() || y1.isNaN() || x2.isNaN() || y2.isNaN()) null
+                        else PhoneBox(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat())
+                    } else null
+                    RecognizedPhone(model, box)
                 }
             }
     }

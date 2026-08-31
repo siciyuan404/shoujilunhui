@@ -18,6 +18,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val initialApiKey = config.apiKey
     val initialArkKey = config.arkApiKey
     val initialArkModel = config.arkModel.ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL }
+    val initialAnnotate = config.annotate
+    val initialAnnotatePrice = config.annotatePrice
+    val initialAnnotateModel = config.annotateModel
 
     /** first=是否成功, second=提示文案 */
     private val _testResult = MutableStateFlow<Pair<Boolean, String>?>(null)
@@ -42,7 +45,15 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun save(url: String, key: String, arkKey: String, arkModel: String) {
+    fun save(
+        url: String,
+        key: String,
+        arkKey: String,
+        arkModel: String,
+        annotate: Boolean,
+        annotatePrice: Boolean,
+        annotateModel: Boolean,
+    ) {
         val u = url.trim()
         if (u.isBlank()) {
             _testResult.value = false to "✗ 服务器地址不能为空"
@@ -52,6 +63,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         config.apiKey = key.trim()
         config.arkApiKey = arkKey.trim()
         config.arkModel = arkModel.trim().ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL }
+        config.annotate = annotate
+        config.annotatePrice = annotatePrice
+        config.annotateModel = annotateModel
         _saved.value = true
     }
 }

@@ -21,13 +21,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,12 +38,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,6 +69,9 @@ fun SettingsScreen(
     var key by remember { mutableStateOf(vm.initialApiKey) }
     var arkKey by remember { mutableStateOf(vm.initialArkKey) }
     var arkModel by remember { mutableStateOf(vm.initialArkModel) }
+    var annotate by remember { mutableStateOf(vm.initialAnnotate) }
+    var annotatePrice by remember { mutableStateOf(vm.initialAnnotatePrice) }
+    var annotateModel by remember { mutableStateOf(vm.initialAnnotateModel) }
 
     LaunchedEffect(saved) {
         if (saved) {
@@ -143,11 +148,47 @@ fun SettingsScreen(
                 }
             }
 
+            // 识别结果标注设置组
+            item {
+                SettingsGroup(title = "识别结果标注") {
+                    ToggleRow(
+                        title = "在图片上标注位置",
+                        desc = "在预览图上绘制识别框，一眼看清每台手机的位置",
+                        checked = annotate,
+                        onCheckedChange = { annotate = it },
+                    )
+                    ToggleRow(
+                        title = "标注中显示价格",
+                        desc = "识别框上直接显示该机型的回收价",
+                        checked = annotatePrice,
+                        onCheckedChange = { annotatePrice = it },
+                    )
+                    ToggleRow(
+                        title = "标注中显示型号",
+                        desc = "识别框上显示匹配到的机型名称",
+                        checked = annotateModel,
+                        onCheckedChange = { annotateModel = it },
+                    )
+                }
+            }
+
+            // 预留分区：后续设置持续扩展
+            item {
+                SettingsGroup(title = "更多设置（即将上线）") {
+                    Text(
+                        "界面显示 / 数据管理 / 关于 等分区将在此按分组卡片持续扩展",
+                        fontSize = 12.sp,
+                        color = TextSecondary,
+                        lineHeight = 17.sp,
+                    )
+                }
+            }
+
             // 保存按钮
             item {
                 Spacer(Modifier.height(4.dp))
                 Button(
-                    onClick = { vm.save(url, key, arkKey, arkModel) },
+                    onClick = { vm.save(url, key, arkKey, arkModel, annotate, annotatePrice, annotateModel) },
                     modifier = Modifier.fillMaxWidth().height(46.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) { Text("保存", fontSize = 15.sp, fontWeight = FontWeight.Medium) }
@@ -189,6 +230,37 @@ private fun SettingsGroup(
             )
             content()
         }
+    }
+}
+
+// ---------- 开关行 ----------
+
+@Composable
+private fun ToggleRow(
+    title: String,
+    desc: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(title, fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            if (desc.isNotBlank()) {
+                Text(
+                    desc,
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 

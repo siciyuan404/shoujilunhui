@@ -27,6 +27,21 @@ class ConfigStore(context: Context) {
         get() = prefs.getString("arkModel", "") ?: ""
         set(v) = prefs.edit().putString("arkModel", v).apply()
 
+    /** 识别结果图上标注开关（默认开启） */
+    var annotate: Boolean
+        get() = prefs.getBoolean("annotate", true)
+        set(v) = prefs.edit().putBoolean("annotate", v).apply()
+
+    /** 标注中显示价格 */
+    var annotatePrice: Boolean
+        get() = prefs.getBoolean("annotatePrice", true)
+        set(v) = prefs.edit().putBoolean("annotatePrice", v).apply()
+
+    /** 标注中显示型号 */
+    var annotateModel: Boolean
+        get() = prefs.getBoolean("annotateModel", true)
+        set(v) = prefs.edit().putBoolean("annotateModel", v).apply()
+
     /** 用于检测从设置页返回后配置是否变化 */
-    fun signature(): String = "$baseUrl|$apiKey|$arkApiKey|$arkModel"
+    fun signature(): String = "$baseUrl|$apiKey|$arkApiKey|$arkModel|$annotate|$annotatePrice|$annotateModel"
 }
