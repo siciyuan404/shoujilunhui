@@ -21,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shoujilunhui.app.BuildConfig
+import com.shoujilunhui.app.UpdateState
 import com.shoujilunhui.app.ui.theme.Accent
 import com.shoujilunhui.app.ui.theme.BgGray
 import com.shoujilunhui.app.ui.theme.Danger
@@ -172,11 +174,25 @@ fun SettingsScreen(
                 }
             }
 
+            // 版本更新（主动更新，对齐 MeowMic 手机端：检查→下载→安装）
+            item {
+                SettingsGroup(title = "版本更新") {
+                    Text(
+                        "当前版本 v${vm.currentVersion}",
+                        fontSize = 13.5.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = TextPrimary,
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    UpdateSection(vm)
+                }
+            }
+
             // 预留分区：后续设置持续扩展
             item {
                 SettingsGroup(title = "更多设置（即将上线）") {
                     Text(
-                        "界面显示 / 数据管理 / 关于 等分区将在此按分组卡片持续扩展",
+                        "界面显示 / 数据管理 等分区将在此按分组卡片持续扩展",
                         fontSize = 12.sp,
                         color = TextSecondary,
                         lineHeight = 17.sp,
@@ -291,4 +307,76 @@ private fun Field(
             unfocusedContainerColor = Color(0xFFFAFAFA),
         ),
     )
+}
+
+// ---------- 版本更新区（主动更新） ----------
+
+@Composable
+private fun UpdateSection(vm: SettingsViewModel) {
+    val state by vm.updateState.collectAsState()
+    // 进入设置页时若尚未检查过，自动检查一次展示最新状态；用户也可手动「检查更新」
+    LaunchedEffect(Unit) {
+        if (state is UpdateState.Idle) vm.checkForUpdate()
+    }
+    when (val s = state) {
+        is UpdateState.Idle -> {
+            Button(
+                onClick = { vm.checkForUpdate() },
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("检查更新", fontSize = 13.5.sp) }
+        }
+        is UpdateState.Checking -> {
+            Text("正在检查更新…", fontSize = 12.5.sp, color = TextSecondary)
+        }
+        is UpdateState.Available -> {
+            Text(
+                "发现新版本 v${s.version}",
+                fontSize = 13.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = Accent,
+            )
+            Spacer(Modifier.height(8.dp))
+            Button(
+                onClick = { vm.downloadUpdate() },
+                modifier = Modifier.fillMaxWidth().height(42.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("下载更新 v${s.version}", fontSize = 13.5.sp) }
+        }
+        is UpdateState.Downloading -> {
+            Text("正在下载… ${s.progress}%", fontSize = 12.5.sp, color = TextSecondary)
+            Spacer(Modifier.height(8.dp))
+            LinearProgressIndicator(
+                progress = { s.progress / 100f },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        is UpdateState.ReadyToInstall -> {
+            Text("下载完成，可立即安装", fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = Accent)
+            Spacer(Modifier.height(8.dp))
+            Button(
+                onClick = { vm.installUpdate() },
+                modifier = Modifier.fillMaxWidth().height(42.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("立即安装", fontSize = 13.5.sp) }
+        }
+        is UpdateState.UpToDate -> {
+            Text("已是最新版本", fontSize = 13.sp, color = Accent, fontWeight = FontWeight.Medium)
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { vm.checkForUpdate() },
+                modifier = Modifier.fillMaxWidth().height(38.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("重新检查", fontSize = 13.sp) }
+        }
+        is UpdateState.Error -> {
+            Text("更新失败：${s.message}", fontSize = 12.sp, color = Danger)
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { vm.checkForUpdate() },
+                modifier = Modifier.fillMaxWidth().height(38.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("重试", fontSize = 13.sp) }
+        }
+    }
 }

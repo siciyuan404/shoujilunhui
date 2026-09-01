@@ -3,7 +3,10 @@ package com.shoujilunhui.app.ui.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.shoujilunhui.app.BuildConfig
 import com.shoujilunhui.app.ConfigStore
+import com.shoujilunhui.app.UpdateState
+import com.shoujilunhui.app.Updater
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.recognize.PhoneRecognizer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,5 +70,48 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         config.annotatePrice = annotatePrice
         config.annotateModel = annotateModel
         _saved.value = true
+    }
+
+    // ===== 主动更新（对齐 MeowMic 手机端：检查→下载→安装） =====
+
+    val currentVersion: String = BuildConfig.VERSION_NAME
+
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
+    val updateState: StateFlow<UpdateState> = _updateState
+
+    /** 主动检查更新（用户点击触发） */
+    fun checkForUpdate() {
+        if (_updateState.value is UpdateState.Checking || _updateState.value is UpdateState.Downloading) return
+        viewModelScope.launch {
+            _updateState.value = UpdateState.Checking
+            _updateState.value = Updater.checkForUpdate(config.baseUrl, currentVersion)
+        }
+    }
+
+    /** 下载最新 APK（带进度） */
+    fun downloadUpdate() {
+        val st = _updateState.value
+        val avail = st as? UpdateState.Available ?: return
+        viewModelScope.launch {
+            _updateState.value = UpdateState.Downloading(0)
+            try {
+                val path = Updater.downloadApk(getApplication(), avail.url, "update_${avail.version}.apk") { p ->
+                    _updateState.value = UpdateState.Downloading(p)
+                }
+                _updateState.value = UpdateState.ReadyToInstall(path)
+            } catch (e: Exception) {
+                _updateState.value = UpdateState.Error(e.message ?: "下载失败")
+            }
+        }
+    }
+
+    /** 调起系统安装器安装 */
+    fun installUpdate() {
+        val ready = _updateState.value as? UpdateState.ReadyToInstall ?: return
+        try {
+            Updater.installApk(getApplication(), ready.apkPath)
+        } catch (e: Exception) {
+            _updateState.value = UpdateState.Error(e.message ?: "无法启动安装器")
+        }
     }
 }

@@ -21,6 +21,19 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 /**
+ * 主动更新 UI 状态（对齐 MeowMic 手机端：检查 → 下载 → 安装）。
+ */
+sealed class UpdateState {
+    object Idle : UpdateState()
+    object Checking : UpdateState()
+    data class Available(val version: String, val url: String) : UpdateState()
+    object UpToDate : UpdateState()
+    data class Downloading(val progress: Int) : UpdateState()
+    data class ReadyToInstall(val apkPath: String) : UpdateState()
+    data class Error(val message: String) : UpdateState()
+}
+
+/**
  * 无感更新 + 滚动更新（灰度）。
  *
  * 流程（全程不打断使用）：
@@ -205,5 +218,87 @@ object Updater {
         nm.createNotificationChannel(
             NotificationChannel(CHANNEL_ID, "版本更新", NotificationManager.IMPORTANCE_HIGH)
         )
+    }
+
+    // ===== 主动更新（用户点击触发，对齐 MeowMic 手机端：检查→下载→安装） =====
+
+    /**
+     * 主动检查更新：忽略灰度放量，只要发现新版本就返回 Available。
+     * @return Available / UpToDate / Error
+     */
+    suspend fun checkForUpdate(baseUrl: String, currentVersion: String): UpdateState = withContext(Dispatchers.IO) {
+        try {
+            val info = fetchUpdateInfo(baseUrl) ?: return@withContext UpdateState.Error("无法获取更新信息")
+            if (info.latest.isBlank() || info.url.isBlank()) {
+                return@withContext UpdateState.Error("更新信息不完整")
+            }
+            if (!isNewer(info.latest, currentVersion)) return@withContext UpdateState.UpToDate
+            UpdateState.Available(info.latest.removePrefix("v"), info.url)
+        } catch (e: Exception) {
+            Log.w(TAG, "主动检查更新失败: ${e.message}")
+            UpdateState.Error(e.message ?: "网络错误")
+        }
+    }
+
+    /**
+     * 主动下载 APK 到缓存目录，带进度回调（0-100）。
+     * @throws Exception 下载失败时抛出
+     */
+    suspend fun downloadApk(
+        context: Context,
+        url: String,
+        fileName: String,
+        onProgress: (Int) -> Unit,
+    ): String = withContext(Dispatchers.IO) {
+        val file = File(context.cacheDir, fileName)
+        if (file.exists()) file.delete()
+        try {
+            val client = OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .build()
+            val req = okhttp3.Request.Builder().url(url).build()
+            client.newCall(req).execute().use { resp ->
+                if (!resp.isSuccessful) throw RuntimeException("下载失败: HTTP ${resp.code}")
+                val body = resp.body ?: throw RuntimeException("下载响应为空")
+                val total = body.contentLength()
+                var downloaded = 0L
+                var lastEmit = 0L
+                body.byteStream().use { input ->
+                    file.outputStream().use { output ->
+                        val buf = ByteArray(8192)
+                        var n: Int
+                        while (input.read(buf).also { n = it } > 0) {
+                            output.write(buf, 0, n)
+                            downloaded += n
+                            if (total > 0) {
+                                val pct = (downloaded * 100 / total).toInt()
+                                val now = System.currentTimeMillis()
+                                if (pct >= 100 || now - lastEmit > 100) {
+                                    onProgress(pct)
+                                    lastEmit = now
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            file.absolutePath
+        } catch (e: Exception) {
+            Log.w(TAG, "主动下载失败: ${e.message}")
+            throw e
+        }
+    }
+
+    /** 主动安装：FileProvider 调起系统安装器 */
+    fun installApk(context: Context, apkPath: String) {
+        val file = File(apkPath)
+        if (!file.exists()) return
+        val uri = FileProvider.getUriForFile(context, context.packageName + ".fileprovider", file)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/vnd.android.package-archive")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
     }
 }
