@@ -466,6 +466,14 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 .rec-result-row .rr-open:hover { border-color: var(--accent); color: var(--accent); }
 .rec-summary { font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
 .rec-summary b { color: var(--accent); }
+.rec-provider-row { display: inline-flex; gap: 8px; }
+.rec-provider-btn {
+  padding: 7px 16px; border-radius: 10px; border: 1px solid var(--border); background: #fff;
+  cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text-secondary);
+  transition: all .15s;
+}
+.rec-provider-btn:hover { border-color: var(--accent); color: var(--accent); }
+.rec-provider-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 @media (max-width: 600px) {
   .rec-body { padding: 14px; }
   .rec-head { padding: 14px; }
@@ -840,21 +848,45 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
         <!-- 识别设置 -->
         <div class="set-sec" id="sec-rec">
           <div class="set-sec-title">拍照识别</div>
-          <div class="set-sec-desc">调用豆包视觉模型识别图片中的手机，并自动匹配回收报价</div>
+          <div class="set-sec-desc">调用视觉大模型识别图片中的手机，并自动匹配回收报价（支持豆包方舟 / DeepSeek）</div>
           <div class="set-items">
             <div class="set-item">
               <div class="set-item-info">
-                <div class="set-item-name">豆包视觉模型 API Key（火山方舟）</div>
+                <div class="set-item-name">识别服务商</div>
+                <div class="set-item-desc">选择要使用的视觉模型服务商</div>
+              </div>
+              <div class="rec-provider-row">
+                <button type="button" class="rec-provider-btn active" id="provArk" onclick="switchRecProvider('ark')">豆包方舟</button>
+                <button type="button" class="rec-provider-btn" id="provDeepseek" onclick="switchRecProvider('deepseek')">DeepSeek</button>
+              </div>
+            </div>
+            <div class="set-item" id="arkFields">
+              <div class="set-item-info">
+                <div class="set-item-name">豆包 API Key（火山方舟）</div>
                 <div class="set-item-desc">console.volcengine.com/ark → API Key 管理 创建，填写后保存</div>
               </div>
               <input type="password" id="setArkKey" placeholder="sk-..." autocomplete="off">
             </div>
-            <div class="set-item">
+            <div class="set-item" id="arkModelField">
               <div class="set-item-info">
                 <div class="set-item-name">模型 ID</div>
-                <div class="set-item-desc">需已在方舟开通，默认 doubao-seed-2-1-turbo-260628</div>
+                <div class="set-item-desc">需已在方舟开通，默认 doubao-seed-character-260628</div>
               </div>
-              <input type="text" id="setArkModel" placeholder="doubao-seed-2-1-turbo-260628" autocomplete="off">
+              <input type="text" id="setArkModel" placeholder="doubao-seed-character-260628" autocomplete="off">
+            </div>
+            <div class="set-item" id="deepseekFields" style="display:none">
+              <div class="set-item-info">
+                <div class="set-item-name">DeepSeek API Key</div>
+                <div class="set-item-desc">platform.deepseek.com → API Keys 创建，填写后保存</div>
+              </div>
+              <input type="password" id="setDeepseekKey" placeholder="sk-..." autocomplete="off">
+            </div>
+            <div class="set-item" id="deepseekModelField" style="display:none">
+              <div class="set-item-info">
+                <div class="set-item-name">视觉模型 ID</div>
+                <div class="set-item-desc">默认 deepseek-v4-flash-vision-exp（可识别图片）</div>
+              </div>
+              <input type="text" id="setDeepseekModel" placeholder="deepseek-v4-flash-vision-exp" autocomplete="off">
             </div>
             <div class="set-item">
               <div class="set-item-info">
@@ -1169,9 +1201,12 @@ function downloadUpdate() {
   }
 }
 
-// ===== 拍照识别：豆包视觉 + 智能匹配报价 =====
+// ===== 拍照识别：视觉大模型（豆包方舟 / DeepSeek）+ 智能匹配报价 =====
+let recProvider = localStorage.getItem('recProvider') || 'ark';
 let recKey = localStorage.getItem('recArkKey') || '';
-let recModel = localStorage.getItem('recArkModel') || 'doubao-seed-2-1-turbo-260628';
+let recModel = localStorage.getItem('recArkModel') || 'doubao-seed-character-260628';
+let recDeepseekKey = localStorage.getItem('recDeepseekKey') || '';
+let recDeepseekModel = localStorage.getItem('recDeepseekModel') || 'deepseek-v4-flash-vision-exp';
 let recBase = localStorage.getItem('recBaseUrl') || '';
 let recImageB64 = '';
 let recAnnotate = localStorage.getItem('recAnnotate') !== '0';
@@ -1182,6 +1217,15 @@ function setRecStatus(msg, isErr) {
   const el = document.getElementById('recStatus');
   el.textContent = msg || '';
   el.className = 'rec-status' + (isErr ? ' error' : '');
+}
+function switchRecProvider(p) {
+  recProvider = p;
+  document.getElementById('provArk').classList.toggle('active', p === 'ark');
+  document.getElementById('provDeepseek').classList.toggle('active', p === 'deepseek');
+  document.getElementById('arkFields').style.display = p === 'ark' ? '' : 'none';
+  document.getElementById('arkModelField').style.display = p === 'ark' ? '' : 'none';
+  document.getElementById('deepseekFields').style.display = p === 'deepseek' ? '' : 'none';
+  document.getElementById('deepseekModelField').style.display = p === 'deepseek' ? '' : 'none';
 }
 function onRecFile(input) {
   const f = input.files && input.files[0];
@@ -1236,27 +1280,37 @@ function loadSettings() {
   const g = (id) => document.getElementById(id);
   g('setArkKey').value = recKey;
   g('setArkModel').value = recModel;
+  g('setDeepseekKey').value = recDeepseekKey;
+  g('setDeepseekModel').value = recDeepseekModel;
   g('setBaseUrl').value = recBase;
   g('setAnnotate').checked = recAnnotate;
   g('setAnnotatePrice').checked = recAnnotatePrice;
   g('setAnnotateModel').checked = recAnnotateModel;
+  switchRecProvider(recProvider);
 }
 function saveSettings() {
   const g = (id) => document.getElementById(id);
   recKey = g('setArkKey').value.trim();
-  recModel = g('setArkModel').value.trim() || 'doubao-seed-2-1-turbo-260628';
+  recModel = g('setArkModel').value.trim() || 'doubao-seed-character-260628';
+  recDeepseekKey = g('setDeepseekKey').value.trim();
+  recDeepseekModel = g('setDeepseekModel').value.trim() || 'deepseek-v4-flash-vision-exp';
   recBase = g('setBaseUrl').value.trim();
   recAnnotate = g('setAnnotate').checked;
   recAnnotatePrice = g('setAnnotatePrice').checked;
   recAnnotateModel = g('setAnnotateModel').checked;
+  localStorage.setItem('recProvider', recProvider);
   localStorage.setItem('recArkKey', recKey);
   localStorage.setItem('recArkModel', recModel);
+  localStorage.setItem('recDeepseekKey', recDeepseekKey);
+  localStorage.setItem('recDeepseekModel', recDeepseekModel);
   localStorage.setItem('recBaseUrl', recBase);
   localStorage.setItem('recAnnotate', recAnnotate ? '1' : '0');
   localStorage.setItem('recAnnotatePrice', recAnnotatePrice ? '1' : '0');
   localStorage.setItem('recAnnotateModel', recAnnotateModel ? '1' : '0');
   showToast('设置已保存', 'ok');
-  setRecStatus(recKey ? '识别设置已保存' : '尚未配置豆包 API Key，识别将无法进行', !recKey);
+  const activeKey = recProvider === 'deepseek' ? recDeepseekKey : recKey;
+  const providerName = recProvider === 'deepseek' ? 'DeepSeek' : '豆包';
+  setRecStatus(activeKey ? '识别设置已保存（' + providerName + '）' : '尚未配置' + providerName + ' API Key，识别将无法进行', !activeKey);
 }
 
 // ---- 智能匹配：把识别型号与报价库命名对齐（与手机端一致）----
@@ -1383,16 +1437,19 @@ function selectRecItem(i, fromBox) {
 }
 async function startRecognize() {
   const btn = document.getElementById('recBtn');
-  if (!recKey) { setRecStatus('尚未配置豆包 API Key，请先点击「⚙ 识别设置」填写', true); openRecSettings(); return; }
+  const activeKey = recProvider === 'deepseek' ? recDeepseekKey : recKey;
+  const activeModel = recProvider === 'deepseek' ? recDeepseekModel : recModel;
+  const providerName = recProvider === 'deepseek' ? 'DeepSeek' : '豆包';
+  if (!activeKey) { setRecStatus('尚未配置' + providerName + ' API Key，请先点击「⚙ 识别设置」填写', true); openRecSettings(); return; }
   if (!recImageB64) { setRecStatus('请先选择要识别的图片', true); return; }
   btn.disabled = true;
-  setRecStatus('识别中… 正在调用豆包视觉模型分析图片');
+  setRecStatus('识别中… 正在调用' + providerName + '视觉模型分析图片');
   document.getElementById('recResults').innerHTML = '';
   try {
     const base = (recBase || location.origin).replace(/\/+$/, '');
     const res = await api(base + '/api/recognize', {
       method: 'POST',
-      body: JSON.stringify({ imageBase64: recImageB64, apiKey: recKey, model: recModel })
+      body: JSON.stringify({ imageBase64: recImageB64, apiKey: activeKey, model: activeModel, provider: recProvider })
     });
     const phones = (res && res.phones) || [];
     if (!phones.length) { setRecStatus('图片中未识别到手机，可换一张更清晰的照片重试'); btn.disabled = false; return; }

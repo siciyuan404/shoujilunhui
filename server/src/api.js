@@ -253,13 +253,18 @@ function createRouter(db, cfg) {
       });
     }
 
-    // ---------- 拍照识别代理：转发豆包视觉大模型，规避浏览器跨域限制 ----------
+    // ---------- 拍照识别代理：转发视觉大模型（豆包方舟 / DeepSeek），规避浏览器跨域限制 ----------
     if (method === 'POST' && pathname === '/api/recognize') {
       const body = await readBody(req);
+      const provider = String(body.provider || 'ark').trim() || 'ark';
       const apiKey = String(body.apiKey || '').trim();
-      const model = String(body.model || '').trim() || 'doubao-seed-2-1-turbo-260628';
       const b64 = String(body.imageBase64 || '').trim();
-      if (!apiKey) return json(res, 400, { error: '未配置豆包 API Key，请在识别设置中填写' });
+      const isDeepSeek = provider === 'deepseek';
+      const aiBase = isDeepSeek ? 'https://api.deepseek.com' : 'https://ark.cn-beijing.volces.com/api/v3';
+      const defaultModel = isDeepSeek ? 'deepseek-v4-flash-vision-exp' : 'doubao-seed-character-260628';
+      const model = String(body.model || '').trim() || defaultModel;
+      const providerName = isDeepSeek ? 'DeepSeek' : '豆包';
+      if (!apiKey) return json(res, 400, { error: '未配置' + providerName + ' API Key，请在识别设置中填写' });
       if (!b64) return json(res, 400, { error: '缺少图片数据' });
       const prompt =
         '请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：' +
@@ -269,9 +274,9 @@ function createRouter(db, cfg) {
         '3) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；' +
         '4) 如果图中有手机但看不清型号，根据外观给出最可能的型号；' +
         '5) 如果图中没有手机，返回 {"phones":[]}。不要输出任何其他内容。';
-      let arkResp;
+      let aiResp;
       try {
-        arkResp = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+        aiResp = await fetch(aiBase + '/chat/completions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
           body: JSON.stringify({
@@ -287,9 +292,9 @@ function createRouter(db, cfg) {
       } catch (e) {
         return json(res, 502, { error: '无法连接识别服务：' + e.message });
       }
-      const text = await arkResp.text();
-      if (!arkResp.ok) {
-        let msg = '识别服务错误（' + arkResp.status + '）';
+      const text = await aiResp.text();
+      if (!aiResp.ok) {
+        let msg = '识别服务错误（' + aiResp.status + '）';
         try {
           const e = JSON.parse(text);
           if (e && e.error && e.error.message) msg += '：' + e.error.message;

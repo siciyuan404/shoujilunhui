@@ -71,6 +71,9 @@ fun SettingsScreen(
     var key by remember { mutableStateOf(vm.initialApiKey) }
     var arkKey by remember { mutableStateOf(vm.initialArkKey) }
     var arkModel by remember { mutableStateOf(vm.initialArkModel) }
+    var provider by remember { mutableStateOf(vm.initialProvider) }
+    var deepseekKey by remember { mutableStateOf(vm.initialDeepseekKey) }
+    var deepseekModel by remember { mutableStateOf(vm.initialDeepseekModel) }
     var annotate by remember { mutableStateOf(vm.initialAnnotate) }
     var annotatePrice by remember { mutableStateOf(vm.initialAnnotatePrice) }
     var annotateModel by remember { mutableStateOf(vm.initialAnnotateModel) }
@@ -141,12 +144,33 @@ fun SettingsScreen(
                 }
             }
 
-            // 拍照识别设置组
+            // 拍照识别设置组（支持豆包方舟 / DeepSeek 双服务商）
             item {
-                SettingsGroup(title = "拍照识别（豆包视觉）") {
-                    Field(value = arkKey, onChange = { arkKey = it }, label = "豆包 API Key", password = true)
+                SettingsGroup(title = "拍照识别") {
+                    Text("识别服务商", fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = TextSecondary)
                     Spacer(Modifier.height(8.dp))
-                    Field(value = arkModel, onChange = { arkModel = it }, label = "视觉模型 ID")
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        ProviderButton(
+                            label = "豆包方舟",
+                            selected = provider == "ark",
+                            onClick = { provider = "ark" },
+                        )
+                        ProviderButton(
+                            label = "DeepSeek",
+                            selected = provider == "deepseek",
+                            onClick = { provider = "deepseek" },
+                        )
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    if (provider == "deepseek") {
+                        Field(value = deepseekKey, onChange = { deepseekKey = it }, label = "DeepSeek API Key", password = true)
+                        Spacer(Modifier.height(8.dp))
+                        Field(value = deepseekModel, onChange = { deepseekModel = it }, label = "视觉模型 ID（默认 deepseek-v4-flash-vision-exp）")
+                    } else {
+                        Field(value = arkKey, onChange = { arkKey = it }, label = "豆包 API Key（火山方舟）", password = true)
+                        Spacer(Modifier.height(8.dp))
+                        Field(value = arkModel, onChange = { arkModel = it }, label = "视觉模型 ID（默认 doubao-seed-character-260628）")
+                    }
                 }
             }
 
@@ -204,7 +228,7 @@ fun SettingsScreen(
             item {
                 Spacer(Modifier.height(4.dp))
                 Button(
-                    onClick = { vm.save(url, key, arkKey, arkModel, annotate, annotatePrice, annotateModel) },
+                    onClick = { vm.save(url, key, arkKey, arkModel, provider, deepseekKey, deepseekModel, annotate, annotatePrice, annotateModel) },
                     modifier = Modifier.fillMaxWidth().height(46.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) { Text("保存", fontSize = 15.sp, fontWeight = FontWeight.Medium) }
@@ -307,6 +331,25 @@ private fun Field(
             unfocusedContainerColor = Color(0xFFFAFAFA),
         ),
     )
+}
+
+// ---------- 服务商选择按钮 ----------
+
+@Composable
+private fun ProviderButton(label: String, selected: Boolean, onClick: () -> Unit) {
+    if (selected) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier.height(36.dp),
+            shape = RoundedCornerShape(10.dp),
+        ) { Text(label, fontSize = 13.sp) }
+    } else {
+        OutlinedButton(
+            onClick = onClick,
+            modifier = Modifier.height(36.dp),
+            shape = RoundedCornerShape(10.dp),
+        ) { Text(label, fontSize = 13.sp, color = TextSecondary) }
+    }
 }
 
 // ---------- 版本更新区（主动更新） ----------

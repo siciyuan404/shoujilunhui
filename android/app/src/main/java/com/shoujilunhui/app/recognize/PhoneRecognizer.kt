@@ -27,16 +27,19 @@ data class PhoneBox(val x1: Float, val y1: Float, val x2: Float, val y2: Float)
 data class RecognizedPhone(val model: String, val box: PhoneBox?)
 
 class PhoneRecognizer(
-    private val baseUrl: String,
-    private val arkKey: String,
-    private val arkModel: String = DEFAULT_ARK_MODEL,
+    private val serverBaseUrl: String,
+    private val aiBaseUrl: String,
+    private val apiKey: String,
+    private val model: String,
 ) {
 
     companion object {
-        // 火山方舟当前推荐的多模态视觉模型（未下线）。旧模型 doubao-1.5-vision-pro-32k-250115 已下线/停用会导致 404。
-        // 若账号未开通，请到火山方舟控制台「开通管理」开通后再填准确模型 ID。
-        const val DEFAULT_ARK_MODEL = "doubao-seed-2-1-turbo-260628"
-        private const val ARK_BASE = "https://ark.cn-beijing.volces.com/api/v3"
+        // 豆包/火山方舟：性价比更高的多模态视觉模型（默认）
+        const val DEFAULT_ARK_MODEL = "doubao-seed-character-260628"
+        // DeepSeek：视觉模型（可识别图片）
+        const val DEFAULT_DEEPSEEK_MODEL = "deepseek-v4-flash-vision-exp"
+        const val ARK_BASE = "https://ark.cn-beijing.volces.com/api/v3"
+        const val DEEPSEEK_BASE = "https://api.deepseek.com"
         private const val RECOGNIZE_PROMPT =
             "请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：" +
                 "{\"phones\":[{\"model\":\"手机具体型号\",\"box\":{\"x1\":0,\"y1\":0,\"x2\":1000,\"y2\":1000}}]}。" +
@@ -69,7 +72,7 @@ class PhoneRecognizer(
 
     suspend fun recognizePhones(base64: String): List<RecognizedPhone> = withContext(Dispatchers.IO) {
         val body = JSONObject().apply {
-            put("model", arkModel)
+            put("model", model)
             val userMsg = JSONObject().apply {
                 put("role", "user")
                 val content = JSONArray()
@@ -85,8 +88,8 @@ class PhoneRecognizer(
             put("response_format", JSONObject().put("type", "json_object"))
         }
         val request = okhttp3.Request.Builder()
-            .url("$ARK_BASE/chat/completions")
-            .addHeader("Authorization", "Bearer $arkKey")
+            .url("$aiBaseUrl/chat/completions")
+            .addHeader("Authorization", "Bearer $apiKey")
             .post(body.toString().toRequestBody("application/json".toMediaType()))
             .build()
         okhttp3.OkHttpClient.Builder()
@@ -102,7 +105,7 @@ class PhoneRecognizer(
                     if (resp.code == 404) {
                         throw Exception(
                             "识别服务错误（404）模型不存在或未开通：" +
-                                (detail ?: "请到火山方舟控制台「开通管理」开通视觉模型，并在设置中填写准确模型 ID（如 $DEFAULT_ARK_MODEL）")
+                                (detail ?: "请在设置中选择正确的服务商并填写已开通的模型 ID（豆包方舟：$DEFAULT_ARK_MODEL；DeepSeek：$DEFAULT_DEEPSEEK_MODEL）")
                         )
                     }
                     throw Exception("识别服务错误（${resp.code}）：${detail ?: "请检查 API Key 与模型名"}")
@@ -133,7 +136,7 @@ class PhoneRecognizer(
     suspend fun queryPrice(model: String): ModelRow? {
         for (cand in ModelMatcher.buildCandidates(model)) {
             val items = try {
-                ApiClient.api(baseUrl).getModels(search = cand, sort = "brand").items
+                ApiClient.api(serverBaseUrl).getModels(search = cand, sort = "brand").items
             } catch (e: Exception) {
                 continue
             }

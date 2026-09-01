@@ -67,18 +67,34 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
     fun startRecognize() {
         val baseUrl = config.baseUrl
         if (baseUrl.isBlank()) { showMessage("请先在设置中填写服务器地址"); return }
-        val arkKey = config.arkApiKey
-        if (arkKey.isBlank()) { showMessage("请先在设置中填写豆包 API Key"); return }
+        val provider = config.recProvider
+        val (aiBaseUrl, apiKey, model, providerName) = when (provider) {
+            "deepseek" -> listOf(
+                PhoneRecognizer.DEEPSEEK_BASE,
+                config.deepseekApiKey,
+                config.deepseekModel.ifBlank { PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL },
+                "DeepSeek 视觉",
+            )
+            else -> listOf(
+                PhoneRecognizer.ARK_BASE,
+                config.arkApiKey,
+                config.arkModel.ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL },
+                "豆包视觉",
+            )
+        }
+        if (apiKey.isBlank()) {
+            showMessage(if (provider == "deepseek") "请先在设置中填写 DeepSeek API Key" else "请先在设置中填写豆包 API Key")
+            return
+        }
         val uri = _ui.value.previewUri
         if (uri == null) { showMessage("请先拍照或选择图片"); return }
-        val arkModel = config.arkModel.ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL }
 
         _ui.update { it.copy(busy = true, status = "正在识别图片中的手机...", results = emptyList()) }
         viewModelScope.launch {
             try {
-                val recognizer = PhoneRecognizer(baseUrl, arkKey, arkModel)
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model)
                 val b64 = recognizer.bitmapToBase64(getApplication(), uri)
-                _ui.update { it.copy(status = "识别中...（豆包视觉）") }
+                _ui.update { it.copy(status = "识别中...（$providerName）") }
                 val phones = recognizer.recognizePhones(b64)
                 if (phones.isEmpty()) {
                     _ui.update { it.copy(status = "未识别到手机，换一张更清晰的图试试") }

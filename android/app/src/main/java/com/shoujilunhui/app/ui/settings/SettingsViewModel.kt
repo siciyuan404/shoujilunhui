@@ -21,6 +21,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val initialApiKey = config.apiKey
     val initialArkKey = config.arkApiKey
     val initialArkModel = config.arkModel.ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL }
+    val initialProvider = config.recProvider
+    val initialDeepseekKey = config.deepseekApiKey
+    val initialDeepseekModel = config.deepseekModel.ifBlank { PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL }
     val initialAnnotate = config.annotate
     val initialAnnotatePrice = config.annotatePrice
     val initialAnnotateModel = config.annotateModel
@@ -53,6 +56,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         key: String,
         arkKey: String,
         arkModel: String,
+        provider: String,
+        deepseekKey: String,
+        deepseekModel: String,
         annotate: Boolean,
         annotatePrice: Boolean,
         annotateModel: Boolean,
@@ -65,7 +71,10 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         config.baseUrl = u
         config.apiKey = key.trim()
         config.arkApiKey = arkKey.trim()
-        config.arkModel = arkModel.trim().ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL }
+        config.arkModel = arkModel.trim()
+        config.recProvider = provider
+        config.deepseekApiKey = deepseekKey.trim()
+        config.deepseekModel = deepseekModel.trim()
         config.annotate = annotate
         config.annotatePrice = annotatePrice
         config.annotateModel = annotateModel
