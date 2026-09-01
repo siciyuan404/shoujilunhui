@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const http = require('http');
@@ -77,19 +77,12 @@ async function checkUpdate() {
   };
 }
 
+// 静默检查：不自动弹原生对话框（更新改为前端「检查更新」按钮点击触发，对齐 MeowMic pc 端）
 function maybePromptUpdate() {
   checkUpdate().then((info) => {
-    if (!info || !info.hasUpdate || !mainWindow || mainWindow.isDestroyed()) return;
-    const btn = dialog.showMessageBoxSync(mainWindow, {
-      type: 'info',
-      title: '发现新版本',
-      message: `发现新版本 v${info.latestTag}`,
-      detail: `当前版本 v${info.currentVersion}\n是否前往 GitHub 下载更新？`,
-      buttons: ['去下载', '暂不更新'],
-      defaultId: 0,
-      cancelId: 1,
-    });
-    if (btn === 0) shell.openExternal(info.url);
+    if (info && info.hasUpdate) {
+      console.log(`[desktop] 发现新版本 v${info.latestTag}（当前 v${info.currentVersion}），前端已高亮更新按钮，点击触发下载`);
+    }
   }).catch(() => {});
 }
 

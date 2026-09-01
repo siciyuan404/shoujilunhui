@@ -65,6 +65,17 @@ body {
   padding: 0 2px; font-family: inherit;
 }
 .header .app-update-bar .aub-close:hover { color: #d4380d; }
+.header .update-check-btn {
+  display: inline-flex; align-items: center; gap: 5px; margin: 8px auto 0;
+  padding: 5px 15px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4);
+  color: #fff; border-radius: 20px; font-size: 12.5px; cursor: pointer; font-family: inherit;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+.header .update-check-btn:hover { background: rgba(255,255,255,.32); box-shadow: 0 2px 8px rgba(0,0,0,.18); transform: translateY(-1px); }
+.header .update-check-btn:active { transform: translateY(0); }
+.header .update-check-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
+.header .update-check-btn.has-update { background: #fa8c16; border-color: #fa8c16; color: #fff; box-shadow: 0 2px 10px rgba(250,140,22,.45); }
+.header .update-check-btn.has-update:hover { background: #d46b08; border-color: #d46b08; }
 .mode-switch { display: inline-flex; margin-top: 14px; background: rgba(255,255,255,.16); border-radius: 24px; padding: 4px; }
 .mode-btn {
   border: none; background: transparent; color: #fff; cursor: pointer; padding: 7px 22px;
@@ -718,6 +729,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   <h1>📱 手机回收 · 查价 + 验机</h1>
   <div class="subtitle">志和环保手机 · 每日更新 · 快速查价 / 验机防炸弹机</div>
   <div class="update-info" id="updateInfo">加载中...</div>
+  <button class="update-check-btn" id="updateCheckBtn" style="display:none" onclick="triggerUpdateCheck()" title="检查是否有新版本，点击触发">🔄 检查更新</button>
   <div class="app-update-bar" id="appUpdateBar" style="display:none">
     <span class="aub-text" id="appUpdateText"></span>
     <button class="aub-btn" id="appUpdateBtn" onclick="downloadUpdate()">立即下载</button>
@@ -1070,30 +1082,90 @@ Promise.all([
     '<div class="empty-state"><p>数据加载失败：' + err.message + '</p><p style="font-size:13px;margin-top:6px">请确认 API 服务已启动 (node server/src/index.js)</p></div>';
 });
 
-// ===== 桌面端：基于 GitHub tag 的版本更新检查 =====
+// ===== 桌面端：基于 GitHub tag 的版本更新检查（点击触发，参考 MeowMic pc 端） =====
 let appUpdateInfo = null;
+let updateChecking = false;
 function setupDesktopUpdate() {
-  if (!window.__desktop || !window.__desktop.checkUpdate) return; // 仅 Electron 桌面端
+  const btn = document.getElementById('updateCheckBtn');
+  if (btn) btn.style.display = 'inline-flex';
+  if (!window.__desktop || !window.__desktop.checkUpdate) return; // 网页端：仅展示按钮，点击时查 GitHub 最新版本
   window.__desktop.getVersion().then(v => {
     const infoEl = document.getElementById('updateInfo');
     if (v && infoEl && !infoEl.textContent.includes('桌面端')) {
       infoEl.textContent += ' · 桌面端 v' + v;
     }
   }).catch(() => {});
+  // 静默检查：发现新版本仅高亮按钮，点击才触发下载（对齐 MeowMic 点击触发）
   window.__desktop.checkUpdate().then(info => {
-    if (info && info.hasUpdate) { appUpdateInfo = info; showUpdateBar(info); }
+    if (info && info.hasUpdate) { appUpdateInfo = info; highlightUpdateButton(info); }
   }).catch(() => {});
+}
+function highlightUpdateButton(info) {
+  const btn = document.getElementById('updateCheckBtn');
+  if (!btn) return;
+  btn.classList.add('has-update');
+  btn.textContent = '🔄 发现新版本 ' + info.latestTag;
+  btn.title = '发现新版本 ' + info.latestTag + '，点击查看/下载';
+}
+async function triggerUpdateCheck() {
+  if (updateChecking) return;
+  const btn = document.getElementById('updateCheckBtn');
+  if (!btn) return;
+  updateChecking = true;
+  btn.disabled = true;
+  btn.textContent = '检查中…';
+  try {
+    if (window.__desktop && window.__desktop.checkUpdate) {
+      // 桌面端：IPC 检查，可对比当前版本
+      const info = await window.__desktop.checkUpdate();
+      if (info && info.hasUpdate) {
+        appUpdateInfo = info;
+        highlightUpdateButton(info);
+        showUpdateBar(info);
+        showToast('发现新版本 ' + info.latestTag + '，可立即下载更新', 'success');
+      } else if (info) {
+        hideUpdateBar();
+        btn.classList.remove('has-update');
+        showToast('已是最新版本 v' + info.currentVersion, 'success');
+      } else {
+        showToast('更新检查失败，请稍后再试', 'error');
+      }
+    } else {
+      // 网页端：直接查询 GitHub 最新 release
+      const res = await fetch('https://api.github.com/repos/siciyuan404/shoujilunhui/releases/latest', {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const j = await res.json();
+      if (j && j.tag_name) {
+        appUpdateInfo = { url: j.html_url, latestTag: j.tag_name, currentVersion: '—' };
+        highlightUpdateButton(appUpdateInfo);
+        showToast('最新桌面端版本 v' + String(j.tag_name).replace(/^v/i, '') + '，点击「立即下载」前往下载', 'success');
+      } else {
+        showToast('更新检查失败，请稍后再试', 'error');
+      }
+    }
+  } catch (e) {
+    showToast('更新检查失败：' + e.message, 'error');
+  } finally {
+    updateChecking = false;
+    btn.disabled = false;
+    if (!btn.classList.contains('has-update')) btn.textContent = '🔄 检查更新';
+  }
 }
 function showUpdateBar(info) {
   const bar = document.getElementById('appUpdateBar');
   const txt = document.getElementById('appUpdateText');
-  txt.textContent = '发现新版本 v' + info.latestTag + '（当前 v' + info.currentVersion + '）';
+  txt.textContent = '发现新版本 ' + info.latestTag + '（当前 v' + info.currentVersion + '）';
   bar.style.display = 'inline-flex';
 }
 function hideUpdateBar() { document.getElementById('appUpdateBar').style.display = 'none'; }
 function downloadUpdate() {
-  if (appUpdateInfo && window.__desktop && window.__desktop.openExternal) {
+  if (!appUpdateInfo) return;
+  if (window.__desktop && window.__desktop.openExternal) {
     window.__desktop.openExternal(appUpdateInfo.url);
+  } else {
+    window.open(appUpdateInfo.url, '_blank');
   }
 }
 
