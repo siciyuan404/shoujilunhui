@@ -42,6 +42,23 @@ node skills/phone-price-api/scripts/api.js PUT /api/models/123 '{"images":["/upl
 - 也可直接写入外链 URL（无需上传）。
 - Web / 桌面端在表格「参考图」列和详情页可手动编辑（上传 / 粘贴 URL / 删除 / 排序 / 设主图）。
 
+## 设备引用（桌面端「引用」按钮 → 粘贴给 AI）
+
+桌面端 / 网页的价格列表中，每个设备行都有「引用」按钮；点击后复制一段**设备引用文本**，形如：
+
+```
+【手机设备引用】设备ID:123｜品牌:华为｜分类:P系列｜型号:P40 Pro
+```
+
+用户把这段引用粘贴给你时，按以下流程处理：
+
+1. **解析 ID**：用正则提取 `设备ID:(\d+)`（字段可能带空格或冒号/等号，兼容 `设备ID=123`）。
+2. **按 ID 定位**：调用 `GET /api/models/<id>`（例如 `node skills/phone-price-api/scripts/api.js GET "/api/models/123"`）拉取该设备**数据库最新**数据。
+3. **核对身份**：将返回的 `brand/category/model` 与引用文本中的品牌/分类/型号比对；不一致时以数据库为准，并向用户说明差异（ID 才是唯一主键，型号名称可能因改名/重复而不唯一）。
+4. **补充数据**：基于该设备数据回答用户问题，或按用户要求补充字段（price 回收价 / note 备注 / 规格 release_date、cpu_model、ram、rom、back_camera 等 / variants 分版本价格 / images 参考图），写操作 `PUT /api/models/<id>` 自动带 Key。
+
+> 引用文本里的品牌/分类/型号是给人看的辅助信息，**定位请一律以 设备ID 为准**。
+
 环境变量 `PHONE_API_BASE` 可覆盖 API 地址（默认 `http://localhost:8760`），`PHONE_API_KEY` 可覆盖密钥（默认读 `server/config.json`）。
 
 ## API 端点总览

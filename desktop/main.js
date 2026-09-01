@@ -111,12 +111,13 @@ async function ensureServer() {
 }
 
 const injectCss = `
-  html { background: transparent !important; padding: 8px !important; }
+  html { background: transparent !important; padding: 8px !important; overflow: hidden !important; }
   body {
     border-radius: 14px !important;
     box-shadow: 0 12px 48px rgba(0,0,0,.38) !important;
     min-height: calc(100vh - 16px) !important;
-    overflow: hidden !important;
+    max-height: calc(100vh - 16px) !important;
+    overflow-y: auto;
     transition: box-shadow .25s !important;
   }
   body.win-blur { box-shadow: 0 4px 18px rgba(0,0,0,.18) !important; }
@@ -203,7 +204,7 @@ async function createWindow() {
 
   // 最大化时移除圆角
   mainWindow.on('maximize', () => {
-    mainWindow.webContents.insertCSS('body { border-radius: 0 !important; } html { padding: 0 !important; }').catch(() => {});
+    mainWindow.webContents.insertCSS('html { padding: 0 !important; } body { border-radius: 0 !important; min-height: 100vh !important; max-height: 100vh !important; }').catch(() => {});
   });
   mainWindow.on('unmaximize', () => {
     mainWindow.webContents.insertCSS(injectCss).catch(() => {});

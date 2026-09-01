@@ -263,11 +263,12 @@ function createRouter(db, cfg) {
       if (!b64) return json(res, 400, { error: '缺少图片数据' });
       const prompt =
         '请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：' +
-        '{"phones":[{"model":"手机具体型号"}]}。' +
+        '{"phones":[{"model":"手机具体型号","box":{"x1":0,"y1":0,"x2":1000,"y2":1000}}]}。' +
         '注意：1) 一台一台列出，图中出现几台就列几台；' +
-        '2) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；' +
-        '3) 如果图中有手机但看不清型号，根据外观给出最可能的型号；' +
-        '4) 如果图中没有手机，返回 {"phones":[]}。不要输出任何其他内容。';
+        '2) box 用 0~1000 归一化坐标表示该手机在图片中的边界框（左上角x1,y1，右下角x2,y2），框要尽量紧贴手机主体；' +
+        '3) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；' +
+        '4) 如果图中有手机但看不清型号，根据外观给出最可能的型号；' +
+        '5) 如果图中没有手机，返回 {"phones":[]}。不要输出任何其他内容。';
       let arkResp;
       try {
         arkResp = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
@@ -301,7 +302,19 @@ function createRouter(db, cfg) {
           ? j.choices[0].message.content : '';
         const parsed = JSON.parse(content);
         const phones = Array.isArray(parsed.phones)
-          ? parsed.phones.map((p) => String((p && p.model) || '').trim()).filter(Boolean)
+          ? parsed.phones.map((p) => {
+              const raw = typeof p === 'string' ? p : (p && p.model);
+              const model = String(raw || '').trim();
+              if (!model) return null;
+              const b = (p && p.box) || {};
+              const num = (v) => {
+                const n = Number(v);
+                return (typeof v !== 'boolean' && v !== null && v !== '' && isFinite(n)) ? n : NaN;
+              };
+              const x1 = num(b.x1), y1 = num(b.y1), x2 = num(b.x2), y2 = num(b.y2);
+              const ok = [x1, y1, x2, y2].every((n) => !isNaN(n));
+              return { model, box: ok ? { x1, y1, x2, y2 } : null };
+            }).filter(Boolean)
           : [];
         return json(res, 200, { phones });
       } catch (e) {

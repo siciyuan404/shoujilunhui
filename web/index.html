@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>手机回收 · 查价 + 验机 - 志和环保</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1677ff">
+<meta name="description" content="志和环保旗下手机回收价格查询与验机核验平台，支持小米、华为、荣耀、苹果等品牌，每日行情自动更新，让旧机找到新轮回。">
+<meta property="og:title" content="手机轮回 · 回收查价 · 验机估价">
+<meta property="og:description" content="每日行情价、芯片与主板结构核验数据库，一站式手机回收工具。">
+<meta property="og:image" content="https://sj.6200052.xyz/og-image.png">
 <style>
 :root {
   --bg: #f0f2f5;
@@ -149,6 +157,17 @@ tr:hover td { background: var(--hover-bg); }
   font-size: 16px; padding: 2px 6px; border-radius: 4px; opacity: .3; transition: all .15s;
 }
 .del-btn:hover { opacity: 1; background: #fff1f0; }
+/* ===== 设备引用按钮（复制引用 → 粘贴给 AI 可精确定位该设备） ===== */
+.ref-btn {
+  border: 1px solid var(--border); background: #fff; color: var(--accent); cursor: pointer;
+  font-size: 12px; padding: 2px 10px; border-radius: 12px; transition: all .15s;
+  font-family: inherit; white-space: nowrap; vertical-align: middle;
+}
+.ref-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+.ref-btn.copied { background: #f6ffed; border-color: #52c41a; color: #52c41a; }
+.ref-btn.detail-link { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ref-btn.detail-link:hover { background: #0958d9; border-color: #0958d9; color: #fff; }
+.row-actions { white-space: nowrap; }
 .add-row td { text-align: center; color: var(--accent); cursor: pointer; font-size: 13px; padding: 8px; }
 .add-row:hover td { background: #f0f7ff; }
 .new-row td { background: #f6ffed !important; }
@@ -244,6 +263,13 @@ tr:hover td { background: var(--hover-bg); }
   font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,.2);
 }
 .hero-year b { font-size: 15px; }
+.hero-ref-btn {
+  background: #fff; color: var(--accent); border: none; padding: 6px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15); transition: all .15s;
+}
+.hero-ref-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.22); }
+.hero-ref-btn.copied { background: #52c41a; color: #fff; }
 
 /* Body grid */
 .detail-body { display: grid; grid-template-columns: 320px 1fr; gap: 18px; padding: 20px 24px 26px; }
@@ -429,27 +455,105 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 .rec-result-row .rr-open:hover { border-color: var(--accent); color: var(--accent); }
 .rec-summary { font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
 .rec-summary b { color: var(--accent); }
-.rec-modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1500; display: flex; align-items: center; justify-content: center; }
-.rec-modal { width: min(520px, 92vw); max-height: 86vh; background: #fff; border-radius: 14px; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,0,.3); animation: fadeInUp .2s ease-out; }
-.rec-modal-head { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; }
-.rec-modal-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 2px 6px; }
-.rec-modal-body { padding: 16px 18px; overflow-y: auto; }
-.rec-form-item { margin-bottom: 16px; }
-.rec-form-item label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-.rec-form-item input {
-  width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
-  outline: none; font-family: inherit;
-}
-.rec-form-item input:focus { border-color: var(--accent); }
-.rec-form-hint { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.6; }
-.rec-modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 13px 18px; border-top: 1px solid var(--border); }
-.rec-modal-foot button { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
-.rec-modal-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.rec-modal-foot button.primary:hover { background: #0958d9; }
 @media (max-width: 600px) {
   .rec-body { padding: 14px; }
   .rec-head { padding: 14px; }
   .rec-result-row .rr-price { font-size: 17px; }
+}
+
+
+/* ===== 识别结果图上标注 ===== */
+.rec-preview { margin-top: 16px; text-align: center; }
+.rec-preview-wrap { position: relative; display: inline-block; max-width: 100%; }
+.rec-preview-wrap img {
+  max-width: 100%; max-height: 420px; border-radius: 10px; display: block; margin: 0 auto;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.rec-overlay { position: absolute; inset: 0; pointer-events: none; }
+.rec-box {
+  position: absolute; border: 2px solid #fa8c16; border-radius: 8px; box-sizing: border-box;
+  pointer-events: auto; cursor: pointer; background: rgba(250,140,22,.06);
+  transition: border-color .15s, background .15s;
+}
+.rec-box.match { border-color: #389e0d; background: rgba(56,158,13,.08); }
+.rec-box.active { border-width: 3px; box-shadow: 0 0 0 2px rgba(64,128,255,.35); }
+.rec-box-num {
+  position: absolute; left: -9px; top: -9px; width: 20px; height: 20px; border-radius: 50%;
+  background: #fa8c16; color: #fff; font-size: 12px; font-weight: 700; z-index: 3;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.rec-box.match .rec-box-num { background: #389e0d; }
+.rec-box-label {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  background: rgba(0,0,0,.75); color: #fff; font-size: 11.5px; line-height: 1.4;
+  padding: 3px 6px; border-radius: 0 0 6px 6px; text-align: left;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rec-box-label b { color: #7fe08a; }
+.rec-box.nomatch .rec-box-label b { color: #ffc069; }
+.rec-result-row { cursor: pointer; }
+.rec-result-row .rr-index {
+  flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; background: var(--accent);
+  color: #fff; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center;
+  justify-content: center; margin-right: 10px;
+}
+.rec-result-row.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(64,128,255,.22); }
+.rec-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: var(--text-secondary); }
+.rec-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+.rec-legend .lg-match { background: #389e0d; }
+.rec-legend .lg-nomatch { background: #fa8c16; }
+.rec-no-box-tip { font-size: 12px; color: #bfbfbf; margin-top: 8px; }
+
+/* ===== 设置页 ===== */
+.settings-panel { max-width: 920px; margin: 0 auto; padding: 18px 16px 30px; }
+.set-card { background: var(--card); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+.set-head { padding: 18px 20px; border-bottom: 1px solid var(--border); }
+.set-head h2 { font-size: 18px; }
+.set-sub { font-size: 13px; color: var(--text-secondary); margin-top: 5px; line-height: 1.7; }
+.set-layout { display: flex; }
+.set-nav { flex: 0 0 180px; border-right: 1px solid var(--border); padding: 12px 10px; display: flex; flex-direction: column; gap: 4px; background: #fafbfc; }
+.set-nav-item {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: none; background: transparent;
+  border-radius: 8px; cursor: pointer; font-size: 13.5px; font-family: inherit; color: var(--text);
+  text-align: left; width: 100%;
+}
+.set-nav-item:hover { background: var(--accent-light); }
+.set-nav-item.active { background: var(--accent); color: #fff; }
+.set-nav-item:disabled { color: #bbb; cursor: not-allowed; }
+.set-nav-item:disabled:hover { background: transparent; }
+.set-soon { font-size: 10px; background: #fff1f0; color: #ff7875; border: 1px solid #ffccc7; border-radius: 10px; padding: 1px 6px; margin-left: auto; }
+.set-body { flex: 1; padding: 18px 20px; min-width: 0; }
+.set-sec-title { font-size: 14.5px; font-weight: 700; margin: 4px 0 2px; }
+.set-sec-desc { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.6; }
+.set-sec + .set-sec { margin-top: 22px; }
+.set-items { display: flex; flex-direction: column; }
+.set-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 2px; border-bottom: 1px solid var(--border); }
+.set-item:last-child { border-bottom: none; }
+.set-item-info { min-width: 0; }
+.set-item-name { font-size: 13.5px; font-weight: 600; }
+.set-item-desc { font-size: 12px; color: var(--text-secondary); margin-top: 3px; line-height: 1.6; }
+.set-item input[type="text"], .set-item input[type="password"] {
+  width: 260px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; font-family: inherit;
+}
+.set-item input:focus { border-color: var(--accent); }
+.set-switch { position: relative; width: 42px; height: 24px; flex: 0 0 auto; }
+.set-switch input { display: none; }
+.set-switch .track { position: absolute; inset: 0; border-radius: 12px; background: #d9d9d9; transition: background .15s; cursor: pointer; }
+.set-switch .track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.set-switch input:checked + .track { background: var(--accent); }
+.set-switch input:checked + .track::after { transform: translateX(18px); }
+.set-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--border); background: #fafbfc; }
+.set-foot button { padding: 9px 24px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13.5px; font-family: inherit; }
+.set-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.set-foot button.primary:hover { background: #0958d9; }
+.set-about-val { font-size: 13px; color: var(--text-secondary); text-align: right; }
+@media (max-width: 700px) {
+  .set-layout { flex-direction: column; }
+  .set-nav { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 8px; }
+  .set-nav-item { white-space: nowrap; width: auto; }
+  .set-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .set-item input[type="text"], .set-item input[type="password"] { width: 100%; }
+  .set-about-val { text-align: left; }
 }
 
 /* ===== 参考图片 ===== */
@@ -623,6 +727,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
     <button class="mode-btn active" id="modePrice" onclick="navTo('#price')">💰 查价</button>
     <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
     <button class="mode-btn" id="modeRecognize" onclick="navTo('#recognize')">📷 识别</button>
+    <button class="mode-btn" id="modeSettings" onclick="navTo('#settings')">⚙ 设置</button>
   </div>
 </div>
 
@@ -689,7 +794,11 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
         <div class="rec-drop-sub">单张图片 · 支持多台手机同时识别 · 识别结果自动匹配报价库</div>
       </div>
       <div class="rec-preview" id="recPreview" style="display:none">
-        <img id="recPreviewImg" alt="待识别图片">
+        <div class="rec-preview-wrap">
+          <img id="recPreviewImg" alt="待识别图片">
+          <div class="rec-overlay" id="recOverlay"></div>
+        </div>
+        <div class="rec-no-box-tip" id="recBoxTip" style="display:none"></div>
         <div class="rec-preview-tools">
           <button onclick="clearRecPreview()">↺ 重新选择</button>
         </div>
@@ -701,33 +810,106 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   </div>
 </div>
 
-<!-- 识别设置弹窗 -->
-<div class="rec-modal-mask" id="recSettingsModal" style="display:none" onclick="if(event.target===this)closeRecSettings()">
-  <div class="rec-modal">
-    <div class="rec-modal-head">
-      <span>📷 识别设置</span>
-      <button class="rec-modal-close" onclick="closeRecSettings()">×</button>
+<!-- 设置页 -->
+<div class="settings-panel" id="settingsPanel" style="display:none">
+  <div class="set-card">
+    <div class="set-head">
+      <h2>⚙ 设置</h2>
+      <p class="set-sub">集中管理应用参数 · 后续设置项将按左侧分区持续扩展（界面显示 / 数据管理等即将上线）</p>
     </div>
-    <div class="rec-modal-body">
-      <div class="rec-form-item">
-        <label>豆包视觉模型 API Key（火山方舟）</label>
-        <input type="password" id="recArkKey" placeholder="sk-..." autocomplete="off">
-        <div class="rec-form-hint">在火山方舟控制台创建：console.volcengine.com/ark → API Key 管理</div>
-      </div>
-      <div class="rec-form-item">
-        <label>模型 ID</label>
-        <input type="text" id="recArkModel" placeholder="doubao-seed-2-1-turbo-260628" autocomplete="off">
-        <div class="rec-form-hint">需已在方舟开通，默认 doubao-seed-2-1-turbo-260628</div>
-      </div>
-      <div class="rec-form-item">
-        <label>服务地址（默认本机）</label>
-        <input type="text" id="recBaseUrl" placeholder="http://127.0.0.1:8760" autocomplete="off">
-        <div class="rec-form-hint">一般无需修改，识别请求经此服务转发到豆包</div>
+    <div class="set-layout">
+      <nav class="set-nav">
+        <button class="set-nav-item active" data-sec="sec-rec" onclick="switchSetSection(this)">📷 识别设置</button>
+        <button class="set-nav-item" data-sec="sec-display" disabled>🎨 界面显示<span class="set-soon">即将上线</span></button>
+        <button class="set-nav-item" data-sec="sec-data" disabled>🗄 数据管理<span class="set-soon">即将上线</span></button>
+        <button class="set-nav-item" data-sec="sec-about" onclick="switchSetSection(this)">ℹ️ 关于</button>
+      </nav>
+      <div class="set-body">
+        <!-- 识别设置 -->
+        <div class="set-sec" id="sec-rec">
+          <div class="set-sec-title">拍照识别</div>
+          <div class="set-sec-desc">调用豆包视觉模型识别图片中的手机，并自动匹配回收报价</div>
+          <div class="set-items">
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">豆包视觉模型 API Key（火山方舟）</div>
+                <div class="set-item-desc">console.volcengine.com/ark → API Key 管理 创建，填写后保存</div>
+              </div>
+              <input type="password" id="setArkKey" placeholder="sk-..." autocomplete="off">
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">模型 ID</div>
+                <div class="set-item-desc">需已在方舟开通，默认 doubao-seed-2-1-turbo-260628</div>
+              </div>
+              <input type="text" id="setArkModel" placeholder="doubao-seed-2-1-turbo-260628" autocomplete="off">
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">服务地址（默认本机）</div>
+                <div class="set-item-desc">一般无需修改，识别请求经此服务转发到豆包</div>
+              </div>
+              <input type="text" id="setBaseUrl" placeholder="http://127.0.0.1:8760" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="set-sec-title">识别结果标注</div>
+          <div class="set-sec-desc">识别完成后在图片上用彩色框标出每台手机的位置、型号与价格，框上编号与下方结果一一对应，点击可互相定位</div>
+          <div class="set-items">
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">在图片上标注位置</div>
+                <div class="set-item-desc">在预览图上绘制识别框，一眼看清每台手机的位置</div>
+              </div>
+              <label class="set-switch"><input type="checkbox" id="setAnnotate" checked><span class="track"></span></label>
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">标注中显示价格</div>
+                <div class="set-item-desc">识别框上直接显示该机型的回收价</div>
+              </div>
+              <label class="set-switch"><input type="checkbox" id="setAnnotatePrice" checked><span class="track"></span></label>
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">标注中显示型号</div>
+                <div class="set-item-desc">识别框上显示匹配到的机型名称</div>
+              </div>
+              <label class="set-switch"><input type="checkbox" id="setAnnotateModel" checked><span class="track"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 关于 -->
+        <div class="set-sec" id="sec-about" style="display:none">
+          <div class="set-sec-title">关于</div>
+          <div class="set-sec-desc">手机回收 · 查价 + 验机 · 每日更新</div>
+          <div class="set-items">
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">版本</div>
+                <div class="set-item-desc">桌面端 / Web / Android 多端同步</div>
+              </div>
+              <span class="set-about-val">v1.7.0</span>
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">数据来源</div>
+                <div class="set-item-desc">志和环保手机回收报价单 · 每日图片解析自动更新</div>
+              </div>
+            </div>
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">收件地址 / 联系人</div>
+                <div class="set-item-desc">深圳市福田区华强北兴华大厦A座12楼12Q · 张俊勇 13430027367</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="rec-modal-foot">
-      <button onclick="closeRecSettings()">取消</button>
-      <button class="primary" onclick="saveRecSettings()">保存</button>
+    <div class="set-foot">
+      <button class="primary" onclick="saveSettings()">保存设置</button>
     </div>
   </div>
 </div>
@@ -920,6 +1102,9 @@ let recKey = localStorage.getItem('recArkKey') || '';
 let recModel = localStorage.getItem('recArkModel') || 'doubao-seed-2-1-turbo-260628';
 let recBase = localStorage.getItem('recBaseUrl') || '';
 let recImageB64 = '';
+let recAnnotate = localStorage.getItem('recAnnotate') !== '0';
+let recAnnotatePrice = localStorage.getItem('recAnnotatePrice') !== '0';
+let recAnnotateModel = localStorage.getItem('recAnnotateModel') !== '0';
 
 function setRecStatus(msg, isErr) {
   const el = document.getElementById('recStatus');
@@ -937,6 +1122,8 @@ function onRecFile(input) {
     document.getElementById('recDrop').style.display = 'none';
     setRecStatus('');
     document.getElementById('recResults').innerHTML = '';
+    document.getElementById('recOverlay').innerHTML = '';
+    document.getElementById('recBoxTip').style.display = 'none';
   };
   reader.readAsDataURL(f);
 }
@@ -947,6 +1134,8 @@ function clearRecPreview() {
   document.getElementById('recFile').value = '';
   setRecStatus('');
   document.getElementById('recResults').innerHTML = '';
+  document.getElementById('recOverlay').innerHTML = '';
+  document.getElementById('recBoxTip').style.display = 'none';
 }
 (function bindRecDrop() {
   const drop = document.getElementById('recDrop');
@@ -965,21 +1154,36 @@ function clearRecPreview() {
     }
   });
 })();
-function openRecSettings() {
-  document.getElementById('recArkKey').value = recKey;
-  document.getElementById('recArkModel').value = recModel;
-  document.getElementById('recBaseUrl').value = recBase;
-  document.getElementById('recSettingsModal').style.display = 'flex';
+// ---- 设置页：分区切换 / 载入 / 保存 ----
+function openRecSettings() { navTo('#settings'); }
+function switchSetSection(btn) {
+  document.querySelectorAll('.set-nav-item').forEach((b) => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.set-sec').forEach((sec) => { sec.style.display = (sec.id === btn.dataset.sec) ? 'block' : 'none'; });
 }
-function closeRecSettings() { document.getElementById('recSettingsModal').style.display = 'none'; }
-function saveRecSettings() {
-  recKey = document.getElementById('recArkKey').value.trim();
-  recModel = document.getElementById('recArkModel').value.trim() || 'doubao-seed-2-1-turbo-260628';
-  recBase = document.getElementById('recBaseUrl').value.trim();
+function loadSettings() {
+  const g = (id) => document.getElementById(id);
+  g('setArkKey').value = recKey;
+  g('setArkModel').value = recModel;
+  g('setBaseUrl').value = recBase;
+  g('setAnnotate').checked = recAnnotate;
+  g('setAnnotatePrice').checked = recAnnotatePrice;
+  g('setAnnotateModel').checked = recAnnotateModel;
+}
+function saveSettings() {
+  const g = (id) => document.getElementById(id);
+  recKey = g('setArkKey').value.trim();
+  recModel = g('setArkModel').value.trim() || 'doubao-seed-2-1-turbo-260628';
+  recBase = g('setBaseUrl').value.trim();
+  recAnnotate = g('setAnnotate').checked;
+  recAnnotatePrice = g('setAnnotatePrice').checked;
+  recAnnotateModel = g('setAnnotateModel').checked;
   localStorage.setItem('recArkKey', recKey);
   localStorage.setItem('recArkModel', recModel);
   localStorage.setItem('recBaseUrl', recBase);
-  closeRecSettings();
+  localStorage.setItem('recAnnotate', recAnnotate ? '1' : '0');
+  localStorage.setItem('recAnnotatePrice', recAnnotatePrice ? '1' : '0');
+  localStorage.setItem('recAnnotateModel', recAnnotateModel ? '1' : '0');
+  showToast('设置已保存', 'ok');
   setRecStatus(recKey ? '识别设置已保存' : '尚未配置豆包 API Key，识别将无法进行', !recKey);
 }
 
@@ -1036,22 +1240,74 @@ function recMatchOne(raw) {
 function renderRecResults(rows) {
   const el = document.getElementById('recResults');
   const matched = rows.filter(r => r.row).length;
-  const html = rows.map(r => {
+  const html = rows.map((r, i) => {
+    const idx = i + 1;
     if (r.row) {
       const m = r.row;
-      return '<div class="rec-result-row">' +
-        '<div><div class="rr-model">' + escAttr(m.model) + '<span class="rr-brand-tag">' + escAttr(m.brand) + '</span><span class="rr-matched">已收录</span></div>' +
-        '<div class="rr-recognized">识别为：' + escAttr(r.recognized) + (m.category ? ' · ' + escAttr(m.category) : '') + '</div></div>' +
+      return '<div class="rec-result-row" data-idx="' + idx + '" onclick="selectRecItem(' + i + ')">' +
+        '<div style="display:flex;align-items:center"><span class="rr-index">' + idx + '</span><div>' +
+        '<div class="rr-model">' + escAttr(m.model) + '<span class="rr-brand-tag">' + escAttr(m.brand) + '</span><span class="rr-matched">已收录</span></div>' +
+        '<div class="rr-recognized">识别为：' + escAttr(r.recognized) + (m.category ? ' · ' + escAttr(m.category) : '') + '</div></div></div>' +
         '<div style="display:flex;align-items:center;gap:10px"><span class="rr-price">' + escAttr(m.price) + ' 元</span>' +
-        '<button class="rr-open" onclick="location.hash=\'#detail|' + encodeURIComponent(m.brand) + '|' + encodeURIComponent(m.model) + '\'">详情</button></div>' +
+        '<button class="rr-open" onclick="event.stopPropagation();location.hash=\'#detail|' + encodeURIComponent(m.brand) + '|' + encodeURIComponent(m.model) + '\'">详情</button></div>' +
         '</div>';
     }
-    return '<div class="rec-result-row">' +
-      '<div><div class="rr-model">' + escAttr(r.recognized) + '</div>' +
-      '<div class="rr-recognized">识别成功，但报价库未收录该型号</div></div>' +
+    return '<div class="rec-result-row" data-idx="' + idx + '" onclick="selectRecItem(' + i + ')">' +
+      '<div style="display:flex;align-items:center"><span class="rr-index" style="background:#fa8c16">' + idx + '</span><div>' +
+      '<div class="rr-model">' + escAttr(r.recognized) + '</div>' +
+      '<div class="rr-recognized">识别成功，但报价库未收录该型号</div></div></div>' +
       '<span class="rr-price none">暂无报价</span></div>';
   }).join('');
-  el.innerHTML = '<div class="rec-summary">识别 ' + rows.length + ' 台，其中 <b>' + matched + '</b> 台已匹配到报价</div>' + html;
+  el.innerHTML = '<div class="rec-summary">识别 ' + rows.length + ' 台，其中 <b>' + matched + '</b> 台已匹配到报价</div>' + html +
+    '<div class="rec-legend"><span><i class="lg-match"></i>已匹配到报价</span><span><i class="lg-nomatch"></i>未收录·暂无报价</span><span>点击色块 / 结果行可互相定位</span></div>';
+  renderRecBoxes(rows);
+}
+
+// ---- 图上标注：把每台手机的位置/型号/价格画到预览图上 ----
+function renderRecBoxes(rows) {
+  const overlay = document.getElementById('recOverlay');
+  const tip = document.getElementById('recBoxTip');
+  if (!overlay) return;
+  overlay.innerHTML = '';
+  if (!recAnnotate || !rows.length) { if (tip) tip.style.display = 'none'; return; }
+  const anyBox = rows.some(r => r.box);
+  if (!anyBox) {
+    if (tip) { tip.textContent = '本次识别未返回位置坐标，已按下方列表展示'; tip.style.display = 'block'; }
+    return;
+  }
+  if (tip) tip.style.display = 'none';
+  const toPct = (v) => { let x = Number(v); if (x > 1) x = x / 1000; return Math.max(0, Math.min(100, x * 100)); };
+  rows.forEach((r, i) => {
+    const b = r.box;
+    if (!b) return;
+    const left = toPct(b.x1), top = toPct(b.y1), right = toPct(b.x2), bot = toPct(b.y2);
+    const w = Math.max(0, right - left), h = Math.max(0, bot - top);
+    if (w <= 0.1 || h <= 0.1) return;
+    const m = r.row;
+    const parts = [];
+    if (recAnnotateModel) parts.push(escAttr(m ? m.model : r.recognized));
+    if (recAnnotatePrice) parts.push(m ? '<b>' + escAttr(m.price) + '元</b>' : '<b>未收录</b>');
+    const label = parts.length ? '<div class="rec-box-label">' + parts.join(' · ') + '</div>' : '';
+    const box = document.createElement('div');
+    box.className = 'rec-box ' + (m ? 'match' : 'nomatch');
+    box.style.left = left + '%';
+    box.style.top = top + '%';
+    box.style.width = w + '%';
+    box.style.height = h + '%';
+    box.innerHTML = '<span class="rec-box-num">' + (i + 1) + '</span>' + label;
+    box.onclick = (e) => { e.stopPropagation(); selectRecItem(i, true); };
+    overlay.appendChild(box);
+  });
+}
+
+// ---- 点击编号/色块：图上标注与下方结果行互相高亮定位 ----
+function selectRecItem(i, fromBox) {
+  const rows = document.querySelectorAll('#recResults .rec-result-row');
+  const boxes = document.querySelectorAll('#recOverlay .rec-box');
+  rows.forEach((el, k) => el.classList.toggle('active', k === i));
+  boxes.forEach((el, k) => el.classList.toggle('active', k === i));
+  const target = fromBox ? rows[i] : boxes[i];
+  if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 async function startRecognize() {
   const btn = document.getElementById('recBtn');
@@ -1068,7 +1324,10 @@ async function startRecognize() {
     });
     const phones = (res && res.phones) || [];
     if (!phones.length) { setRecStatus('图片中未识别到手机，可换一张更清晰的照片重试'); btn.disabled = false; return; }
-    const rows = phones.map(p => ({ recognized: p, row: recMatchOne(p) }));
+    const rows = phones.map(p => {
+      const name = typeof p === 'string' ? p : (p && p.model) || '';
+      return { recognized: name, box: (p && p.box) || null, row: recMatchOne(name) };
+    });
     renderRecResults(rows);
     const matched = rows.filter(r => r.row).length;
     setRecStatus('识别 ' + phones.length + ' 台，其中 ' + matched + ' 台已匹配到报价');
@@ -1091,7 +1350,22 @@ function route() {
     const model = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
     showListControls(false);
     document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
     renderDetail(brand, model);
+    return;
+  }
+  if (h === '#settings') {
+    currentMode = 'settings';
+    lastMode = 'settings';
+    document.getElementById('searchBar').style.display = 'none';
+    document.getElementById('tabsWrap').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('settingsPanel').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+    loadSettings();
+    updateModeButtons();
     return;
   }
   if (h === '#recognize') {
@@ -1101,6 +1375,8 @@ function route() {
     document.getElementById('tabsWrap').style.display = 'none';
     document.getElementById('statsBar').style.display = 'none';
     document.getElementById('recognizePanel').style.display = 'block';
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
     updateModeButtons();
     return;
   }
@@ -1111,6 +1387,8 @@ function route() {
   currentBrand = '全部';
   showListControls(true);
   document.getElementById('recognizePanel').style.display = 'none';
+  document.getElementById('settingsPanel').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
   updateModeButtons();
   initTabs();
   render();
@@ -1125,6 +1403,7 @@ function updateModeButtons() {
   document.getElementById('modePrice').classList.toggle('active', currentMode === 'price');
   document.getElementById('modeVerify').classList.toggle('active', currentMode === 'verify');
   document.getElementById('modeRecognize').classList.toggle('active', currentMode === 'recognize');
+  document.getElementById('modeSettings').classList.toggle('active', currentMode === 'settings');
   document.getElementById('sortBtns').style.display = currentMode === 'price' ? 'flex' : 'none';
   document.getElementById('verifyBtns').style.display = currentMode === 'verify' ? 'flex' : 'none';
   document.getElementById('searchInput').placeholder =
@@ -1375,6 +1654,43 @@ async function delModel(id) {
     renderPrice();
     showToast('已删除', 'success');
   } catch (e) { showToast('删除失败: ' + e.message, 'error'); }
+}
+
+// ===== 设备引用（复制 → 粘贴给 AI 可精确定位该设备数据） =====
+// 引用文本以「设备ID」为核心，AI 拿到后可直接 GET /api/models/<id> 定位并补充
+function buildRefText(id) {
+  const found = findModelById(id);
+  if (!found) return '';
+  const m = found.m, g = found.g;
+  return `【手机设备引用】设备ID:${m.id}｜品牌:${g.brand}｜分类:${g.category}｜型号:${m.model}`;
+}
+function fallbackCopy(text, done) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  done();
+}
+function copyRef(id, btn) {
+  const text = buildRefText(id);
+  if (!text) { showToast('未找到该设备', 'error'); return; }
+  const done = () => {
+    showToast('已复制设备引用，粘贴给 AI 即可精确定位并补充数据', 'success');
+    if (btn) {
+      const old = btn.textContent;
+      btn.textContent = '已复制';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1500);
+    }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
 }
 
 // ---------- 参考图片编辑 ----------
@@ -1636,7 +1952,7 @@ function renderPrice() {
   let html = '';
   Object.keys(byCategory).forEach(cat => {
     html += `<div class="category-section"><div class="category-title">${cat}</div>`;
-    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>规格</th><th>备注</th><th>参考图</th><th style="width:36px"></th></tr></thead><tbody>`;
+    html += `<div class="table-wrap"><table><thead><tr><th>型号</th><th>报价(元)</th><th>规格</th><th>备注</th><th>参考图</th><th style="width:175px">操作</th></tr></thead><tbody>`;
     byCategory[cat].forEach(item => {
       const modelName = highlightMatch(item.model, currentSearch);
       const noteText = item.note || '';
@@ -1648,7 +1964,11 @@ function renderPrice() {
         <td>${specBadgesHtml(item)}</td>
         <td class="note-cell"><span class="edit-note"${editAttr} data-field="note" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${noteText || ''}</span></td>
         <td>${imgCellHtml(item)}</td>
-        <td>${canEdit ? `<button class="del-btn" onclick="delModel('${item.id}')" title="删除">×</button>` : ''}</td>
+        <td class="row-actions">
+          <button class="ref-btn detail-link" onclick="event.stopPropagation();navTo('#detail|${enc(item.brand)}|${enc(item.model)}')" title="查看该设备详情页：机型档案 / 分容分版本价格 / 参考图片 / 主板结构">详情</button>
+          <button class="ref-btn" onclick="copyRef(${item.id}, this)" title="复制设备引用，粘贴给 AI 即可精确定位该设备并补充数据">引用</button>
+          ${canEdit ? `<button class="del-btn" onclick="delModel('${item.id}')" title="删除">×</button>` : ''}
+        </td>
       </tr>`;
     });
     if (canEdit) html += `<tr class="add-row" onclick="addModel('${enc(cat)}')"><td colspan="6">+ 添加型号</td></tr>`;
@@ -1734,6 +2054,7 @@ function renderDetail(brand, model) {
     <div class="hero-badges">
       <span class="hero-chip">${heroChip}</span>
       <span class="hero-year">发布年份 <b>${heroYear}</b></span>
+      ${dbModel && dbModel.id ? `<button class="hero-ref-btn" onclick="copyRef(${dbModel.id}, this)" title="复制设备引用，粘贴给 AI 即可精确定位该设备并补充数据">引用该设备</button>` : ''}
     </div>
   </div>`;
 
