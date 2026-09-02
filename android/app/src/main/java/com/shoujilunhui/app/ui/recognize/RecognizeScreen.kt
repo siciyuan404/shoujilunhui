@@ -86,6 +86,7 @@ import kotlin.math.roundToInt
 @Composable
 fun RecognizeScreen(
     onBack: () -> Unit,
+    onOpenHistory: () -> Unit = {},
     vm: RecognizeViewModel = viewModel(),
 ) {
     val ui by vm.ui.collectAsState()
@@ -123,6 +124,11 @@ fun RecognizeScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                    }
+                },
+                actions = {
+                    TextButton(onClick = onOpenHistory) {
+                        Text("历史", color = Color.White, fontSize = 14.sp)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -207,7 +213,7 @@ fun RecognizeScreen(
                 // 总价卡片 + 报价隐藏/显示切换
                 item { TotalCard(ui, vm) }
 
-                itemsIndexed(ui.results) { index, r ->
+                itemsIndexed(ui.results) { _, r ->
                     Card(
                         shape = RoundedCornerShape(10.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -225,7 +231,7 @@ fun RecognizeScreen(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
-                                    "${index + 1}",
+                                    "${r.seq}",
                                     color = Color.White,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
@@ -328,6 +334,7 @@ private fun ThumbnailStrip(ui: RecognizeUiState, vm: RecognizeViewModel) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.weight(1f)) {
             itemsIndexed(ui.previewUris) { index, uri ->
                 val selected = index == ui.selectedIndex
+                val imgItems = ui.results.filter { it.imageIndex == index }
                 Box(
                     Modifier
                         .size(56.dp)
@@ -341,6 +348,34 @@ private fun ThumbnailStrip(ui: RecognizeUiState, vm: RecognizeViewModel) {
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
                     )
+                    // 每张图都叠加识别框标注
+                    if (imgItems.isNotEmpty()) {
+                        Canvas(Modifier.fillMaxSize()) {
+                            imgItems.forEach { r ->
+                                val b = r.box ?: return@forEach
+                                val l = b.x1 / 1000f * size.width
+                                val t = b.y1 / 1000f * size.height
+                                val w = (b.x2 - b.x1) / 1000f * size.width
+                                val h = (b.y2 - b.y1) / 1000f * size.height
+                                if (w <= 0f || h <= 0f) return@forEach
+                                drawRect(
+                                    if (r.row != null) MatchGreen else MatchOrange,
+                                    topLeft = Offset(l, t), size = Size(w, h), style = Stroke(width = 2f),
+                                )
+                            }
+                        }
+                        val seqs = imgItems.map { it.seq }
+                        Text(
+                            if (seqs.size == 1) "${seqs[0]}" else "${seqs.first()}-${seqs.last()}",
+                            color = Color.White,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .background(Color(0xAA000000), RoundedCornerShape(3.dp))
+                                .padding(horizontal = 3.dp, vertical = 1.dp),
+                        )
+                    }
                     Box(
                         Modifier
                             .align(Alignment.TopEnd)
@@ -478,7 +513,7 @@ private fun buildAnnotationLabel(
     showChannelPrice: Boolean,
     priceFor: (RecognizeResult) -> String,
 ): String {
-    val sb = StringBuilder().append(i + 1)
+    val sb = StringBuilder().append(r.seq)
     if (showModel) { sb.append(' ').append(r.model) }
     if (showPrice) {
         sb.append(if (showModel) " · " else " ")

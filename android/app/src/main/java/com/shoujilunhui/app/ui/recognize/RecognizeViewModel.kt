@@ -6,9 +6,12 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
+import com.shoujilunhui.app.HistoryItem
+import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.recognize.PhoneBox
 import com.shoujilunhui.app.recognize.PhoneRecognizer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -21,6 +24,8 @@ data class RecognizeResult(
     val row: ModelRow?,
     /** 该结果来自第几张图片（与 previewUris 下标对应） */
     val imageIndex: Int = 0,
+    /** 全局连续编号（跨图片连续，1、2、3…N） */
+    val seq: Int = 0,
 )
 
 data class RecognizeUiState(
@@ -43,6 +48,8 @@ data class RecognizeUiState(
 class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val config = ConfigStore(app)
+
+    private val historyStore by lazy { HistoryStore(getApplication()) }
 
     private val _ui = MutableStateFlow(
         RecognizeUiState(
@@ -145,6 +152,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                 val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model)
                 val all = mutableListOf<RecognizeResult>()
                 var failMsg: String? = null
+                var seq = 1
                 uris.forEachIndexed { idx, uri ->
                     _ui.update {
                         it.copy(status = if (uris.size == 1)
@@ -156,7 +164,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                         val b64 = recognizer.bitmapToBase64(getApplication(), uri)
                         val phones = recognizer.recognizePhones(b64)
                         phones.forEach { p ->
-                            all += RecognizeResult(p.model, p.box, recognizer.queryPrice(p.model), idx)
+                            all += RecognizeResult(p.model, p.box, recognizer.queryPrice(p.model), idx, seq++)
                         }
                     } catch (e: Exception) {
                         failMsg = "第 ${idx + 1} 张识别失败：${e.message}"
@@ -170,6 +178,29 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                 val matched = all.count { it.row != null }
                 val total = channelTotal(all)
                 val tail = if (failMsg != null) "（${failMsg}）" else ""
+                // 自动保存历史（复制图片到私有目录 + 明细入库；失败不影响展示）
+                val urisToSave = _ui.value.previewUris
+                val chTotal = channelTotal(all)
+                val cuTotal = customerTotal(all)
+                val items = all.map { r ->
+                    HistoryItem(
+                        seq = r.seq,
+                        imageIndex = r.imageIndex,
+                        model = r.model,
+                        recognized = r.model,
+                        matched = r.row != null,
+                        brand = r.row?.brand ?: "",
+                        category = r.row?.category ?: "",
+                        channelPrice = priceValue(r.row),
+                        customerPrice = customerPrice(r.row),
+                        box = r.box,
+                    )
+                }
+                viewModelScope.launch(Dispatchers.IO) {
+                    try {
+                        historyStore.save(getApplication(), urisToSave, items, all.size, matched, chTotal, cuTotal, config.priceRatio)
+                    } catch (_: Exception) {}
+                }
                 _ui.update {
                     it.copy(
                         results = all,

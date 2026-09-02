@@ -6,9 +6,13 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.shoujilunhui.app.ui.history.HistoryDetailScreen
+import com.shoujilunhui.app.ui.history.HistoryListScreen
 import com.shoujilunhui.app.ui.home.HomeScreen
 import com.shoujilunhui.app.ui.recognize.RecognizeScreen
 import com.shoujilunhui.app.ui.settings.SettingsScreen
@@ -41,6 +45,8 @@ object Routes {
     const val HOME = "home"
     const val RECOGNIZE = "recognize"
     const val SETTINGS = "settings"
+    const val HISTORY = "history"
+    const val HISTORY_DETAIL = "history/{id}"
 }
 
 @Composable
@@ -54,10 +60,25 @@ fun AppNav() {
             )
         }
         composable(Routes.RECOGNIZE) {
-            RecognizeScreen(onBack = { nav.popBackStack() })
+            RecognizeScreen(
+                onBack = { nav.popBackStack() },
+                onOpenHistory = { nav.navigate(Routes.HISTORY) },
+            )
         }
         composable(Routes.SETTINGS) {
             SettingsScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.HISTORY) {
+            HistoryListScreen(
+                onBack = { nav.popBackStack() },
+                onOpenDetail = { id -> nav.navigate(Routes.HISTORY_DETAIL.replace("{id}", id.toString())) },
+            )
+        }
+        composable(
+            Routes.HISTORY_DETAIL,
+            arguments = listOf(navArgument("id") { type = NavType.LongType })
+        ) { entry ->
+            HistoryDetailScreen(entryId = entry.arguments?.getLong("id") ?: 0L, onBack = { nav.popBackStack() })
         }
     }
 }
