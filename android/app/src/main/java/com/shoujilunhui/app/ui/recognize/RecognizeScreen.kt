@@ -7,6 +7,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -21,11 +23,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -48,6 +53,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -91,14 +97,22 @@ fun RecognizeScreen(
 
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
         val uri = cameraUri
-        if (ok && uri != null) vm.onImagePicked(uri)
+        if (ok && uri != null) vm.addImages(listOf(uri))
     }
-    val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let(vm::onImagePicked)
+    // 相册多选
+    val pickImages = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+        if (uris.isNotEmpty()) vm.addImages(uris)
     }
 
     LaunchedEffect(message) {
         message?.let { snackbar.showSnackbar(it); vm.clearMessage() }
+    }
+
+    // 单台报价展示文本：渠道价 or 客户价（隐藏渠道价）
+    val priceFor: (RecognizeResult) -> String = { r ->
+        if (r.row == null) "未收录"
+        else if (ui.showChannelPrice) "${r.row.price}元"
+        else "${vm.fmt(vm.customerPrice(r.row) ?: 0.0)}元"
     }
 
     Scaffold(
@@ -124,8 +138,13 @@ fun RecognizeScreen(
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            // 预览 + 图上标注
-            item { PreviewWithOverlay(ui) }
+            // 预览（多图大图 + 图上标注）
+            item { PreviewWithOverlay(ui, priceFor) }
+
+            // 缩略图列表（可删除 / 点击切换大图）
+            if (ui.previewUris.isNotEmpty()) {
+                item { ThumbnailStrip(ui, vm) }
+            }
 
             // 取图
             item {
@@ -149,7 +168,7 @@ fun RecognizeScreen(
                         shape = RoundedCornerShape(10.dp),
                     ) { Text("拍照", fontSize = 13.sp) }
                     OutlinedButton(
-                        onClick = { pickImage.launch("image/*") },
+                        onClick = { pickImages.launch("image/*") },
                         modifier = Modifier.weight(1f).height(42.dp),
                         shape = RoundedCornerShape(10.dp),
                     ) { Text("从相册选择", fontSize = 13.sp) }
@@ -184,6 +203,10 @@ fun RecognizeScreen(
 
             if (ui.results.isNotEmpty()) {
                 item { Text("识别结果", fontSize = 14.sp, fontWeight = FontWeight.Bold) }
+
+                // 总价卡片 + 报价隐藏/显示切换
+                item { TotalCard(ui, vm) }
+
                 itemsIndexed(ui.results) { index, r ->
                     Card(
                         shape = RoundedCornerShape(10.dp),
@@ -195,7 +218,6 @@ fun RecognizeScreen(
                             Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            // 编号与图上标注一一对应
                             Box(
                                 Modifier
                                     .size(26.dp)
@@ -227,8 +249,21 @@ fun RecognizeScreen(
                                     overflow = TextOverflow.Ellipsis,
                                 )
                             }
+                            if (ui.previewUris.size > 1) {
+                                Text(
+                                    "图${r.imageIndex + 1}",
+                                    fontSize = 10.sp,
+                                    color = TextSecondary,
+                                    modifier = Modifier
+                                        .background(Color(0xFFF0F2F5), RoundedCornerShape(4.dp))
+                                        .padding(horizontal = 5.dp, vertical = 2.dp),
+                                )
+                                Spacer(Modifier.width(8.dp))
+                            }
                             Text(
-                                r.row?.let { "¥${it.price}" } ?: "—",
+                                if (r.row == null) "—"
+                                else if (ui.showChannelPrice) "¥${r.row.price}"
+                                else "¥${vm.fmt(vm.customerPrice(r.row) ?: 0.0)}",
                                 color = if (r.row != null) PriceRed else TextSecondary,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
@@ -241,11 +276,103 @@ fun RecognizeScreen(
     }
 }
 
-// ---------- 预览 + 图上标注 ----------
+// ---------- 总价卡片 + 报价显示模式切换（隐藏渠道价） ----------
 
 @Composable
-private fun PreviewWithOverlay(ui: RecognizeUiState) {
-    val uri = ui.previewUri
+private fun TotalCard(ui: RecognizeUiState, vm: RecognizeViewModel) {
+    val ratio = vm.priceRatio()
+    val showChannel = ui.showChannelPrice
+    val total = if (showChannel) vm.channelTotal(ui.results) else vm.customerTotal(ui.results)
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF3E3)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    if (showChannel) "渠道报价总计（内部）" else "客户报价总计（比例 ${ratio}%）",
+                    fontSize = 12.sp,
+                    color = TextSecondary,
+                )
+                Text(
+                    "¥${vm.fmt(total)}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PriceRed,
+                )
+                if (showChannel) {
+                    Text(
+                        "客户价 = 渠道价 × ${ratio}%，点击右侧按钮切换后隐藏渠道价",
+                        fontSize = 10.5.sp,
+                        color = TextSecondary,
+                    )
+                }
+            }
+            TextButton(onClick = vm::togglePriceMode) {
+                Text(if (showChannel) "隐藏报价" else "显示渠道价", fontSize = 12.5.sp)
+            }
+        }
+    }
+}
+
+// ---------- 缩略图横向列表 ----------
+
+@Composable
+private fun ThumbnailStrip(ui: RecognizeUiState, vm: RecognizeViewModel) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.weight(1f)) {
+            itemsIndexed(ui.previewUris) { index, uri ->
+                val selected = index == ui.selectedIndex
+                Box(
+                    Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .border(2.dp, if (selected) Accent else Color(0xFFDDE1E6), RoundedCornerShape(8.dp))
+                        .clickable { vm.selectImage(index) },
+                ) {
+                    AsyncImage(
+                        model = uri,
+                        contentDescription = "第${index + 1}张",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                    Box(
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .size(18.dp)
+                            .background(Color(0x99000000), CircleShape)
+                            .clickable { vm.removeImage(index) },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = "删除",
+                            tint = Color.White,
+                            modifier = Modifier.size(11.dp),
+                        )
+                    }
+                }
+            }
+        }
+        TextButton(onClick = { while (ui.previewUris.isNotEmpty()) vm.removeImage(0) }) {
+            Text("清空", fontSize = 12.sp, color = TextSecondary)
+        }
+    }
+}
+
+// ---------- 预览 + 图上标注（多图：只画当前选中图的结果） ----------
+
+@Composable
+private fun PreviewWithOverlay(
+    ui: RecognizeUiState,
+    priceFor: (RecognizeResult) -> String,
+) {
+    val uri = ui.previewUris.getOrNull(ui.selectedIndex)
     if (uri == null) {
         Box(
             Modifier
@@ -254,10 +381,12 @@ private fun PreviewWithOverlay(ui: RecognizeUiState) {
                 .background(Color(0xFFE9EDF2), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center,
         ) {
-            Text("拍照或从相册选择手机照片", color = TextSecondary, fontSize = 13.sp)
+            Text("拍照或从相册选择手机照片（可多张一起识别）", color = TextSecondary, fontSize = 13.sp)
         }
         return
     }
+    val imgSize = ui.imageSizes.getOrNull(ui.selectedIndex)
+    val currentResults = ui.results.filter { it.imageIndex == ui.selectedIndex }
     BoxWithConstraints(
         Modifier
             .fillMaxWidth()
@@ -267,7 +396,6 @@ private fun PreviewWithOverlay(ui: RecognizeUiState) {
         val density = LocalDensity.current
         val maxWpx = with(density) { maxWidth.toPx() }
         val maxHpx = with(density) { 400.dp.toPx() }
-        val imgSize = ui.imageSize
         val hasSize = imgSize != null && imgSize.first > 0 && imgSize.second > 0
         val (dispWpx, dispHpx) = if (hasSize) {
             val s = imgSize!!
@@ -288,11 +416,13 @@ private fun PreviewWithOverlay(ui: RecognizeUiState) {
                 contentScale = if (hasSize) ContentScale.FillBounds else ContentScale.Fit,
                 modifier = Modifier.fillMaxSize(),
             )
-            if (ui.results.isNotEmpty() && ui.annotate) {
+            if (currentResults.isNotEmpty() && ui.annotate) {
                 RecognitionOverlay(
-                    results = ui.results,
+                    results = currentResults,
                     showPrice = ui.annotatePrice,
                     showModel = ui.annotateModel,
+                    showChannelPrice = ui.showChannelPrice,
+                    priceFor = priceFor,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -306,6 +436,8 @@ private fun RecognitionOverlay(
     results: List<RecognizeResult>,
     showPrice: Boolean,
     showModel: Boolean,
+    showChannelPrice: Boolean,
+    priceFor: (RecognizeResult) -> String,
     modifier: Modifier = Modifier,
 ) {
     val textMeasurer = rememberTextMeasurer()
@@ -322,7 +454,7 @@ private fun RecognitionOverlay(
             // 外框
             drawRect(color, topLeft = Offset(l, t), size = Size(w, h), style = Stroke(width = 4f))
             // 顶部标签条：编号 + 型号 + 价格
-            val label = buildAnnotationLabel(i, r, showPrice, showModel)
+            val label = buildAnnotationLabel(i, r, showPrice, showModel, showChannelPrice, priceFor)
             val style = TextStyle(color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             val layout = textMeasurer.measure(
                 text = AnnotatedString(label),
@@ -338,12 +470,20 @@ private fun RecognitionOverlay(
     }
 }
 
-private fun buildAnnotationLabel(i: Int, r: RecognizeResult, showPrice: Boolean, showModel: Boolean): String {
+private fun buildAnnotationLabel(
+    i: Int,
+    r: RecognizeResult,
+    showPrice: Boolean,
+    showModel: Boolean,
+    showChannelPrice: Boolean,
+    priceFor: (RecognizeResult) -> String,
+): String {
     val sb = StringBuilder().append(i + 1)
     if (showModel) { sb.append(' ').append(r.model) }
     if (showPrice) {
         sb.append(if (showModel) " · " else " ")
-        sb.append(if (r.row != null) "${r.row!!.price}元" else "未收录")
+        if (r.row != null && !showChannelPrice) sb.append("客")
+        sb.append(priceFor(r))
     }
     return sb.toString()
 }

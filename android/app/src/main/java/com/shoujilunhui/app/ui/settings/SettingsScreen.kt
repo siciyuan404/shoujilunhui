@@ -74,6 +74,7 @@ fun SettingsScreen(
     var provider by remember { mutableStateOf(vm.initialProvider) }
     var deepseekKey by remember { mutableStateOf(vm.initialDeepseekKey) }
     var deepseekModel by remember { mutableStateOf(vm.initialDeepseekModel) }
+    var priceRatioText by remember { mutableStateOf(vm.initialPriceRatio.toString()) }
     var annotate by remember { mutableStateOf(vm.initialAnnotate) }
     var annotatePrice by remember { mutableStateOf(vm.initialAnnotatePrice) }
     var annotateModel by remember { mutableStateOf(vm.initialAnnotateModel) }
@@ -171,6 +172,15 @@ fun SettingsScreen(
                         Spacer(Modifier.height(8.dp))
                         Field(value = arkModel, onChange = { arkModel = it }, label = "视觉模型 ID（默认 doubao-seed-character-260628）")
                     }
+                    Spacer(Modifier.height(12.dp))
+                    Text("客户报价比例", fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = TextSecondary)
+                    Spacer(Modifier.height(6.dp))
+                    Field(
+                        value = priceRatioText,
+                        onChange = { priceRatioText = it.filter(Char::isDigit).take(3) },
+                        label = "展示给客户的报价 = 渠道价 × 比例（默认 60，可填 50/60/70）",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    )
                 }
             }
 
@@ -228,7 +238,7 @@ fun SettingsScreen(
             item {
                 Spacer(Modifier.height(4.dp))
                 Button(
-                    onClick = { vm.save(url, key, arkKey, arkModel, provider, deepseekKey, deepseekModel, annotate, annotatePrice, annotateModel) },
+                    onClick = { vm.save(url, key, arkKey, arkModel, provider, deepseekKey, deepseekModel, priceRatioText.toIntOrNull() ?: 60, annotate, annotatePrice, annotateModel) },
                     modifier = Modifier.fillMaxWidth().height(46.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) { Text("保存", fontSize = 15.sp, fontWeight = FontWeight.Medium) }

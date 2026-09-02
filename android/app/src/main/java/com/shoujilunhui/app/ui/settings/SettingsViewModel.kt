@@ -27,6 +27,7 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val initialAnnotate = config.annotate
     val initialAnnotatePrice = config.annotatePrice
     val initialAnnotateModel = config.annotateModel
+    val initialPriceRatio = config.priceRatio
 
     /** first=是否成功, second=提示文案 */
     private val _testResult = MutableStateFlow<Pair<Boolean, String>?>(null)
@@ -59,6 +60,7 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         provider: String,
         deepseekKey: String,
         deepseekModel: String,
+        priceRatio: Int,
         annotate: Boolean,
         annotatePrice: Boolean,
         annotateModel: Boolean,
@@ -75,6 +77,7 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         config.recProvider = provider
         config.deepseekApiKey = deepseekKey.trim()
         config.deepseekModel = deepseekModel.trim()
+        config.priceRatio = priceRatio
         config.annotate = annotate
         config.annotatePrice = annotatePrice
         config.annotateModel = annotateModel
