@@ -70,6 +70,30 @@ class PhoneRecognizer(
         return Bitmap.createScaledBitmap(src, (w * ratio).toInt(), (h * ratio).toInt(), true)
     }
 
+    /**
+     * 单台补救：按归一化 box 裁剪图片中该手机所在区域，放大后单独重新识别。
+     * 用于整体识别不准确时，对某台手机单独换更高级模型重试。
+     */
+    suspend fun recognizeCrop(context: Context, uri: Uri, box: PhoneBox): List<RecognizedPhone> =
+        withContext(Dispatchers.IO) {
+            val input = context.contentResolver.openInputStream(uri) ?: throw Exception("无法读取图片")
+            val src = BitmapFactory.decodeStream(input)
+            input.close()
+            if (src == null) throw Exception("图片解码失败")
+            val w = src.width
+            val h = src.height
+            val x1 = (box.x1 / 1000f * w).toInt().coerceIn(0, w - 1)
+            val y1 = (box.y1 / 1000f * h).toInt().coerceIn(0, h - 1)
+            val x2 = (box.x2 / 1000f * w).toInt().coerceIn(x1 + 1, w)
+            val y2 = (box.y2 / 1000f * h).toInt().coerceIn(y1 + 1, h)
+            val crop = Bitmap.createBitmap(src, x1, y1, x2 - x1, y2 - y1)
+            val scaled = scaleBitmap(crop, 1024)
+            val baos = ByteArrayOutputStream()
+            scaled.compress(Bitmap.CompressFormat.JPEG, 92, baos)
+            val b64 = Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP)
+            recognizePhones(b64)
+        }
+
     suspend fun recognizePhones(base64: String): List<RecognizedPhone> = withContext(Dispatchers.IO) {
         val body = JSONObject().apply {
             put("model", model)

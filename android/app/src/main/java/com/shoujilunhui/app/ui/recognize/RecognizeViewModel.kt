@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
 import com.shoujilunhui.app.HistoryItem
 import com.shoujilunhui.app.HistoryStore
+import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.recognize.PhoneBox
 import com.shoujilunhui.app.recognize.PhoneRecognizer
@@ -43,6 +44,8 @@ data class RecognizeUiState(
     val annotateModel: Boolean = true,
     /** true=显示渠道报价（内部用）；false=显示客户报价（渠道价×比例，隐藏渠道价，给客户看） */
     val showChannelPrice: Boolean = true,
+    /** 识别页当前选中的模型 ID（空=按服务商默认），可在识别页直接切换 */
+    val model: String = "",
 )
 
 class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
@@ -116,31 +119,122 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun serverBaseUrl(): String = config.baseUrl
+
     /** 切换 渠道报价 / 客户报价（隐藏渠道价） */
     fun togglePriceMode() {
         _ui.update { it.copy(showChannelPrice = !it.showChannelPrice) }
+    }
+
+    // ===== 模型切换：识别页可直接选择不同能力的视觉模型 =====
+
+    /** 当前服务商的预设模型列表（识别页快捷切换；也可自定义输入） */
+    fun modelPresets(): List<String> = if (config.recProvider == "deepseek")
+        listOf("deepseek-v4-flash-vision-exp")
+    else
+        listOf("doubao-seed-character-260628", "doubao-seed-2-1-turbo-260628")
+
+    fun defaultModel(): String = if (config.recProvider == "deepseek")
+        PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL else PhoneRecognizer.DEFAULT_ARK_MODEL
+
+    /** 当前生效的模型（选中为空时用服务商默认） */
+    fun activeModel(): String = _ui.value.model.ifBlank { defaultModel() }
+
+    fun selectModel(m: String) {
+        _ui.update { it.copy(model = m.trim()) }
+    }
+
+    // ===== 单台补救：单独重识别 / 选相似机型 =====
+
+    /** 对某台按位置框裁剪原图区域，单独重新识别（可用更高级模型） */
+    fun reRecognize(index: Int) {
+        val cur = _ui.value
+        if (cur.busy) return
+        val target = cur.results.getOrNull(index) ?: return
+        val box = target.box ?: run { showMessage("该台未返回位置框，无法单独裁剪重识别，可尝试「选相似机型」"); return }
+        val uri = cur.previewUris.getOrNull(target.imageIndex) ?: run { showMessage("原图已不存在"); return }
+        val baseUrl = config.baseUrl
+        if (baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }
+        val isDeep = config.recProvider == "deepseek"
+        val aiBaseUrl = if (isDeep) PhoneRecognizer.DEEPSEEK_BASE else PhoneRecognizer.ARK_BASE
+        val apiKey = if (isDeep) config.deepseekApiKey else config.arkApiKey
+        if (apiKey.isBlank()) { showMessage("请先填写 API Key"); return }
+        val model = activeModel()
+        _ui.update { it.copy(busy = true, status = "正在对第 ${target.seq} 台单独重识别（$model）...") }
+        viewModelScope.launch {
+            try {
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model)
+                val phones = recognizer.recognizeCrop(getApplication(), uri, box)
+                if (phones.isEmpty()) {
+                    _ui.update { it.copy(busy = false, status = "该区域未识别到手机，可更换模型重试或选择相似机型") }
+                    return@launch
+                }
+                val best = phones.first()
+                val newRow = recognizer.queryPrice(best.model)
+                val updated = cur.results.toMutableList()
+                updated[index] = RecognizeResult(best.model, best.box, newRow, target.imageIndex, target.seq)
+                _ui.update {
+                    it.copy(
+                        results = updated,
+                        busy = false,
+                        status = "已用「$model」重识别第 ${target.seq} 台为「${best.model}」",
+                    )
+                }
+            } catch (e: Exception) {
+                _ui.update { it.copy(busy = false, status = "重识别失败：${e.message}") }
+            }
+        }
+    }
+
+    private val _candidatesIndex = MutableStateFlow(-1)
+    val candidatesIndex: StateFlow<Int> = _candidatesIndex
+    private val _candidates = MutableStateFlow<List<ModelRow>>(emptyList())
+    val candidates: StateFlow<List<ModelRow>> = _candidates
+
+    /** 加载该台的相似机型候选（基于识别型号搜索报价库） */
+    fun loadCandidates(index: Int) {
+        val target = _ui.value.results.getOrNull(index) ?: return
+        if (config.baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }
+        _candidatesIndex.value = index
+        _candidates.value = emptyList()
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val items = ApiClient.api(config.baseUrl).getModels(search = target.model, sort = "brand").items
+                _candidates.value = items.take(30)
+            } catch (e: Exception) {
+                showMessage("加载相似机型失败：${e.message}")
+                _candidatesIndex.value = -1
+            }
+        }
+    }
+
+    fun closeCandidates() {
+        _candidatesIndex.value = -1
+        _candidates.value = emptyList()
+    }
+
+    /** 手动选择相似机型，替换该行并重新匹配报价 */
+    fun applyCandidate(index: Int, row: ModelRow) {
+        val cur = _ui.value
+        val t = cur.results.getOrNull(index) ?: return
+        val updated = cur.results.toMutableList()
+        updated[index] = RecognizeResult(t.model, t.box, row, t.imageIndex, t.seq)
+        _ui.update { it.copy(results = updated, status = "已将第 ${t.seq} 台手动设为「${row.model}」，重新匹配报价") }
+        closeCandidates()
     }
 
     fun startRecognize() {
         val baseUrl = config.baseUrl
         if (baseUrl.isBlank()) { showMessage("请先在设置中填写服务器地址"); return }
         val provider = config.recProvider
-        val (aiBaseUrl, apiKey, model, providerName) = when (provider) {
-            "deepseek" -> listOf(
-                PhoneRecognizer.DEEPSEEK_BASE,
-                config.deepseekApiKey,
-                config.deepseekModel.ifBlank { PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL },
-                "DeepSeek 视觉",
-            )
-            else -> listOf(
-                PhoneRecognizer.ARK_BASE,
-                config.arkApiKey,
-                config.arkModel.ifBlank { PhoneRecognizer.DEFAULT_ARK_MODEL },
-                "豆包视觉",
-            )
-        }
+        val isDeep = provider == "deepseek"
+        val aiBaseUrl = if (isDeep) PhoneRecognizer.DEEPSEEK_BASE else PhoneRecognizer.ARK_BASE
+        val apiKey = if (isDeep) config.deepseekApiKey else config.arkApiKey
+        val defaultModel = if (isDeep) PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL else PhoneRecognizer.DEFAULT_ARK_MODEL
+        val providerName = if (isDeep) "DeepSeek 视觉" else "豆包视觉"
+        val model = _ui.value.model.ifBlank { defaultModel }
         if (apiKey.isBlank()) {
-            showMessage(if (provider == "deepseek") "请先在设置中填写 DeepSeek API Key" else "请先在设置中填写豆包 API Key")
+            showMessage(if (isDeep) "请先在设置中填写 DeepSeek API Key" else "请先在设置中填写豆包 API Key")
             return
         }
         val uris = _ui.value.previewUris

@@ -1,5 +1,9 @@
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
+@file:OptIn(
+    androidx.compose.material3.ExperimentalMaterial3Api::class,
+)
+
 package com.shoujilunhui.app.ui.recognize
 
 import android.net.Uri
@@ -19,6 +23,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,13 +36,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,6 +53,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -73,6 +83,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.ui.home.DetailSheet
 import com.shoujilunhui.app.ui.theme.Accent
 import com.shoujilunhui.app.ui.theme.MatchGreen
 import com.shoujilunhui.app.ui.theme.MatchOrange
@@ -91,10 +103,14 @@ fun RecognizeScreen(
 ) {
     val ui by vm.ui.collectAsState()
     val message by vm.message.collectAsState()
+    val candIdx by vm.candidatesIndex.collectAsState()
+    val candidates by vm.candidates.collectAsState()
     val snackbar = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     var cameraUri by remember { mutableStateOf<Uri?>(null) }
+    var showModelPicker by remember { mutableStateOf(false) }
+    var detailRow by remember { mutableStateOf<ModelRow?>(null) }
 
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
         val uri = cameraUri
@@ -114,6 +130,48 @@ fun RecognizeScreen(
         if (r.row == null) "未收录"
         else if (ui.showChannelPrice) "${r.row.price}元"
         else "${vm.fmt(vm.customerPrice(r.row) ?: 0.0)}元"
+    }
+
+    // 模型选择对话框
+    if (showModelPicker) {
+        ModelPickerDialog(
+            presets = vm.modelPresets(),
+            current = vm.activeModel(),
+            onDismiss = { showModelPicker = false },
+            onSelect = { m -> vm.selectModel(m); showModelPicker = false },
+        )
+    }
+
+    // 相似机型候选弹层
+    if (candIdx >= 0) {
+        ModalBottomSheet(
+            onDismissRequest = { vm.closeCandidates() },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            CandidateSheet(
+                index = candIdx,
+                candidates = candidates,
+                onPick = { m -> vm.applyCandidate(candIdx, m) },
+                onDismiss = { vm.closeCandidates() },
+            )
+        }
+    }
+
+    // 机型详情弹层
+    detailRow?.let { row ->
+        ModalBottomSheet(
+            onDismissRequest = { detailRow = null },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            DetailSheet(
+                row = row,
+                baseUrl = vm.serverBaseUrl(),
+                onEdit = {},
+                onDelete = {},
+                onImageClick = { _, _ -> },
+                showActions = false,
+            )
+        }
     }
 
     Scaffold(
@@ -183,6 +241,23 @@ fun RecognizeScreen(
 
             // 识别
             item {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("识别模型", fontSize = 12.5.sp, color = TextSecondary)
+                    Spacer(Modifier.width(10.dp))
+                    OutlinedButton(
+                        onClick = { showModelPicker = true },
+                        modifier = Modifier.weight(1f).height(40.dp),
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        Text(vm.activeModel(), fontSize = 12.5.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+            }
+
+            item {
                 Button(
                     onClick = vm::startRecognize,
                     enabled = !ui.busy,
@@ -213,12 +288,15 @@ fun RecognizeScreen(
                 // 总价卡片 + 报价隐藏/显示切换
                 item { TotalCard(ui, vm) }
 
-                itemsIndexed(ui.results) { _, r ->
+                itemsIndexed(ui.results) { index, r ->
                     Card(
                         shape = RoundedCornerShape(10.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .then(if (r.row != null)
+                                Modifier.clickable { detailRow = r.row }
+                            else Modifier),
                     ) {
                         Row(
                             Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
@@ -274,6 +352,36 @@ fun RecognizeScreen(
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                             )
+                        }
+                        Row(
+                            Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            TextButton(
+                                onClick = { vm.reRecognize(index) },
+                                enabled = !ui.busy,
+                                modifier = Modifier.height(30.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp),
+                            ) { Text("重识别", fontSize = 12.sp) }
+                            if (r.row == null) {
+                                TextButton(
+                                    onClick = { vm.loadCandidates(index) },
+                                    modifier = Modifier.height(30.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp),
+                                ) { Text("选相似机型", fontSize = 12.sp, color = Accent) }
+                            } else {
+                                TextButton(
+                                    onClick = { detailRow = r.row },
+                                    modifier = Modifier.height(30.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp),
+                                ) { Text("详情", fontSize = 12.sp) }
+                                Spacer(Modifier.weight(1f))
+                                Text(
+                                    "识别有偏差可点「重识别」换模型重试",
+                                    fontSize = 10.sp,
+                                    color = TextSecondary,
+                                )
+                            }
                         }
                     }
                 }
@@ -521,4 +629,115 @@ private fun buildAnnotationLabel(
         sb.append(priceFor(r))
     }
     return sb.toString()
+}
+
+// ---------- 识别模型选择对话框 ----------
+
+@Composable
+private fun ModelPickerDialog(
+    presets: List<String>,
+    current: String,
+    onDismiss: () -> Unit,
+    onSelect: (String) -> Unit,
+) {
+    var custom by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("选择识别模型", fontSize = 16.sp) },
+        text = {
+            Column {
+                Text("预设模型（点选即切换）", fontSize = 12.sp, color = TextSecondary)
+                Spacer(Modifier.height(6.dp))
+                presets.forEach { m ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(if (m == current) Accent.copy(alpha = 0.12f) else Color.Transparent)
+                            .clickable { onSelect(m) }
+                            .padding(horizontal = 10.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            if (m == current) "● " else "○ ",
+                            color = if (m == current) Accent else TextSecondary,
+                            fontSize = 12.sp,
+                        )
+                        Text(m, fontSize = 13.sp, color = TextPrimary)
+                    }
+                }
+                Spacer(Modifier.height(10.dp))
+                Text("自定义模型 ID", fontSize = 12.sp, color = TextSecondary)
+                Spacer(Modifier.height(6.dp))
+                OutlinedTextField(
+                    value = custom,
+                    onValueChange = { custom = it },
+                    placeholder = { Text("粘贴其他模型 ID", fontSize = 12.sp) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                if (custom.isNotBlank()) onSelect(custom) else onDismiss()
+            }) { Text("确定", fontSize = 14.sp) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("取消", fontSize = 14.sp) }
+        },
+    )
+}
+
+// ---------- 相似机型候选弹层 ----------
+
+@Composable
+private fun CandidateSheet(
+    index: Int,
+    candidates: List<ModelRow>,
+    onPick: (ModelRow) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text("选择相似机型（第 ${index + 1} 台）", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+            Spacer(Modifier.weight(1f))
+            TextButton(onClick = onDismiss) { Text("关闭", fontSize = 13.sp) }
+        }
+        if (candidates.isEmpty()) {
+            Text("加载中...", fontSize = 13.sp, color = TextSecondary, modifier = Modifier.padding(16.dp))
+        } else {
+            LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp)) {
+                itemsIndexed(candidates) { _, m ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { onPick(m) }
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(m.model, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+                            Text(
+                                "${m.brand} · ${m.category}",
+                                fontSize = 11.sp,
+                                color = TextSecondary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        Text("¥${m.price}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = PriceRed)
+                    }
+                }
+            }
+        }
+    }
 }

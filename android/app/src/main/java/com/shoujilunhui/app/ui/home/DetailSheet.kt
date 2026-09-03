@@ -72,6 +72,8 @@ fun DetailSheet(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onImageClick: (List<String>, Int) -> Unit,
+    /** recognize viewer mode: hide edit/delete actions */
+    showActions: Boolean = true,
 ) {
     Column(
         Modifier
@@ -194,6 +196,7 @@ fun DetailSheet(
         Text("更新于 ${row.updatedAt ?: "-"}", fontSize = 10.5.sp, color = TextSecondary)
 
         // 操作
+        if (showActions) {
         Spacer(Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             OutlinedButton(
@@ -208,6 +211,7 @@ fun DetailSheet(
                 modifier = Modifier.weight(1f).height(42.dp),
                 shape = RoundedCornerShape(10.dp),
             ) { Text("编辑价格/备注", fontSize = 13.sp) }
+        }
         }
     }
 }
@@ -294,6 +298,7 @@ fun FilterSheet(
         FilterGroup("CPU 品牌", HomeViewModel.CPU_OPTIONS, selCpu) { selCpu = it }
         FilterGroup("上市年份", HomeViewModel.YEAR_OPTIONS, selYear) { selYear = it }
         FilterGroup("后置主摄", HomeViewModel.CAMERA_OPTIONS, selCam) { selCam = it }
+        if (showActions) {
         Spacer(Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             OutlinedButton(
