@@ -1,9 +1,5 @@
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
-@file:OptIn(
-    androidx.compose.material3.ExperimentalMaterial3Api::class,
-)
-
 package com.shoujilunhui.app.ui.recognize
 
 import android.net.Uri
