@@ -145,11 +145,17 @@ function parseVariants(row, base) {
   try { v = JSON.parse(row.variants || '[]'); } catch (e) { v = []; }
   try { im = JSON.parse(row.images || '[]'); } catch (e) { im = []; }
   if (base && Array.isArray(im)) {
+    const baseOrigin = base.replace(/\/+$/, '');
     im = im.map((x) => {
       x = String(x).trim();
       if (!x) return x;
+      // 录入图片时可能存成了本机回环地址（127.0.0.1/localhost），手机等其它设备访问不到，
+      // 这里统一替换为当前请求的 Host（局域网 IP 或穿透域名），保证各端都能加载
+      if (/^https?:\/\/[^/]+/i.test(x) && /^https?:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?\//i.test(x)) {
+        return baseOrigin + '/' + x.replace(/^https?:\/\/[^/]+/i, '').replace(/^\/+/, '');
+      }
       if (/^https?:\/\//i.test(x)) return x;
-      return base.replace(/\/+$/, '') + '/' + x.replace(/^\/+/, '');
+      return baseOrigin + '/' + x.replace(/^\/+/, '');
     });
   }
   return Object.assign({}, row, { variants: v, images: im });
