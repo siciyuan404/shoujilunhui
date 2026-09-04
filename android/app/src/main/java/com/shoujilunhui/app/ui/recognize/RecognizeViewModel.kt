@@ -153,8 +153,8 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
 
     // ===== 单台补救：单独重识别 / 选相似机型 =====
 
-    /** 对某台按位置框裁剪原图区域，单独重新识别（可用更高级模型） */
-    fun reRecognize(index: Int) {
+    /** 对某台按位置框裁剪原图区域，单独重新识别（可用更高级模型 / 单独填提示词） */
+    fun reRecognize(index: Int, prompt: String? = null) {
         val cur = _ui.value
         if (cur.busy) return
         val target = cur.results.getOrNull(index) ?: return
@@ -167,10 +167,12 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         val apiKey = if (isDeep) config.deepseekApiKey else config.arkApiKey
         if (apiKey.isBlank()) { showMessage("请先填写 API Key"); return }
         val model = activeModel()
+        // 本次重识别使用的提示词：单独传入优先，否则用识别页全局提示词
+        val promptForThis = prompt?.trim()?.takeIf { it.isNotEmpty() } ?: _ui.value.prompt
         _ui.update { it.copy(busy = true, status = "正在对第 ${target.seq} 台单独重识别（$model）...") }
         viewModelScope.launch {
             try {
-                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, _ui.value.prompt)
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, promptForThis)
                 val phones = recognizer.recognizeCrop(getApplication(), uri, box)
                 if (phones.isEmpty()) {
                     _ui.update { it.copy(busy = false, status = "该区域未识别到手机，可更换模型重试或选择相似机型") }
@@ -197,6 +199,9 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
     val candidatesIndex: StateFlow<Int> = _candidatesIndex
     private val _candidates = MutableStateFlow<List<ModelRow>>(emptyList())
     val candidates: StateFlow<List<ModelRow>> = _candidates
+    /** 候选是否已加载完成（区分「加载中」与「无匹配结果」） */
+    private val _candidatesLoaded = MutableStateFlow(false)
+    val candidatesLoaded: StateFlow<Boolean> = _candidatesLoaded
 
     /** 加载该台的相似机型候选（基于识别型号搜索报价库） */
     fun loadCandidates(index: Int) {
@@ -204,12 +209,15 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         if (config.baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }
         _candidatesIndex.value = index
         _candidates.value = emptyList()
+        _candidatesLoaded.value = false
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val items = ApiClient.api(config.baseUrl).getModels(search = target.model, sort = "brand").items
                 _candidates.value = items.take(30)
+                _candidatesLoaded.value = true
             } catch (e: Exception) {
                 showMessage("加载相似机型失败：${e.message}")
+                _candidatesLoaded.value = true
                 _candidatesIndex.value = -1
             }
         }
@@ -218,6 +226,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
     fun closeCandidates() {
         _candidatesIndex.value = -1
         _candidates.value = emptyList()
+        _candidatesLoaded.value = false
     }
 
     /** 手动选择相似机型，替换该行并重新匹配报价 */

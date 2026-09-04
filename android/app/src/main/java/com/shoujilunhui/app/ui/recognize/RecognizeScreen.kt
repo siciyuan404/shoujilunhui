@@ -101,12 +101,15 @@ fun RecognizeScreen(
     val message by vm.message.collectAsState()
     val candIdx by vm.candidatesIndex.collectAsState()
     val candidates by vm.candidates.collectAsState()
+    val candLoaded by vm.candidatesLoaded.collectAsState()
     val snackbar = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     var cameraUri by remember { mutableStateOf<Uri?>(null) }
     var showModelPicker by remember { mutableStateOf(false) }
     var detailRow by remember { mutableStateOf<ModelRow?>(null) }
+    /** 待重识别的行下标（非空时弹提示词对话框） */
+    var reRecognizeTarget by remember { mutableStateOf<Int?>(null) }
 
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
         val uri = cameraUri
@@ -147,10 +150,22 @@ fun RecognizeScreen(
             CandidateSheet(
                 index = candIdx,
                 candidates = candidates,
+                loaded = candLoaded,
                 onPick = { m -> vm.applyCandidate(candIdx, m) },
                 onDismiss = { vm.closeCandidates() },
             )
         }
+    }
+
+    // 单台重识别：先弹提示词对话框（预填当前全局提示词，可修改）
+    reRecognizeTarget?.let { index ->
+        ReRecognizeDialog(
+            index = index,
+            seq = ui.results.getOrNull(index)?.seq ?: 0,
+            initialPrompt = ui.prompt,
+            onConfirm = { prompt -> vm.reRecognize(index, prompt); reRecognizeTarget = null },
+            onDismiss = { reRecognizeTarget = null },
+        )
     }
 
     // 机型详情弹层
@@ -387,30 +402,29 @@ fun RecognizeScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             TextButton(
-                                onClick = { vm.reRecognize(index) },
+                                onClick = { reRecognizeTarget = index },
                                 enabled = !ui.busy,
                                 modifier = Modifier.height(30.dp),
                                 contentPadding = PaddingValues(horizontal = 10.dp),
                             ) { Text("重识别", fontSize = 12.sp) }
-                            if (r.row == null) {
-                                TextButton(
-                                    onClick = { vm.loadCandidates(index) },
-                                    modifier = Modifier.height(30.dp),
-                                    contentPadding = PaddingValues(horizontal = 10.dp),
-                                ) { Text("选相似机型", fontSize = 12.sp, color = Accent) }
-                            } else {
+                            TextButton(
+                                onClick = { vm.loadCandidates(index) },
+                                modifier = Modifier.height(30.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp),
+                            ) { Text("选相似机型", fontSize = 12.sp, color = Accent) }
+                            if (r.row != null) {
                                 TextButton(
                                     onClick = { detailRow = r.row },
                                     modifier = Modifier.height(30.dp),
                                     contentPadding = PaddingValues(horizontal = 10.dp),
                                 ) { Text("详情", fontSize = 12.sp) }
-                                Spacer(Modifier.weight(1f))
-                                Text(
-                                    "识别有偏差可点「重识别」换模型重试",
-                                    fontSize = 10.sp,
-                                    color = TextSecondary,
-                                )
                             }
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                if (r.row == null) "未收录，可换模型或选相似" else "可点选相似机型核对",
+                                fontSize = 10.sp,
+                                color = TextSecondary,
+                            )
                         }
                     }
                 }
@@ -724,6 +738,7 @@ private fun ModelPickerDialog(
 private fun CandidateSheet(
     index: Int,
     candidates: List<ModelRow>,
+    loaded: Boolean,
     onPick: (ModelRow) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -741,10 +756,28 @@ private fun CandidateSheet(
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onDismiss) { Text("关闭", fontSize = 13.sp) }
         }
-        if (candidates.isEmpty()) {
-            Text("加载中...", fontSize = 13.sp, color = TextSecondary, modifier = Modifier.padding(16.dp))
-        } else {
-            LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp)) {
+        when {
+            !loaded -> Text(
+                "加载中...",
+                fontSize = 13.sp,
+                color = TextSecondary,
+                modifier = Modifier.padding(16.dp),
+            )
+            candidates.isEmpty() -> Column(Modifier.fillMaxWidth().padding(24.dp)) {
+                Text(
+                    "未找到匹配的相似机型",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TextPrimary,
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "可先点击「重识别」填写提示词换模型重试，或在「选相似机型」搜索框直接输入关键词查找",
+                    fontSize = 12.sp,
+                    color = TextSecondary,
+                )
+            }
+            else -> LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp)) {
                 itemsIndexed(candidates) { _, m ->
                     Row(
                         Modifier
@@ -769,4 +802,41 @@ private fun CandidateSheet(
             }
         }
     }
+}
+
+// ---------- 单台重识别：提示词输入对话框 ----------
+
+@Composable
+private fun ReRecognizeDialog(
+    index: Int,
+    seq: Int,
+    initialPrompt: String,
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var prompt by remember { mutableStateOf(initialPrompt) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("重识别第 ${seq} 台", fontSize = 16.sp) },
+        text = {
+            Column {
+                Text("可选填提示词引导模型更准确识别该台（预填了识别页的全局提示词，可修改或清空）", fontSize = 12.sp, color = TextSecondary)
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = prompt,
+                    onValueChange = { prompt = it },
+                    placeholder = { Text("例如：这是一台折叠屏手机，注意识别铰链与外屏", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 3,
+                    textStyle = TextStyle(fontSize = 13.sp),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(prompt.trim()) }) { Text("开始重识别", fontSize = 14.sp) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("取消", fontSize = 14.sp) }
+        },
+    )
 }
