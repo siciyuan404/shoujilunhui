@@ -253,6 +253,39 @@ fun RecognizeScreen(
                 }
             }
 
+            // 识别提示词（选填，可针对图片描述引导模型提高识别率）
+            item {
+                Column {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("识别提示词", fontSize = 12.5.sp, color = TextSecondary)
+                        Spacer(Modifier.weight(1f))
+                        if (ui.prompt.isNotBlank()) {
+                            TextButton(
+                                onClick = { vm.setPrompt("") },
+                                modifier = Modifier.height(28.dp),
+                                contentPadding = PaddingValues(horizontal = 6.dp),
+                            ) { Text("清空", fontSize = 11.sp, color = TextSecondary) }
+                        }
+                    }
+                    OutlinedTextField(
+                        value = ui.prompt,
+                        onValueChange = vm::setPrompt,
+                        placeholder = {
+                            Text(
+                                "选填：例如「图中两台手机，一台折叠屏一台直板」，可提升识别准确率",
+                                fontSize = 12.sp,
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 2,
+                        textStyle = TextStyle(fontSize = 13.sp),
+                    )
+                }
+            }
+
             item {
                 Button(
                     onClick = vm::startRecognize,

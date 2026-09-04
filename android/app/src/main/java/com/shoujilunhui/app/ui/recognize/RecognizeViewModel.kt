@@ -46,6 +46,8 @@ data class RecognizeUiState(
     val showChannelPrice: Boolean = true,
     /** 识别页当前选中的模型 ID（空=按服务商默认），可在识别页直接切换 */
     val model: String = "",
+    /** 用户填写的识别提示词（选填，引导模型提高识别率） */
+    val prompt: String = "",
 )
 
 class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
@@ -144,6 +146,11 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(model = m.trim()) }
     }
 
+    /** 更新识别提示词 */
+    fun setPrompt(p: String) {
+        _ui.update { it.copy(prompt = p) }
+    }
+
     // ===== 单台补救：单独重识别 / 选相似机型 =====
 
     /** 对某台按位置框裁剪原图区域，单独重新识别（可用更高级模型） */
@@ -163,7 +170,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(busy = true, status = "正在对第 ${target.seq} 台单独重识别（$model）...") }
         viewModelScope.launch {
             try {
-                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model)
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, _ui.value.prompt)
                 val phones = recognizer.recognizeCrop(getApplication(), uri, box)
                 if (phones.isEmpty()) {
                     _ui.update { it.copy(busy = false, status = "该区域未识别到手机，可更换模型重试或选择相似机型") }
@@ -243,7 +250,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(busy = true, status = "正在识别图片中的手机...", results = emptyList()) }
         viewModelScope.launch {
             try {
-                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model)
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, _ui.value.prompt)
                 val all = mutableListOf<RecognizeResult>()
                 var failMsg: String? = null
                 var seq = 1

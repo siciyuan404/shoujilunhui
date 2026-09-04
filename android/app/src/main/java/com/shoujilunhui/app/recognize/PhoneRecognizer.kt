@@ -31,6 +31,8 @@ class PhoneRecognizer(
     private val aiBaseUrl: String,
     private val apiKey: String,
     private val model: String,
+    /** 用户在识别页填写的补充提示词，可引导模型更准确识别（空则不影响） */
+    private val extraPrompt: String = "",
 ) {
 
     companion object {
@@ -94,13 +96,22 @@ class PhoneRecognizer(
             recognizePhones(b64)
         }
 
+    /** 组装最终识别指令：基础指令 + 用户补充提示词（选填） */
+    private fun buildRecognizePrompt(): String {
+        val t = extraPrompt.trim()
+        if (t.isEmpty()) return RECOGNIZE_PROMPT
+        return RECOGNIZE_PROMPT +
+            "\n[用户补充提示词] $t\n" +
+            "请把以上用户提示作为重要参考，结合提示更准确地识别图中手机及位置框。"
+    }
+
     suspend fun recognizePhones(base64: String): List<RecognizedPhone> = withContext(Dispatchers.IO) {
         val body = JSONObject().apply {
             put("model", model)
             val userMsg = JSONObject().apply {
                 put("role", "user")
                 val content = JSONArray()
-                content.put(JSONObject().put("type", "text").put("text", RECOGNIZE_PROMPT))
+                content.put(JSONObject().put("type", "text").put("text", buildRecognizePrompt()))
                 content.put(
                     JSONObject().put("type", "image_url")
                         .put("image_url", JSONObject().put("url", "data:image/jpeg;base64,$base64"))
