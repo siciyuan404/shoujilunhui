@@ -20,6 +20,36 @@ const UPDATE_POLICY = {
   forceBelow: '1.0.0',
 };
 
+// GitHub releases/latest 动态缓存：打 tag 发布新版本后，/api/update 自动反映新版本，
+// 无需再手动改 UPDATE_POLICY / config.json。失败时回退静态配置。
+let _ghReleaseCache = { at: 0, latest: '', url: '' };
+const GH_CACHE_MS = 5 * 60 * 1000;
+
+async function fetchLatestRelease() {
+  const now = Date.now();
+  if (_ghReleaseCache.at && now - _ghReleaseCache.at < GH_CACHE_MS && _ghReleaseCache.latest) {
+    return _ghReleaseCache;
+  }
+  try {
+    const resp = await fetch('https://api.github.com/repos/siciyuan404/shoujilunhui/releases/latest', {
+      headers: { 'User-Agent': 'shoujilunhui-server', 'Accept': 'application/vnd.github+json' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!resp.ok) return null;
+    const j = await resp.json();
+    const tag = String(j.tag_name || '').replace(/^v/i, '').trim();
+    const apk = Array.isArray(j.assets)
+      ? j.assets.find((a) => a && /\.apk$/i.test(String(a.name)))
+      : null;
+    const url = apk && apk.browser_download_url ? String(apk.browser_download_url) : '';
+    if (!tag || !url) return null;
+    _ghReleaseCache = { at: now, latest: tag, url };
+    return _ghReleaseCache;
+  } catch (e) {
+    return null;
+  }
+}
+
 // 可写入的规格字段（除基础 brand/category/model/price/note/images 外）
 const SPEC_FIELDS = [
   'release_date', 'cpu_brand', 'cpu_model', 'ram', 'rom',
@@ -250,10 +280,17 @@ function createRouter(db, cfg) {
     if (method === 'GET' && pathname === '/api/update') {
       // 无感更新 + 滚动更新（灰度）策略接口，供 APP 启动后台静默检查
       const upd = Object.assign({}, UPDATE_POLICY, cfg.update || {});
+      let latest = String(upd.latest || '');
+      let url = String(upd.url || '');
+      // config 未显式覆盖版本时，动态读取 GitHub 最新 release（打 tag 即生效，带 5 分钟缓存）
+      if (!cfg.update || cfg.update.latest == null) {
+        const gh = await fetchLatestRelease();
+        if (gh) { latest = gh.latest; url = gh.url; }
+      }
       return json(res, 200, {
         enabled: true,
-        latest: String(upd.latest),
-        url: String(upd.url || ''),
+        latest,
+        url,
         gray: Math.max(0, Math.min(100, Number(upd.gray) || 100)),
         forceBelow: String(upd.forceBelow || ''),
       });
