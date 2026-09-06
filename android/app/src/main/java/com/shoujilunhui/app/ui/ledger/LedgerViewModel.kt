@@ -11,6 +11,8 @@ import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.data.RecordPostBody
+import com.shoujilunhui.app.data.RecordBatchBody
+import com.shoujilunhui.app.data.RecordPatchBody
 import com.shoujilunhui.app.data.RecordRow
 import com.shoujilunhui.app.data.StatsResponse
 import com.shoujilunhui.app.recognize.PhoneRecognizer
@@ -232,19 +234,17 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             try {
                 val row = matchModel(model)
-                val patch = mutableMapOf<String, String>(
-                    "model" to (row?.model ?: model.trim()),
-                    "rec_price" to recPrice,
-                    "channel" to channel,
-                    "sale_price" to salePrice,
-                    "status" to status,
-                    "day" to day.ifBlank { todayStr() },
+                val patch = RecordPatchBody(
+                    model = row?.model ?: model.trim(),
+                    brand = row?.brand,
+                    category = row?.category,
+                    modelId = row?.id,
+                    recPrice = recPrice,
+                    channel = channel,
+                    salePrice = salePrice,
+                    status = status,
+                    day = day.ifBlank { todayStr() },
                 )
-                row?.let {
-                    patch["brand"] = it.brand
-                    patch["category"] = it.category
-                    patch["model_id"] = it.id.toString()
-                }
                 ApiClient.api(config.baseUrl).putRecord(id, config.apiKey, patch)
                 showMessage("已保存")
                 onDone()
@@ -416,8 +416,8 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     )
                 }
                 val res = ApiClient.api(config.baseUrl)
-                    .postRecordsBatch(config.apiKey, mapOf("items" to items))
-                val n = (res["inserted"] as? Number)?.toInt() ?: items.size
+                    .postRecordsBatch(config.apiKey, RecordBatchBody(items))
+                val n = res.inserted
                 showMessage("已入账 $n 台")
                 _ui.update { it.copy(pending = emptyList(), pendingStatus = "") }
                 onDone()

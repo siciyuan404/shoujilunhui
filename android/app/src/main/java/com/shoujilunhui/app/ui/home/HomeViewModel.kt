@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.data.ModelPatchBody
 import com.shoujilunhui.app.data.PostBody
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -144,10 +145,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     fun updateModel(row: ModelRow, price: String, note: String, modelCode: String? = null) {
         viewModelScope.launch {
             try {
-                val patch = mutableMapOf<String, Any>("price" to price, "note" to note)
-                if (modelCode != null) patch["model_code"] = modelCode
                 val updated = ApiClient.api(baseUrl).putModel(
-                    row.id, apiKey, patch
+                    row.id, apiKey, ModelPatchBody(
+                        price = price,
+                        note = note,
+                        modelCode = modelCode,
+                    )
                 )
                 _ui.update { s ->
                     s.copy(models = s.models.map { if (it.id == row.id) updated else it })
@@ -185,7 +188,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 if (uploaded.isEmpty()) { _message.value = "图片上传失败，请重试"; return@launch }
                 val merged = (row.images?.filter { it.isNotBlank() }.orEmpty() + uploaded).distinct()
                 val updated = ApiClient.api(baseUrl).putModel(
-                    row.id, apiKey, mapOf("images" to merged)
+                    row.id, apiKey, ModelPatchBody(images = merged)
                 )
                 _ui.update { s ->
                     s.copy(models = s.models.map { if (it.id == row.id) updated else it })
@@ -206,7 +209,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 val remaining = (row.images?.filter { it.isNotBlank() }.orEmpty())
                     .filterNot { it == url }
                 val updated = ApiClient.api(baseUrl).putModel(
-                    row.id, apiKey, mapOf("images" to remaining)
+                    row.id, apiKey, ModelPatchBody(images = remaining)
                 )
                 _ui.update { s ->
                     s.copy(models = s.models.map { if (it.id == row.id) updated else it })

@@ -164,6 +164,33 @@ data class RecordPostBody(
 
 data class UploadResponse(val ok: Boolean, val url: String?, val name: String?)
 
+data class RecordBatchBody(val items: List<RecordPostBody>)
+
+data class RecordPatchBody(
+    val model: String? = null,
+    val brand: String? = null,
+    val category: String? = null,
+    @SerializedName("model_id") val modelId: Long? = null,
+    @SerializedName("rec_price") val recPrice: String? = null,
+    @SerializedName("sale_price") val salePrice: String? = null,
+    val channel: String? = null,
+    val day: String? = null,
+    val status: String? = null,
+    val note: String? = null,
+    val photo: String? = null
+)
+
+data class ModelPatchBody(
+    val price: String? = null,
+    val note: String? = null,
+    val images: List<String>? = null,
+    @SerializedName("model_code") val modelCode: String? = null
+)
+
+data class BatchResult(val ok: Boolean, val inserted: Int)
+
+data class IdResult(val ok: Boolean, val id: Long)
+
 interface Api {
     @GET("api/models")
     suspend fun getModels(
@@ -188,10 +215,10 @@ interface Api {
     suspend fun postModel(@Header("X-API-Key") key: String, @Body body: PostBody): ModelRow
 
     @PUT("api/models/{id}")
-    suspend fun putModel(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: Map<String, Any>): ModelRow
+    suspend fun putModel(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: ModelPatchBody): ModelRow
 
     @DELETE("api/models/{id}")
-    suspend fun deleteModel(@Path("id") id: Long, @Header("X-API-Key") key: String): Map<String, Any>
+    suspend fun deleteModel(@Path("id") id: Long, @Header("X-API-Key") key: String): IdResult
 
     // ---------- 收机记账 ----------
 
@@ -216,13 +243,13 @@ interface Api {
     suspend fun postRecord(@Header("X-API-Key") key: String, @Body body: RecordPostBody): RecordRow
 
     @POST("api/records/batch")
-    suspend fun postRecordsBatch(@Header("X-API-Key") key: String, @Body body: Map<String, List<RecordPostBody>>): Map<String, Any>
+    suspend fun postRecordsBatch(@Header("X-API-Key") key: String, @Body body: RecordBatchBody): BatchResult
 
     @PUT("api/records/{id}")
-    suspend fun putRecord(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: Map<String, String>): RecordRow
+    suspend fun putRecord(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: RecordPatchBody): RecordRow
 
     @DELETE("api/records/{id}")
-    suspend fun deleteRecord(@Path("id") id: Long, @Header("X-API-Key") key: String): Map<String, Any>
+    suspend fun deleteRecord(@Path("id") id: Long, @Header("X-API-Key") key: String): IdResult
 
     @POST("api/upload")
     suspend fun uploadImage(@Header("X-API-Key") key: String, @Body body: RequestBody): UploadResponse
