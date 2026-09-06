@@ -262,15 +262,32 @@ fun LedgerScreen(
                                     TextButton(onClick = { vm.clearPending() }) { Text("清空", fontSize = 12.sp) }
                                 }
                             }
+                            item {
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    var batchSeller by remember { mutableStateOf("") }
+                                    LgField(
+                                        value = batchSeller,
+                                        onValueChange = { v -> batchSeller = v; vm.applyBatchSeller(v) },
+                                        label = "来源人（整批，谁卖给你的）",
+                                        placeholder = "如 张三 / 同行阿强，可空",
+                                        modifier = Modifier.weight(1f),
+                                    )
+                                }
+                            }
                             itemsIndexed(ui.pending) { index, p ->
                                 PendingCard(
                                     index = index,
                                     pending = p,
                                     channels = ui.channels,
+                                    sellers = ui.sellers,
                                     onPrice = { v -> vm.updatePending(index, v, p.channel, p.salePrice, p.saleChannel) },
                                     onChannel = { v -> vm.updatePending(index, p.recPrice, v, p.salePrice, p.saleChannel) },
                                     onSalePrice = { v -> vm.updatePending(index, p.recPrice, p.channel, v, p.saleChannel) },
                                     onSaleChannel = { v -> vm.updatePending(index, p.recPrice, p.channel, p.salePrice, v) },
+                                    onSeller = { v -> vm.updatePendingSeller(index, v) },
                                     onDay = { v -> vm.updatePendingDay(index, v) },
                                     onReRecognize = { vm.reRecognizePending(index) },
                                     onChecked = { checked -> vm.togglePending(index, checked) },
@@ -475,8 +492,8 @@ fun LedgerScreen(
             title = "手动录入",
             initial = null,
             onDismiss = { showAdd = false },
-            onSave = { model, rec, ch, saleCh, sale, status, day ->
-                vm.addRecord(model, rec, ch, saleCh, sale, status, day) { showAdd = false }
+            onSave = { model, rec, ch, saleCh, sale, status, day, seller ->
+                vm.addRecord(model, rec, ch, saleCh, seller, sale, status, day) { showAdd = false }
             },
             vm = vm,
         )
@@ -488,8 +505,8 @@ fun LedgerScreen(
             title = "编辑修正",
             initial = row,
             onDismiss = { editRow = null },
-            onSave = { model, rec, ch, saleCh, sale, status, day ->
-                vm.updateRecord(row.id, model, rec, ch, saleCh, sale, status, day) { editRow = null }
+            onSave = { model, rec, ch, saleCh, sale, status, day, seller ->
+                vm.updateRecord(row.id, model, rec, ch, saleCh, seller, sale, status, day) { editRow = null }
             },
             vm = vm,
         )
@@ -601,6 +618,29 @@ private fun StatsSection(stats: StatsResponse?) {
                 }
             }
         }
+        // 来源人排行
+        val sellers = stats?.bySeller.orEmpty().take(8)
+        if (sellers.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
+            Text("来源人排行", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            Spacer(Modifier.height(8.dp))
+            Card(
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Column(Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
+                    sellers.forEach {
+                        BreakdownBar(
+                            "👤 ${it.seller}（${it.count} 台）",
+                            it.recTotal,
+                            sellers.maxOf { s -> s.recTotal },
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -693,10 +733,12 @@ private fun PendingCard(
     index: Int,
     pending: PendingRecord,
     channels: List<String>,
+    sellers: List<String>,
     onPrice: (String) -> Unit,
     onChannel: (String) -> Unit,
     onSalePrice: (String) -> Unit,
     onSaleChannel: (String) -> Unit,
+    onSeller: (String) -> Unit,
     onDay: (String) -> Unit,
     onReRecognize: () -> Unit,
     onChecked: (Boolean) -> Unit,
@@ -770,6 +812,18 @@ private fun PendingCard(
             }
             Spacer(Modifier.height(6.dp))
             ChannelSuggestRow(channels = channels, current = pending.saleChannel, onPick = onSaleChannel)
+            Spacer(Modifier.height(6.dp))
+            LgField(
+                value = pending.seller,
+                onValueChange = onSeller,
+                label = "来源人",
+                placeholder = "谁卖给你的，可空",
+                modifier = Modifier.fillMaxWidth(),
+            )
+            if (sellers.isNotEmpty()) {
+                Spacer(Modifier.height(6.dp))
+                SellerSuggestRow(sellers = sellers, current = pending.seller, onPick = onSeller)
+            }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
@@ -858,7 +912,7 @@ private fun RecordCard(
                     }
                 }
                 Text(
-                    "${row.day} · 收:${row.channel.ifBlank { "无" }}${if (row.saleChannel.isNotBlank()) " · 出:${row.saleChannel}" else ""} · ${row.status}",
+                    "${if (row.seller.isNotBlank()) "👤 " + row.seller + " · " else ""}${row.day} · 收:${row.channel.ifBlank { "无" }}${if (row.saleChannel.isNotBlank()) " · 出:${row.saleChannel}" else ""} · ${row.status}",
                     fontSize = 11.sp,
                     color = TextSecondary,
                     maxLines = 1,
@@ -907,13 +961,14 @@ private fun RecordFormDialog(
     title: String,
     initial: RecordRow?,
     onDismiss: () -> Unit,
-    onSave: (String, String, String, String, String, String, String) -> Unit,
+    onSave: (String, String, String, String, String, String, String, String) -> Unit,
     vm: LedgerViewModel,
 ) {
     var model by remember { mutableStateOf(initial?.model ?: "") }
     var recPrice by remember { mutableStateOf(initial?.recPrice ?: "") }
     var channel by remember { mutableStateOf(initial?.channel ?: "路边收") }
     var saleChannel by remember { mutableStateOf(initial?.saleChannel ?: "") }
+    var seller by remember { mutableStateOf(initial?.seller ?: "") }
     var salePrice by remember { mutableStateOf(initial?.salePrice ?: "") }
     var status by remember { mutableStateOf(initial?.status ?: "在库") }
     var day by remember { mutableStateOf(initial?.day ?: todayStr()) }
@@ -1000,6 +1055,18 @@ private fun RecordFormDialog(
                 }
                 Spacer(Modifier.height(6.dp))
                 ChannelSuggestRow(channels = ui.channels, current = saleChannel, onPick = { saleChannel = it })
+                Spacer(Modifier.height(6.dp))
+                LgField(
+                    value = seller,
+                    onValueChange = { seller = it },
+                    label = "来源人",
+                    placeholder = "谁卖给你的，可空",
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                if (ui.sellers.isNotEmpty()) {
+                    Spacer(Modifier.height(6.dp))
+                    SellerSuggestRow(sellers = ui.sellers, current = seller, onPick = { seller = it })
+                }
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Spacer(Modifier.weight(1f))
@@ -1024,7 +1091,7 @@ private fun RecordFormDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day) }) {
+            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller) }) {
                 Text("保存")
             }
         },
@@ -1104,6 +1171,37 @@ private fun ChannelSuggestRow(
             ) {
                 Text(
                     c,
+                    fontSize = 11.sp,
+                    color = TextPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                )
+            }
+        }
+    }
+}
+
+/** 来源人联想 chips：历史来源人，点击即填入 */
+@Composable
+private fun SellerSuggestRow(
+    sellers: List<String>,
+    current: String,
+    onPick: (String) -> Unit,
+    max: Int = 6,
+) {
+    val show = sellers.filter { it != current }.take(max)
+    if (show.isEmpty()) return
+    Row(
+        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        show.forEach { c ->
+            Surface(
+                color = Color(0xFFE8F1FF),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable { onPick(c) },
+            ) {
+                Text(
+                    "👤 " + c,
                     fontSize = 11.sp,
                     color = TextPrimary,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),

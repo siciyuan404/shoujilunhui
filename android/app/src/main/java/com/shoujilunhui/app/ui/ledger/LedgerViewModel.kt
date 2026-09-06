@@ -42,6 +42,7 @@ data class PendingRecord(
     val recPrice: String = "",
     val channel: String = "",
     val saleChannel: String = "",
+    val seller: String = "",
     val salePrice: String = "",
     val status: String = "在库",
     val day: String = todayStr(),
@@ -67,6 +68,7 @@ data class LedgerUiState(
     val suggestionLoading: Boolean = false,
     val historyEntries: List<HistoryEntry> = emptyList(),
     val channels: List<String> = emptyList(),
+    val sellers: List<String> = emptyList(),
 )
 
 class LedgerViewModel(app: Application) : AndroidViewModel(app) {
@@ -143,6 +145,8 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                         loaded = true,
                         channels = ((stats.byChannel?.mapNotNull { c -> c.channel.ifBlank { null } } ?: emptyList()) + defaultChannels)
                             .distinct().take(12),
+                        sellers = (stats.bySeller?.mapNotNull { s -> s.seller.ifBlank { null } } ?: emptyList())
+                            .distinct().take(12),
                     )
                 }
             } catch (e: Exception) {
@@ -193,6 +197,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         recPrice: String,
         channel: String,
         saleChannel: String,
+        seller: String,
         salePrice: String,
         status: String,
         day: String,
@@ -212,6 +217,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     recPrice = recPrice.ifBlank { null },
                     channel = channel,
                     saleChannel = saleChannel.ifBlank { null },
+                    seller = seller.ifBlank { null },
                     salePrice = salePrice.ifBlank { null },
                     status = status,
                     day = day.ifBlank { todayStr() },
@@ -232,6 +238,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         recPrice: String,
         channel: String,
         saleChannel: String,
+        seller: String,
         salePrice: String,
         status: String,
         day: String,
@@ -250,6 +257,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     recPrice = recPrice,
                     channel = channel,
                     saleChannel = saleChannel,
+                    seller = seller,
                     salePrice = salePrice,
                     status = status,
                     day = day.ifBlank { todayStr() },
@@ -395,6 +403,24 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         return res.url ?: ""
     }
 
+    /** 修改待入账行的来源人 */
+    fun updatePendingSeller(index: Int, seller: String) {
+        val p = _ui.value.pending.getOrNull(index) ?: return
+        val updated = _ui.value.pending.toMutableList()
+        updated[index] = p.copy(seller = seller)
+        _ui.update { it.copy(pending = updated) }
+    }
+
+    /** 批量来源人：把待入账中来源人仍为空的行填上（不覆盖已单独填的） */
+    fun applyBatchSeller(seller: String) {
+        val v = seller.trim()
+        if (v.isEmpty()) return
+        _ui.update { st ->
+            val updated = st.pending.map { p -> if (p.seller.isBlank()) p.copy(seller = v) else p }.toMutableList()
+            st.copy(pending = updated)
+        }
+    }
+
     /** 修改待入账行的收价/收货渠道/出货价/出货渠道 */
     fun updatePending(index: Int, recPrice: String, channel: String, salePrice: String = "", saleChannel: String = "") {
         val p = _ui.value.pending.getOrNull(index) ?: return
@@ -495,6 +521,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                         recPrice = p.recPrice.ifBlank { null },
                         channel = p.channel.ifBlank { null },
                         saleChannel = p.saleChannel.ifBlank { null },
+                        seller = p.seller.ifBlank { null },
                         salePrice = p.salePrice.ifBlank { null },
                         status = p.status,
                         day = p.day.ifBlank { todayStr() },

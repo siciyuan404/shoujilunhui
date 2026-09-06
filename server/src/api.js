@@ -261,7 +261,7 @@ function rowValues(f) {
 }
 
 // ---------- 收机记账（records） ----------
-const RECORD_INSERT_COLS = ['photo', 'brand', 'category', 'model', 'model_id', 'rec_price', 'sale_price', 'channel', 'sale_channel', 'day', 'status', 'note'];
+const RECORD_INSERT_COLS = ['photo', 'brand', 'category', 'model', 'model_id', 'rec_price', 'sale_price', 'channel', 'sale_channel', 'seller', 'day', 'status', 'note'];
 
 function validateRecord(body, partial) {
   const err = [];
@@ -281,6 +281,7 @@ function validateRecord(body, partial) {
   if (body.sale_price !== undefined) out.sale_price = String(body.sale_price ?? '').trim();
   if (body.channel !== undefined) out.channel = String(body.channel ?? '').trim();
   if (body.sale_channel !== undefined) out.sale_channel = String(body.sale_channel ?? '').trim();
+  if (body.seller !== undefined) out.seller = String(body.seller ?? '').trim();
   if (body.day !== undefined) {
     const d = String(body.day ?? '').trim();
     out.day = /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : '';
@@ -347,9 +348,10 @@ function listRecords(db, q) {
     where.push('day >= ? AND day <= ?'); args.push(start, end);
   }
   if (q.get('channel') && q.get('channel') !== '全部') { where.push('channel LIKE ?'); args.push('%' + q.get('channel') + '%'); }
+  if (q.get('seller') && q.get('seller') !== '全部') { where.push('seller LIKE ?'); args.push('%' + q.get('seller') + '%'); }
   if (q.get('status') && q.get('status') !== '全部') { where.push('status = ?'); args.push(q.get('status')); }
   if (q.get('search')) {
-    where.push('(model LIKE ? OR brand LIKE ? OR channel LIKE ? OR note LIKE ?)');
+    where.push('(model LIKE ? OR brand LIKE ? OR channel LIKE ? OR note LIKE ? OR seller LIKE ?)');
     const s = '%' + q.get('search') + '%';
     args.push(s, s, s, s);
   }
@@ -381,7 +383,7 @@ function recordStats(db, range) {
   const round = (x) => Math.round(x * 100) / 100;
   const recTotal = round(rows.reduce((s, r) => s + num(r.rec_price), 0));
   const saleTotal = round(rows.reduce((s, r) => s + num(r.sale_price), 0));
-  const maps = { byDay: new Map(), byChannel: new Map(), byModel: new Map(), byStatus: new Map() };
+  const maps = { byDay: new Map(), byChannel: new Map(), byModel: new Map(), byStatus: new Map(), bySeller: new Map() };
   const acc = (map, key, mk) => {
     if (!map.has(key)) map.set(key, mk(key));
     return map.get(key);
@@ -392,6 +394,11 @@ function recordStats(db, range) {
     const ch = (r.channel || '').trim();
     if (ch) {
       const c = acc(maps.byChannel, ch, (k) => ({ channel: k, count: 0, recTotal: 0, saleTotal: 0 }));
+      c.count++; c.recTotal += num(r.rec_price); c.saleTotal += num(r.sale_price);
+    }
+    const sel = (r.seller || '').trim();
+    if (sel) {
+      const c = acc(maps.bySeller, sel, (k) => ({ seller: k, count: 0, recTotal: 0, saleTotal: 0 }));
       c.count++; c.recTotal += num(r.rec_price); c.saleTotal += num(r.sale_price);
     }
     const mo = (r.model || '').trim();
@@ -414,11 +421,13 @@ function recordStats(db, range) {
       profit: round(saleTotal - recTotal),
       channels: maps.byChannel.size,
       statuses: maps.byStatus.size,
+      sellers: maps.bySeller.size,
     },
     byDay: finalize(maps.byDay).sort((a, b) => (a.day < b.day ? -1 : 1)),
     byChannel: finalize(maps.byChannel),
     byModel: finalize(maps.byModel),
     byStatus: finalize(maps.byStatus),
+    bySeller: finalize(maps.bySeller),
   };
 }
 
@@ -648,7 +657,7 @@ function createRouter(db, cfg) {
         const f = validateRecord(body, false);
         if (!f.day) f.day = new Date().toLocaleDateString('sv');
         const r = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`)
-          .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.day, f.status || '在库', f.note || '');
+          .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.seller || '', f.day, f.status || '在库', f.note || '');
         return json(res, 201, parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
       }
 
@@ -663,7 +672,7 @@ function createRouter(db, cfg) {
         try {
           for (const it of items) {
             const f = validateRecord(it, false);
-            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.day || today, f.status || '在库', f.note || '');
+            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.seller || '', f.day || today, f.status || '在库', f.note || '');
             n++;
           }
           db.exec('COMMIT');

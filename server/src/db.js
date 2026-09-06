@@ -111,6 +111,7 @@ function openDb() {
       sale_price TEXT NOT NULL DEFAULT '',
       channel TEXT NOT NULL DEFAULT '',
       sale_channel TEXT NOT NULL DEFAULT '',
+      seller TEXT NOT NULL DEFAULT '',
       day TEXT NOT NULL DEFAULT '',
       status TEXT NOT NULL DEFAULT '在库',
       note TEXT NOT NULL DEFAULT '',
@@ -134,13 +135,14 @@ function openDb() {
   // 老库迁移：records 表补齐缺失列
   const rcols = db.prepare('PRAGMA table_info(records)').all();
   const rnames = new Set(rcols.map((c) => c.name));
-  const rAddCols = [['sale_channel', "TEXT NOT NULL DEFAULT ''"]];
+  const rAddCols = [['sale_channel', "TEXT NOT NULL DEFAULT ''"], ['seller', "TEXT NOT NULL DEFAULT ''"]];
   for (const [col, def] of rAddCols) {
     if (!rnames.has(col)) {
       db.exec(`ALTER TABLE records ADD COLUMN ${col} ${def}`);
       console.log(`[db] 已为 records 表补充 ${col} 列`);
     }
   }
+  db.exec('CREATE INDEX IF NOT EXISTS idx_records_seller ON records(seller)');
   return db;
 }
 

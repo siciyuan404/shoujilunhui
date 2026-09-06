@@ -84,6 +84,7 @@ data class RecordRow(
     @SerializedName("sale_price") val salePrice: String,
     val channel: String,
     @SerializedName("sale_channel") val saleChannel: String,
+    val seller: String,
     val day: String,
     val status: String,
     val note: String?,
@@ -106,7 +107,8 @@ data class Summary(
     @SerializedName("saleTotal") val saleTotal: Double,
     val profit: Double,
     val channels: Int,
-    val statuses: Int
+    val statuses: Int,
+    val sellers: Int = 0
 )
 
 data class DayStat(
@@ -141,13 +143,22 @@ data class StatusStat(
     val profit: Double
 )
 
+data class SellerStat(
+    val seller: String,
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double
+)
+
 data class StatsResponse(
     val range: StatsRange?,
     val summary: Summary?,
     @SerializedName("byDay") val byDay: List<DayStat>?,
     @SerializedName("byChannel") val byChannel: List<ChannelStat>?,
     @SerializedName("byModel") val byModel: List<ModelStat>?,
-    @SerializedName("byStatus") val byStatus: List<StatusStat>?
+    @SerializedName("byStatus") val byStatus: List<StatusStat>?,
+    @SerializedName("bySeller") val bySeller: List<SellerStat>?
 )
 
 data class RecordPostBody(
@@ -160,6 +171,7 @@ data class RecordPostBody(
     @SerializedName("sale_price") val salePrice: String? = null,
     val channel: String? = null,
     @SerializedName("sale_channel") val saleChannel: String? = null,
+    val seller: String? = null,
     val day: String? = null,
     val status: String? = null,
     val note: String? = null
@@ -178,6 +190,7 @@ data class RecordPatchBody(
     @SerializedName("sale_price") val salePrice: String? = null,
     val channel: String? = null,
     @SerializedName("sale_channel") val saleChannel: String? = null,
+    val seller: String? = null,
     val day: String? = null,
     val status: String? = null,
     val note: String? = null,
