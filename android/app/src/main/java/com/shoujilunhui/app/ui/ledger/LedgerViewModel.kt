@@ -15,6 +15,7 @@ import com.shoujilunhui.app.data.RecordBatchBody
 import com.shoujilunhui.app.data.RecordPatchBody
 import com.shoujilunhui.app.data.RecordRow
 import com.shoujilunhui.app.data.StatsResponse
+import com.shoujilunhui.app.recognize.PhoneBox
 import com.shoujilunhui.app.recognize.PhoneRecognizer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,9 +41,12 @@ data class PendingRecord(
     val modelId: Long? = null,
     val recPrice: String = "",
     val channel: String = "",
+    val saleChannel: String = "",
     val salePrice: String = "",
     val status: String = "在库",
     val day: String = todayStr(),
+    val sourceUri: String = "",
+    val box: String = "",
 )
 
 data class LedgerUiState(
@@ -78,7 +82,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
     val message: StateFlow<String?> = _message
 
     fun clearMessage() { _message.value = null }
-    private fun showMessage(msg: String) { _message.value = msg }
+    fun showMessage(msg: String) { _message.value = msg }
 
     fun serverBaseUrl(): String = config.baseUrl
     fun hasWriteKey(): Boolean = config.apiKey.isNotBlank()
@@ -187,6 +191,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         model: String,
         recPrice: String,
         channel: String,
+        saleChannel: String,
         salePrice: String,
         status: String,
         day: String,
@@ -205,6 +210,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     modelId = row?.id,
                     recPrice = recPrice.ifBlank { null },
                     channel = channel,
+                    saleChannel = saleChannel.ifBlank { null },
                     salePrice = salePrice.ifBlank { null },
                     status = status,
                     day = day.ifBlank { todayStr() },
@@ -224,6 +230,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         model: String,
         recPrice: String,
         channel: String,
+        saleChannel: String,
         salePrice: String,
         status: String,
         day: String,
@@ -241,6 +248,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     modelId = row?.id,
                     recPrice = recPrice,
                     channel = channel,
+                    saleChannel = saleChannel,
                     salePrice = salePrice,
                     status = status,
                     day = day.ifBlank { todayStr() },
@@ -294,6 +302,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                 recPrice = it.channelPrice?.let { v ->
                     if (v == v.toLong().toDouble()) v.toLong().toString() else "%.2f".format(v)
                 } ?: "",
+                channel = "路边收",
                 status = "在库",
                 day = day,
             )
@@ -312,8 +321,8 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
 
     // ===== 拍照识别 → 待入账 =====
 
-    /** 选图后逐张识别为待入账记录（复用现有识别引擎 + 报价库匹配） */
-    fun recognizeToPending(uris: List<Uri>) {
+    /** 拍照/选图后逐张识别为待入账记录（复用现有识别引擎 + 报价库匹配；extraPrompt 为用户补充提示词） */
+    fun recognizeToPending(uris: List<Uri>, extraPrompt: String = "") {
         if (uris.isEmpty()) return
         val baseUrl = config.baseUrl
         if (baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }
@@ -328,7 +337,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(pendingBusy = true, pendingStatus = "识别中...") }
         viewModelScope.launch {
             try {
-                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, "")
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, extraPrompt)
                 val pending = mutableListOf<PendingRecord>()
                 var fail: String? = null
                 val day = todayStr()
@@ -350,8 +359,11 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                                 category = row?.category ?: "",
                                 modelId = row?.id,
                                 recPrice = row?.price ?: "",
+                                channel = "路边收",
                                 status = "在库",
                                 day = day,
+                                sourceUri = uri.toString(),
+                                box = p.box?.let { "${it.x1},${it.y1},${it.x2},${it.y2}" } ?: "",
                             )
                         }
                     } catch (e: Exception) {
@@ -382,12 +394,65 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         return res.url ?: ""
     }
 
-    /** 修改待入账行的收价/渠道 */
-    fun updatePending(index: Int, recPrice: String, channel: String) {
+    /** 修改待入账行的收价/收货渠道/出货价/出货渠道 */
+    fun updatePending(index: Int, recPrice: String, channel: String, salePrice: String = "", saleChannel: String = "") {
         val p = _ui.value.pending.getOrNull(index) ?: return
         val updated = _ui.value.pending.toMutableList()
-        updated[index] = p.copy(recPrice = recPrice, channel = channel)
+        updated[index] = p.copy(recPrice = recPrice, channel = channel, salePrice = salePrice, saleChannel = saleChannel)
         _ui.update { it.copy(pending = updated) }
+    }
+
+    /** 待入账单台重新识别：优先用原图+位置框裁剪重识别，无框则整图重识别 */
+    fun reRecognizePending(index: Int) {
+        val p = _ui.value.pending.getOrNull(index) ?: return
+        if (p.sourceUri.isBlank()) { showMessage("该台没有原图，无法单台重识别"); return }
+        val baseUrl = config.baseUrl
+        if (baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }
+        val isDeep = config.recProvider == "deepseek"
+        val aiBaseUrl = if (isDeep) PhoneRecognizer.DEEPSEEK_BASE else PhoneRecognizer.ARK_BASE
+        val apiKey = if (isDeep) config.deepseekApiKey else config.arkApiKey
+        if (apiKey.isBlank()) {
+            showMessage(if (isDeep) "请先在设置中填写 DeepSeek API Key" else "请先在设置中填写豆包 API Key")
+            return
+        }
+        val model = if (isDeep) PhoneRecognizer.DEFAULT_DEEPSEEK_MODEL else PhoneRecognizer.DEFAULT_ARK_MODEL
+        _ui.update { it.copy(pendingBusy = true, pendingStatus = "正在重新识别第 ${index + 1} 台...") }
+        viewModelScope.launch {
+            try {
+                val recognizer = PhoneRecognizer(baseUrl, aiBaseUrl, apiKey, model, "")
+                val uri = Uri.parse(p.sourceUri)
+                val nums = p.box.split(',').mapNotNull { it.trim().toFloatOrNull() }
+                val phones = if (nums.size == 4) {
+                    recognizer.recognizeCrop(getApplication(), uri, PhoneBox(nums[0], nums[1], nums[2], nums[3]))
+                } else {
+                    val b64 = recognizer.bitmapToBase64(getApplication(), uri)
+                    recognizer.recognizePhones(b64)
+                }
+                val first = phones.firstOrNull()
+                if (first == null) {
+                    _ui.update { it.copy(pendingBusy = false, pendingStatus = "未识别到手机") }
+                    return@launch
+                }
+                val row = recognizer.queryPrice(first.model)
+                val updated = _ui.value.pending.toMutableList()
+                updated[index] = p.copy(
+                    model = row?.model ?: first.model,
+                    brand = row?.brand ?: "",
+                    category = row?.category ?: "",
+                    modelId = row?.id,
+                    recPrice = row?.price ?: p.recPrice,
+                )
+                _ui.update {
+                    it.copy(
+                        pending = updated,
+                        pendingBusy = false,
+                        pendingStatus = "已重新识别为：${updated[index].model}",
+                    )
+                }
+            } catch (e: Exception) {
+                _ui.update { it.copy(pendingBusy = false, pendingStatus = "重新识别失败：${e.message}") }
+            }
+        }
     }
 
     fun clearPending() {
@@ -410,6 +475,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                         modelId = p.modelId,
                         recPrice = p.recPrice.ifBlank { null },
                         channel = p.channel.ifBlank { null },
+                        saleChannel = p.saleChannel.ifBlank { null },
                         salePrice = p.salePrice.ifBlank { null },
                         status = p.status,
                         day = p.day.ifBlank { todayStr() },

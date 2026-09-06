@@ -263,7 +263,7 @@ function rowValues(f) {
 }
 
 // ---------- 收机记账（records） ----------
-const RECORD_INSERT_COLS = ['photo', 'brand', 'category', 'model', 'model_id', 'rec_price', 'sale_price', 'channel', 'day', 'status', 'note'];
+const RECORD_INSERT_COLS = ['photo', 'brand', 'category', 'model', 'model_id', 'rec_price', 'sale_price', 'channel', 'sale_channel', 'day', 'status', 'note'];
 
 function validateRecord(body, partial) {
   const err = [];
@@ -282,6 +282,7 @@ function validateRecord(body, partial) {
   if (body.rec_price !== undefined) out.rec_price = String(body.rec_price ?? '').trim();
   if (body.sale_price !== undefined) out.sale_price = String(body.sale_price ?? '').trim();
   if (body.channel !== undefined) out.channel = String(body.channel ?? '').trim();
+  if (body.sale_channel !== undefined) out.sale_channel = String(body.sale_channel ?? '').trim();
   if (body.day !== undefined) {
     const d = String(body.day ?? '').trim();
     out.day = /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : '';
@@ -649,7 +650,7 @@ function createRouter(db, cfg) {
         const f = validateRecord(body, false);
         if (!f.day) f.day = new Date().toLocaleDateString('sv');
         const r = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`)
-          .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.day, f.status || '在库', f.note || '');
+          .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.day, f.status || '在库', f.note || '');
         return json(res, 201, parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
       }
 
@@ -664,7 +665,7 @@ function createRouter(db, cfg) {
         try {
           for (const it of items) {
             const f = validateRecord(it, false);
-            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.day || today, f.status || '在库', f.note || '');
+            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.day || today, f.status || '在库', f.note || '');
             n++;
           }
           db.exec('COMMIT');

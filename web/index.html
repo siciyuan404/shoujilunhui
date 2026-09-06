@@ -992,7 +992,8 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
       <div class="lg-form-item"><label>型号</label><input id="lgFModel" list="lgModelList" placeholder="搜索或输入型号" oninput="lgModelInput()"><datalist id="lgModelList"></datalist></div>
       <div class="lg-form-item"><label>品牌 / 分类</label><input id="lgFBrand" readonly placeholder="选型号自动带出"></div>
       <div class="lg-form-item"><label>收购价（元）</label><input id="lgFRec" type="number" placeholder="如 1800"></div>
-      <div class="lg-form-item"><label>渠道</label><input id="lgFChannel" list="lgChannelList" placeholder="如 路边收 / 线上 / 熟客"><datalist id="lgChannelList"></datalist></div>
+      <div class="lg-form-item"><label>渠道</label><input id="lgFChannel" list="lgChannelList" value="路边收" placeholder="如 路边收 / 线上 / 熟客"><datalist id="lgChannelList"></datalist></div>
+      <div class="lg-form-item"><label>出货渠道</label><input id="lgFSaleChannel" list="lgChannelList" placeholder="如 闲鱼 / 线上 / 同行"></div>
       <div class="lg-form-item"><label>出货价（元，可后填）</label><input id="lgFSale" type="number" placeholder="如 2100"></div>
       <div class="lg-form-item"><label>状态</label><select id="lgFStatus"><option>在库</option><option>已出</option></select></div>
       <div class="lg-form-item"><label>日期</label><input id="lgFDay" type="date"></div>
@@ -1024,6 +1025,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
       <div><label>收购价（元）</label><input id="lgEditRec" type="number"></div>
       <div><label>出货价（元）</label><input id="lgEditSale" type="number"></div>
       <div><label>渠道</label><input id="lgEditChannel" list="lgChannelList"></div>
+      <div><label>出货渠道</label><input id="lgEditSaleChannel" list="lgChannelList"></div>
       <div><label>状态</label><select id="lgEditStatus"><option>在库</option><option>已出</option></select></div>
       <div class="lg-edit-full"><label>日期</label><input id="lgEditDay" type="date"></div>
     </div>
@@ -2610,7 +2612,7 @@ let lgStats = null;
 let lgRecords = [];
 let lgPhotos = [];
 let lgPending = [];
-let lgChannelOpts = [];
+let lgChannelOpts = ['路边收', '线上', '熟客', '闲鱼', '转转', '展会', '同行', '快递', '电商平台', '朋友介绍'];
 let lgEditingId = null;
 let lgModelListBuilt = false;
 let lgStatusFilter = '';
@@ -2734,7 +2736,7 @@ function lgRenderTable() {
       '<div class="lg-tb-main"><div class="lg-tb-model">' + escAttr(r.model) +
         (r.brand ? '<span class="lg-tb-brand">' + escAttr(r.brand) + '</span>' : '') +
         (r.status ? '<span class="lg-tb-status">' + escAttr(r.status) + '</span>' : '') + '</div>' +
-        '<div class="lg-tb-sub">' + escAttr(r.day) + (r.channel ? ' · 渠道：' + escAttr(r.channel) : '') + '</div></div>' +
+        '<div class="lg-tb-sub">' + escAttr(r.day) + (r.channel ? ' · 渠道：' + escAttr(r.channel) : '') + (r.sale_channel ? ' · 出货：' + escAttr(r.sale_channel) : '') + '</div></div>' +
       '<div class="lg-tb-money"><div class="lg-tb-rec">收 <b>' + escAttr(r.rec_price || '-') + '</b> 元</div>' +
         (r.sale_price ? '<div class="lg-tb-sale">出 ' + escAttr(r.sale_price) + ' 元</div><div class="lg-tb-profit ' + (profit >= 0 ? 'p' : 'n') + '">' + (profit >= 0 ? '+' : '') + fmtNum(profit) + ' 元</div>' : '') + '</div>' +
       '<div class="lg-tb-ops">' +
@@ -2753,7 +2755,8 @@ function lgOpenEdit(id) {
   document.getElementById('lgEditModel').value = r.model || '';
   document.getElementById('lgEditRec').value = r.rec_price || '';
   document.getElementById('lgEditSale').value = r.sale_price || '';
-  document.getElementById('lgEditChannel').value = r.channel || '';
+  document.getElementById('lgEditChannel').value = r.channel || '路边收';
+  document.getElementById('lgEditSaleChannel').value = r.sale_channel || '';
   document.getElementById('lgEditStatus').value = r.status || '在库';
   document.getElementById('lgEditDay').value = r.day || lgToday();
   document.getElementById('lgEditModal').style.display = 'flex';
@@ -2768,6 +2771,7 @@ async function lgSaveEdit() {
     rec_price: document.getElementById('lgEditRec').value.trim(),
     sale_price: document.getElementById('lgEditSale').value.trim(),
     channel: document.getElementById('lgEditChannel').value.trim(),
+    sale_channel: document.getElementById('lgEditSaleChannel').value.trim(),
     status: document.getElementById('lgEditStatus').value,
     day: document.getElementById('lgEditDay').value || lgToday()
   };
@@ -2888,7 +2892,8 @@ async function lgRecognizeAll() {
             category: m ? m.category : '',
             model_id: m ? m.id : null,
             rec_price: m ? m.price : '',
-            channel: '',
+            channel: '路边收',
+            sale_channel: '',
             sale_price: '',
             status: '在库',
             day: lgToday()
@@ -2917,6 +2922,7 @@ function lgRenderPending() {
         '<input class="lg-pend-model" value="' + escAttr(r.model) + '" placeholder="型号" list="lgModelList" onchange="lgPendSet(' + i + ',\'model\',this.value)">' +
         '<input class="lg-pend-rec" type="number" value="' + escAttr(r.rec_price) + '" placeholder="收价" onchange="lgPendSet(' + i + ',\'rec_price\',this.value)">' +
         '<input class="lg-pend-channel" value="' + escAttr(r.channel) + '" placeholder="渠道" list="lgChannelList" onchange="lgPendSet(' + i + ',\'channel\',this.value)">' +
+        '<input class="lg-pend-salechannel" value="' + escAttr(r.sale_channel) + '" placeholder="出货渠道" list="lgChannelList" onchange="lgPendSet(' + i + ',\'sale_channel\',this.value)">' +
         '<input class="lg-pend-sale" type="number" value="' + escAttr(r.sale_price) + '" placeholder="出货价(可空)" onchange="lgPendSet(' + i + ',\'sale_price\',this.value)">' +
         '<input type="date" class="lg-pend-day" value="' + escAttr(r.day) + '" onchange="lgPendSet(' + i + ',\'day\',this.value)">' +
         '<button class="lg-pend-x" title="移除该项" onclick="lgPendDel(' + i + ')">×</button>' +
@@ -2973,6 +2979,7 @@ async function lgAddOne() {
     model_id: m ? m.id : null,
     rec_price: document.getElementById('lgFRec').value.trim(),
     channel: channel,
+    sale_channel: document.getElementById('lgFSaleChannel').value.trim(),
     sale_price: document.getElementById('lgFSale').value.trim(),
     status: document.getElementById('lgFStatus').value,
     day: document.getElementById('lgFDay').value || lgToday()
@@ -2983,7 +2990,8 @@ async function lgAddOne() {
     document.getElementById('lgFModel').value = '';
     document.getElementById('lgFBrand').value = '';
     document.getElementById('lgFRec').value = '';
-    document.getElementById('lgFChannel').value = '';
+    document.getElementById('lgFChannel').value = '路边收';
+    document.getElementById('lgFSaleChannel').value = '';
     document.getElementById('lgFSale').value = '';
     if (channel) lgChannelOpts.push(channel);
     lgLoad();

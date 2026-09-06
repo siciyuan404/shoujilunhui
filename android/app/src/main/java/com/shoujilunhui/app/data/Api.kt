@@ -82,6 +82,7 @@ data class RecordRow(
     @SerializedName("rec_price") val recPrice: String,
     @SerializedName("sale_price") val salePrice: String,
     val channel: String,
+    @SerializedName("sale_channel") val saleChannel: String,
     val day: String,
     val status: String,
     val note: String?,
@@ -157,6 +158,7 @@ data class RecordPostBody(
     @SerializedName("rec_price") val recPrice: String? = null,
     @SerializedName("sale_price") val salePrice: String? = null,
     val channel: String? = null,
+    @SerializedName("sale_channel") val saleChannel: String? = null,
     val day: String? = null,
     val status: String? = null,
     val note: String? = null
@@ -174,6 +176,7 @@ data class RecordPatchBody(
     @SerializedName("rec_price") val recPrice: String? = null,
     @SerializedName("sale_price") val salePrice: String? = null,
     val channel: String? = null,
+    @SerializedName("sale_channel") val saleChannel: String? = null,
     val day: String? = null,
     val status: String? = null,
     val note: String? = null,

@@ -33,6 +33,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import android.net.Uri
+import java.io.File
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -135,8 +139,18 @@ fun LedgerScreen(
         ActivityResultContracts.GetMultipleContents()
     ) { uris ->
         if (uris.isNotEmpty()) {
-            vm.recognizeToPending(uris)
+            vm.recognizeToPending(uris, promptPick)
         }
+    }
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
+    var promptPick by remember { mutableStateOf("") }
+    var promptTake by remember { mutableStateOf("") }
+    var showPromptPick by remember { mutableStateOf(false) }
+    var showPromptTake by remember { mutableStateOf(false) }
+    val takePhoto = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { ok ->
+        if (ok) cameraUri?.let { vm.recognizeToPending(listOf(it), promptTake) }
     }
 
     LaunchedEffect(Unit) {
@@ -252,9 +266,12 @@ fun LedgerScreen(
                                     index = index,
                                     pending = p,
                                     channels = ui.channels,
-                                    onPrice = { v -> vm.updatePending(index, v, p.channel) },
-                                    onChannel = { v -> vm.updatePending(index, p.recPrice, v) },
+                                    onPrice = { v -> vm.updatePending(index, v, p.channel, p.salePrice, p.saleChannel) },
+                                    onChannel = { v -> vm.updatePending(index, p.recPrice, v, p.salePrice, p.saleChannel) },
+                                    onSalePrice = { v -> vm.updatePending(index, p.recPrice, p.channel, v, p.saleChannel) },
+                                    onSaleChannel = { v -> vm.updatePending(index, p.recPrice, p.channel, p.salePrice, v) },
                                     onDay = { v -> vm.updatePendingDay(index, v) },
+                                    onReRecognize = { vm.reRecognizePending(index) },
                                 )
                             }
                             item {
@@ -337,10 +354,24 @@ fun LedgerScreen(
                 Text("选择记账方式", fontSize = 15.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
                 Spacer(Modifier.height(14.dp))
                 Button(
-                    onClick = { showEntrySheet = false; pickImages.launch("*/*") },
+                    onClick = {
+                        showEntrySheet = false
+                        promptTake = ""
+                        showPromptTake = true
+                    },
                     modifier = Modifier.fillMaxWidth().height(48.dp),
                     shape = RoundedCornerShape(12.dp),
-                ) { Text("📷 拍照 / 选图识别入账", fontSize = 14.sp) }
+                ) { Text("📷 拍照识别", fontSize = 14.sp) }
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(
+                    onClick = {
+                        showEntrySheet = false
+                        promptPick = ""
+                        showPromptPick = true
+                    },
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
+                ) { Text("🖼 选图识别", fontSize = 14.sp) }
                 Spacer(Modifier.height(10.dp))
                 OutlinedButton(
                     onClick = { showEntrySheet = false; showAdd = true },
@@ -362,6 +393,50 @@ fun LedgerScreen(
                 Spacer(Modifier.height(20.dp))
             }
         }
+    }
+
+    // 识别提示词对话框（拍照 / 选图前可补充提示词影响识别）
+    if (showPromptTake || showPromptPick) {
+        val context = LocalContext.current
+        val isTake = showPromptTake
+        AlertDialog(
+            onDismissRequest = { showPromptTake = false; showPromptPick = false },
+            title = { Text("识别提示词（可留空）", fontSize = 16.sp) },
+            text = {
+                OutlinedTextField(
+                    value = if (isTake) promptTake else promptPick,
+                    onValueChange = { if (isTake) promptTake = it else promptPick = it },
+                    placeholder = { Text("如：重点关注标签上印刷的型号文字", fontSize = 12.sp) },
+                    minLines = 2,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (isTake) {
+                        showPromptTake = false
+                        try {
+                            val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                            val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                            file.createNewFile()
+                            val uri = FileProvider.getUriForFile(
+                                context, "${context.packageName}.fileprovider", file
+                            )
+                            cameraUri = uri
+                            takePhoto.launch(uri)
+                        } catch (e: Exception) {
+                            vm.showMessage("无法打开相机：${e.message}")
+                        }
+                    } else {
+                        showPromptPick = false
+                        pickImages.launch("*/*")
+                    }
+                }) { Text("开始识别") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPromptTake = false; showPromptPick = false }) { Text("取消") }
+            },
+        )
     }
 
     // 从识别历史选择
@@ -397,8 +472,8 @@ fun LedgerScreen(
             title = "手动录入",
             initial = null,
             onDismiss = { showAdd = false },
-            onSave = { model, rec, ch, sale, status, day ->
-                vm.addRecord(model, rec, ch, sale, status, day) { showAdd = false }
+            onSave = { model, rec, ch, saleCh, sale, status, day ->
+                vm.addRecord(model, rec, ch, saleCh, sale, status, day) { showAdd = false }
             },
             vm = vm,
         )
@@ -410,8 +485,8 @@ fun LedgerScreen(
             title = "编辑修正",
             initial = row,
             onDismiss = { editRow = null },
-            onSave = { model, rec, ch, sale, status, day ->
-                vm.updateRecord(row.id, model, rec, ch, sale, status, day) { editRow = null }
+            onSave = { model, rec, ch, saleCh, sale, status, day ->
+                vm.updateRecord(row.id, model, rec, ch, saleCh, sale, status, day) { editRow = null }
             },
             vm = vm,
         )
@@ -617,7 +692,10 @@ private fun PendingCard(
     channels: List<String>,
     onPrice: (String) -> Unit,
     onChannel: (String) -> Unit,
+    onSalePrice: (String) -> Unit,
+    onSaleChannel: (String) -> Unit,
     onDay: (String) -> Unit,
+    onReRecognize: () -> Unit,
 ) {
     var showDate by remember { mutableStateOf(false) }
     Card(
@@ -661,6 +739,26 @@ private fun PendingCard(
             }
             Spacer(Modifier.height(6.dp))
             ChannelSuggestRow(channels = channels, current = pending.channel, onPick = onChannel)
+            Spacer(Modifier.height(6.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                LgField(
+                    value = pending.salePrice,
+                    onValueChange = onSalePrice,
+                    label = "出货价（元）",
+                    placeholder = "可后填",
+                    number = true,
+                    modifier = Modifier.weight(1f),
+                )
+                LgField(
+                    value = pending.saleChannel,
+                    onValueChange = onSaleChannel,
+                    label = "出货渠道",
+                    placeholder = "如 闲鱼",
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            Spacer(Modifier.height(6.dp))
+            ChannelSuggestRow(channels = channels, current = pending.saleChannel, onPick = onSaleChannel)
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
@@ -669,6 +767,13 @@ private fun PendingCard(
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     Text("📅 记入 ${pending.day}", fontSize = 13.sp, color = TextPrimary)
+                }
+                if (pending.sourceUri.isNotBlank()) {
+                    OutlinedButton(
+                        onClick = onReRecognize,
+                        modifier = Modifier.height(46.dp),
+                        shape = RoundedCornerShape(12.dp),
+                    ) { Text("🔄 重识别", fontSize = 12.sp) }
                 }
                 Text("🟢 在库", fontSize = 11.sp, color = TextSecondary)
             }
@@ -737,7 +842,7 @@ private fun RecordCard(
                     }
                 }
                 Text(
-                    "${row.day} · ${row.channel.ifBlank { "无渠道" }} · ${row.status}",
+                    "${row.day} · 收:${row.channel.ifBlank { "无" }}${if (row.saleChannel.isNotBlank()) " · 出:${row.saleChannel}" else ""} · ${row.status}",
                     fontSize = 11.sp,
                     color = TextSecondary,
                     maxLines = 1,
@@ -749,12 +854,26 @@ private fun RecordCard(
             Column(horizontalAlignment = Alignment.End) {
                 Text("收 ¥${row.recPrice}", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                 val sale = row.salePrice
-                Text(
-                    if (sale.isNotBlank()) "出 ¥$sale" else "未出货",
-                    fontSize = 11.sp,
-                    color = if (sale.isNotBlank()) PriceRed else TextSecondary,
-                    modifier = Modifier.padding(top = 1.dp),
-                )
+                if (sale.isNotBlank()) {
+                    Text(
+                        "出 ¥$sale",
+                        fontSize = 11.sp,
+                        color = PriceRed,
+                        modifier = Modifier.padding(top = 1.dp),
+                    )
+                    val profit = sale.toDoubleOrNull()?.minus(row.recPrice.toDoubleOrNull() ?: 0.0)
+                    if (profit != null) {
+                        Text(
+                            (if (profit >= 0) "毛利 +${fmt(profit)}" else "毛利 ${fmt(profit)}"),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = if (profit >= 0) Color(0xFF1E9E5A) else Color(0xFFE03E3E),
+                            modifier = Modifier.padding(top = 1.dp),
+                        )
+                    }
+                } else {
+                    Text("未出货", fontSize = 11.sp, color = TextSecondary, modifier = Modifier.padding(top = 1.dp))
+                }
             }
         }
         Row(Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp, bottom = 4.dp)) {
@@ -772,12 +891,13 @@ private fun RecordFormDialog(
     title: String,
     initial: RecordRow?,
     onDismiss: () -> Unit,
-    onSave: (String, String, String, String, String, String) -> Unit,
+    onSave: (String, String, String, String, String, String, String) -> Unit,
     vm: LedgerViewModel,
 ) {
     var model by remember { mutableStateOf(initial?.model ?: "") }
     var recPrice by remember { mutableStateOf(initial?.recPrice ?: "") }
-    var channel by remember { mutableStateOf(initial?.channel ?: "") }
+    var channel by remember { mutableStateOf(initial?.channel ?: "路边收") }
+    var saleChannel by remember { mutableStateOf(initial?.saleChannel ?: "") }
     var salePrice by remember { mutableStateOf(initial?.salePrice ?: "") }
     var status by remember { mutableStateOf(initial?.status ?: "在库") }
     var day by remember { mutableStateOf(initial?.day ?: todayStr()) }
@@ -854,9 +974,22 @@ private fun RecordFormDialog(
                         number = true,
                         modifier = Modifier.weight(1f),
                     )
+                    LgField(
+                        value = saleChannel,
+                        onValueChange = { saleChannel = it },
+                        label = "出货渠道",
+                        placeholder = "如 闲鱼",
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                ChannelSuggestRow(channels = ui.channels, current = saleChannel, onPick = { saleChannel = it })
+                Spacer(Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Spacer(Modifier.weight(1f))
                     OutlinedButton(
                         onClick = { showDate = true },
-                        modifier = Modifier.weight(1f).height(56.dp),
+                        modifier = Modifier.height(56.dp),
                         shape = RoundedCornerShape(12.dp),
                     ) { Text("📅 $day", fontSize = 13.sp, color = TextPrimary) }
                 }
@@ -875,7 +1008,7 @@ private fun RecordFormDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(model, recPrice, channel, salePrice, status, day) }) {
+            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day) }) {
                 Text("保存")
             }
         },
