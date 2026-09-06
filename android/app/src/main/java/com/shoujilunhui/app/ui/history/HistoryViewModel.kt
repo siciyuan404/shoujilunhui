@@ -11,6 +11,7 @@ import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelPatchBody
 import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.data.PostBody
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
