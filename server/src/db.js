@@ -61,6 +61,8 @@ const SPEC_COLS = [
   ['os', "TEXT NOT NULL DEFAULT ''"],
   // 分容分版本价格：[{"spec":"128G","price":"100"},{"spec":"256G","price":"130"}]
   ['variants', "TEXT NOT NULL DEFAULT '[]'"],
+  // 型号代码：官方型号编码，如华为 P40 Pro → ELS-AN00
+  ['model_code', "TEXT NOT NULL DEFAULT ''"],
 ];
 
 function openDb() {
@@ -90,6 +92,7 @@ function openDb() {
       network TEXT NOT NULL DEFAULT '',
       os TEXT NOT NULL DEFAULT '',
       variants TEXT NOT NULL DEFAULT '[]',
+      model_code TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL DEFAULT (datetime('now','localtime')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
@@ -136,7 +139,7 @@ function autoMigrate(db) {
   if (cnt > 0) return false;
   if (!fs.existsSync(LEGACY_JSON)) return false;
   const data = JSON.parse(fs.readFileSync(LEGACY_JSON, 'utf-8'));
-  const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images, release_date, cpu_brand, cpu_model, ram, rom, back_camera, front_camera, screen_size, screen_type, refresh, battery, charge, network, os, variants) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+  const ins = db.prepare('INSERT INTO models (brand, category, model, price, note, images, release_date, cpu_brand, cpu_model, ram, rom, back_camera, front_camera, screen_size, screen_type, refresh, battery, charge, network, os, variants, model_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
   let n = 0;
   const tx = () => {
     db.exec('BEGIN');
@@ -147,7 +150,7 @@ function autoMigrate(db) {
         ins.run(g.brand, g.category, m.model, String(m.price ?? ''), m.note || '', imgs,
           m.release_date || '', m.cpu_brand || '', m.cpu_model || '', m.ram || '', m.rom || '',
           m.back_camera || '', m.front_camera || '', m.screen_size || '', m.screen_type || '', m.refresh || '',
-          m.battery || '', m.charge || '', m.network || '', m.os || '', vars);
+          m.battery || '', m.charge || '', m.network || '', m.os || '', vars, m.model_code || '');
         n++;
       }
     }

@@ -54,7 +54,7 @@ async function fetchLatestRelease() {
 const SPEC_FIELDS = [
   'release_date', 'cpu_brand', 'cpu_model', 'ram', 'rom',
   'back_camera', 'front_camera', 'screen_size', 'screen_type', 'refresh',
-  'battery', 'charge', 'network', 'os', 'variants',
+  'battery', 'charge', 'network', 'os', 'variants', 'model_code',
 ];
 
 function json(res, code, data) {
@@ -118,9 +118,9 @@ function listModels(db, q) {
   if (q.get('brand') && q.get('brand') !== '全部') { where.push('brand = ?'); args.push(q.get('brand')); }
   if (q.get('category')) { where.push('category = ?'); args.push(q.get('category')); }
   if (q.get('search')) {
-    where.push('(model LIKE ? OR note LIKE ? OR brand LIKE ? OR category LIKE ? OR cpu_model LIKE ? OR release_date LIKE ?)');
+    where.push('(model LIKE ? OR note LIKE ? OR brand LIKE ? OR category LIKE ? OR cpu_model LIKE ? OR release_date LIKE ? OR model_code LIKE ?)');
     const s = '%' + q.get('search') + '%';
-    args.push(s, s, s, s, s, s);
+    args.push(s, s, s, s, s, s, s);
   }
   if (q.get('min_price')) { where.push('CAST(price AS REAL) >= ?'); args.push(Number(q.get('min_price'))); }
   if (q.get('max_price')) { where.push('CAST(price AS REAL) <= ?'); args.push(Number(q.get('max_price'))); }

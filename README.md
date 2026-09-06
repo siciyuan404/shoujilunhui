@@ -26,7 +26,7 @@
 
 数据源以 `server/db/phone.db`（SQLite）为运行时事实源，首次启动自动从 `phone-price/data.json` 导入 1600+ 条机型（含已补录的规格种子）。
 
-- **规格字段**：`release_date`(上市时间) / `cpu_brand` / `cpu_model` / `ram` / `rom` / `back_camera` / `front_camera` / `screen_size` / `screen_type` / `refresh` / `battery` / `charge` / `network` / `os` / `variants`(分容分版本价格)
+- **规格字段**：`release_date`(上市时间) / `cpu_brand` / `cpu_model` / `ram` / `rom` / `back_camera` / `front_camera` / `screen_size` / `screen_type` / `refresh` / `battery` / `charge` / `network` / `os` / `variants`(分容分版本价格) / `model_code`(型号代码，官方型号编码如 华为P40 Pro→ELS-AN00，可空，列表/详情/编辑三端均可见可补)
 - **补录工具**：`python server/merge_specs.py` 把 `phone-price/phone-specs.json` 验机知识库中已有机型的年份/CPU/屏幕信息，按「品牌映射+归一化型号」合并进数据库（主流机型优先，其余逐步手动补录）
 - **补录方式**：桌面端/Web 端（本机）点「规格✎」在弹窗中维护规格与分版本价格，保存即入库
 - **部署注意**：规格种子已随 `phone-price/data.json` 版本化，新环境首次启动 `autoMigrate` 即带规格

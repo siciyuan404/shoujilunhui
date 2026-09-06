@@ -141,11 +141,13 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun updateModel(row: ModelRow, price: String, note: String) {
+    fun updateModel(row: ModelRow, price: String, note: String, modelCode: String? = null) {
         viewModelScope.launch {
             try {
+                val patch = mutableMapOf<String, Any>("price" to price, "note" to note)
+                if (modelCode != null) patch["model_code"] = modelCode
                 val updated = ApiClient.api(baseUrl).putModel(
-                    row.id, apiKey, mapOf("price" to price, "note" to note)
+                    row.id, apiKey, patch
                 )
                 _ui.update { s ->
                     s.copy(models = s.models.map { if (it.id == row.id) updated else it })

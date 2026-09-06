@@ -23,6 +23,7 @@ data class ModelRow(
     val model: String,
     val price: String,
     val note: String?,
+    @SerializedName("model_code") val modelCode: String?,
     @SerializedName("release_date") val releaseDate: String?,
     @SerializedName("cpu_brand") val cpuBrand: String?,
     @SerializedName("cpu_model") val cpuModel: String?,

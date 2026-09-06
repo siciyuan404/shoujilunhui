@@ -72,6 +72,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -309,7 +310,7 @@ fun HomeScreen(
         EditModelDialog(
             row = row,
             onDismiss = { editRow = null },
-            onSave = { price, note -> vm.updateModel(row, price, note); editRow = null },
+            onSave = { price, note, code -> vm.updateModel(row, price, note, code); editRow = null },
         )
     }
 
@@ -557,6 +558,16 @@ private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLon
                     color = TextSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                )
+                val modelCode = row.modelCode?.takeIf { it.isNotBlank() }
+                Text(
+                    modelCode ?: "型号代码待补",
+                    fontSize = 10.5.sp,
+                    color = if (modelCode != null) TextSecondary else Color(0xFFC0C6D0),
+                    fontStyle = if (modelCode != null) FontStyle.Normal else FontStyle.Italic,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 1.dp),
                 )
                 val specs = buildList {
                     if (!row.cpuModel.isNullOrBlank()) add(row.cpuModel)

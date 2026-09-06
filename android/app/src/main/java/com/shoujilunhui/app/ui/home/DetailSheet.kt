@@ -193,6 +193,7 @@ fun DetailSheet(
         Spacer(Modifier.height(10.dp))
         SectionTitle("详细参数")
         val specs = listOf(
+            "型号代码" to row.modelCode,
             "上市时间" to row.releaseDate,
             "CPU品牌" to row.cpuBrand,
             "CPU型号" to row.cpuModel,
@@ -428,10 +429,11 @@ fun AddModelDialog(
 fun EditModelDialog(
     row: ModelRow,
     onDismiss: () -> Unit,
-    onSave: (price: String, note: String) -> Unit,
+    onSave: (price: String, note: String, modelCode: String) -> Unit,
 ) {
     var price by remember { mutableStateOf(row.price) }
     var note by remember { mutableStateOf(row.note ?: "") }
+    var modelCode by remember { mutableStateOf(row.modelCode ?: "") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -439,10 +441,11 @@ fun EditModelDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 DialogField(price, { price = it }, "回收价（元）")
+                DialogField(modelCode, { modelCode = it }, "型号代码（可空，如 ELS-AN00）")
                 DialogField(note, { note = it }, "备注")
             }
         },
-        confirmButton = { TextButton(onClick = { onSave(price.trim(), note.trim()) }) { Text("保存") } },
+        confirmButton = { TextButton(onClick = { onSave(price.trim(), note.trim(), modelCode.trim()) }) { Text("保存") } },
         dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
     )
 }

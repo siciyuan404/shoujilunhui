@@ -575,6 +575,10 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   .set-about-val { text-align: left; }
 }
 
+.model-code { font-size: 11px; color: #8a94a6; margin-top: 3px; }
+.model-code .edit-model { font-weight: 400; font-size: 11px; color: #8a94a6; padding: 1px 3px; border-radius: 4px; }
+.model-code-empty .edit-model { color: #c0c6d0; font-style: italic; }
+
 /* ===== 参考图片 ===== */
 .img-thumb {
   position: relative; width: 52px; height: 52px; border-radius: 8px; overflow: hidden; cursor: pointer;
@@ -1226,6 +1230,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
     <div class="spec-modal-body">
       <div class="spec-form-grid">
         <div class="spec-form-section">💻 硬件</div>
+        <div class="spec-form-item"><label>型号代码</label><input id="spModelCode" placeholder="官方型号，如 ELS-AN00 / LYA-AL00"></div>
         <div class="spec-form-item"><label>上市时间 (年或年-月)</label><input id="spRelease" placeholder="如 2024 / 2024-09"></div>
         <div class="spec-form-item"><label>CPU品牌</label><select id="spCpuBrand">
           <option value="">未知</option><option>高通</option><option>联发科</option><option>苹果</option>
@@ -1314,7 +1319,8 @@ Promise.all([
       ram: it.ram || '', rom: it.rom || '', back_camera: it.back_camera || '', front_camera: it.front_camera || '',
       screen_size: it.screen_size || '', screen_type: it.screen_type || '', refresh: it.refresh || '',
       battery: it.battery || '', charge: it.charge || '', network: it.network || '', os: it.os || '',
-      variants: vars
+      variants: vars,
+      model_code: it.model_code || ''
     });
   }
   specsData = specData;
@@ -2205,7 +2211,7 @@ async function openSpecEditor(id) {
   specEditId = Number(id);
   document.getElementById('specModalTitle').textContent = m.model;
   const set = (el, v) => { const node = document.getElementById(el); if (node) node.value = v || ''; };
-  set('spRelease', m.release_date); set('spCpuBrand', m.cpu_brand); set('spCpuModel', m.cpu_model);
+  set('spModelCode', m.model_code); set('spRelease', m.release_date); set('spCpuBrand', m.cpu_brand); set('spCpuModel', m.cpu_model);
   set('spRam', m.ram); set('spRom', m.rom); set('spBackCam', m.back_camera); set('spFrontCam', m.front_camera);
   set('spScreenSize', m.screen_size); set('spScreenType', m.screen_type); set('spRefresh', m.refresh);
   set('spBattery', m.battery); set('spCharge', m.charge); set('spNetwork', m.network); set('spOs', m.os);
@@ -2245,6 +2251,7 @@ async function saveSpecEditor() {
     price: ((document.getElementById('vv_price_' + i) || {}).value || '').trim() || v.price,
   })).filter(v => v.spec || v.price);
   const patch = {
+    model_code: document.getElementById('spModelCode').value.trim(),
     release_date: document.getElementById('spRelease').value.trim(),
     cpu_brand: document.getElementById('spCpuBrand').value,
     cpu_model: document.getElementById('spCpuModel').value.trim(),
@@ -2300,9 +2307,9 @@ function renderPrice() {
   allData.forEach(group => {
     if (currentBrand !== '全部' && group.brand !== currentBrand) return;
     group.models.forEach(m => {
-      if (currentSearch && !m.model.toLowerCase().includes(currentSearch)) return;
+      if (currentSearch && !m.model.toLowerCase().includes(currentSearch) && !(m.model_code || '').toLowerCase().includes(currentSearch)) return;
       if (!matchSpecs(m)) return;
-      filtered.push({ id: m.id, brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '', images: m.images || [], release_date: m.release_date || '', cpu_brand: m.cpu_brand || '', cpu_model: m.cpu_model || '', back_camera: m.back_camera || '', variants: m.variants || [] });
+      filtered.push({ id: m.id, brand: group.brand, category: group.category, model: m.model, price: m.price, note: m.note || '', images: m.images || [], release_date: m.release_date || '', cpu_brand: m.cpu_brand || '', cpu_model: m.cpu_model || '', back_camera: m.back_camera || '', variants: m.variants || [], model_code: m.model_code || '' });
     });
   });
   if (currentSort === 'price-desc') filtered.sort((a, b) => parseInt(b.price) - parseInt(a.price));
@@ -2326,8 +2333,11 @@ function renderPrice() {
       const noteText = item.note || '';
       const editAttr = canEdit ? ' contenteditable="true"' : '';
       const editSpecBtn = canEdit ? `<button class="img-edit-mini" style="margin-left:4px" onclick="openSpecEditor(${item.id})" title="编辑规格 / 分容量版本价格">规格✎</button>` : '';
+      const codeHtml = item.model_code
+        ? `<div class="model-code"><span class="edit-model"${editAttr} data-field="model_code" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${escAttr(item.model_code)}</span></div>`
+        : (canEdit ? `<div class="model-code model-code-empty"><span class="edit-model"${editAttr} data-field="model_code" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">待补</span></div>` : '');
       html += `<tr>
-        <td><span class="edit-model"${editAttr} data-field="model" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span>${editSpecBtn}</td>
+        <td><span class="edit-model"${editAttr} data-field="model" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${modelName}</span>${editSpecBtn}${codeHtml}</td>
         <td>${priceCellHtml(item)}</td>
         <td>${specBadgesHtml(item)}</td>
         <td class="note-cell"><span class="edit-note"${editAttr} data-field="note" data-id="${item.id}" onfocus="editFocus(this)" onblur="editBlur(this)">${noteText || ''}</span></td>
