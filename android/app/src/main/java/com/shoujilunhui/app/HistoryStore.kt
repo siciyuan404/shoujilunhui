@@ -203,6 +203,32 @@ class HistoryStore(context: Context) : SQLiteOpenHelper(context.applicationConte
         return null
     }
 
+    /** 收录后更新某台识别项的匹配状态与价格，并重算整条汇总 */
+    fun updateItem(
+        historyId: Long,
+        seq: Int,
+        matched: Boolean,
+        brand: String,
+        category: String,
+        channelPrice: Double?,
+        customerPrice: Double?,
+    ) {
+        val db = writableDatabase
+        db.update("recognize_history_items", ContentValues().apply {
+            put("matched", if (matched) 1 else 0)
+            put("brand", brand)
+            put("category", category)
+            if (channelPrice != null) put("channel_price", channelPrice)
+            if (customerPrice != null) put("customer_price", customerPrice)
+        }, "history_id=? AND seq=?", arrayOf(historyId.toString(), seq.toString()))
+        val list = items(historyId)
+        db.update("recognize_history", ContentValues().apply {
+            put("matched_count", list.count { it.matched })
+            put("channel_total", list.mapNotNull { it.channelPrice }.sum())
+            put("customer_total", list.mapNotNull { it.customerPrice }.sum())
+        }, "id=?", arrayOf(historyId.toString()))
+    }
+
     /** 删除记录（含图片目录） */
     fun delete(id: Long) {
         val dir = get(id)?.dir

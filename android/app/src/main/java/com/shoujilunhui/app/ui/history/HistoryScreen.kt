@@ -71,11 +71,13 @@ import coil.compose.AsyncImage
 import com.shoujilunhui.app.HistoryEntry
 import com.shoujilunhui.app.HistoryItem
 import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.ui.home.AddModelDialog
 import com.shoujilunhui.app.ui.home.DeleteConfirmDialog
 import com.shoujilunhui.app.ui.home.DetailSheet
 import com.shoujilunhui.app.ui.home.EditModelDialog
 import com.shoujilunhui.app.ui.home.ImageViewerDialog
 import com.shoujilunhui.app.ui.theme.Accent
+import com.shoujilunhui.app.ui.theme.Danger
 import com.shoujilunhui.app.ui.theme.MatchGreen
 import com.shoujilunhui.app.ui.theme.MatchOrange
 import com.shoujilunhui.app.ui.theme.PriceRed
@@ -96,6 +98,7 @@ fun HistoryListScreen(
     vm: HistoryViewModel = viewModel(),
 ) {
     val entries by vm.entries.collectAsState()
+    var confirmDelete by remember { mutableStateOf<HistoryEntry?>(null) }
     LaunchedEffect(Unit) { vm.refresh() }
 
     Scaffold(
@@ -130,14 +133,30 @@ fun HistoryListScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(entries) { e ->
-                HistoryRow(e, onClick = { onOpenDetail(e.id) })
+                HistoryRow(
+                    e,
+                    onClick = { onOpenDetail(e.id) },
+                    onDelete = { confirmDelete = e },
+                )
             }
         }
+    }
+
+    confirmDelete?.let { e ->
+        AlertDialog(
+            onDismissRequest = { confirmDelete = null },
+            title = { Text("删除这条识别记录？", fontSize = 16.sp) },
+            text = { Text("将删除 ${e.imageCount} 张图 · ${e.phoneCount} 台识别记录，且无法恢复。", fontSize = 13.sp) },
+            confirmButton = {
+                TextButton(onClick = { vm.delete(e.id); confirmDelete = null }) { Text("删除", color = Danger) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text("取消") } },
+        )
     }
 }
 
 @Composable
-private fun HistoryRow(e: HistoryEntry, onClick: () -> Unit) {
+private fun HistoryRow(e: HistoryEntry, onClick: () -> Unit, onDelete: () -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -177,6 +196,17 @@ private fun HistoryRow(e: HistoryEntry, onClick: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 color = PriceRed,
             )
+            IconButton(
+                onClick = onDelete,
+                modifier = Modifier.size(30.dp),
+            ) {
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = "删除",
+                    tint = TextSecondary,
+                    modifier = Modifier.size(16.dp),
+                )
+            }
         }
     }
 }
@@ -198,6 +228,7 @@ fun HistoryDetailScreen(
     var deleteRow by remember { mutableStateOf<ModelRow?>(null) }
     var viewer by remember { mutableStateOf<Pair<List<String>, Int>?>(null) }
     var pendingImgRow by remember { mutableStateOf<ModelRow?>(null) }
+    var showAddModel by remember { mutableStateOf<HistoryItem?>(null) }
     var showImgPicker by remember { mutableStateOf(false) }
     var cameraUri by remember { mutableStateOf<Uri?>(null) }
     val pickImages = rememberLauncherForActivityResult(
@@ -282,12 +313,27 @@ fun HistoryDetailScreen(
                 }
                 item {
                     imgItems.forEach { it ->
-                        HistoryItemRow(it, onClick = { vm.searchModel(it.model) })
+                        HistoryItemRow(it, onClick = {
+                            if (it.matched) vm.searchModel(it.model) else showAddModel = it
+                        })
                         Spacer(Modifier.height(6.dp))
                     }
                 }
             }
         }
+    }
+
+    // 未收录机器 → 添加机型（可拍照补充资料），收录后该历史项更新为已匹配
+    showAddModel?.let { item ->
+        AddModelDialog(
+            defaultBrand = "",
+            defaultModel = item.model,
+            onDismiss = { showAddModel = null },
+            onAdd = { b, c, m, p, n, imgs ->
+                vm.addModelToHistory(e.id, item, b, c, m, p, n, imgs)
+                showAddModel = null
+            },
+        )
     }
 
     // 报价库机型详情（修改价格/补图/删除）
@@ -467,6 +513,8 @@ private fun HistoryItemRow(it: HistoryItem, onClick: () -> Unit = {}) {
                 }
                 if (it.matched) {
                     Text("点此修改库内数据", fontSize = 9.sp, color = Accent, modifier = Modifier.padding(top = 2.dp))
+                } else {
+                    Text("未收录，点此收录并补资料", fontSize = 9.sp, color = MatchOrange, modifier = Modifier.padding(top = 2.dp))
                 }
             }
         }

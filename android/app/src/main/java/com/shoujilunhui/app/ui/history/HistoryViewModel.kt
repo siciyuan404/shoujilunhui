@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
 import com.shoujilunhui.app.HistoryEntry
+import com.shoujilunhui.app.HistoryItem
 import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelPatchBody
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import kotlin.math.roundToInt
 
 class HistoryViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -48,6 +50,40 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         store.delete(id)
         _entries.value = store.all()
         if (_detail.value?.id == id) _detail.value = null
+    }
+
+    /** 历史里未收录的机器 → 新增到报价库（可带拍照/相册图片），并把该历史项标记为已匹配 */
+    fun addModelToHistory(
+        entryId: Long,
+        item: HistoryItem,
+        brand: String,
+        category: String,
+        model: String,
+        price: String,
+        note: String,
+        images: List<Uri>,
+    ) {
+        if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
+        viewModelScope.launch {
+            try {
+                val urls = images.mapNotNull { uri -> uploadImage(uri) }
+                val created = ApiClient.api(baseUrl).postModel(
+                    apiKey, PostBody(brand, category, model, price, note, images = urls.ifEmpty { null })
+                )
+                val cp = priceValue(created.price)
+                val cu = cp?.times(config.priceRatio / 100.0)?.let { (it * 10).roundToInt() / 10.0 }
+                store.updateItem(entryId, item.seq, true, created.brand, created.category, cp, cu)
+                _detail.value = store.get(entryId)
+                _message.value = "已收录「${created.model}」，历史记录已更新"
+            } catch (e: Exception) {
+                _message.value = "收录失败：${e.message}"
+            }
+        }
+    }
+
+    private fun priceValue(s: String?): Double? {
+        val v = s?.trim() ?: return null
+        return Regex("\\d+(\\.\\d+)?").find(v)?.value?.toDoubleOrNull()
     }
 
     /** 按识别出的型号名在报价库查找，精确匹配优先，找不到取第一个 */

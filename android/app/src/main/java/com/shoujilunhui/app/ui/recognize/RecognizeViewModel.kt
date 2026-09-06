@@ -59,6 +59,9 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val historyStore by lazy { HistoryStore(getApplication()) }
 
+    /** 最近一次批量识别保存的历史 id；重识别成功后删除，避免错误旧记录残留 */
+    private var lastHistoryId: Long? = null
+
     private val _ui = MutableStateFlow(
         RecognizeUiState(
             annotate = config.annotate,
@@ -191,6 +194,14 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                         busy = false,
                         status = "已用「$model」重识别第 ${target.seq} 台为「${best.model}」",
                     )
+                }
+                // 删除上一次批量识别保存的历史：旧结果已过时，错误记录不再保留
+                val oldHistoryId = lastHistoryId
+                lastHistoryId = null
+                if (oldHistoryId != null) {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        try { historyStore.delete(oldHistoryId) } catch (_: Exception) {}
+                    }
                 }
             } catch (e: Exception) {
                 _ui.update { it.copy(busy = false, status = "重识别失败：${e.message}") }
@@ -354,7 +365,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                 }
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
-                        historyStore.save(getApplication(), urisToSave, items, all.size, matched, chTotal, cuTotal, config.priceRatio)
+                        lastHistoryId = historyStore.save(getApplication(), urisToSave, items, all.size, matched, chTotal, cuTotal, config.priceRatio)
                     } catch (_: Exception) {}
                 }
                 _ui.update {
