@@ -134,7 +134,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                         records = records.items,
                         busy = false,
                         loaded = true,
-                        channels = (stats.byChannel.mapNotNull { c -> c.channel.ifBlank { null } } + defaultChannels)
+                        channels = ((stats.byChannel?.mapNotNull { c -> c.channel.ifBlank { null } } ?: emptyList()) + defaultChannels)
                             .distinct().take(12),
                     )
                 }
