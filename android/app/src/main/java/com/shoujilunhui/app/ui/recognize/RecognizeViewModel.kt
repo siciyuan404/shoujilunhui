@@ -185,7 +185,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                     return@launch
                 }
                 val best = phones.first()
-                val newRow = recognizer.queryPrice(best.model)
+                val newRow = recognizer.queryPrice(best.model, best.brand)
                 val updated = cur.results.toMutableList()
                 updated[index] = RecognizeResult(best.model, best.box, newRow, target.imageIndex, target.seq)
                 _ui.update {
@@ -331,7 +331,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                         val b64 = recognizer.bitmapToBase64(getApplication(), uri)
                         val phones = recognizer.recognizePhones(b64)
                         phones.forEach { p ->
-                            all += RecognizeResult(p.model, p.box, recognizer.queryPrice(p.model), idx, seq++)
+                            all += RecognizeResult(p.model, p.box, recognizer.queryPrice(p.model, p.brand), idx, seq++)
                         }
                     } catch (e: Exception) {
                         failMsg = "第 ${idx + 1} 张识别失败：${e.message}"

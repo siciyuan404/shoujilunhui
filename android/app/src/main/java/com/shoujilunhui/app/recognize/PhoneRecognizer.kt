@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit
 /** 识别结果中的手机位置框（0~1000 归一化坐标，左上角 x1,y1，右下角 x2,y2） */
 data class PhoneBox(val x1: Float, val y1: Float, val x2: Float, val y2: Float)
 
-/** 识别出的单台手机：型号 + 位置框（模型未返回框时为 null） */
-data class RecognizedPhone(val model: String, val box: PhoneBox?)
+/** 识别出的单台手机：型号 + 品牌（识别结果带 brand，空则未知）+ 位置框（模型未返回框时为 null） */
+data class RecognizedPhone(val model: String, val box: PhoneBox?, val brand: String = "")
 
 class PhoneRecognizer(
     private val serverBaseUrl: String,
@@ -43,13 +43,16 @@ class PhoneRecognizer(
         const val ARK_BASE = "https://ark.cn-beijing.volces.com/api/v3"
         const val DEEPSEEK_BASE = "https://api.deepseek.com"
         private const val RECOGNIZE_PROMPT =
-            "请仔细查看这张图片，识别出图中出现的所有手机。请只返回 JSON，格式：" +
-                "{\"phones\":[{\"model\":\"手机具体型号\",\"box\":{\"x1\":0,\"y1\":0,\"x2\":1000,\"y2\":1000}}]}。" +
-                "注意：1) 一台一台列出，图中出现几台就列几台；" +
-                "2) box 用 0~1000 归一化坐标表示该手机在图片中的边界框（左上角x1,y1，右下角x2,y2），框要尽量紧贴手机主体；" +
-                "3) 型号尽量简洁，如 畅享9 Plus、P40 Pro、苹果15 Pro Max（不要带品牌名，不要带内存/颜色/新旧等多余描述）；" +
-                "4) 如果图中有手机但看不清型号，根据外观给出最可能的型号；" +
-                "5) 如果图中没有手机，返回 {\"phones\":[]}。不要输出任何其他内容。"
+            "请识别这张图片中出现的所有手机。识别时必须严格分两步，先确定品牌，再确定型号。\n" +
+                "第一步【先确定品牌】：逐一观察每台手机的品牌特征（背面或正面logo、摄像头模组布局与形状、屏幕形态、机身设计语言、系统界面），品牌只能从下面列表中选择：\n" +
+                "苹果(Apple/iPhone)、华为、荣耀、小米、红米、OPPO、vivo、一加、真我、三星、魅族、努比亚、联想、摩托罗拉、中兴、谷歌(Google)、360、金立、酷派、乐视、美图、锤子、华硕、智选、鼎桥、诺基亚、索尼、LG、黑鲨、红魔、iQOO、其他\n" +
+                "品牌判定规则：1) 必须有明确依据（logo、外观特征）才选该品牌，拿不准选\"其他\"；" +
+                "2) 苹果特征：背面中央咬一口苹果logo、左上角方形摄像头模组（Pro系列为三角排列三摄）、灵动岛(15/16/17)或刘海屏(14及以前)、无后置指纹、边框圆润。苹果是市场最常见的手机，拍摄对象是苹果时务必认苹果，除非照片明显不是；" +
+                "3) 严禁把苹果误认成360、魅族、金立、酷派等小众品牌，这些品牌只有照片上清楚出现其logo或标志性外观时才可选。\n" +
+                "第二步【再确定型号】：品牌确定后，从该品牌真实存在过的型号中给出最可能的具体型号，宁缺勿错：看不清具体型号时只写系列名（如\"苹果15\"、\"P40\"），绝不编造不存在的型号。\n" +
+                "输出严格 JSON 格式：{\"phones\":[{\"brand\":\"品牌\",\"model\":\"型号\",\"box\":{\"x1\":0,\"y1\":0,\"x2\":1000,\"y2\":1000}}]}。" +
+                "model 规则：不带品牌名；苹果统一用 iPhone 写法（如 iPhone 15 Pro Max、iPhone 14、iPhone XR），其他品牌用官方型号名（如 P40 Pro、畅享9 Plus、N7）。\n" +
+                "box 用 0~1000 归一化坐标表示该手机在图片中的边界框（左上角x1,y1，右下角x2,y2），框尽量紧贴手机主体；一台一台列，图中几台就列几台；图中没有手机返回 {\"phones\":[]}。只输出 JSON，不要任何其他内容。"
     }
 
     suspend fun bitmapToBase64(context: Context, uri: Uri, maxDim: Int = 1280, quality: Int = 85): String =
@@ -153,6 +156,7 @@ class PhoneRecognizer(
                 (0 until phones.length()).mapNotNull { i ->
                     val obj = phones.getJSONObject(i)
                     val model = obj.optString("model").trim().takeIf { it.isNotBlank() } ?: return@mapNotNull null
+                    val brand = obj.optString("brand").trim()
                     val b = obj.optJSONObject("box")
                     val box = if (b != null) {
                         val x1 = b.optDouble("x1", Double.NaN)
@@ -162,13 +166,14 @@ class PhoneRecognizer(
                         if (x1.isNaN() || y1.isNaN() || x2.isNaN() || y2.isNaN()) null
                         else PhoneBox(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat())
                     } else null
-                    RecognizedPhone(model, box)
+                    RecognizedPhone(model, box, brand)
                 }
             }
     }
 
-    /** 多级候选匹配报价库 */
-    suspend fun queryPrice(model: String): ModelRow? {
+    /** 多级候选匹配报价库；brandHint 来自识别结果时只在该品牌内匹配（苹果/iPhone 统一视为苹果），避免跨品牌误配 */
+    suspend fun queryPrice(model: String, brandHint: String = ""): ModelRow? {
+        val hint = brandHint.trim()
         for (cand in ModelMatcher.buildCandidates(model)) {
             val items = try {
                 ApiClient.api(serverBaseUrl).getModels(search = cand, sort = "brand").items
@@ -176,10 +181,12 @@ class PhoneRecognizer(
                 continue
             }
             if (items.isEmpty()) continue
+            val pool = if (hint.isEmpty()) items else items.filter { ModelMatcher.sameBrand(it.brand, hint) }
+            if (hint.isNotEmpty() && pool.isEmpty()) continue
             // 优先归一化后完全相等；否则选最短（最接近的精确型号）
             val cn = ModelMatcher.normalizeModel(cand)
-            items.firstOrNull { ModelMatcher.normalizeModel(it.model) == cn }?.let { return it }
-            return items.minByOrNull { ModelMatcher.normalizeModel(it.model).length }
+            pool.firstOrNull { ModelMatcher.normalizeModel(it.model) == cn }?.let { return it }
+            return pool.minByOrNull { ModelMatcher.normalizeModel(it.model).length }
         }
         return null
     }

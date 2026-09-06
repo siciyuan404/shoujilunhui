@@ -1578,11 +1578,18 @@ function recCandidates(raw) {
   });
   return list;
 }
-function recMatchOne(raw) {
+function recBrandKey(s) {
+  const t = recNorm(s);
+  return (t === 'apple' || t === 'iphone') ? '苹果' : t;
+}
+function recMatchOne(raw, brandHint) {
+  // 品牌提示（来自识别结果）：只在该品牌分组内匹配，避免苹果被匹配成 360 等其他品牌
+  const hint = brandHint ? recBrandKey(brandHint) : '';
   for (const cand of recCandidates(raw)) {
     const cn = recNorm(cand);
     let best = null, bestLen = 1e9, bestBrand = '', bestCat = '';
     for (const g of allData) {
+      if (hint && recBrandKey(g.brand) !== hint) continue;
       for (const m of g.models) {
         const mn = recNorm(m.model);
         if (mn === cn) return Object.assign({ brand: g.brand, category: g.category }, m);
@@ -1613,7 +1620,7 @@ function renderRecResults(rows) {
     }
     return '<div class="rec-result-row" data-idx="' + idx + '" onclick="selectRecItem(' + i + ')">' +
       '<div style="display:flex;align-items:center"><span class="rr-index" style="background:#fa8c16">' + idx + '</span><div>' +
-      '<div class="rr-model">' + escAttr(r.recognized) + '</div>' +
+      '<div class="rr-model">' + escAttr(r.recognized) + (r.brand ? '<span class="rr-brand-tag">' + escAttr(r.brand) + '</span>' : '') + '</div>' +
       '<div class="rr-recognized">识别成功，但报价库未收录该型号</div></div></div>' +
       '<span class="rr-price none">暂无报价</span></div>';
   }).join('');
@@ -1688,7 +1695,7 @@ async function startRecognize() {
     if (!phones.length) { setRecStatus('图片中未识别到手机，可换一张更清晰的照片重试'); btn.disabled = false; return; }
     const rows = phones.map(p => {
       const name = typeof p === 'string' ? p : (p && p.model) || '';
-      return { recognized: name, box: (p && p.box) || null, row: recMatchOne(name) };
+      return { recognized: name, box: (p && p.box) || null, brand: (p && p.brand) || '', row: recMatchOne(name, p && p.brand) };
     });
     renderRecResults(rows);
     const matched = rows.filter(r => r.row).length;
@@ -2167,25 +2174,32 @@ async function uploadRaw(file) {
   return r.json();
 }
 
-document.getElementById('imgFile').addEventListener('change', async function (e) {
-  const files = Array.from(e.target.files || []);
-  e.target.value = '';
-  if (!files.length || !imgEdit) return;
+async function handleImgFiles(files) {
+  const list = Array.from(files || []).filter((f) => f.type && f.type.startsWith('image/'));
+  if (!list.length) return 0;
+  if (!imgEdit) return 0;
   const tip = document.getElementById('imgUploading');
-  for (const f of files) {
-    if (!f.type.startsWith('image/')) { showToast('跳过非图片文件: ' + f.name, 'error'); continue; }
+  let ok = 0;
+  for (const f of list) {
     tip.textContent = '正在上传 ' + f.name + ' ...';
     try {
       const d = await uploadRaw(f);
       imgEdit.images.push(d.url);
       tip.textContent = '已上传 ' + d.url;
       renderImgGrid();
+      ok++;
     } catch (err) {
       tip.textContent = '上传失败: ' + err.message;
       showToast('上传失败: ' + err.message, 'error');
     }
   }
   setTimeout(() => { if (tip.textContent.startsWith('已上传')) tip.textContent = ''; }, 1500);
+  return ok;
+}
+document.getElementById('imgFile').addEventListener('change', async function (e) {
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  if (files.length && imgEdit) await handleImgFiles(files);
 });
 
 async function saveImgEditor() {
@@ -2574,6 +2588,38 @@ function toggleZoom(img) {
   const zoomed = img.classList.toggle('zoom');
   img.parentNode.classList.toggle('can-scroll', zoomed);
 }
+// ---- 全局 Ctrl+V 粘贴图片：识别页 / 记账页 / 参考图弹窗 通用 ----
+document.addEventListener('paste', function (e) {
+  const files = e.clipboardData && e.clipboardData.files;
+  if (!files || !files.length) return;
+  const imgs = Array.from(files).filter((f) => f.type && f.type.startsWith('image/'));
+  if (!imgs.length) return;
+  e.preventDefault();
+  // 1) 查价页参考图弹窗打开时 → 上传到参考图
+  if (imgEdit && document.getElementById('imgModal').style.display !== 'none') {
+    handleImgFiles(imgs).then((n) => { if (n) showToast('已粘贴上传 ' + n + ' 张参考图', 'success'); });
+    return;
+  }
+  // 2) 记账页 → 多张进待识别列表
+  if ((location.hash || '').indexOf('ledger') >= 0) {
+    const n = lgAddFiles(imgs);
+    if (n) showToast('已粘贴 ' + n + ' 张图片，点「📷 开始识别并入账」', 'success');
+    return;
+  }
+  // 3) 识别页 → 取第一张（单张识别）
+  if ((location.hash || '').indexOf('recognize') >= 0 || (location.hash || '').indexOf('verify') >= 0) {
+    const input = document.getElementById('recFile');
+    try {
+      const dt = new DataTransfer(); dt.items.add(imgs[0]); input.files = dt.files;
+    } catch (_) {}
+    onRecFile(input);
+    if (imgs.length > 1) setRecStatus('已粘贴 ' + imgs.length + ' 张，识别页为单张识别，仅取第 1 张（多张请到记账页）');
+    else setRecStatus('已粘贴图片，可点下方按钮识别');
+    return;
+  }
+  // 4) 其他页面 → 提示可用位置
+  showToast('粘贴图片请在「📒 记账」或「📷 识别」页使用', 'error');
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
 });
@@ -2827,7 +2873,7 @@ async function lgReRecognize(id) {
     const phones = (res && res.phones) || [];
     if (!phones.length) { showToast('未识别到手机，可换更清晰的照片', 'error'); return; }
     const name = (typeof phones[0] === 'string' ? phones[0] : (phones[0] && phones[0].model)) || '';
-    const m = recMatchOne(name);
+    const m = recMatchOne(name, phones[0] && phones[0].brand);
     const patch = { model: m ? m.model : name };
     if (m) { patch.brand = m.brand; patch.category = m.category; patch.model_id = m.id; }
     await api('/api/records/' + id, { method: 'PUT', body: JSON.stringify(patch) });
@@ -2837,18 +2883,22 @@ async function lgReRecognize(id) {
 }
 
 // ---- 拍照入账 ----
-function lgAddPhotos(input) {
-  const files = Array.from(input.files || []);
-  if (!files.length) return;
-  files.forEach((f) => {
-    if (!f.type || !f.type.startsWith('image/')) return;
+function lgAddFiles(files) {
+  const list = Array.from(files || []).filter((f) => f.type && f.type.startsWith('image/'));
+  if (!list.length) return 0;
+  list.forEach((f) => {
     const reader = new FileReader();
     reader.onload = () => {
-      lgPhotos.push({ name: f.name, dataUrl: reader.result, b64: String(reader.result).split(',')[1] || '', url: '', status: 'ready' });
+      lgPhotos.push({ name: f.name || '粘贴图片', dataUrl: reader.result, b64: String(reader.result).split(',')[1] || '', url: '', status: 'ready' });
       lgRenderPhotos();
     };
     reader.readAsDataURL(f);
   });
+  return list.length;
+}
+function lgAddPhotos(input) {
+  const files = Array.from(input.files || []);
+  if (files.length) lgAddFiles(files);
   input.value = '';
 }
 function lgRenderPhotos() {
@@ -2906,7 +2956,7 @@ async function lgRecognizeAll() {
         p.url = up.url; p.status = 'uploaded';
         phones.forEach((ph) => {
           const name = (typeof ph === 'string' ? ph : (ph && ph.model)) || '';
-          const m = recMatchOne(name);
+          const m = recMatchOne(name, ph && ph.brand);
           lgPending.push({
             photo: up.url,
             model: m ? m.model : name,

@@ -360,7 +360,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                             try { photoUrl = uploadPhoto(uri) } catch (_: Exception) {}
                         }
                         phones.forEach { p ->
-                            val row = recognizer.queryPrice(p.model)
+                            val row = recognizer.queryPrice(p.model, p.brand)
                             pending += PendingRecord(
                                 photo = photoUrl,
                                 model = row?.model ?: p.model,
@@ -476,7 +476,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     _ui.update { it.copy(pendingBusy = false, pendingStatus = "未识别到手机") }
                     return@launch
                 }
-                val row = recognizer.queryPrice(first.model)
+                val row = recognizer.queryPrice(first.model, first.brand)
                 val updated = _ui.value.pending.toMutableList()
                 updated[index] = p.copy(
                     model = row?.model ?: first.model,

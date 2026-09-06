@@ -42,6 +42,19 @@ object ModelMatcher {
         else -> normalized
     }
 
+    /** 品牌归一化键：Apple/iPhone/苹果 统一为"苹果"，其他品牌归一化后原样（用于识别品牌与报价库品牌对齐） */
+    private fun brandKey(s: String): String {
+        val t = normalizeModel(s)
+        return when (t) {
+            "apple", "iphone" -> "苹果"
+            else -> t
+        }
+    }
+
+    /** 品牌是否同源（大小写/中英文别名视为同一品牌） */
+    fun sameBrand(a: String, b: String): Boolean =
+        a.isNotBlank() && b.isNotBlank() && brandKey(a) == brandKey(b)
+
     /** 核心系列词："畅享9plus"->畅享9，"p40pro"->p40，"苹果15promax"->苹果15 */
     private fun coreKeys(normalized: String): List<String> {
         val keys = mutableListOf<String>()
