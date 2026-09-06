@@ -2,9 +2,18 @@
 
 package com.shoujilunhui.app.ui.history
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +66,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.shoujilunhui.app.HistoryEntry
 import com.shoujilunhui.app.HistoryItem
+import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.ui.home.DeleteConfirmDialog
+import com.shoujilunhui.app.ui.home.DetailSheet
+import com.shoujilunhui.app.ui.home.EditModelDialog
+import com.shoujilunhui.app.ui.home.ImageViewerDialog
 import com.shoujilunhui.app.ui.theme.Accent
 import com.shoujilunhui.app.ui.theme.MatchGreen
 import com.shoujilunhui.app.ui.theme.MatchOrange
@@ -172,7 +186,22 @@ fun HistoryDetailScreen(
     vm: HistoryViewModel = viewModel(),
 ) {
     val detail by vm.detail.collectAsState()
+    val modelDetail by vm.modelDetail.collectAsState()
+    val message by vm.message.collectAsState()
+    val snackbar = remember { SnackbarHostState() }
+    var detailRow by remember { mutableStateOf<ModelRow?>(null) }
+    var editRow by remember { mutableStateOf<ModelRow?>(null) }
+    var deleteRow by remember { mutableStateOf<ModelRow?>(null) }
+    var viewer by remember { mutableStateOf<Pair<List<String>, Int>?>(null) }
+    var pendingImgRow by remember { mutableStateOf<ModelRow?>(null) }
+    val pickImages = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) pendingImgRow?.let { vm.addModelImages(it, uris) }
+    }
     LaunchedEffect(entryId) { vm.loadDetail(entryId) }
+    LaunchedEffect(modelDetail) { modelDetail?.let { detailRow = it } }
+    LaunchedEffect(message) { message?.let { snackbar.showSnackbar(it); vm.clearMessage() } }
     val e = detail
     if (e == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -201,6 +230,7 @@ fun HistoryDetailScreen(
                 ),
             )
         },
+        snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
@@ -238,12 +268,52 @@ fun HistoryDetailScreen(
                 }
                 item {
                     imgItems.forEach { it ->
-                        HistoryItemRow(it)
+                        HistoryItemRow(it, onClick = { vm.searchModel(it.model) })
                         Spacer(Modifier.height(6.dp))
                     }
                 }
             }
         }
+    }
+
+    // 报价库机型详情（修改价格/补图/删除）
+    detailRow?.let { row ->
+        ModalBottomSheet(
+            onDismissRequest = { detailRow = null },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            DetailSheet(
+                row = row,
+                baseUrl = vm.baseUrl,
+                onEdit = { detailRow = null; editRow = row },
+                onDelete = { detailRow = null; deleteRow = row },
+                onImageClick = { imgs, idx -> viewer = imgs to idx },
+                onAddImages = { pendingImgRow = row; pickImages.launch("*/*") },
+                onRemoveImage = { url -> vm.removeModelImage(row, url) },
+            )
+        }
+    }
+    editRow?.let { row ->
+        EditModelDialog(
+            row = row,
+            onDismiss = { editRow = null },
+            onSave = { price, note, code -> vm.updateModel(row, price, note, code); editRow = null },
+        )
+    }
+    deleteRow?.let { row ->
+        DeleteConfirmDialog(
+            row = row,
+            onDismiss = { deleteRow = null },
+            onConfirm = { vm.deleteModel(row); deleteRow = null },
+        )
+    }
+    viewer?.let { (urls, idx) ->
+        ImageViewerDialog(
+            urls = urls,
+            startIndex = idx,
+            baseUrl = vm.baseUrl,
+            onDismiss = { viewer = null },
+        )
     }
 }
 
@@ -309,12 +379,12 @@ private fun HistoryOverlay(items: List<HistoryItem>, modifier: Modifier = Modifi
 }
 
 @Composable
-private fun HistoryItemRow(it: HistoryItem) {
+private fun HistoryItemRow(it: HistoryItem, onClick: () -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
     ) {
         Row(
             Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
@@ -347,6 +417,9 @@ private fun HistoryItemRow(it: HistoryItem) {
                 )
                 if (it.channelPrice != null) {
                     Text("渠道 ¥${fmt(it.channelPrice)}", fontSize = 10.sp, color = TextSecondary)
+                }
+                if (it.matched) {
+                    Text("点此修改库内数据", fontSize = 9.sp, color = Accent, modifier = Modifier.padding(top = 2.dp))
                 }
             }
         }

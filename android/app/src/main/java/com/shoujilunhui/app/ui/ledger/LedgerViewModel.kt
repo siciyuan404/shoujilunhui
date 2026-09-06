@@ -47,6 +47,7 @@ data class PendingRecord(
     val day: String = todayStr(),
     val sourceUri: String = "",
     val box: String = "",
+    val checked: Boolean = true,
 )
 
 data class LedgerUiState(
@@ -402,6 +403,22 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(pending = updated) }
     }
 
+    /** 勾选/取消勾选待入账行（只保存勾选的） */
+    fun togglePending(index: Int, checked: Boolean) {
+        val p = _ui.value.pending.getOrNull(index) ?: return
+        val updated = _ui.value.pending.toMutableList()
+        updated[index] = p.copy(checked = checked)
+        _ui.update { it.copy(pending = updated) }
+    }
+
+    /** 删除待入账中的一台（仅从清单移除，不动原图） */
+    fun removePending(index: Int) {
+        val p = _ui.value.pending.getOrNull(index) ?: return
+        val updated = _ui.value.pending.toMutableList()
+        updated.removeAt(index)
+        _ui.update { it.copy(pending = updated, pendingStatus = "已移除 " + p.model) }
+    }
+
     /** 待入账单台重新识别：优先用原图+位置框裁剪重识别，无框则整图重识别 */
     fun reRecognizePending(index: Int) {
         val p = _ui.value.pending.getOrNull(index) ?: return
@@ -459,14 +476,16 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(pending = emptyList(), pendingStatus = "") }
     }
 
-    /** 批量保存待入账记录 */
+    /** 批量保存待入账记录（只保存勾选的，未勾选保留在清单） */
     fun savePending(onDone: () -> Unit = {}) {
         val cur = _ui.value
         if (cur.pending.isEmpty()) { showMessage("没有待入账的记录"); return }
         if (!hasWriteKey()) { showMessage("请先在设置中填写服务器 API Key"); return }
+        val toSave = cur.pending.filter { it.checked }
+        if (toSave.isEmpty()) { showMessage("请先勾选要入账的机器"); return }
         viewModelScope.launch {
             try {
-                val items = cur.pending.map { p ->
+                val items = toSave.map { p ->
                     RecordPostBody(
                         photo = p.photo.ifBlank { null },
                         brand = p.brand,
@@ -484,8 +503,9 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                 val res = ApiClient.api(config.baseUrl)
                     .postRecordsBatch(config.apiKey, RecordBatchBody(items))
                 val n = res.inserted
-                showMessage("已入账 $n 台")
-                _ui.update { it.copy(pending = emptyList(), pendingStatus = "") }
+                val remaining = cur.pending.filterNot { it.checked }
+                showMessage("已入账 $n 台" + if (remaining.isNotEmpty()) "，未勾选 ${remaining.size} 台保留" else "")
+                _ui.update { it.copy(pending = remaining, pendingStatus = "") }
                 onDone()
                 load()
             } catch (e: Exception) {

@@ -789,6 +789,8 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 .lg-rec-status { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
 .lg-rec-status.error { color: #cf1322; }
 .lg-pend-row { display: flex; gap: 8px; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-top: 8px; flex-wrap: wrap; }
+.lg-pend-check { display: flex; align-items: center; flex: 0 0 auto; }
+.lg-pend-check input { width: 18px; height: 18px; accent-color: #1677ff; cursor: pointer; }
 .lg-pend-photo { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
 .lg-pend-fields { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; align-items: center; }
 .lg-pend-fields input { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; min-width: 90px; }
@@ -2917,6 +2919,7 @@ function lgRenderPending() {
   const el = document.getElementById('lgRecRows');
   const html = lgPending.map((r, i) =>
     '<div class="lg-pend-row">' +
+      '<label class="lg-pend-check" title="勾选后才会入账"><input type="checkbox" ' + (r.checked === false ? '' : 'checked') + ' onchange="lgPendSet(' + i + ',\'checked\',this.checked)"></label>' +
       (r.photo ? '<img class="lg-pend-photo" src="' + escAttr(r.photo) + '" onclick="openLightbox(\'' + escAttr(r.photo) + '\')">' : '') +
       '<div class="lg-pend-fields">' +
         '<input class="lg-pend-model" value="' + escAttr(r.model) + '" placeholder="型号" list="lgModelList" onchange="lgPendSet(' + i + ',\'model\',this.value)">' +
@@ -2932,10 +2935,12 @@ function lgRenderPending() {
   const bar = document.getElementById('lgBatchBar');
   bar.style.display = lgPending.length ? 'flex' : 'none';
   const btn = bar.querySelector('.primary');
-  if (btn) btn.textContent = '💾 确认入账（' + lgPending.length + ' 台）';
+  const checkedCount = lgPending.filter((r) => r.checked !== false).length;
+  if (btn) btn.textContent = '💾 确认入账（勾选 ' + checkedCount + '/' + lgPending.length + ' 台）';
 }
 function lgPendSet(i, field, val) {
   const r = lgPending[i]; if (!r) return;
+  if (field === 'checked') { r.checked = !!val; lgRenderPending(); return; }
   r[field] = String(val == null ? '' : val).trim();
   if (field === 'model') {
     const m = recMatchOne(r.model);
@@ -2946,16 +2951,20 @@ function lgPendDel(i) { lgPending.splice(i, 1); lgRenderPending(); }
 function lgClearPending() { lgPending = []; lgRenderPending(); setLgRecStatus(''); }
 async function lgSaveBatch() {
   if (!lgPending.length) return;
+  const items = lgPending.filter((r) => r.checked !== false);
+  if (!items.length) { showToast('请先勾选要入账的机器', 'error'); return; }
   if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
   try {
-    const res = await api('/api/records/batch', { method: 'POST', body: JSON.stringify({ items: lgPending }) });
+    const res = await api('/api/records/batch', { method: 'POST', body: JSON.stringify({ items: items }) });
     showToast('已入账 ' + res.inserted + ' 台', 'success');
-    lgPending = []; lgPhotos = [];
+    const remain = lgPending.filter((r) => r.checked === false);
+    lgPending = remain; lgPhotos = [];
     document.getElementById('lgPhotos').innerHTML = '';
     document.getElementById('lgFile').value = '';
     document.getElementById('lgRecAllBtn').disabled = true;
     lgRenderPending();
     lgLoad();
+    if (remain.length) showToast('已入账 ' + res.inserted + ' 台，未勾选 ' + remain.length + ' 台保留', 'success');
   } catch (e) { showToast('入账失败：' + e.message, 'error'); }
 }
 

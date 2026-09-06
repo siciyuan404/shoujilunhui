@@ -41,6 +41,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -272,6 +273,8 @@ fun LedgerScreen(
                                     onSaleChannel = { v -> vm.updatePending(index, p.recPrice, p.channel, p.salePrice, v) },
                                     onDay = { v -> vm.updatePendingDay(index, v) },
                                     onReRecognize = { vm.reRecognizePending(index) },
+                                    onChecked = { checked -> vm.togglePending(index, checked) },
+                                    onDelete = { vm.removePending(index) },
                                 )
                             }
                             item {
@@ -696,6 +699,8 @@ private fun PendingCard(
     onSaleChannel: (String) -> Unit,
     onDay: (String) -> Unit,
     onReRecognize: () -> Unit,
+    onChecked: (Boolean) -> Unit,
+    onDelete: () -> Unit,
 ) {
     var showDate by remember { mutableStateOf(false) }
     Card(
@@ -706,6 +711,12 @@ private fun PendingCard(
     ) {
         Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = pending.checked,
+                    onCheckedChange = onChecked,
+                    modifier = Modifier.size(20.dp),
+                )
+                Spacer(Modifier.width(2.dp))
                 Text(
                     "${index + 1}. ${pending.model}",
                     fontSize = 13.5.sp,
@@ -776,6 +787,11 @@ private fun PendingCard(
                     ) { Text("🔄 重识别", fontSize = 12.sp) }
                 }
                 Text("🟢 在库", fontSize = 11.sp, color = TextSecondary)
+                OutlinedButton(
+                    onClick = onDelete,
+                    modifier = Modifier.height(46.dp),
+                    shape = RoundedCornerShape(12.dp),
+                ) { Text("✕ 移除", fontSize = 12.sp, color = MaterialTheme.colorScheme.error) }
             }
         }
     }
