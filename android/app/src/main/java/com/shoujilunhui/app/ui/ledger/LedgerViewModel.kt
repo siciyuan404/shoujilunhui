@@ -198,6 +198,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         channel: String,
         saleChannel: String,
         seller: String,
+        photo: String,
         salePrice: String,
         status: String,
         day: String,
@@ -209,7 +210,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val row = matchModel(model)
                 val body = RecordPostBody(
-                    photo = null,
+                    photo = photo.ifBlank { null },
                     brand = row?.brand ?: "",
                     category = row?.category ?: "",
                     model = row?.model ?: model.trim(),
@@ -239,6 +240,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         channel: String,
         saleChannel: String,
         seller: String,
+        photo: String,
         salePrice: String,
         status: String,
         day: String,
@@ -258,6 +260,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     channel = channel,
                     saleChannel = saleChannel,
                     seller = seller,
+                    photo = photo.ifBlank { null },
                     salePrice = salePrice,
                     status = status,
                     day = day.ifBlank { todayStr() },
@@ -394,7 +397,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     /** 上传原图到服务器（写操作需 Key），失败返回空串不影响入账 */
-    private suspend fun uploadPhoto(uri: Uri): String {
+    suspend fun uploadPhoto(uri: Uri): String {
         val ctx = getApplication<Application>()
         val bytes = ctx.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: return ""
         val mime = ctx.contentResolver.getType(uri) ?: "image/jpeg"
@@ -494,6 +497,17 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                 }
             } catch (e: Exception) {
                 _ui.update { it.copy(pendingBusy = false, pendingStatus = "重新识别失败：${e.message}") }
+            }
+        }
+    }
+
+    /** 编辑/补图用：上传一张照片，成功后回传 URL */
+    fun uploadRecordPhoto(uri: Uri, onOk: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                onOk(uploadPhoto(uri))
+            } catch (e: Exception) {
+                showMessage("照片上传失败：${e.message}")
             }
         }
     }

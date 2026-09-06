@@ -492,8 +492,8 @@ fun LedgerScreen(
             title = "手动录入",
             initial = null,
             onDismiss = { showAdd = false },
-            onSave = { model, rec, ch, saleCh, sale, status, day, seller ->
-                vm.addRecord(model, rec, ch, saleCh, seller, sale, status, day) { showAdd = false }
+            onSave = { model, rec, ch, saleCh, sale, status, day, seller, photo ->
+                vm.addRecord(model, rec, ch, saleCh, seller, photo, sale, status, day) { showAdd = false }
             },
             vm = vm,
         )
@@ -505,8 +505,8 @@ fun LedgerScreen(
             title = "编辑修正",
             initial = row,
             onDismiss = { editRow = null },
-            onSave = { model, rec, ch, saleCh, sale, status, day, seller ->
-                vm.updateRecord(row.id, model, rec, ch, saleCh, seller, sale, status, day) { editRow = null }
+            onSave = { model, rec, ch, saleCh, sale, status, day, seller, photo ->
+                vm.updateRecord(row.id, model, rec, ch, saleCh, seller, photo, sale, status, day) { editRow = null }
             },
             vm = vm,
         )
@@ -895,6 +895,19 @@ private fun RecordCard(
                         .background(Color(0xFFEEEEEE), RoundedCornerShape(10.dp)),
                 )
                 Spacer(Modifier.width(10.dp))
+            } else {
+                Surface(
+                    onClick = onEdit,
+                    shape = RoundedCornerShape(10.dp),
+                    color = Color(0xFFF2F6FF),
+                    modifier = Modifier.size(48.dp),
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                        Text("📷", fontSize = 16.sp)
+                        Text("补图", fontSize = 9.sp, color = TextSecondary)
+                    }
+                }
+                Spacer(Modifier.width(10.dp))
             }
             Column(Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -961,7 +974,7 @@ private fun RecordFormDialog(
     title: String,
     initial: RecordRow?,
     onDismiss: () -> Unit,
-    onSave: (String, String, String, String, String, String, String, String) -> Unit,
+    onSave: (String, String, String, String, String, String, String, String, String) -> Unit,
     vm: LedgerViewModel,
 ) {
     var model by remember { mutableStateOf(initial?.model ?: "") }
@@ -969,6 +982,15 @@ private fun RecordFormDialog(
     var channel by remember { mutableStateOf(initial?.channel ?: "路边收") }
     var saleChannel by remember { mutableStateOf(initial?.saleChannel ?: "") }
     var seller by remember { mutableStateOf(initial?.seller ?: "") }
+    var photo by remember { mutableStateOf(initial?.photo ?: "") }
+    var cameraUri2 by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val pickOne = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { u -> vm.uploadRecordPhoto(u) { photo = it } }
+    }
+    val takeOne = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        if (ok) cameraUri2?.let { u -> vm.uploadRecordPhoto(u) { photo = it } }
+    }
     var salePrice by remember { mutableStateOf(initial?.salePrice ?: "") }
     var status by remember { mutableStateOf(initial?.status ?: "在库") }
     var day by remember { mutableStateOf(initial?.day ?: todayStr()) }
@@ -1088,10 +1110,53 @@ private fun RecordFormDialog(
                         )
                     }
                 }
+                Spacer(Modifier.height(10.dp))
+                Text("照片", fontSize = 12.sp, color = TextSecondary)
+                Spacer(Modifier.height(6.dp))
+                if (photo.isNotBlank()) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AsyncImage(
+                            model = fullImageUrl(vm.serverBaseUrl(), photo),
+                            contentDescription = "记录照片",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.size(64.dp).background(Color(0xFFEEEEEE), RoundedCornerShape(10.dp)),
+                        )
+                        OutlinedButton(onClick = {
+                            try {
+                                val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                                val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                                file.createNewFile()
+                                val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                                cameraUri2 = uri
+                                takeOne.launch(uri)
+                            } catch (e: Exception) {
+                                vm.showMessage("无法打开相机：${e.message}")
+                            }
+                        }) { Text("📷 重拍", fontSize = 12.sp) }
+                        OutlinedButton(onClick = { pickOne.launch("image/*") }) { Text("🖼 换图", fontSize = 12.sp) }
+                        OutlinedButton(onClick = { photo = "" }) { Text("✕ 移除", fontSize = 12.sp, color = MaterialTheme.colorScheme.error) }
+                    }
+                } else {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(onClick = {
+                            try {
+                                val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                                val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                                file.createNewFile()
+                                val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                                cameraUri2 = uri
+                                takeOne.launch(uri)
+                            } catch (e: Exception) {
+                                vm.showMessage("无法打开相机：${e.message}")
+                            }
+                        }) { Text("📷 拍照", fontSize = 12.sp) }
+                        OutlinedButton(onClick = { pickOne.launch("image/*") }) { Text("🖼 相册选图", fontSize = 12.sp) }
+                    }
+                }
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller) }) {
+            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller, photo) }) {
                 Text("保存")
             }
         },

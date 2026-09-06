@@ -807,6 +807,8 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 .lg-tb-row:last-child { border-bottom: none; }
 .lg-tb-photo { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); cursor: zoom-in; flex: none; }
 .lg-tb-nophoto { width: 46px; height: 46px; border-radius: 8px; background: #f7f9fc; border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #bbb; flex: none; }
+.lg-tb-nophoto.lg-tb-photo-btn { cursor: pointer; }
+.lg-tb-nophoto.lg-tb-photo-btn:hover { background: #eef4ff; color: #3b6fe0; border-color: #9db9f2; }
 .lg-tb-main { flex: 1; min-width: 0; }
 .lg-tb-model { font-size: 14px; font-weight: 600; color: var(--text); }
 .lg-tb-brand { font-size: 11px; background: var(--accent-light); color: var(--accent); border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
@@ -1032,11 +1034,31 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
       <div><label>出货渠道</label><input id="lgEditSaleChannel" list="lgChannelList"></div>
       <div><label>来源人</label><input id="lgEditSeller" list="lgSellerList"></div>
       <div><label>状态</label><select id="lgEditStatus"><option>在库</option><option>已出</option></select></div>
+      <div class="lg-edit-full"><label>照片</label><div id="lgEditPhotoBox"></div></div>
       <div class="lg-edit-full"><label>日期</label><input id="lgEditDay" type="date"></div>
     </div>
     <div class="lg-edit-foot">
       <button class="lg-btn" onclick="document.getElementById('lgEditModal').style.display='none'">取消</button>
       <button class="lg-btn primary" onclick="lgSaveEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 记录补图弹窗 -->
+<div class="lg-edit-mask" id="lgPhotoModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="lg-edit-modal">
+    <h3>📷 补充照片 — <span id="lgPhotoTitle"></span></h3>
+    <div class="lg-edit-form">
+      <div class="lg-edit-full" id="lgPhotoPrev"></div>
+      <div class="lg-edit-full">
+        <button class="lg-btn" onclick="document.getElementById('lgPhotoFile').click()">⬆ 选择图片</button>
+        <input type="file" id="lgPhotoFile" accept="image/*" style="display:none" onchange="lgPhotoPick(this)">
+        <span class="lg-hint">或直接 Ctrl+V 粘贴截图</span>
+      </div>
+    </div>
+    <div class="lg-edit-foot">
+      <button class="lg-btn" onclick="document.getElementById('lgPhotoModal').style.display='none'">取消</button>
+      <button class="lg-btn primary" onclick="lgPhotoSave()">保存</button>
     </div>
   </div>
 </div>
@@ -2600,6 +2622,17 @@ document.addEventListener('paste', function (e) {
     handleImgFiles(imgs).then((n) => { if (n) showToast('已粘贴上传 ' + n + ' 张参考图', 'success'); });
     return;
   }
+  // 1.5) 记录补图弹窗打开时 → 粘贴到补图
+  if (lgPhotoId && document.getElementById('lgPhotoModal') && document.getElementById('lgPhotoModal').style.display !== 'none') {
+    lgPhotoSetFile(imgs[0]);
+    if (imgs.length > 1) showToast('补图一次一张，已取第 1 张', 'error');
+    return;
+  }
+  // 1.6) 记录编辑弹窗打开时 → 粘贴为记录照片
+  if (lgEditingId && document.getElementById('lgEditModal').style.display !== 'none') {
+    lgEditPhotoSetFile(imgs[0]);
+    return;
+  }
   // 2) 记账页 → 多张进待识别列表
   if ((location.hash || '').indexOf('ledger') >= 0) {
     const n = lgAddFiles(imgs);
@@ -2797,9 +2830,12 @@ function lgRenderTable() {
     const profit = Number(r.sale_price || 0) - Number(r.rec_price || 0);
     const photo = r.photo
       ? '<img class="lg-tb-photo" src="' + escAttr(r.photo) + '" onclick="openLightbox(\'' + escAttr(r.photo) + '\')" title="点击查看原图">'
-      : '<span class="lg-tb-nophoto">无图</span>';
+      : '<span class="lg-tb-nophoto lg-tb-photo-btn" onclick="lgOpenPhoto(' + r.id + ')" title="点击补充照片">无图·补图</span>';
     return '<div class="lg-tb-row">' + photo +
-      '<div class="lg-tb-main"><div class="lg-tb-model">' + escAttr(r.model) +
+      '<div class="lg-tb-main"><div class="lg-tb-model" ' +
+        (r.photo
+          ? 'onclick="openLightbox(\'' + escAttr(r.photo) + '\')" title="点击查看原图" style="cursor:zoom-in"'
+          : 'onclick="lgOpenPhoto(' + r.id + ')" title="无照片，点击补充" style="cursor:pointer"') + '>' + escAttr(r.model) +
         (r.brand ? '<span class="lg-tb-brand">' + escAttr(r.brand) + '</span>' : '') +
         (r.status ? '<span class="lg-tb-status">' + escAttr(r.status) + '</span>' : '') + '</div>' +
         '<div class="lg-tb-sub">' + (r.seller ? '👤 ' + escAttr(r.seller) + ' · ' : '') + escAttr(r.day) + (r.channel ? ' · 渠道：' + escAttr(r.channel) : '') + (r.sale_channel ? ' · 出货：' + escAttr(r.sale_channel) : '') + '</div></div>' +
@@ -2814,6 +2850,54 @@ function lgRenderTable() {
   wrap.innerHTML = '<div class="lg-tb">' + html + '</div>';
 }
 
+// ---- 记录补图（明细无图点击补图 / Ctrl+V 粘贴） ----
+let lgPhotoId = null;
+let lgPhotoNew = null;
+function lgOpenPhoto(id) {
+  const r = lgRecords.find((x) => x.id === id); if (!r) return;
+  lgPhotoId = id;
+  lgPhotoNew = null;
+  document.getElementById('lgPhotoTitle').textContent = (r.brand ? r.brand + ' ' : '') + (r.model || '');
+  document.getElementById('lgPhotoPrev').innerHTML = r.photo
+    ? '<img src="' + escAttr(r.photo) + '" style="max-height:180px;border-radius:10px;max-width:100%" onclick="openLightbox(\'' + escAttr(r.photo) + '\')">' +
+      '<div style="color:#999;font-size:12px;margin-top:6px">当前已有照片，可选新图覆盖</div>'
+    : '<div style="color:#999;font-size:13px;padding:18px 0">当前无照片 — 选一张照片或直接 Ctrl+V 粘贴截图</div>';
+  document.getElementById('lgPhotoModal').style.display = 'flex';
+}
+function lgPhotoSetFile(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) { showToast('剪贴板内容不是图片', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    lgPhotoNew = { b64: String(reader.result).split(',')[1] || '', mime: file.type, name: file.name || '粘贴图片' };
+    document.getElementById('lgPhotoPrev').innerHTML =
+      '<img src="' + reader.result + '" style="max-height:180px;border-radius:10px;max-width:100%">' +
+      '<div style="color:#1e9e5a;font-size:12px;margin-top:6px">已选 ' + escAttr(lgPhotoNew.name) + '，点「保存」上传</div>';
+  };
+  reader.readAsDataURL(file);
+}
+function lgPhotoPick(input) {
+  const f = input.files && input.files[0];
+  input.value = '';
+  if (f) lgPhotoSetFile(f);
+}
+async function lgPhotoSave() {
+  if (!lgPhotoId) return;
+  if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
+  if (!lgPhotoNew) { showToast('请先选择或粘贴一张图片', 'error'); return; }
+  try {
+    const bin = atob(lgPhotoNew.b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const r = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': lgPhotoNew.mime, 'X-API-Key': apiKey }, body: bytes });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || '上传失败');
+    const up = await r.json();
+    await api('/api/records/' + lgPhotoId, { method: 'PUT', body: JSON.stringify({ photo: up.url }) });
+    document.getElementById('lgPhotoModal').style.display = 'none';
+    showToast('照片已补充 ✓', 'success');
+    lgLoad();
+  } catch (e) { showToast('保存失败：' + e.message, 'error'); }
+}
+
 // ---- 编辑 / 删除 / 重新识别 ----
 function lgOpenEdit(id) {
   const r = lgRecords.find((x) => x.id === id); if (!r) return;
@@ -2826,13 +2910,70 @@ function lgOpenEdit(id) {
   document.getElementById('lgEditSeller').value = r.seller || '';
   document.getElementById('lgEditStatus').value = r.status || '在库';
   document.getElementById('lgEditDay').value = r.day || lgToday();
+  lgEditPhoto = r.photo || '';
+  lgEditPhotoNew = null;
+  lgEditPhotoCleared = false;
+  renderEditPhotoBox();
   document.getElementById('lgEditModal').style.display = 'flex';
+}
+let lgEditPhoto = '';
+let lgEditPhotoNew = null;
+let lgEditPhotoCleared = false;
+function renderEditPhotoBox() {
+  const el = document.getElementById('lgEditPhotoBox');
+  if (!el) return;
+  const cur = lgEditPhotoNew;
+  const p = [];
+  p.push('<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">');
+  if (cur) p.push('<img src="' + cur.dataUrl + '" style="height:56px;border-radius:8px;border:1px solid var(--border)">');
+  else if (lgEditPhoto) p.push('<img src="' + escAttr(lgEditPhoto) + '" style="height:56px;border-radius:8px;border:1px solid var(--border);cursor:zoom-in" onclick="openLightbox(\'' + escAttr(lgEditPhoto) + '\')">');
+  else p.push('<span style="color:#bbb;font-size:12px">无照片</span>');
+  p.push('<button class="lg-btn" type="button" onclick="document.getElementById(\'lgEditPhotoFile\').click()">' + (lgEditPhoto || lgEditPhotoNew ? '换图' : '⬆ 上传') + '</button>');
+  p.push('<input type="file" id="lgEditPhotoFile" accept="image/*" style="display:none" onchange="lgEditPhotoPick(this)">');
+  if (lgEditPhoto || lgEditPhotoNew) p.push('<button class="lg-btn" type="button" onclick="lgEditPhotoClear()">清空</button>');
+  p.push('<span style="color:#999;font-size:11px">或 Ctrl+V 粘贴</span>');
+  p.push('</div>');
+  el.innerHTML = p.join('');
+}
+function lgEditPhotoSetFile(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) { showToast('剪贴板内容不是图片', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    lgEditPhotoNew = { dataUrl: reader.result, b64: String(reader.result).split(',')[1] || '', mime: file.type, name: file.name || '粘贴图片' };
+    lgEditPhotoCleared = false;
+    renderEditPhotoBox();
+  };
+  reader.readAsDataURL(file);
+}
+function lgEditPhotoPick(input) {
+  const f = input.files && input.files[0];
+  input.value = '';
+  if (f) lgEditPhotoSetFile(f);
+}
+function lgEditPhotoClear() {
+  lgEditPhoto = '';
+  lgEditPhotoNew = null;
+  lgEditPhotoCleared = true;
+  renderEditPhotoBox();
 }
 async function lgSaveEdit() {
   if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
   const model = document.getElementById('lgEditModel').value.trim();
   if (!model) { showToast('型号不能为空', 'error'); return; }
   const m = recMatchOne(model);
+  let photoVal;
+  if (lgEditPhotoNew) {
+    try {
+      const bin = atob(lgEditPhotoNew.b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const upRes = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': lgEditPhotoNew.mime, 'X-API-Key': apiKey }, body: bytes });
+      if (!upRes.ok) throw new Error((await upRes.json().catch(() => ({}))).error || '上传失败');
+      photoVal = (await upRes.json()).url;
+    } catch (e) { showToast('照片上传失败：' + e.message, 'error'); return; }
+  } else if (lgEditPhotoCleared) {
+    photoVal = '';
+  }
   const body = {
     model: m ? m.model : model,
     rec_price: document.getElementById('lgEditRec').value.trim(),
@@ -2841,7 +2982,8 @@ async function lgSaveEdit() {
     sale_channel: document.getElementById('lgEditSaleChannel').value.trim(),
     seller: document.getElementById('lgEditSeller').value.trim(),
     status: document.getElementById('lgEditStatus').value,
-    day: document.getElementById('lgEditDay').value || lgToday()
+    day: document.getElementById('lgEditDay').value || lgToday(),
+    photo: photoVal
   };
   if (m) { body.brand = m.brand; body.category = m.category; body.model_id = m.id; }
   try {
