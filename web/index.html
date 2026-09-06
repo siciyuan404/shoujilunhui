@@ -729,6 +729,111 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 .spec-modal-foot button { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; }
 .spec-modal-foot button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .spec-modal-foot button.primary:hover { background: #0958d9; }
+/* ===== 收机记账 ===== */
+.ledger-panel { max-width: 980px; margin: 0 auto; padding: 14px 14px 40px; }
+.lg-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; }
+.lg-head h2 { margin: 0 0 4px; font-size: 18px; }
+.lg-sub { margin: 0; font-size: 12.5px; color: var(--text-secondary); }
+.lg-card-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.lg-card-head h3 { margin: 0; font-size: 15px; }
+.lg-hint { font-size: 12px; color: var(--text-secondary); }
+.lg-datebar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 0 6px; }
+.lg-date-btn { border: 1px solid var(--border); background: #fff; color: var(--text); padding: 6px 14px; border-radius: 999px; font-size: 13px; cursor: pointer; }
+.lg-date-btn:hover { border-color: var(--accent); color: var(--accent); }
+.lg-date-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lg-custom { display: flex; align-items: center; gap: 6px; }
+.lg-filter-row { display: flex; gap: 6px; margin: 8px 0 10px; flex-wrap: wrap; }
+.lg-filter-btn { border: 1px solid var(--border); background: #fff; color: var(--text); padding: 4px 12px; border-radius: 999px; font-size: 12px; cursor: pointer; }
+.lg-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.lg-filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lg-custom input[type="date"] { border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px; font-size: 13px; }
+.lg-range { font-size: 13px; color: var(--accent); font-weight: 600; margin: 4px 0 10px; }
+.lg-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.lg-stat { background: #f7f9fc; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.lg-stat-val { font-size: 20px; font-weight: 700; color: var(--text); white-space: nowrap; }
+.lg-stat-val i { font-style: normal; font-size: 12px; color: var(--text-secondary); margin-left: 2px; }
+.lg-stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+.lg-stat.rec .lg-stat-val { color: #d46b08; }
+.lg-stat.sale .lg-stat-val { color: #389e0d; }
+.lg-stat.profit .lg-stat-val { color: #389e0d; }
+.lg-stat.profit-neg .lg-stat-val { color: #cf1322; }
+.lg-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.lg-chart { border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+.lg-chart-full { grid-column: 1 / -1; }
+.lg-chart h4 { margin: 0 0 10px; font-size: 13.5px; }
+.lg-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12.5px; }
+.lg-bar-label { width: 110px; flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; color: var(--text); }
+.lg-bar-track { flex: 1; background: #f0f2f5; border-radius: 6px; height: 16px; overflow: hidden; }
+.lg-bar-fill { height: 100%; background: linear-gradient(90deg, #69b1ff, #1677ff); border-radius: 6px; min-width: 3px; }
+.lg-bar-val { width: 96px; flex: none; color: var(--text-secondary); font-size: 12px; text-align: right; }
+.lg-cols { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.lg-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.lg-col-bar { width: 100%; max-width: 34px; background: linear-gradient(180deg, #69b1ff, #1677ff); border-radius: 6px 6px 0 0; min-height: 2px; }
+.lg-col-val { font-size: 11px; color: var(--text); margin-top: 3px; }
+.lg-col-day { font-size: 10.5px; color: var(--text-secondary); margin-top: 2px; }
+.lg-photos { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.lg-photo { position: relative; width: 92px; }
+.lg-photo img { width: 92px; height: 92px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+.lg-photo-name { font-size: 10px; color: var(--text-secondary); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lg-photo-x { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: #ff4d4f; color: #fff; border: none; cursor: pointer; font-size: 13px; line-height: 1; }
+.lg-photo-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.lg-btn { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text); }
+.lg-btn:hover { border-color: var(--accent); color: var(--accent); }
+.lg-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lg-btn.primary:hover { opacity: .9; color: #fff; }
+.lg-btn:disabled { opacity: .45; cursor: not-allowed; }
+.lg-rec-status { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+.lg-rec-status.error { color: #cf1322; }
+.lg-pend-row { display: flex; gap: 8px; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-top: 8px; flex-wrap: wrap; }
+.lg-pend-photo { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+.lg-pend-fields { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; align-items: center; }
+.lg-pend-fields input { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; min-width: 90px; }
+.lg-pend-model { width: 180px; }
+.lg-pend-rec, .lg-pend-sale { width: 90px; }
+.lg-pend-day { width: 130px; }
+.lg-pend-x { border: none; background: #ff4d4f; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 13px; }
+.lg-batch-bar { display: flex; gap: 10px; margin-top: 12px; }
+.lg-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.lg-form-item label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+.lg-form-item input, .lg-form-item select { width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; font-size: 13px; }
+.lg-tb { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.lg-tb-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid #f0f0f0; }
+.lg-tb-row:last-child { border-bottom: none; }
+.lg-tb-photo { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); cursor: zoom-in; flex: none; }
+.lg-tb-nophoto { width: 46px; height: 46px; border-radius: 8px; background: #f7f9fc; border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #bbb; flex: none; }
+.lg-tb-main { flex: 1; min-width: 0; }
+.lg-tb-model { font-size: 14px; font-weight: 600; color: var(--text); }
+.lg-tb-brand { font-size: 11px; background: var(--accent-light); color: var(--accent); border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+.lg-tb-status { font-size: 11px; background: #f6ffed; color: #389e0d; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+.lg-tb-sub { font-size: 11.5px; color: var(--text-secondary); margin-top: 2px; }
+.lg-tb-money { text-align: right; flex: none; }
+.lg-tb-rec { font-size: 12.5px; color: #d46b08; }
+.lg-tb-rec b { font-size: 14px; }
+.lg-tb-sale { font-size: 11.5px; color: #389e0d; }
+.lg-tb-profit { font-size: 11.5px; font-weight: 700; }
+.lg-tb-profit.p { color: #389e0d; }
+.lg-tb-profit.n { color: #cf1322; }
+.lg-tb-ops { display: flex; gap: 4px; flex: none; }
+.lg-op { border: 1px solid var(--border); background: #fff; border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; line-height: 1; }
+.lg-op:hover { border-color: var(--accent); }
+.lg-op.del:hover { border-color: #ff4d4f; color: #ff4d4f; }
+.lg-edit-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
+.lg-edit-modal { background: #fff; border-radius: 14px; width: 100%; max-width: 420px; padding: 18px; box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+.lg-edit-modal h3 { margin: 0 0 12px; font-size: 16px; }
+.lg-edit-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lg-edit-form label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+.lg-edit-form input, .lg-edit-form select { width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; font-size: 13px; }
+.lg-edit-full { grid-column: 1 / -1; }
+.lg-edit-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+@media (max-width: 600px) {
+  .lg-stats { grid-template-columns: repeat(2, 1fr); }
+  .lg-charts { grid-template-columns: 1fr; }
+  .lg-bar-label { width: 76px; }
+  .lg-pend-model { width: 100%; }
+  .lg-tb-row { flex-wrap: wrap; }
+  .lg-tb-money { text-align: left; }
+  .lg-edit-form { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -747,6 +852,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
     <button class="mode-btn active" id="modePrice" onclick="navTo('#price')">💰 查价</button>
     <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
     <button class="mode-btn" id="modeRecognize" onclick="navTo('#recognize')">📷 识别</button>
+    <button class="mode-btn" id="modeLedger" onclick="navTo('#ledger')">📒 记账</button>
     <button class="mode-btn" id="modeSettings" onclick="navTo('#settings')">⚙ 设置</button>
   </div>
 </div>
@@ -830,18 +936,112 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   </div>
 </div>
 
+<!-- 收机记账面板 -->
+<div class="ledger-panel" id="ledgerPanel" style="display:none">
+  <div class="lg-card">
+    <div class="lg-head">
+      <h2>📒 收机记账</h2>
+      <p class="lg-sub">拍照识别入账 · 记录每天收了多少台、每台收价与渠道 · 日/周/月/自定义日期段报表</p>
+    </div>
+    <div class="lg-datebar">
+      <button class="lg-date-btn active" data-p="today" onclick="lgSetPeriod('today')">今天</button>
+      <button class="lg-date-btn" data-p="week" onclick="lgSetPeriod('week')">本周</button>
+      <button class="lg-date-btn" data-p="month" onclick="lgSetPeriod('month')">本月</button>
+      <button class="lg-date-btn" data-p="lastweek" onclick="lgSetPeriod('lastweek')">上周</button>
+      <button class="lg-date-btn" data-p="lastmonth" onclick="lgSetPeriod('lastmonth')">上月</button>
+      <span class="lg-custom">
+        <input type="date" id="lgStart" onchange="lgCustom()">
+        <span>~</span>
+        <input type="date" id="lgEnd" onchange="lgCustom()">
+      </span>
+    </div>
+    <div class="lg-range" id="lgRange"></div>
+    <div class="lg-stats" id="lgStats"></div>
+    <div class="lg-charts" id="lgCharts"></div>
+  </div>
+
+  <div class="lg-card">
+    <div class="lg-card-head">
+      <h3>📷 拍照入账</h3>
+      <span class="lg-hint">一张图可有多台手机 · 可一次选多张连传 · 识别后确认/改价再批量入账</span>
+    </div>
+    <div class="lg-photos" id="lgPhotos"></div>
+    <input type="file" id="lgFile" accept="image/*" multiple style="display:none" onchange="lgAddPhotos(this)">
+    <div class="lg-photo-actions">
+      <button class="lg-btn" onclick="document.getElementById('lgFile').click()">+ 选择照片（可多选）</button>
+      <button class="lg-btn primary" id="lgRecAllBtn" onclick="lgRecognizeAll()" disabled>📷 开始识别并入账</button>
+    </div>
+    <div class="lg-rec-status" id="lgRecStatus"></div>
+    <div class="lg-rec-rows" id="lgRecRows"></div>
+    <div class="lg-batch-bar" id="lgBatchBar" style="display:none">
+      <button class="lg-btn primary" onclick="lgSaveBatch()">💾 确认入账</button>
+      <button class="lg-btn" onclick="lgClearPending()">清空待入账</button>
+    </div>
+  </div>
+
+  <div class="lg-card">
+    <div class="lg-card-head">
+      <h3>➕ 手动记一笔</h3>
+      <span class="lg-hint">输入/搜索型号（自动带出报价参考），填收购价与渠道即可，日期默认今天</span>
+    </div>
+    <div class="lg-form">
+      <div class="lg-form-item"><label>型号</label><input id="lgFModel" list="lgModelList" placeholder="搜索或输入型号" oninput="lgModelInput()"><datalist id="lgModelList"></datalist></div>
+      <div class="lg-form-item"><label>品牌 / 分类</label><input id="lgFBrand" readonly placeholder="选型号自动带出"></div>
+      <div class="lg-form-item"><label>收购价（元）</label><input id="lgFRec" type="number" placeholder="如 1800"></div>
+      <div class="lg-form-item"><label>渠道</label><input id="lgFChannel" list="lgChannelList" placeholder="如 路边收 / 线上 / 熟客"><datalist id="lgChannelList"></datalist></div>
+      <div class="lg-form-item"><label>出货价（元，可后填）</label><input id="lgFSale" type="number" placeholder="如 2100"></div>
+      <div class="lg-form-item"><label>状态</label><select id="lgFStatus"><option>在库</option><option>已出</option></select></div>
+      <div class="lg-form-item"><label>日期</label><input id="lgFDay" type="date"></div>
+      <div class="lg-form-item" style="display:flex;align-items:flex-end"><button class="lg-btn primary" style="width:100%" onclick="lgAddOne()">添加</button></div>
+    </div>
+  </div>
+
+  <div class="lg-card">
+    <div class="lg-card-head">
+      <h3>📋 记录明细</h3>
+      <span class="lg-hint">共 <b id="lgCount">0</b> 条 · 点 ✎ 修改（型号/收价/渠道/出货价）· 点 📷 重新识别型号 · 点 × 删除</span>
+    </div>
+    <div class="lg-filter-row" id="lgStatusFilter">
+      <button class="lg-filter-btn active" data-st="" onclick="lgSetStatusFilter(this)">全部</button>
+      <button class="lg-filter-btn" data-st="在库" onclick="lgSetStatusFilter(this)">🟢 在库</button>
+      <button class="lg-filter-btn" data-st="已出" onclick="lgSetStatusFilter(this)">✅ 已出</button>
+      <button class="lg-filter-btn" data-st="__nosale" onclick="lgSetStatusFilter(this)">🔸 未填出货价</button>
+    </div>
+    <div class="lg-table-wrap" id="lgTableWrap"></div>
+  </div>
+</div>
+
+<!-- 记账编辑弹窗 -->
+<div class="lg-edit-mask" id="lgEditModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="lg-edit-modal">
+    <h3>✎ 修改记录</h3>
+    <div class="lg-edit-form">
+      <div class="lg-edit-full"><label>型号（可搜索重选）</label><input id="lgEditModel" list="lgModelList" placeholder="搜索或输入型号"></div>
+      <div><label>收购价（元）</label><input id="lgEditRec" type="number"></div>
+      <div><label>出货价（元）</label><input id="lgEditSale" type="number"></div>
+      <div><label>渠道</label><input id="lgEditChannel" list="lgChannelList"></div>
+      <div><label>状态</label><select id="lgEditStatus"><option>在库</option><option>已出</option></select></div>
+      <div class="lg-edit-full"><label>日期</label><input id="lgEditDay" type="date"></div>
+    </div>
+    <div class="lg-edit-foot">
+      <button class="lg-btn" onclick="document.getElementById('lgEditModal').style.display='none'">取消</button>
+      <button class="lg-btn primary" onclick="lgSaveEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- 设置页 -->
 <div class="settings-panel" id="settingsPanel" style="display:none">
   <div class="set-card">
     <div class="set-head">
       <h2>⚙ 设置</h2>
-      <p class="set-sub">集中管理应用参数 · 后续设置项将按左侧分区持续扩展（界面显示 / 数据管理等即将上线）</p>
+      <p class="set-sub">集中管理应用参数 · 服务器 API Key 在「数据管理」中填写（手机 / 远程访问时必填，本机打开可留空自动获取）</p>
     </div>
     <div class="set-layout">
       <nav class="set-nav">
         <button class="set-nav-item active" data-sec="sec-rec" onclick="switchSetSection(this)">📷 识别设置</button>
         <button class="set-nav-item" data-sec="sec-display" disabled>🎨 界面显示<span class="set-soon">即将上线</span></button>
-        <button class="set-nav-item" data-sec="sec-data" disabled>🗄 数据管理<span class="set-soon">即将上线</span></button>
+        <button class="set-nav-item" data-sec="sec-data" onclick="switchSetSection(this)">🗄 数据管理</button>
         <button class="set-nav-item" data-sec="sec-about" onclick="switchSetSection(this)">ℹ️ 关于</button>
       </nav>
       <div class="set-body">
@@ -920,6 +1120,21 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
                 <div class="set-item-desc">识别框上显示匹配到的机型名称</div>
               </div>
               <label class="set-switch"><input type="checkbox" id="setAnnotateModel" checked><span class="track"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 数据管理 -->
+        <div class="set-sec" id="sec-data" style="display:none">
+          <div class="set-sec-title">数据管理</div>
+          <div class="set-sec-desc">记账与报价的写操作需服务器 API Key。本机打开自动获取；手机 / 远程访问时在此填写一次即可</div>
+          <div class="set-items">
+            <div class="set-item">
+              <div class="set-item-info">
+                <div class="set-item-name">服务器 API Key</div>
+                <div class="set-item-desc">填写后保存，手机端记账（拍照入账 / 手动添加 / 修改 / 删除）即可远程使用</div>
+              </div>
+              <input type="password" id="setApiKey" placeholder="sk-...（本地打开可留空，自动获取）" autocomplete="off">
             </div>
           </div>
         </div>
@@ -1104,6 +1319,7 @@ Promise.all([
   }
   specsData = specData;
   if (cfg && cfg.apiKey) { apiKey = cfg.apiKey; canEdit = true; }
+  else { const k = localStorage.getItem('ledgerApiKey'); if (k) { apiKey = k; canEdit = true; } }
   const total = result.total || 0;
   document.getElementById('updateInfo').textContent = '📅 已收录 ' + total + ' 款机型 · 数据库实时更新';
   loadFilterOptions();
@@ -1286,6 +1502,7 @@ function loadSettings() {
   g('setAnnotate').checked = recAnnotate;
   g('setAnnotatePrice').checked = recAnnotatePrice;
   g('setAnnotateModel').checked = recAnnotateModel;
+  g('setApiKey').value = localStorage.getItem('ledgerApiKey') || '';
   switchRecProvider(recProvider);
 }
 function saveSettings() {
@@ -1307,6 +1524,9 @@ function saveSettings() {
   localStorage.setItem('recAnnotate', recAnnotate ? '1' : '0');
   localStorage.setItem('recAnnotatePrice', recAnnotatePrice ? '1' : '0');
   localStorage.setItem('recAnnotateModel', recAnnotateModel ? '1' : '0');
+  const apiKeyVal = g('setApiKey').value.trim();
+  if (apiKeyVal) { apiKey = apiKeyVal; canEdit = true; localStorage.setItem('ledgerApiKey', apiKeyVal); }
+  else if (localStorage.getItem('ledgerApiKey')) { localStorage.removeItem('ledgerApiKey'); }
   showToast('设置已保存', 'ok');
   const activeKey = recProvider === 'deepseek' ? recDeepseekKey : recKey;
   const providerName = recProvider === 'deepseek' ? 'DeepSeek' : '豆包';
@@ -1480,6 +1700,7 @@ function route() {
     showListControls(false);
     document.getElementById('recognizePanel').style.display = 'none';
     document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     renderDetail(brand, model);
     return;
@@ -1491,6 +1712,7 @@ function route() {
     document.getElementById('tabsWrap').style.display = 'none';
     document.getElementById('statsBar').style.display = 'none';
     document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'none';
     document.getElementById('settingsPanel').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
     loadSettings();
@@ -1505,7 +1727,22 @@ function route() {
     document.getElementById('statsBar').style.display = 'none';
     document.getElementById('recognizePanel').style.display = 'block';
     document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'none';
     document.getElementById('mainContent').style.display = 'none';
+    updateModeButtons();
+    return;
+  }
+  if (h === '#ledger') {
+    currentMode = 'ledger';
+    lastMode = 'ledger';
+    document.getElementById('searchBar').style.display = 'none';
+    document.getElementById('tabsWrap').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'block';
+    lgInit();
     updateModeButtons();
     return;
   }
@@ -1517,6 +1754,7 @@ function route() {
   showListControls(true);
   document.getElementById('recognizePanel').style.display = 'none';
   document.getElementById('settingsPanel').style.display = 'none';
+  document.getElementById('ledgerPanel').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
   updateModeButtons();
   initTabs();
@@ -1532,6 +1770,7 @@ function updateModeButtons() {
   document.getElementById('modePrice').classList.toggle('active', currentMode === 'price');
   document.getElementById('modeVerify').classList.toggle('active', currentMode === 'verify');
   document.getElementById('modeRecognize').classList.toggle('active', currentMode === 'recognize');
+  document.getElementById('modeLedger').classList.toggle('active', currentMode === 'ledger');
   document.getElementById('modeSettings').classList.toggle('active', currentMode === 'settings');
   document.getElementById('sortBtns').style.display = currentMode === 'price' ? 'flex' : 'none';
   document.getElementById('verifyBtns').style.display = currentMode === 'verify' ? 'flex' : 'none';
@@ -2351,6 +2590,394 @@ function highlightMatch(text, query) {
   const idx = text.toLowerCase().indexOf(query);
   if (idx === -1) return text;
   return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+}
+
+// ===== 收机记账 =====
+let lgPeriod = 'today';
+let lgCustomStart = '';
+let lgCustomEnd = '';
+let lgStats = null;
+let lgRecords = [];
+let lgPhotos = [];
+let lgPending = [];
+let lgChannelOpts = [];
+let lgEditingId = null;
+let lgModelListBuilt = false;
+let lgStatusFilter = '';
+
+function lgToday() {
+  const d = new Date(), p = (n) => (n < 10 ? '0' + n : '' + n);
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+function fmtNum(v) {
+  const n = Number(v || 0);
+  if (!isFinite(n)) return '0';
+  return (Math.round(n * 100) / 100).toLocaleString('zh-CN');
+}
+function lgInit() {
+  const today = lgToday();
+  if (!document.getElementById('lgFDay').value) document.getElementById('lgFDay').value = today;
+  document.getElementById('lgStart').value = document.getElementById('lgStart').value || today;
+  document.getElementById('lgEnd').value = document.getElementById('lgEnd').value || today;
+  if (!lgModelListBuilt && allData.length) {
+    const names = [];
+    for (const g of allData) for (const m of g.models) names.push(m.model);
+    document.getElementById('lgModelList').innerHTML = names.slice(0, 3000).map((n) => '<option value="' + escAttr(n) + '">').join('');
+    lgModelListBuilt = true;
+  }
+  lgLoad();
+}
+async function lgLoad() {
+  const q = new URLSearchParams();
+  if (lgPeriod === 'custom' && lgCustomStart && lgCustomEnd) { q.set('start', lgCustomStart); q.set('end', lgCustomEnd); }
+  else q.set('period', lgPeriod);
+  try {
+    const [stats, list] = await Promise.all([
+      api('/api/records/stats?' + q.toString()),
+      api('/api/records?' + q.toString() + '&limit=500')
+    ]);
+    lgStats = stats; lgRecords = list.items || [];
+    lgRender();
+  } catch (e) { showToast('加载失败：' + e.message, 'error'); }
+}
+function lgSetPeriod(p) {
+  lgPeriod = p;
+  document.querySelectorAll('.lg-date-btn').forEach((b) => b.classList.toggle('active', b.dataset.p === p));
+  lgLoad();
+}
+function lgCustom() {
+  const s = document.getElementById('lgStart').value, e = document.getElementById('lgEnd').value;
+  if (!s || !e || s > e) { showToast('请选择正确的日期范围', 'error'); return; }
+  lgPeriod = 'custom'; lgCustomStart = s; lgCustomEnd = e;
+  document.querySelectorAll('.lg-date-btn').forEach((b) => b.classList.remove('active'));
+  lgLoad();
+}
+function lgRender() {
+  const s = lgStats;
+  if (!s) return;
+  document.getElementById('lgRange').textContent = '📅 ' + s.range.start + ' ~ ' + s.range.end;
+  const cards = [
+    { label: '收机台数', val: fmtNum(s.summary.count), unit: '台', cls: '' },
+    { label: '总收购价', val: fmtNum(s.summary.recTotal), unit: '元', cls: 'rec' },
+    { label: '总出货价', val: fmtNum(s.summary.saleTotal), unit: '元', cls: 'sale' },
+    { label: '毛利润', val: fmtNum(s.summary.profit), unit: '元', cls: s.summary.profit >= 0 ? 'profit' : 'profit-neg' },
+  ];
+  document.getElementById('lgStats').innerHTML = cards.map((c) =>
+    '<div class="lg-stat ' + c.cls + '"><div class="lg-stat-val">' + c.val + '<i>' + c.unit + '</i></div><div class="lg-stat-label">' + c.label + '</div></div>'
+  ).join('');
+  lgRenderCharts(s);
+  lgRenderTable();
+  lgUpdateChannels();
+}
+function lgRenderCharts(s) {
+  const el = document.getElementById('lgCharts');
+  const hasDays = s.byDay && s.byDay.length;
+  const hasCh = s.byChannel && s.byChannel.length;
+  const hasMo = s.byModel && s.byModel.length;
+  let html = '';
+  if (hasDays) {
+    const max = Math.max(1, ...s.byDay.map((r) => r.count));
+    html += '<div class="lg-chart lg-chart-full"><h4>📈 每日收机台数</h4><div class="lg-cols">' +
+      s.byDay.map((r) =>
+        '<div class="lg-col" title="' + escAttr(r.day) + ' 收' + r.count + '台 / 收价' + fmtNum(r.recTotal) + '元"><div class="lg-col-bar" style="height:' + Math.max(2, Math.round(r.count / max * 100)) + '%"></div><div class="lg-col-val">' + r.count + '</div><div class="lg-col-day">' + r.day.slice(5) + '</div></div>'
+      ).join('') + '</div></div>';
+  }
+  if (hasCh) {
+    const mx = Math.max(1, ...s.byChannel.map((x) => x.recTotal));
+    html += '<div class="lg-chart"><h4>🏪 渠道收机金额</h4>' +
+      s.byChannel.slice(0, 8).map((r) =>
+        '<div class="lg-bar-row"><div class="lg-bar-label" title="' + escAttr(r.channel) + '">' + escAttr(r.channel) + '</div><div class="lg-bar-track"><div class="lg-bar-fill" style="width:' + Math.max(3, Math.round(r.recTotal / mx * 100)) + '%"></div></div><div class="lg-bar-val">' + fmtNum(r.recTotal) + '元 / ' + r.count + '台</div></div>'
+      ).join('') + '</div>';
+  }
+  if (hasMo) {
+    const mx = Math.max(1, ...s.byModel.map((x) => x.recTotal));
+    html += '<div class="lg-chart"><h4>📱 机型收机排行</h4>' +
+      s.byModel.slice(0, 8).map((r) =>
+        '<div class="lg-bar-row"><div class="lg-bar-label" title="' + escAttr(r.model) + '">' + escAttr(r.model) + '</div><div class="lg-bar-track"><div class="lg-bar-fill" style="width:' + Math.max(3, Math.round(r.recTotal / mx * 100)) + '%"></div></div><div class="lg-bar-val">' + fmtNum(r.recTotal) + '元 / ' + r.count + '台</div></div>'
+      ).join('') + '</div>';
+  }
+  el.innerHTML = html || '<div class="lg-chart lg-chart-full"><h4>📊 该时间段暂无数据，入账后自动生成报表</h4></div>';
+}
+function lgUpdateChannels() {
+  const names = new Set(lgChannelOpts);
+  if (lgStats && lgStats.byChannel) lgStats.byChannel.forEach((c) => c.channel && names.add(c.channel));
+  document.getElementById('lgChannelList').innerHTML = [...names].map((n) => '<option value="' + escAttr(n) + '">').join('');
+}
+function lgSetStatusFilter(btn) {
+  lgStatusFilter = btn.dataset.st || '';
+  document.querySelectorAll('#lgStatusFilter .lg-filter-btn').forEach((b) => b.classList.toggle('active', b === btn));
+  lgRenderTable();
+}
+function lgRenderTable() {
+  const wrap = document.getElementById('lgTableWrap');
+  let rows = lgRecords;
+  if (lgStatusFilter === '__nosale') rows = rows.filter((r) => !r.sale_price);
+  else if (lgStatusFilter) rows = rows.filter((r) => r.status === lgStatusFilter);
+  document.getElementById('lgCount').textContent = rows.length;
+  if (!rows.length) { wrap.innerHTML = '<div class="empty-state"><p>该时间段暂无记录 — 拍张照片识别入账，或手动记一笔</p></div>'; return; }
+  const html = rows.map((r) => {
+    const profit = Number(r.sale_price || 0) - Number(r.rec_price || 0);
+    const photo = r.photo
+      ? '<img class="lg-tb-photo" src="' + escAttr(r.photo) + '" onclick="openLightbox(\'' + escAttr(r.photo) + '\')" title="点击查看原图">'
+      : '<span class="lg-tb-nophoto">无图</span>';
+    return '<div class="lg-tb-row">' + photo +
+      '<div class="lg-tb-main"><div class="lg-tb-model">' + escAttr(r.model) +
+        (r.brand ? '<span class="lg-tb-brand">' + escAttr(r.brand) + '</span>' : '') +
+        (r.status ? '<span class="lg-tb-status">' + escAttr(r.status) + '</span>' : '') + '</div>' +
+        '<div class="lg-tb-sub">' + escAttr(r.day) + (r.channel ? ' · 渠道：' + escAttr(r.channel) : '') + '</div></div>' +
+      '<div class="lg-tb-money"><div class="lg-tb-rec">收 <b>' + escAttr(r.rec_price || '-') + '</b> 元</div>' +
+        (r.sale_price ? '<div class="lg-tb-sale">出 ' + escAttr(r.sale_price) + ' 元</div><div class="lg-tb-profit ' + (profit >= 0 ? 'p' : 'n') + '">' + (profit >= 0 ? '+' : '') + fmtNum(profit) + ' 元</div>' : '') + '</div>' +
+      '<div class="lg-tb-ops">' +
+        '<button class="lg-op" title="重新识别型号" onclick="lgReRecognize(' + r.id + ')">📷</button>' +
+        '<button class="lg-op" title="编辑（型号/收价/渠道/出货价）" onclick="lgOpenEdit(' + r.id + ')">✎</button>' +
+        '<button class="lg-op del" title="删除" onclick="lgDel(' + r.id + ')">×</button>' +
+      '</div></div>';
+  }).join('');
+  wrap.innerHTML = '<div class="lg-tb">' + html + '</div>';
+}
+
+// ---- 编辑 / 删除 / 重新识别 ----
+function lgOpenEdit(id) {
+  const r = lgRecords.find((x) => x.id === id); if (!r) return;
+  lgEditingId = id;
+  document.getElementById('lgEditModel').value = r.model || '';
+  document.getElementById('lgEditRec').value = r.rec_price || '';
+  document.getElementById('lgEditSale').value = r.sale_price || '';
+  document.getElementById('lgEditChannel').value = r.channel || '';
+  document.getElementById('lgEditStatus').value = r.status || '在库';
+  document.getElementById('lgEditDay').value = r.day || lgToday();
+  document.getElementById('lgEditModal').style.display = 'flex';
+}
+async function lgSaveEdit() {
+  if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
+  const model = document.getElementById('lgEditModel').value.trim();
+  if (!model) { showToast('型号不能为空', 'error'); return; }
+  const m = recMatchOne(model);
+  const body = {
+    model: m ? m.model : model,
+    rec_price: document.getElementById('lgEditRec').value.trim(),
+    sale_price: document.getElementById('lgEditSale').value.trim(),
+    channel: document.getElementById('lgEditChannel').value.trim(),
+    status: document.getElementById('lgEditStatus').value,
+    day: document.getElementById('lgEditDay').value || lgToday()
+  };
+  if (m) { body.brand = m.brand; body.category = m.category; body.model_id = m.id; }
+  try {
+    await api('/api/records/' + lgEditingId, { method: 'PUT', body: JSON.stringify(body) });
+    document.getElementById('lgEditModal').style.display = 'none';
+    showToast('已保存', 'success');
+    lgLoad();
+  } catch (e) { showToast('保存失败：' + e.message, 'error'); }
+}
+async function lgDel(id) {
+  if (!confirm('确定删除这条记录？')) return;
+  try { await api('/api/records/' + id, { method: 'DELETE' }); showToast('已删除', 'success'); lgLoad(); }
+  catch (e) { showToast('删除失败：' + e.message, 'error'); }
+}
+async function lgReRecognize(id) {
+  const r = lgRecords.find((x) => x.id === id); if (!r) return;
+  if (!r.photo) { showToast('该记录没有照片，无法重新识别', 'error'); return; }
+  const activeKey = recProvider === 'deepseek' ? recDeepseekKey : recKey;
+  if (!activeKey) { showToast('请先在设置中配置视觉识别 API Key', 'error'); openRecSettings(); return; }
+  try {
+    const imgResp = await fetch(r.photo);
+    const blob = await imgResp.blob();
+    const b64 = await new Promise((res) => { const rd = new FileReader(); rd.onload = () => res(String(rd.result).split(',')[1] || ''); rd.readAsDataURL(blob); });
+    const base = (recBase || location.origin).replace(/\/+$/, '');
+    const res = await api(base + '/api/recognize', {
+      method: 'POST',
+      body: JSON.stringify({ imageBase64: b64, apiKey: activeKey, model: (recProvider === 'deepseek' ? recDeepseekModel : recModel), provider: recProvider })
+    });
+    const phones = (res && res.phones) || [];
+    if (!phones.length) { showToast('未识别到手机，可换更清晰的照片', 'error'); return; }
+    const name = (typeof phones[0] === 'string' ? phones[0] : (phones[0] && phones[0].model)) || '';
+    const m = recMatchOne(name);
+    const patch = { model: m ? m.model : name };
+    if (m) { patch.brand = m.brand; patch.category = m.category; patch.model_id = m.id; }
+    await api('/api/records/' + id, { method: 'PUT', body: JSON.stringify(patch) });
+    showToast('重新识别为：' + patch.model, 'success');
+    lgLoad();
+  } catch (e) { showToast('识别失败：' + e.message, 'error'); }
+}
+
+// ---- 拍照入账 ----
+function lgAddPhotos(input) {
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
+  files.forEach((f) => {
+    if (!f.type || !f.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      lgPhotos.push({ name: f.name, dataUrl: reader.result, b64: String(reader.result).split(',')[1] || '', url: '', status: 'ready' });
+      lgRenderPhotos();
+    };
+    reader.readAsDataURL(f);
+  });
+  input.value = '';
+}
+function lgRenderPhotos() {
+  const el = document.getElementById('lgPhotos');
+  el.innerHTML = lgPhotos.map((p, i) =>
+    '<div class="lg-photo"><img src="' + p.dataUrl + '" alt="' + escAttr(p.name) + '">' +
+    '<div class="lg-photo-name">' + escAttr(p.name) + '</div>' +
+    '<button class="lg-photo-x" onclick="lgRemovePhoto(' + i + ')">×</button></div>'
+  ).join('');
+  document.getElementById('lgRecAllBtn').disabled = lgPhotos.length === 0;
+}
+function lgRemovePhoto(i) {
+  lgPhotos.splice(i, 1);
+  lgRenderPhotos();
+}
+function setLgRecStatus(msg, isErr) {
+  const el = document.getElementById('lgRecStatus');
+  el.textContent = msg || '';
+  el.className = 'lg-rec-status' + (isErr ? ' error' : '');
+}
+async function uploadPhoto(p) {
+  if (!apiKey) throw new Error('未配置服务器 API Key（本机打开自动获取，远程请在设置-数据管理中填写）');
+  const bin = atob(p.b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const ct = (p.dataUrl || '').split(';')[0].split(':')[1] || 'image/jpeg';
+  const r = await fetch('/api/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': ct, 'X-API-Key': apiKey },
+    body: bytes
+  });
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || '照片上传失败');
+  return r.json();
+}
+async function lgRecognizeAll() {
+  const activeKey = recProvider === 'deepseek' ? recDeepseekKey : recKey;
+  if (!activeKey) { showToast('请先在设置中配置视觉识别 API Key（豆包/DeepSeek）', 'error'); openRecSettings(); return; }
+  const btn = document.getElementById('lgRecAllBtn');
+  btn.disabled = true;
+  const base = (recBase || location.origin).replace(/\/+$/, '');
+  const model = recProvider === 'deepseek' ? recDeepseekModel : recModel;
+  let fail = 0;
+  for (let i = 0; i < lgPhotos.length; i++) {
+    const p = lgPhotos[i];
+    if (p.status === 'uploaded') continue;
+    setLgRecStatus('正在识别 ' + (i + 1) + '/' + lgPhotos.length + '：' + p.name + ' …');
+    try {
+      const res = await api(base + '/api/recognize', {
+        method: 'POST',
+        body: JSON.stringify({ imageBase64: p.b64, apiKey: activeKey, model, provider: recProvider })
+      });
+      const phones = (res && res.phones) || [];
+      if (phones.length) {
+        const up = await uploadPhoto(p);
+        p.url = up.url; p.status = 'uploaded';
+        phones.forEach((ph) => {
+          const name = (typeof ph === 'string' ? ph : (ph && ph.model)) || '';
+          const m = recMatchOne(name);
+          lgPending.push({
+            photo: up.url,
+            model: m ? m.model : name,
+            brand: m ? m.brand : '',
+            category: m ? m.category : '',
+            model_id: m ? m.id : null,
+            rec_price: m ? m.price : '',
+            channel: '',
+            sale_price: '',
+            status: '在库',
+            day: lgToday()
+          });
+        });
+      } else {
+        p.status = 'empty';
+        setLgRecStatus(p.name + ' 未识别到手机，可换更清晰照片', true);
+      }
+    } catch (e) {
+      fail++;
+      setLgRecStatus(p.name + ' 识别失败：' + e.message, true);
+    }
+  }
+  btn.disabled = false;
+  lgRenderPhotos();
+  lgRenderPending();
+  setLgRecStatus('识别完成：新增 ' + lgPending.length + ' 台待入账' + (fail ? '，失败 ' + fail + ' 张' : '') + '。核对型号与价格后点「确认入账」');
+}
+function lgRenderPending() {
+  const el = document.getElementById('lgRecRows');
+  const html = lgPending.map((r, i) =>
+    '<div class="lg-pend-row">' +
+      (r.photo ? '<img class="lg-pend-photo" src="' + escAttr(r.photo) + '" onclick="openLightbox(\'' + escAttr(r.photo) + '\')">' : '') +
+      '<div class="lg-pend-fields">' +
+        '<input class="lg-pend-model" value="' + escAttr(r.model) + '" placeholder="型号" list="lgModelList" onchange="lgPendSet(' + i + ',\'model\',this.value)">' +
+        '<input class="lg-pend-rec" type="number" value="' + escAttr(r.rec_price) + '" placeholder="收价" onchange="lgPendSet(' + i + ',\'rec_price\',this.value)">' +
+        '<input class="lg-pend-channel" value="' + escAttr(r.channel) + '" placeholder="渠道" list="lgChannelList" onchange="lgPendSet(' + i + ',\'channel\',this.value)">' +
+        '<input class="lg-pend-sale" type="number" value="' + escAttr(r.sale_price) + '" placeholder="出货价(可空)" onchange="lgPendSet(' + i + ',\'sale_price\',this.value)">' +
+        '<input type="date" class="lg-pend-day" value="' + escAttr(r.day) + '" onchange="lgPendSet(' + i + ',\'day\',this.value)">' +
+        '<button class="lg-pend-x" title="移除该项" onclick="lgPendDel(' + i + ')">×</button>' +
+      '</div></div>'
+  ).join('');
+  el.innerHTML = html || '<div class="empty-state"><p>还没有待入账项 — 选照片开始识别，或在下方手动记一笔</p></div>';
+  const bar = document.getElementById('lgBatchBar');
+  bar.style.display = lgPending.length ? 'flex' : 'none';
+  const btn = bar.querySelector('.primary');
+  if (btn) btn.textContent = '💾 确认入账（' + lgPending.length + ' 台）';
+}
+function lgPendSet(i, field, val) {
+  const r = lgPending[i]; if (!r) return;
+  r[field] = String(val == null ? '' : val).trim();
+  if (field === 'model') {
+    const m = recMatchOne(r.model);
+    if (m) { r.brand = m.brand; r.category = m.category; r.model_id = m.id; if (!r.rec_price) r.rec_price = m.price || ''; }
+  }
+}
+function lgPendDel(i) { lgPending.splice(i, 1); lgRenderPending(); }
+function lgClearPending() { lgPending = []; lgRenderPending(); setLgRecStatus(''); }
+async function lgSaveBatch() {
+  if (!lgPending.length) return;
+  if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
+  try {
+    const res = await api('/api/records/batch', { method: 'POST', body: JSON.stringify({ items: lgPending }) });
+    showToast('已入账 ' + res.inserted + ' 台', 'success');
+    lgPending = []; lgPhotos = [];
+    document.getElementById('lgPhotos').innerHTML = '';
+    document.getElementById('lgFile').value = '';
+    document.getElementById('lgRecAllBtn').disabled = true;
+    lgRenderPending();
+    lgLoad();
+  } catch (e) { showToast('入账失败：' + e.message, 'error'); }
+}
+
+// ---- 手动记一笔 ----
+function lgModelInput() {
+  const v = document.getElementById('lgFModel').value.trim();
+  const m = v ? recMatchOne(v) : null;
+  document.getElementById('lgFBrand').value = m ? (m.brand + (m.category ? ' · ' + m.category : '')) : '';
+  if (m && !document.getElementById('lgFRec').value) document.getElementById('lgFRec').value = m.price || '';
+}
+async function lgAddOne() {
+  const model = document.getElementById('lgFModel').value.trim();
+  if (!model) { showToast('请填写型号', 'error'); return; }
+  if (!apiKey) { showToast('未配置服务器 API Key（远程请在设置-数据管理中填写）', 'error'); return; }
+  const m = recMatchOne(model);
+  const channel = document.getElementById('lgFChannel').value.trim();
+  const body = {
+    model: m ? m.model : model,
+    brand: m ? m.brand : (document.getElementById('lgFBrand').value.split('·')[0] || '').trim(),
+    category: m ? m.category : '',
+    model_id: m ? m.id : null,
+    rec_price: document.getElementById('lgFRec').value.trim(),
+    channel: channel,
+    sale_price: document.getElementById('lgFSale').value.trim(),
+    status: document.getElementById('lgFStatus').value,
+    day: document.getElementById('lgFDay').value || lgToday()
+  };
+  try {
+    await api('/api/records', { method: 'POST', body: JSON.stringify(body) });
+    showToast('已添加：' + body.model, 'success');
+    document.getElementById('lgFModel').value = '';
+    document.getElementById('lgFBrand').value = '';
+    document.getElementById('lgFRec').value = '';
+    document.getElementById('lgFChannel').value = '';
+    document.getElementById('lgFSale').value = '';
+    if (channel) lgChannelOpts.push(channel);
+    lgLoad();
+  } catch (e) { showToast('添加失败：' + e.message, 'error'); }
 }
 </script>
 </body>

@@ -113,6 +113,29 @@ node skills/phone-price-api/scripts/api.js PUT /api/models/123 '{"images":["/upl
 - **AI Skill 编辑**：`node skills/phone-price-api/scripts/api.js UPLOAD <图>` + `PUT` 写 `images`
 - 上传图片不进入 git（`server/uploads/` 已加入 .gitignore）
 
+## 收机记账（Web + Android）
+
+收机随手记：拍照/选图识别型号自动入账，也可手动录入，日/周/月/自定义日期段报表。
+
+- **录入方式**（Web 端「📒 记账」页 / Android APP 首页账本按钮）：
+  - 拍照或选多张图 → 逐张识别图中手机（复用视觉识别 + 报价库匹配，1 图多台、多批上传均可）→ 自动带出型号/品牌/报价库参考价 → 核对收价与渠道后批量入账
+  - 手动录入：输入型号自动联想报价库（带出品牌/分类/参考收价），填收价/渠道/出货价/状态（在库·已出）/日期
+- **每台记录字段**：照片、品牌、分类、型号、收购价、渠道、出货价（可后填）、状态、日期、备注
+- **修正**：识别错误时两端均可编辑改型号/价格/渠道；也可删除重录；Web 端对已入账记录可直接「重新识别」照片修正型号
+- **报表**：今天 / 本周 / 本月 / 上周 / 上月 / 自定义日期段，含本期台数、总收购价、总出货价、毛利，附每日收购额柱图、渠道排行、机型排行
+- **写操作需 API Key**：Web 端远程访问时在「设置 → 数据管理」填一次；Android 在「设置 → 管理 API Key」填写
+
+### 记账 API
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | /api/records | 记录列表（period=today\|week\|month\|lastweek\|lastmonth 或 day=YYYY-MM-DD 或 start&end；channel/status/search/sort/limit/page） | 无 |
+| GET | /api/records/stats | 报表统计（summary + byDay/byChannel/byModel/byStatus） | 无 |
+| POST | /api/records | 新增一条 | X-API-Key |
+| POST | /api/records/batch | 批量新增 `{"items":[...]}` | X-API-Key |
+| PUT/PATCH | /api/records/:id | 修改（部分字段） | X-API-Key |
+| DELETE | /api/records/:id | 删除 | X-API-Key |
+
 ## API 一览
 
 | 方法 | 路径 | 说明 | 认证 |
@@ -131,6 +154,12 @@ node skills/phone-price-api/scripts/api.js PUT /api/models/123 '{"images":["/upl
 | POST | /api/upload | 上传参考图片（二进制 body） | X-API-Key |
 | GET | /api/export | 导出 JSON | 无 |
 | GET | /api/config | 本机返回 API Key | 本机 |
+| GET | /api/records | 收机记账列表 | 无 |
+| GET | /api/records/stats | 收机记账报表统计 | 无 |
+| POST | /api/records | 新增记账 | X-API-Key |
+| POST | /api/records/batch | 批量新增记账 | X-API-Key |
+| PUT | /api/records/:id | 修改记账 | X-API-Key |
+| DELETE | /api/records/:id | 删除记账 | X-API-Key |
 
 完整参数见 `skills/phone-price-api/references/api.md`。
 

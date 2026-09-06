@@ -1,6 +1,7 @@
 package com.shoujilunhui.app.data
 
 import com.google.gson.annotations.SerializedName
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -68,6 +69,100 @@ data class PostBody(
 
 data class HealthResponse(val ok: Boolean, val models: Int, val time: String?)
 
+// ---------- 收机记账 ----------
+
+data class RecordRow(
+    val id: Long,
+    val photo: String,
+    val brand: String,
+    val category: String,
+    val model: String,
+    @SerializedName("model_id") val modelId: Long?,
+    @SerializedName("rec_price") val recPrice: String,
+    @SerializedName("sale_price") val salePrice: String,
+    val channel: String,
+    val day: String,
+    val status: String,
+    val note: String?,
+    @SerializedName("created_at") val createdAt: String?,
+    @SerializedName("updated_at") val updatedAt: String?
+)
+
+data class RecordsResponse(
+    val total: Int,
+    val page: Int,
+    val limit: Int,
+    val items: List<RecordRow>
+)
+
+data class StatsRange(val start: String, val end: String)
+
+data class Summary(
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double,
+    val channels: Int,
+    val statuses: Int
+)
+
+data class DayStat(
+    val day: String,
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double
+)
+
+data class ChannelStat(
+    val channel: String,
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double
+)
+
+data class ModelStat(
+    val model: String,
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double
+)
+
+data class StatusStat(
+    val status: String,
+    val count: Int,
+    @SerializedName("recTotal") val recTotal: Double,
+    @SerializedName("saleTotal") val saleTotal: Double,
+    val profit: Double
+)
+
+data class StatsResponse(
+    val range: StatsRange?,
+    val summary: Summary?,
+    @SerializedName("byDay") val byDay: List<DayStat>?,
+    @SerializedName("byChannel") val byChannel: List<ChannelStat>?,
+    @SerializedName("byModel") val byModel: List<ModelStat>?,
+    @SerializedName("byStatus") val byStatus: List<StatusStat>?
+)
+
+data class RecordPostBody(
+    val photo: String? = null,
+    val brand: String? = null,
+    val category: String? = null,
+    val model: String,
+    @SerializedName("model_id") val modelId: Long? = null,
+    @SerializedName("rec_price") val recPrice: String? = null,
+    @SerializedName("sale_price") val salePrice: String? = null,
+    val channel: String? = null,
+    val day: String? = null,
+    val status: String? = null,
+    val note: String? = null
+)
+
+data class UploadResponse(val ok: Boolean, val url: String?, val name: String?)
+
 interface Api {
     @GET("api/models")
     suspend fun getModels(
@@ -92,8 +187,42 @@ interface Api {
     suspend fun postModel(@Header("X-API-Key") key: String, @Body body: PostBody): ModelRow
 
     @PUT("api/models/{id}")
-    suspend fun putModel(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: Map<String, String>): ModelRow
+    suspend fun putModel(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: Map<String, Any>): ModelRow
 
     @DELETE("api/models/{id}")
     suspend fun deleteModel(@Path("id") id: Long, @Header("X-API-Key") key: String): Map<String, Any>
+
+    // ---------- 收机记账 ----------
+
+    @GET("api/records")
+    suspend fun getRecords(
+        @Query("period") period: String? = null,
+        @Query("day") day: String? = null,
+        @Query("start") start: String? = null,
+        @Query("end") end: String? = null,
+        @Query("limit") limit: Int? = 500
+    ): RecordsResponse
+
+    @GET("api/records/stats")
+    suspend fun getRecordStats(
+        @Query("period") period: String? = null,
+        @Query("day") day: String? = null,
+        @Query("start") start: String? = null,
+        @Query("end") end: String? = null
+    ): StatsResponse
+
+    @POST("api/records")
+    suspend fun postRecord(@Header("X-API-Key") key: String, @Body body: RecordPostBody): RecordRow
+
+    @POST("api/records/batch")
+    suspend fun postRecordsBatch(@Header("X-API-Key") key: String, @Body body: Map<String, List<RecordPostBody>>): Map<String, Any>
+
+    @PUT("api/records/{id}")
+    suspend fun putRecord(@Path("id") id: Long, @Header("X-API-Key") key: String, @Body body: Map<String, String>): RecordRow
+
+    @DELETE("api/records/{id}")
+    suspend fun deleteRecord(@Path("id") id: Long, @Header("X-API-Key") key: String): Map<String, Any>
+
+    @POST("api/upload")
+    suspend fun uploadImage(@Header("X-API-Key") key: String, @Body body: RequestBody): UploadResponse
 }

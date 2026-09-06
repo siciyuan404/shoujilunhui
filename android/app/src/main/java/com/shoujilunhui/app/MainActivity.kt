@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.shoujilunhui.app.ui.history.HistoryDetailScreen
 import com.shoujilunhui.app.ui.history.HistoryListScreen
 import com.shoujilunhui.app.ui.home.HomeScreen
+import com.shoujilunhui.app.ui.ledger.LedgerScreen
 import com.shoujilunhui.app.ui.recognize.RecognizeScreen
 import com.shoujilunhui.app.ui.settings.SettingsScreen
 import com.shoujilunhui.app.ui.theme.AppTheme
@@ -47,6 +48,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val HISTORY = "history"
     const val HISTORY_DETAIL = "history/{id}"
+    const val LEDGER = "ledger"
 }
 
 @Composable
@@ -57,7 +59,11 @@ fun AppNav() {
             HomeScreen(
                 onOpenSettings = { nav.navigate(Routes.SETTINGS) },
                 onOpenRecognize = { nav.navigate(Routes.RECOGNIZE) },
+                onOpenLedger = { nav.navigate(Routes.LEDGER) },
             )
+        }
+        composable(Routes.LEDGER) {
+            LedgerScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.RECOGNIZE) {
             RecognizeScreen(

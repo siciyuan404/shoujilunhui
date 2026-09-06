@@ -5,6 +5,8 @@
 
 package com.shoujilunhui.app.ui.home
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -127,10 +129,59 @@ private val CameraIcon: ImageVector by lazy {
     }.build()
 }
 
+/** 账本图标（记账入口） */
+private val LedgerIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "Ledger",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(fill = SolidColor(Color.Black)) {
+            moveTo(4f, 4f)
+            curveToRelative(0f, -1.1f, 0.9f, -2f, 2f, -2f)
+            horizontalLineToRelative(12f)
+            curveToRelative(1.1f, 0f, 2f, 0.9f, 2f, 2f)
+            verticalLineToRelative(16f)
+            curveToRelative(0f, 1.1f, -0.9f, 2f, -2f, 2f)
+            horizontalLineTo(6f)
+            curveToRelative(-1.1f, 0f, -2f, -0.9f, -2f, -2f)
+            verticalLineTo(4f)
+            close()
+            moveTo(6f, 4f)
+            verticalLineToRelative(16f)
+            horizontalLineToRelative(12f)
+            verticalLineTo(4f)
+            horizontalLineTo(6f)
+            close()
+            moveTo(9f, 7f)
+            horizontalLineToRelative(6f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(9f)
+            verticalLineTo(7f)
+            close()
+            moveTo(9f, 11f)
+            horizontalLineToRelative(6f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(9f)
+            verticalLineTo(11f)
+            close()
+            moveTo(9f, 15f)
+            horizontalLineToRelative(4f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(9f)
+            verticalLineTo(15f)
+            close()
+        }
+    }.build()
+}
+
 @Composable
 fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenRecognize: () -> Unit,
+    onOpenLedger: () -> Unit,
     vm: HomeViewModel = viewModel(),
 ) {
     val ui by vm.ui.collectAsState()
@@ -143,6 +194,14 @@ fun HomeScreen(
     var showAdd by remember { mutableStateOf(false) }
     var showFilter by remember { mutableStateOf(false) }
     var viewer by remember { mutableStateOf<Pair<List<String>, Int>?>(null) }
+    var pendingImgRow by remember { mutableStateOf<ModelRow?>(null) }
+    val pickImages = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        val row = pendingImgRow
+        pendingImgRow = null
+        if (row != null && uris.isNotEmpty()) vm.addModelImages(row, uris)
+    }
 
     // 回到前台（如从设置页返回）时按配置变化重载
     LifecycleResumeEffect(Unit) {
@@ -196,6 +255,7 @@ fun HomeScreen(
                 onSearchChange = vm::onSearchChange,
                 onOpenSettings = onOpenSettings,
                 onOpenRecognize = onOpenRecognize,
+                onOpenLedger = onOpenLedger,
             )
             FilterEntryRow(
                 brand = ui.brand,
@@ -227,7 +287,8 @@ fun HomeScreen(
         }
     }
 
-    detailRow?.let { row ->
+    detailRow?.let { clicked ->
+        val row = ui.models.firstOrNull { it.id == clicked.id } ?: clicked
         ModalBottomSheet(
             onDismissRequest = { detailRow = null },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -238,6 +299,8 @@ fun HomeScreen(
                 onEdit = { detailRow = null; editRow = row },
                 onDelete = { detailRow = null; deleteRow = row },
                 onImageClick = { imgs, idx -> viewer = imgs to idx },
+                onAddImages = { pendingImgRow = row; pickImages.launch("*/*") },
+                onRemoveImage = { url -> vm.removeModelImage(row, url) },
             )
         }
     }
@@ -302,6 +365,7 @@ private fun HomeHeader(
     onSearchChange: (String) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenRecognize: () -> Unit,
+    onOpenLedger: () -> Unit,
 ) {
     Row(
         Modifier
@@ -359,6 +423,23 @@ private fun HomeHeader(
                     CameraIcon,
                     contentDescription = "拍照识别",
                     tint = Color.White,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+        // 记账入口
+        Surface(
+            onClick = onOpenLedger,
+            shape = CircleShape,
+            color = Color.White,
+            modifier = Modifier.size(40.dp),
+            shadowElevation = 1.dp,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    LedgerIcon,
+                    contentDescription = "记账",
+                    tint = Accent,
                     modifier = Modifier.size(20.dp),
                 )
             }

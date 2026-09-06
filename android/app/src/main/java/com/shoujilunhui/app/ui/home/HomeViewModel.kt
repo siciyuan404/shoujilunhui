@@ -1,6 +1,7 @@
 package com.shoujilunhui.app.ui.home
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
@@ -13,6 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 data class HomeUiState(
     val loading: Boolean = false,
@@ -165,6 +168,64 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: Exception) {
                 _message.value = "删除失败：${e.message}"
             }
+        }
+    }
+
+    // ---------- 机型图片管理 ----------
+
+    /** 相册多选补图：逐张上传 → 合并写回机型 images（首图为封面） */
+    fun addModelImages(row: ModelRow, uris: List<Uri>) {
+        if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
+        if (apiKey.isBlank()) { _message.value = "补图需要 API Key，请先在设置中填写"; return }
+        viewModelScope.launch {
+            try {
+                val uploaded = uris.mapNotNull { uri -> uploadImage(uri) }
+                if (uploaded.isEmpty()) { _message.value = "图片上传失败，请重试"; return@launch }
+                val merged = (row.images?.filter { it.isNotBlank() }.orEmpty() + uploaded).distinct()
+                val updated = ApiClient.api(baseUrl).putModel(
+                    row.id, apiKey, mapOf("images" to merged)
+                )
+                _ui.update { s ->
+                    s.copy(models = s.models.map { if (it.id == row.id) updated else it })
+                }
+                _message.value = "已添加 ${uploaded.size} 张图片"
+            } catch (e: Exception) {
+                _message.value = "补图失败：${e.message}"
+            }
+        }
+    }
+
+    /** 删除机型的一张图片 */
+    fun removeModelImage(row: ModelRow, url: String) {
+        if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
+        if (apiKey.isBlank()) { _message.value = "删图需要 API Key，请先在设置中填写"; return }
+        viewModelScope.launch {
+            try {
+                val remaining = (row.images?.filter { it.isNotBlank() }.orEmpty())
+                    .filterNot { it == url }
+                val updated = ApiClient.api(baseUrl).putModel(
+                    row.id, apiKey, mapOf("images" to remaining)
+                )
+                _ui.update { s ->
+                    s.copy(models = s.models.map { if (it.id == row.id) updated else it })
+                }
+                _message.value = "已删除图片"
+            } catch (e: Exception) {
+                _message.value = "删图失败：${e.message}"
+            }
+        }
+    }
+
+    /** 上传本地图片到服务器，返回相对 URL（/uploads/...），失败返回 null */
+    private suspend fun uploadImage(uri: Uri): String? {
+        val ctx = getApplication<Application>()
+        val bytes = ctx.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: return null
+        val mime = ctx.contentResolver.getType(uri) ?: "image/jpeg"
+        val body = bytes.toRequestBody(mime.toMediaTypeOrNull())
+        return try {
+            ApiClient.api(baseUrl).uploadImage(apiKey, body).url
+        } catch (e: Exception) {
+            null
         }
     }
 

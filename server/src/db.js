@@ -96,6 +96,26 @@ function openDb() {
     CREATE INDEX IF NOT EXISTS idx_models_brand ON models(brand);
     CREATE INDEX IF NOT EXISTS idx_models_cat ON models(brand, category);
     CREATE INDEX IF NOT EXISTS idx_models_model ON models(model);
+    -- 收机记账表
+    CREATE TABLE IF NOT EXISTS records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      photo TEXT NOT NULL DEFAULT '',
+      brand TEXT NOT NULL DEFAULT '',
+      category TEXT NOT NULL DEFAULT '',
+      model TEXT NOT NULL DEFAULT '',
+      model_id INTEGER,
+      rec_price TEXT NOT NULL DEFAULT '',
+      sale_price TEXT NOT NULL DEFAULT '',
+      channel TEXT NOT NULL DEFAULT '',
+      day TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT '在库',
+      note TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_records_day ON records(day);
+    CREATE INDEX IF NOT EXISTS idx_records_channel ON records(channel);
+    CREATE INDEX IF NOT EXISTS idx_records_model ON records(model);
   `);
   // 老库迁移：补齐缺失列（images + 规格字段）
   const cols = db.prepare('PRAGMA table_info(models)').all();

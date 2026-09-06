@@ -8,6 +8,7 @@ package com.shoujilunhui.app.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,6 +75,8 @@ fun DetailSheet(
     onImageClick: (List<String>, Int) -> Unit,
     /** recognize viewer mode: hide edit/delete actions */
     showActions: Boolean = true,
+    onAddImages: () -> Unit = {},
+    onRemoveImage: (String) -> Unit = {},
 ) {
     Column(
         Modifier
@@ -140,6 +143,50 @@ fun DetailSheet(
                     }
                 }
             }
+        }
+
+        // 图片管理（补图 / 删图）
+        if (showActions) {
+            Spacer(Modifier.height(10.dp))
+            SectionTitle("📷 机型图片（${imgs.size} 张）")
+            if (imgs.isNotEmpty()) {
+                Row(
+                    Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    imgs.forEach { url ->
+                        Box {
+                            AsyncImage(
+                                model = fullImageUrl(baseUrl, url),
+                                contentDescription = "机型图片",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFEEEEEE))
+                                    .clickable { onImageClick(imgs, imgs.indexOf(url)) },
+                            )
+                            Box(
+                                Modifier
+                                    .align(Alignment.TopEnd)
+                                    .size(18.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.Black.copy(alpha = 0.6f))
+                                    .clickable { onRemoveImage(url) },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text("×", color = Color.White, fontSize = 11.sp)
+                            }
+                        }
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+            OutlinedButton(
+                onClick = onAddImages,
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("➕ 从相册添加图片（可多选，首图为封面）", fontSize = 13.sp) }
         }
 
         // 参数

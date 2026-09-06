@@ -262,6 +262,167 @@ function rowValues(f) {
   return INSERT_COLS.map((c) => (f[c] !== undefined ? f[c] : (c === 'images' || c === 'variants' ? '[]' : '')));
 }
 
+// ---------- 收机记账（records） ----------
+const RECORD_INSERT_COLS = ['photo', 'brand', 'category', 'model', 'model_id', 'rec_price', 'sale_price', 'channel', 'day', 'status', 'note'];
+
+function validateRecord(body, partial) {
+  const err = [];
+  const out = {};
+  if (!partial || body.model !== undefined) {
+    if (body.model === undefined || !String(body.model ?? '').trim()) err.push('model 必填');
+    else out.model = String(body.model).trim();
+  }
+  if (body.photo !== undefined) out.photo = String(body.photo ?? '').trim();
+  if (body.brand !== undefined) out.brand = String(body.brand ?? '').trim();
+  if (body.category !== undefined) out.category = String(body.category ?? '').trim();
+  if (body.model_id !== undefined) {
+    const n = Number(body.model_id);
+    out.model_id = (body.model_id === null || body.model_id === '' || !isFinite(n)) ? null : n;
+  }
+  if (body.rec_price !== undefined) out.rec_price = String(body.rec_price ?? '').trim();
+  if (body.sale_price !== undefined) out.sale_price = String(body.sale_price ?? '').trim();
+  if (body.channel !== undefined) out.channel = String(body.channel ?? '').trim();
+  if (body.day !== undefined) {
+    const d = String(body.day ?? '').trim();
+    out.day = /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : '';
+  }
+  if (body.status !== undefined) out.status = String(body.status ?? '').trim() || '在库';
+  if (body.note !== undefined) out.note = String(body.note ?? '').trim();
+  if (err.length) throw new Error(err.join('; '));
+  return out;
+}
+
+// 把 photo 相对路径/回环地址统一替换为当前请求 Host（与 parseVariants 一致）
+function parseRecord(row, base) {
+  if (!row) return row;
+  let photo = String(row.photo || '').trim();
+  if (photo && base) {
+    const baseOrigin = base.replace(/\/+$/, '');
+    if (/^https?:\/\/[^/]+/i.test(photo) && /^https?:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?\//i.test(photo)) {
+      photo = baseOrigin + '/' + photo.replace(/^https?:\/\/[^/]+/i, '').replace(/^\/+/, '');
+    } else if (!/^https?:\/\//i.test(photo)) {
+      photo = baseOrigin + '/' + photo.replace(/^\/+/, '');
+    }
+  }
+  return Object.assign({}, row, { photo });
+}
+
+// 日期范围解析：day 精确日 > start~end 区间 > period(today/week/month/lastweek/lastmonth)
+function recordRange(q) {
+  const fmt = (d) => d.toLocaleDateString('sv');
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const today = fmt(new Date());
+  const day = q.get('day');
+  if (day && /^\d{4}-\d{2}-\d{2}$/.test(day)) return { start: day, end: day };
+  const start = q.get('start'), end = q.get('end');
+  if (start && end && /^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end) && start <= end) {
+    return { start, end };
+  }
+  const period = q.get('period') || 'today';
+  const t = new Date(today + 'T00:00:00');
+  if (period === 'week') {
+    const dow = (t.getDay() + 6) % 7; // 周一=0
+    return { start: fmt(addDays(t, -dow)), end: today };
+  }
+  if (period === 'month') return { start: fmt(new Date(t.getFullYear(), t.getMonth(), 1)), end: today };
+  if (period === 'lastweek') {
+    const dow = (t.getDay() + 6) % 7;
+    const mon = addDays(t, -dow - 7);
+    return { start: fmt(mon), end: fmt(addDays(mon, 6)) };
+  }
+  if (period === 'lastmonth') {
+    const first = new Date(t.getFullYear(), t.getMonth() - 1, 1);
+    const last = new Date(t.getFullYear(), t.getMonth(), 0);
+    return { start: fmt(first), end: fmt(last) };
+  }
+  return { start: today, end: today };
+}
+
+function listRecords(db, q) {
+  const where = [];
+  const args = [];
+  const day = q.get('day');
+  if (day && /^\d{4}-\d{2}-\d{2}$/.test(day)) { where.push('day = ?'); args.push(day); }
+  const start = q.get('start'), end = q.get('end');
+  if (start && end && /^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end) && start <= end) {
+    where.push('day >= ? AND day <= ?'); args.push(start, end);
+  }
+  if (q.get('channel') && q.get('channel') !== '全部') { where.push('channel LIKE ?'); args.push('%' + q.get('channel') + '%'); }
+  if (q.get('status') && q.get('status') !== '全部') { where.push('status = ?'); args.push(q.get('status')); }
+  if (q.get('search')) {
+    where.push('(model LIKE ? OR brand LIKE ? OR channel LIKE ? OR note LIKE ?)');
+    const s = '%' + q.get('search') + '%';
+    args.push(s, s, s, s);
+  }
+  const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
+  const total = db.prepare(`SELECT COUNT(*) AS c FROM records ${whereSql}`).get(...args).c;
+  const sorts = {
+    day_desc: 'day DESC, id DESC', day_asc: 'day ASC, id ASC',
+    rec_desc: 'CAST(rec_price AS REAL) DESC, id ASC', rec_asc: 'CAST(rec_price AS REAL) ASC, id ASC',
+    id: 'id ASC',
+  };
+  const orderSql = sorts[q.get('sort')] || sorts.day_desc;
+  let limit = parseInt(q.get('limit') || '0', 10) || 0;
+  if (limit < 0 || limit > 5000) limit = 0;
+  let pageSql = '';
+  if (limit > 0) {
+    const page = Math.max(1, parseInt(q.get('page') || '1', 10));
+    pageSql = ` LIMIT ${limit} OFFSET ${(page - 1) * limit}`;
+  }
+  const rows = db.prepare(`SELECT * FROM records ${whereSql} ORDER BY ${orderSql}${pageSql}`).all(...args);
+  const page = limit > 0 ? Math.max(1, parseInt(q.get('page') || '1', 10)) : 1;
+  return { total, page, limit: limit > 0 ? limit : rows.length, items: rows };
+}
+
+function recordStats(db, range) {
+  const where = 'WHERE day >= ? AND day <= ?';
+  const args = [range.start, range.end];
+  const rows = db.prepare(`SELECT * FROM records ${where} ORDER BY day DESC, id DESC`).all(...args);
+  const num = (v) => Number(v || 0);
+  const round = (x) => Math.round(x * 100) / 100;
+  const recTotal = round(rows.reduce((s, r) => s + num(r.rec_price), 0));
+  const saleTotal = round(rows.reduce((s, r) => s + num(r.sale_price), 0));
+  const maps = { byDay: new Map(), byChannel: new Map(), byModel: new Map(), byStatus: new Map() };
+  const acc = (map, key, mk) => {
+    if (!map.has(key)) map.set(key, mk(key));
+    return map.get(key);
+  };
+  for (const r of rows) {
+    const d = acc(maps.byDay, r.day, (k) => ({ day: k, count: 0, recTotal: 0, saleTotal: 0 }));
+    d.count++; d.recTotal += num(r.rec_price); d.saleTotal += num(r.sale_price);
+    const ch = (r.channel || '').trim();
+    if (ch) {
+      const c = acc(maps.byChannel, ch, (k) => ({ channel: k, count: 0, recTotal: 0, saleTotal: 0 }));
+      c.count++; c.recTotal += num(r.rec_price); c.saleTotal += num(r.sale_price);
+    }
+    const mo = (r.model || '').trim();
+    if (mo) {
+      const m = acc(maps.byModel, mo, (k) => ({ model: k, count: 0, recTotal: 0, saleTotal: 0 }));
+      m.count++; m.recTotal += num(r.rec_price); m.saleTotal += num(r.sale_price);
+    }
+    const st = (r.status || '在库').trim();
+    const s = acc(maps.byStatus, st, (k) => ({ status: k, count: 0, recTotal: 0, saleTotal: 0 }));
+    s.count++; s.recTotal += num(r.rec_price); s.saleTotal += num(r.sale_price);
+  }
+  const finalize = (map) => [...map.values()]
+    .map((x) => ({ ...x, recTotal: round(x.recTotal), saleTotal: round(x.saleTotal), profit: round(x.saleTotal - x.recTotal) }))
+    .sort((a, b) => b.recTotal - a.recTotal);
+  return {
+    range: { start: range.start, end: range.end },
+    summary: {
+      count: rows.length,
+      recTotal, saleTotal,
+      profit: round(saleTotal - recTotal),
+      channels: maps.byChannel.size,
+      statuses: maps.byStatus.size,
+    },
+    byDay: finalize(maps.byDay).sort((a, b) => (a.day < b.day ? -1 : 1)),
+    byChannel: finalize(maps.byChannel),
+    byModel: finalize(maps.byModel),
+    byStatus: finalize(maps.byStatus),
+  };
+}
+
 function createRouter(db, cfg) {
   return async function handle(req, res, pathname, q) {
     const method = req.method;
@@ -408,6 +569,17 @@ function createRouter(db, cfg) {
       return json(res, 200, result);
     }
 
+    // ---------- 收机记账：查询与统计（公开） ----------
+    if (method === 'GET' && pathname === '/api/records') {
+      const result = listRecords(db, q);
+      result.items = result.items.map((it) => parseRecord(it, requestBase(req)));
+      return json(res, 200, result);
+    }
+
+    if (method === 'GET' && pathname === '/api/records/stats') {
+      return json(res, 200, recordStats(db, recordRange(q)));
+    }
+
     let m = pathname.match(/^\/api\/models\/(\d+)$/);
     if (m) {
       const id = Number(m[1]);
@@ -443,6 +615,11 @@ function createRouter(db, cfg) {
       ['PUT', /^\/api\/models\/\d+$/],
       ['PATCH', /^\/api\/models\/\d+$/],
       ['DELETE', /^\/api\/models\/\d+$/],
+      ['POST', '/api/records'],
+      ['POST', '/api/records/batch'],
+      ['PUT', /^\/api\/records\/\d+$/],
+      ['PATCH', /^\/api\/records\/\d+$/],
+      ['DELETE', /^\/api\/records\/\d+$/],
     ];
     const isWrite = writeOps.some(([mm, p]) => method === mm && (p instanceof RegExp ? p.test(pathname) : p === pathname));
 
@@ -464,6 +641,55 @@ function createRouter(db, cfg) {
         const fname = `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
         fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
         return json(res, 201, { ok: true, url: '/uploads/' + fname, name: fname });
+      }
+
+      // ---------- 收机记账：写入（需 API Key） ----------
+      if (method === 'POST' && pathname === '/api/records') {
+        const body = await readBody(req);
+        const f = validateRecord(body, false);
+        if (!f.day) f.day = new Date().toLocaleDateString('sv');
+        const r = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`)
+          .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.day, f.status || '在库', f.note || '');
+        return json(res, 201, parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
+      }
+
+      if (method === 'POST' && pathname === '/api/records/batch') {
+        const body = await readBody(req);
+        const items = Array.isArray(body.items) ? body.items : (Array.isArray(body) ? body : null);
+        if (!Array.isArray(items) || !items.length) return json(res, 400, { error: 'items 数组必填' });
+        const ins = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`);
+        const today = new Date().toLocaleDateString('sv');
+        let n = 0;
+        db.exec('BEGIN');
+        try {
+          for (const it of items) {
+            const f = validateRecord(it, false);
+            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.day || today, f.status || '在库', f.note || '');
+            n++;
+          }
+          db.exec('COMMIT');
+        } catch (e) { db.exec('ROLLBACK'); throw e; }
+        return json(res, 201, { ok: true, inserted: n });
+      }
+
+      const rm = pathname.match(/^\/api\/records\/(\d+)$/);
+      if (rm && (method === 'PUT' || method === 'PATCH')) {
+        const id = Number(rm[1]);
+        const body = await readBody(req);
+        const fields = validateRecord(body, true);
+        const keys = Object.keys(fields);
+        if (!keys.length) return json(res, 400, { error: '无可更新字段' });
+        const sets = keys.map((k) => `${k} = ?`).join(', ');
+        db.prepare(`UPDATE records SET ${sets}, updated_at = datetime('now','localtime') WHERE id = ?`).run(...keys.map((k) => fields[k]), id);
+        const row = db.prepare('SELECT * FROM records WHERE id = ?').get(id);
+        if (!row) return json(res, 404, { error: 'not found' });
+        return json(res, 200, parseRecord(row, requestBase(req)));
+      }
+      if (rm && method === 'DELETE') {
+        const id = Number(rm[1]);
+        const r = db.prepare('DELETE FROM records WHERE id = ?').run(id);
+        if (!r.changes) return json(res, 404, { error: 'not found' });
+        return json(res, 200, { ok: true, id });
       }
 
       if (method === 'POST' && pathname === '/api/models') {
