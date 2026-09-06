@@ -74,6 +74,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.shoujilunhui.app.HistoryEntry
+import com.shoujilunhui.app.HistoryItem
 import com.shoujilunhui.app.data.DayStat
 import com.shoujilunhui.app.data.RecordRow
 import com.shoujilunhui.app.data.StatsResponse
@@ -84,6 +86,7 @@ import com.shoujilunhui.app.ui.theme.PriceRed
 import com.shoujilunhui.app.ui.theme.TextPrimary
 import com.shoujilunhui.app.ui.theme.TextSecondary
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 private val PERIODS = listOf(
@@ -120,6 +123,9 @@ fun LedgerScreen(
     var customStage by remember { mutableStateOf(0) } // 0=无 1=选开始 2=选结束
     var customStart by remember { mutableStateOf("") }
     var customEnd by remember { mutableStateOf("") }
+    var showHistoryPicker by remember { mutableStateOf(false) }
+    var historyExpanded by remember { mutableStateOf<Long?>(null) }
+    var historySelected by remember { mutableStateOf<Set<Pair<Long, Int>>>(emptySet()) }
 
     val pickImages = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
@@ -243,6 +249,7 @@ fun LedgerScreen(
                                     pending = p,
                                     onPrice = { v -> vm.updatePending(index, v, p.channel) },
                                     onChannel = { v -> vm.updatePending(index, p.recPrice, v) },
+                                    onDay = { v -> vm.updatePendingDay(index, v) },
                                 )
                             }
                             item {
@@ -335,9 +342,48 @@ fun LedgerScreen(
                     modifier = Modifier.fillMaxWidth().height(48.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) { Text("✍️ 手动录入一台", fontSize = 14.sp) }
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(
+                    onClick = {
+                        showEntrySheet = false
+                        vm.loadHistoryEntries()
+                        historyExpanded = null
+                        historySelected = emptySet()
+                        showHistoryPicker = true
+                    },
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
+                ) { Text("🕘 从识别历史选择", fontSize = 14.sp) }
                 Spacer(Modifier.height(20.dp))
             }
         }
+    }
+
+    // 从识别历史选择
+    if (showHistoryPicker) {
+        HistoryPickerSheet(
+            entries = ui.historyEntries,
+            expandedId = historyExpanded,
+            onToggleExpand = { id ->
+                historyExpanded = if (historyExpanded == id) null else id
+            },
+            itemsOf = { id -> vm.historyItems(id) },
+            selected = historySelected,
+            onToggleSelect = { key ->
+                historySelected = if (key in historySelected) historySelected - key else historySelected + key
+            },
+            onConfirm = {
+                historySelected.groupBy { it.first }.forEach { (hid, keys) ->
+                    val entry = ui.historyEntries.firstOrNull { it.id == hid } ?: return@forEach
+                    val seqs = keys.map { it.second }.toSet()
+                    vm.addFromHistory(entry, vm.historyItems(hid).filter { it.seq in seqs })
+                }
+                historySelected = emptySet()
+                historyExpanded = null
+                showHistoryPicker = false
+            },
+            onDismiss = { showHistoryPicker = false },
+        )
     }
 
     // 添加
@@ -565,6 +611,7 @@ private fun PendingCard(
     pending: PendingRecord,
     onPrice: (String) -> Unit,
     onChannel: (String) -> Unit,
+    onDay: (String) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(14.dp),
@@ -605,6 +652,18 @@ private fun PendingCard(
                     textStyle = androidx.compose.ui.text.TextStyle(fontSize = 13.sp),
                     singleLine = true,
                 )
+            }
+            Spacer(Modifier.height(6.dp))
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = pending.day,
+                    onValueChange = onDay,
+                    label = { Text("记入日期", fontSize = 11.sp) },
+                    modifier = Modifier.weight(1f).height(44.dp),
+                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
+                    singleLine = true,
+                )
+                Text("🟢 在库", fontSize = 11.sp, color = TextSecondary)
             }
         }
     }
@@ -800,4 +859,137 @@ private fun RecordFormDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
     )
+}
+
+// ---------- 识别历史选择 ----------
+
+private fun historyDateOf(ms: Long): String =
+    Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault()).toLocalDate().toString()
+
+private fun historyTimeOf(ms: Long): String {
+    val dt: LocalDateTime = Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    return "%02d-%02d %02d:%02d".format(dt.monthValue, dt.dayOfMonth, dt.hour, dt.minute)
+}
+
+@Composable
+private fun HistoryPickerSheet(
+    entries: List<HistoryEntry>,
+    expandedId: Long?,
+    onToggleExpand: (Long) -> Unit,
+    itemsOf: (Long) -> List<HistoryItem>,
+    selected: Set<Pair<Long, Int>>,
+    onToggleSelect: (Pair<Long, Int>) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    ) {
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = 600.dp)
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            item {
+                Text("🕘 从识别历史选择", fontSize = 15.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+                Text("勾选识别过的机器加入待入账（记入识别当天，可在待入账卡改日期）", fontSize = 11.sp, color = TextSecondary)
+                Spacer(Modifier.height(6.dp))
+            }
+            if (entries.isEmpty()) {
+                item {
+                    Text(
+                        "还没有识别历史，先去「识别」拍照",
+                        fontSize = 13.sp,
+                        color = TextSecondary,
+                        modifier = Modifier.padding(vertical = 24.dp),
+                    )
+                }
+            } else {
+                items(entries, key = { it.id }) { e ->
+                    val expanded = expandedId == e.id
+                    Card(
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                            Row(
+                                Modifier.fillMaxWidth().clickable { onToggleExpand(e.id) },
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(historyTimeOf(e.createdAt), fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+                                    Text(
+                                        "${historyDateOf(e.createdAt)} · ${e.phoneCount} 台 · 匹配 ${e.matchedCount}",
+                                        fontSize = 11.sp,
+                                        color = TextSecondary,
+                                    )
+                                }
+                                Text(if (expanded) "▾" else "▸", fontSize = 12.sp, color = TextSecondary)
+                            }
+                            if (expanded) {
+                                Spacer(Modifier.height(6.dp))
+                                val items = itemsOf(e.id)
+                                if (items.isEmpty()) {
+                                    Text("该条记录没有明细", fontSize = 12.sp, color = TextSecondary)
+                                }
+                                items.forEach { item ->
+                                    val key = e.id to item.seq
+                                    val checked = key in selected
+                                    Row(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(if (checked) Accent.copy(alpha = 0.08f) else Color.Transparent)
+                                            .clickable { onToggleSelect(key) }
+                                            .padding(horizontal = 10.dp, vertical = 7.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Text(
+                                            if (checked) "☑" else "☐",
+                                            fontSize = 14.sp,
+                                            color = if (checked) Accent else TextSecondary,
+                                        )
+                                        Spacer(Modifier.width(8.dp))
+                                        Column(Modifier.weight(1f)) {
+                                            Text(
+                                                item.model,
+                                                fontSize = 13.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = TextPrimary,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                            )
+                                            if (item.brand.isNotBlank()) {
+                                                Text(item.brand, fontSize = 10.sp, color = TextSecondary)
+                                            }
+                                        }
+                                        if (item.channelPrice != null) {
+                                            Text("收 ¥${fmt(item.channelPrice)}", fontSize = 12.sp, color = TextSecondary)
+                                        } else {
+                                            Text("未匹配报价", fontSize = 11.sp, color = TextSecondary)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            item {
+                Spacer(Modifier.height(6.dp))
+                Button(
+                    onClick = onConfirm,
+                    modifier = Modifier.fillMaxWidth().height(44.dp),
+                    enabled = selected.isNotEmpty(),
+                    shape = RoundedCornerShape(12.dp),
+                ) { Text("✔ 加入待入账（已选 ${selected.size} 台）", fontSize = 14.sp) }
+                Spacer(Modifier.height(12.dp))
+            }
+        }
+    }
 }

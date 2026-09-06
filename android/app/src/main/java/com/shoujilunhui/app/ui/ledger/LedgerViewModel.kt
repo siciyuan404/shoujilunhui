@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shoujilunhui.app.ConfigStore
+import com.shoujilunhui.app.HistoryEntry
+import com.shoujilunhui.app.HistoryItem
+import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.data.RecordPostBody
@@ -18,7 +21,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 /** 今日日期 YYYY-MM-DD */
@@ -53,6 +58,7 @@ data class LedgerUiState(
     val pendingStatus: String = "",
     val suggestions: List<ModelRow> = emptyList(),
     val suggestionLoading: Boolean = false,
+    val historyEntries: List<HistoryEntry> = emptyList(),
 )
 
 class LedgerViewModel(app: Application) : AndroidViewModel(app) {
@@ -249,6 +255,48 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                 showMessage("删除失败：${e.message}")
             }
         }
+    }
+
+    // ===== 识别历史 → 待入账（补记） =====
+
+    private val historyStore by lazy { HistoryStore(getApplication()) }
+
+    /** 加载识别历史列表（倒序） */
+    fun loadHistoryEntries() {
+        _ui.update { it.copy(historyEntries = historyStore.all()) }
+    }
+
+    /** 某条历史记录的明细（seq 升序） */
+    fun historyItems(historyId: Long): List<HistoryItem> =
+        historyStore.get(historyId)?.items.orEmpty()
+
+    /** 从识别历史选中的机器加入待入账；记入识别当天（后续可在待入账卡上改日期） */
+    fun addFromHistory(entry: HistoryEntry, items: List<HistoryItem>) {
+        if (items.isEmpty()) return
+        val day = Instant.ofEpochMilli(entry.createdAt)
+            .atZone(ZoneId.systemDefault()).toLocalDate().toString()
+        val added = items.map { it ->
+            PendingRecord(
+                model = it.model,
+                brand = it.brand,
+                category = it.category,
+                recPrice = it.channelPrice?.let { v ->
+                    if (v == v.toLong().toDouble()) v.toLong().toString() else "%.2f".format(v)
+                } ?: "",
+                status = "在库",
+                day = day,
+            )
+        }
+        _ui.update { st -> st.copy(pending = st.pending + added) }
+        showMessage("已加入 ${added.size} 台待入账（记入 $day）")
+    }
+
+    /** 修改待入账行的记入日期（补记到某天） */
+    fun updatePendingDay(index: Int, day: String) {
+        val p = _ui.value.pending.getOrNull(index) ?: return
+        val updated = _ui.value.pending.toMutableList()
+        updated[index] = p.copy(day = day)
+        _ui.update { it.copy(pending = updated) }
     }
 
     // ===== 拍照识别 → 待入账 =====
