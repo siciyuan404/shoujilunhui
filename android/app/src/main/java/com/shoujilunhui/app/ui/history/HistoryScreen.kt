@@ -4,6 +4,10 @@ package com.shoujilunhui.app.ui.history
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import java.io.File
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +38,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -194,10 +200,20 @@ fun HistoryDetailScreen(
     var deleteRow by remember { mutableStateOf<ModelRow?>(null) }
     var viewer by remember { mutableStateOf<Pair<List<String>, Int>?>(null) }
     var pendingImgRow by remember { mutableStateOf<ModelRow?>(null) }
+    var showImgPicker by remember { mutableStateOf(false) }
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
     val pickImages = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
     ) { uris ->
         if (uris.isNotEmpty()) pendingImgRow?.let { vm.addModelImages(it, uris) }
+    }
+    val takePhoto = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { ok ->
+        if (ok) {
+            val uri = cameraUri
+            pendingImgRow?.let { r -> if (uri != null) vm.addModelImages(r, listOf(uri)) }
+        }
     }
     LaunchedEffect(entryId) { vm.loadDetail(entryId) }
     LaunchedEffect(modelDetail) { modelDetail?.let { detailRow = it } }
@@ -288,7 +304,7 @@ fun HistoryDetailScreen(
                 onEdit = { detailRow = null; editRow = row },
                 onDelete = { detailRow = null; deleteRow = row },
                 onImageClick = { imgs, idx -> viewer = imgs to idx },
-                onAddImages = { pendingImgRow = row; pickImages.launch("*/*") },
+                onAddImages = { pendingImgRow = row; showImgPicker = true },
                 onRemoveImage = { url -> vm.removeModelImage(row, url) },
             )
         }
@@ -313,6 +329,39 @@ fun HistoryDetailScreen(
             startIndex = idx,
             baseUrl = vm.baseUrl,
             onDismiss = { viewer = null },
+        )
+    }
+
+    // 补图来源选择：拍照 / 相册
+    if (showImgPicker) {
+        val context = LocalContext.current
+        AlertDialog(
+            onDismissRequest = { showImgPicker = false },
+            title = { Text("添加图片", fontSize = 16.sp) },
+            text = {
+                Column {
+                    TextButton(onClick = {
+                        showImgPicker = false
+                        try {
+                            val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                            val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                            file.createNewFile()
+                            val uri = FileProvider.getUriForFile(
+                                context, "${context.packageName}.fileprovider", file
+                            )
+                            cameraUri = uri
+                            takePhoto.launch(uri)
+                        } catch (e: Exception) {
+                            vm.showMessage("无法打开相机：${e.message}")
+                        }
+                    }) { Text("拍照", fontSize = 13.sp) }
+                    TextButton(onClick = { showImgPicker = false; pickImages.launch("*/*") }) {
+                        Text("从相册选择（可多选）", fontSize = 13.sp)
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showImgPicker = false }) { Text("取消") } },
         )
     }
 }

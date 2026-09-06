@@ -44,6 +44,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     val message: StateFlow<String?> = _message
 
     fun clearMessage() { _message.value = null }
+    fun showMessage(msg: String) { _message.value = msg }
 
     val baseUrl: String get() = config.baseUrl
     private val apiKey: String get() = config.apiKey
@@ -129,11 +130,14 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     // ---------- 增 / 改 / 删 ----------
 
-    fun addModel(brand: String, category: String, model: String, price: String, note: String) {
+    fun addModel(brand: String, category: String, model: String, price: String, note: String, images: List<Uri> = emptyList()) {
         if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
         viewModelScope.launch {
             try {
-                ApiClient.api(baseUrl).postModel(apiKey, PostBody(brand, category, model, price, note))
+                val urls = images.mapNotNull { uri -> uploadImage(uri) }
+                ApiClient.api(baseUrl).postModel(
+                    apiKey, PostBody(brand, category, model, price, note, images = urls.ifEmpty { null })
+                )
                 _message.value = "已添加"
                 loadModels()
             } catch (e: Exception) {

@@ -81,6 +81,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.ui.home.DetailSheet
+import com.shoujilunhui.app.ui.home.AddModelDialog
 import com.shoujilunhui.app.ui.theme.Accent
 import com.shoujilunhui.app.ui.theme.MatchGreen
 import com.shoujilunhui.app.ui.theme.MatchOrange
@@ -110,6 +111,7 @@ fun RecognizeScreen(
     var detailRow by remember { mutableStateOf<ModelRow?>(null) }
     /** 待重识别的行下标（非空时弹提示词对话框） */
     var reRecognizeTarget by remember { mutableStateOf<Int?>(null) }
+    var showAddModel by remember { mutableStateOf<Int?>(null) }
 
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
         val uri = cameraUri
@@ -169,6 +171,19 @@ fun RecognizeScreen(
     }
 
     // 机型详情弹层
+    showAddModel?.let { idx ->
+        val result = ui.results.getOrNull(idx)
+        AddModelDialog(
+            defaultBrand = "",
+            defaultModel = result?.model ?: "",
+            onDismiss = { showAddModel = null },
+            onAdd = { b, c, m, p, n, imgs ->
+                vm.addModelAndMatch(idx, b, c, m, p, n, imgs)
+                showAddModel = null
+            },
+        )
+    }
+
     detailRow?.let { row ->
         ModalBottomSheet(
             onDismissRequest = { detailRow = null },
@@ -407,6 +422,13 @@ fun RecognizeScreen(
                                 modifier = Modifier.height(30.dp),
                                 contentPadding = PaddingValues(horizontal = 10.dp),
                             ) { Text("重识别", fontSize = 12.sp) }
+                            if (r.row == null) {
+                                TextButton(
+                                    onClick = { showAddModel = index },
+                                    modifier = Modifier.height(30.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp),
+                                ) { Text("收录", fontSize = 12.sp, color = MatchGreen) }
+                            }
                             TextButton(
                                 onClick = { vm.loadCandidates(index) },
                                 modifier = Modifier.height(30.dp),

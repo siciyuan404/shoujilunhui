@@ -65,7 +65,8 @@ data class PostBody(
     val category: String,
     val model: String,
     val price: String,
-    val note: String
+    val note: String,
+    val images: List<String>? = null
 )
 
 data class HealthResponse(val ok: Boolean, val models: Int, val time: String?)

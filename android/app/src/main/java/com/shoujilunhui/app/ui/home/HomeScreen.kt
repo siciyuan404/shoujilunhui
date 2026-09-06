@@ -28,12 +28,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import java.io.File
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -196,12 +203,23 @@ fun HomeScreen(
     var showFilter by remember { mutableStateOf(false) }
     var viewer by remember { mutableStateOf<Pair<List<String>, Int>?>(null) }
     var pendingImgRow by remember { mutableStateOf<ModelRow?>(null) }
+    var showImgPicker by remember { mutableStateOf(false) }
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
     val pickImages = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
     ) { uris ->
         val row = pendingImgRow
         pendingImgRow = null
         if (row != null && uris.isNotEmpty()) vm.addModelImages(row, uris)
+    }
+    val takePhoto = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { ok ->
+        if (ok) {
+            val row = pendingImgRow
+            pendingImgRow = null
+            cameraUri?.let { if (row != null) vm.addModelImages(row, listOf(it)) }
+        }
     }
 
     // 回到前台（如从设置页返回）时按配置变化重载
@@ -300,7 +318,7 @@ fun HomeScreen(
                 onEdit = { detailRow = null; editRow = row },
                 onDelete = { detailRow = null; deleteRow = row },
                 onImageClick = { imgs, idx -> viewer = imgs to idx },
-                onAddImages = { pendingImgRow = row; pickImages.launch("*/*") },
+                onAddImages = { pendingImgRow = row; showImgPicker = true },
                 onRemoveImage = { url -> vm.removeModelImage(row, url) },
             )
         }
@@ -322,11 +340,44 @@ fun HomeScreen(
         )
     }
 
+    // 补图来源选择：拍照 / 相册
+    if (showImgPicker) {
+        val context = LocalContext.current
+        AlertDialog(
+            onDismissRequest = { showImgPicker = false },
+            title = { Text("添加图片", fontSize = 16.sp) },
+            text = {
+                Column {
+                    TextButton(onClick = {
+                        showImgPicker = false
+                        try {
+                            val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                            val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                            file.createNewFile()
+                            val uri = FileProvider.getUriForFile(
+                                context, "${context.packageName}.fileprovider", file
+                            )
+                            cameraUri = uri
+                            takePhoto.launch(uri)
+                        } catch (e: Exception) {
+                            vm.showMessage("无法打开相机：${e.message}")
+                        }
+                    }) { Text("拍照", fontSize = 13.sp) }
+                    TextButton(onClick = { showImgPicker = false; pickImages.launch("*/*") }) {
+                        Text("从相册选择（可多选）", fontSize = 13.sp)
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showImgPicker = false }) { Text("取消") } },
+        )
+    }
+
     if (showAdd) {
         AddModelDialog(
             defaultBrand = if (ui.brand == "全部") "" else ui.brand,
             onDismiss = { showAdd = false },
-            onAdd = { b, c, m, p, n -> vm.addModel(b, c, m, p, n); showAdd = false },
+            onAdd = { b, c, m, p, n, imgs -> vm.addModel(b, c, m, p, n, imgs); showAdd = false },
         )
     }
 

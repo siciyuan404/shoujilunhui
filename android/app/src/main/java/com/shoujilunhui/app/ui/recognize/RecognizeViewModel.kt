@@ -10,6 +10,7 @@ import com.shoujilunhui.app.HistoryItem
 import com.shoujilunhui.app.HistoryStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.data.PostBody
 import com.shoujilunhui.app.recognize.PhoneBox
 import com.shoujilunhui.app.recognize.PhoneRecognizer
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 data class RecognizeResult(
     val model: String,
@@ -204,6 +207,49 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
     val candidatesLoaded: StateFlow<Boolean> = _candidatesLoaded
 
     /** 加载该台的相似机型候选（基于识别型号搜索报价库） */
+    /** 未收录 → 收录到报价库（可带拍照/相册图片），成功后更新该结果行的匹配机型 */
+    fun addModelAndMatch(
+        index: Int,
+        brand: String,
+        category: String,
+        model: String,
+        price: String,
+        note: String,
+        images: List<Uri>,
+    ) {
+        if (config.baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
+        viewModelScope.launch {
+            try {
+                val urls = images.mapNotNull { uri -> uploadImage(uri) }
+                val created = ApiClient.api(config.baseUrl).postModel(
+                    config.apiKey,
+                    PostBody(brand, category, model, price, note, images = urls.ifEmpty { null }),
+                )
+                val results = _ui.value.results.toMutableList()
+                if (index in results.indices) {
+                    results[index] = results[index].copy(row = created)
+                    _ui.update { it.copy(results = results) }
+                }
+                _message.value = "已收录「${model}」到报价库，可继续核对"
+            } catch (e: Exception) {
+                _message.value = "收录失败：${e.message}"
+            }
+        }
+    }
+
+    /** 上传本地图片到服务器，返回相对 URL（/uploads/...），失败返回 null */
+    private suspend fun uploadImage(uri: Uri): String? {
+        val ctx = getApplication<Application>()
+        val bytes = ctx.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: return null
+        val mime = ctx.contentResolver.getType(uri) ?: "image/jpeg"
+        val body = bytes.toRequestBody(mime.toMediaTypeOrNull())
+        return try {
+            ApiClient.api(config.baseUrl).uploadImage(config.apiKey, body).url
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun loadCandidates(index: Int) {
         val target = _ui.value.results.getOrNull(index) ?: return
         if (config.baseUrl.isBlank()) { showMessage("请先填写服务器地址"); return }

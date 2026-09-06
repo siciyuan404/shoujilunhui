@@ -6,6 +6,12 @@
 
 package com.shoujilunhui.app.ui.home
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import java.io.File
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -389,35 +395,84 @@ private fun FilterGroup(title: String, options: List<String>, selected: String, 
 @Composable
 fun AddModelDialog(
     defaultBrand: String,
+    defaultModel: String = "",
     onDismiss: () -> Unit,
-    onAdd: (brand: String, category: String, model: String, price: String, note: String) -> Unit,
+    onAdd: (brand: String, category: String, model: String, price: String, note: String, images: List<Uri>) -> Unit,
 ) {
+    val context = LocalContext.current
     var brand by remember { mutableStateOf(defaultBrand) }
     var category by remember { mutableStateOf("") }
-    var model by remember { mutableStateOf("") }
+    var model by remember { mutableStateOf(defaultModel) }
     var price by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
+    var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    var showImgPicker by remember { mutableStateOf(false) }
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
+    val pickImages = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) images = (images + uris).distinct()
+    }
+    val takePhoto = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { ok ->
+        if (ok) cameraUri?.let { images = (images + it).distinct() }
+    }
+    if (showImgPicker) {
+        AlertDialog(
+            onDismissRequest = { showImgPicker = false },
+            title = { Text("添加图片", fontSize = 16.sp) },
+            text = {
+                Column {
+                    TextButton(onClick = {
+                        showImgPicker = false
+                        try {
+                            val dir = File(context.cacheDir, "camera").apply { mkdirs() }
+                            val file = File(dir, "img_${System.currentTimeMillis()}.jpg")
+                            file.createNewFile()
+                            val uri = FileProvider.getUriForFile(
+                                context, "${context.packageName}.fileprovider", file
+                            )
+                            cameraUri = uri
+                            takePhoto.launch(uri)
+                        } catch (e: Exception) {
+                            error = "无法打开相机：${e.message}"
+                        }
+                    }) { Text("📷 拍照", fontSize = 13.sp) }
+                    TextButton(onClick = { showImgPicker = false; pickImages.launch("*/*") }) {
+                        Text("🖼 从相册选择（可多选）", fontSize = 13.sp)
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showImgPicker = false }) { Text("取消") } },
+        )
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("添加型号", fontSize = 16.sp) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                DialogField(brand, { brand = it }, "品牌 *")
-                DialogField(category, { category = it }, "分类 *")
+                DialogField(brand, { brand = it }, "品牌（可空）")
+                DialogField(category, { category = it }, "分类（可空）")
                 DialogField(model, { model = it }, "型号 *")
-                DialogField(price, { price = it }, "回收价（元）")
-                DialogField(note, { note = it }, "备注")
+                DialogField(price, { price = it }, "回收价（元，可空）")
+                DialogField(note, { note = it }, "备注（可空）")
+                OutlinedButton(
+                    onClick = { showImgPicker = true },
+                    modifier = Modifier.fillMaxWidth().height(42.dp),
+                ) { Text(if (images.isEmpty()) "📷 添加图片（拍照/相册）" else "📷 已选 ${images.size} 张图，点击继续添加", fontSize = 12.sp) }
                 error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 11.sp) }
             }
         },
         confirmButton = {
             TextButton(onClick = {
-                if (brand.isBlank() || category.isBlank() || model.isBlank()) {
-                    error = "品牌/分类/型号必填"
+                if (model.isBlank()) {
+                    error = "型号必填（品牌/分类等可空）"
                 } else {
-                    onAdd(brand.trim(), category.trim(), model.trim(), price.trim(), note.trim())
+                    onAdd(brand.trim(), category.trim(), model.trim(), price.trim(), note.trim(), images)
                 }
             }) { Text("添加") }
         },

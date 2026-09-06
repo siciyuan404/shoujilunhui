@@ -210,12 +210,10 @@ function validateModel(body, partial) {
   const err = [];
   const out = {};
   if (!partial || body.brand !== undefined) {
-    if (!body.brand || !String(body.brand).trim()) err.push('brand 必填');
-    else out.brand = String(body.brand).trim();
+    out.brand = String(body.brand ?? '').trim();
   }
   if (!partial || body.category !== undefined) {
-    if (!body.category || !String(body.category).trim()) err.push('category 必填');
-    else out.category = String(body.category).trim();
+    out.category = String(body.category ?? '').trim();
   }
   if (!partial || body.model !== undefined) {
     if (!body.model || !String(body.model).trim()) err.push('model 必填');

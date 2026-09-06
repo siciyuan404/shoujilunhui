@@ -38,6 +38,7 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     private val apiKey: String get() = config.apiKey
 
     fun clearMessage() { _message.value = null }
+    fun showMessage(msg: String) { _message.value = msg }
 
     fun refresh() { _entries.value = store.all() }
 
