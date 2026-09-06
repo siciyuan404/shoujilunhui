@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -50,6 +51,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -69,6 +71,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,6 +89,7 @@ import com.shoujilunhui.app.ui.theme.PriceRed
 import com.shoujilunhui.app.ui.theme.TextPrimary
 import com.shoujilunhui.app.ui.theme.TextSecondary
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -247,6 +251,7 @@ fun LedgerScreen(
                                 PendingCard(
                                     index = index,
                                     pending = p,
+                                    channels = ui.channels,
                                     onPrice = { v -> vm.updatePending(index, v, p.channel) },
                                     onChannel = { v -> vm.updatePending(index, p.recPrice, v) },
                                     onDay = { v -> vm.updatePendingDay(index, v) },
@@ -609,10 +614,12 @@ private fun BreakdownBar(name: String, value: Double, max: Double) {
 private fun PendingCard(
     index: Int,
     pending: PendingRecord,
+    channels: List<String>,
     onPrice: (String) -> Unit,
     onChannel: (String) -> Unit,
     onDay: (String) -> Unit,
 ) {
+    var showDate by remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -636,36 +643,54 @@ private fun PendingCard(
             }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(
+                LgField(
                     value = pending.recPrice,
                     onValueChange = onPrice,
-                    label = { Text("收价", fontSize = 11.sp) },
-                    modifier = Modifier.weight(1f).height(52.dp),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 13.sp),
-                    singleLine = true,
+                    label = "收价（元）",
+                    placeholder = "如 800",
+                    number = true,
+                    modifier = Modifier.weight(1f),
                 )
-                OutlinedTextField(
+                LgField(
                     value = pending.channel,
                     onValueChange = onChannel,
-                    label = { Text("渠道", fontSize = 11.sp) },
-                    modifier = Modifier.weight(1f).height(52.dp),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 13.sp),
-                    singleLine = true,
+                    label = "渠道",
+                    placeholder = "如 路边收",
+                    modifier = Modifier.weight(1f),
                 )
             }
             Spacer(Modifier.height(6.dp))
+            ChannelSuggestRow(channels = channels, current = pending.channel, onPick = onChannel)
+            Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(
-                    value = pending.day,
-                    onValueChange = onDay,
-                    label = { Text("记入日期", fontSize = 11.sp) },
-                    modifier = Modifier.weight(1f).height(44.dp),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
-                    singleLine = true,
-                )
+                OutlinedButton(
+                    onClick = { showDate = true },
+                    modifier = Modifier.weight(1f).height(46.dp),
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Text("📅 记入 ${pending.day}", fontSize = 13.sp, color = TextPrimary)
+                }
                 Text("🟢 在库", fontSize = 11.sp, color = TextSecondary)
             }
         }
+    }
+    if (showDate) {
+        val initial = try {
+            LocalDate.parse(pending.day).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        } catch (_: Exception) { null }
+        val state = rememberDatePickerState(initialSelectedDateMillis = initial)
+        DatePickerDialog(
+            onDismissRequest = { showDate = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    state.selectedDateMillis?.let {
+                        onDay(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().toString())
+                    }
+                    showDate = false
+                }) { Text("确定") }
+            },
+            dismissButton = { TextButton(onClick = { showDate = false }) { Text("取消") } },
+        ) { DatePicker(state = state) }
     }
 }
 
@@ -756,6 +781,7 @@ private fun RecordFormDialog(
     var salePrice by remember { mutableStateOf(initial?.salePrice ?: "") }
     var status by remember { mutableStateOf(initial?.status ?: "在库") }
     var day by remember { mutableStateOf(initial?.day ?: todayStr()) }
+    var showDate by remember { mutableStateOf(false) }
     val ui by vm.ui.collectAsState()
     val suggestions = ui.suggestions
 
@@ -764,13 +790,11 @@ private fun RecordFormDialog(
         title = { Text(title, fontSize = 16.sp) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                OutlinedTextField(
+                LgField(
                     value = model,
                     onValueChange = { model = it; vm.searchModels(it) },
-                    label = { Text("型号（输入联想）", fontSize = 12.sp) },
-                    modifier = Modifier.fillMaxWidth(),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
-                    singleLine = true,
+                    label = "型号",
+                    placeholder = "搜索或输入型号",
                 )
                 if (suggestions.isNotEmpty()) {
                     Column(
@@ -778,7 +802,7 @@ private fun RecordFormDialog(
                             .fillMaxWidth()
                             .heightIn(max = 150.dp)
                             .verticalScroll(rememberScrollState())
-                            .background(Color(0xFFF7F7F7), RoundedCornerShape(8.dp))
+                            .background(Color(0xFFF7F7F7), RoundedCornerShape(10.dp))
                             .padding(vertical = 2.dp)
                     ) {
                         suggestions.forEach { s ->
@@ -795,48 +819,46 @@ private fun RecordFormDialog(
                                         recPrice = s.price
                                         vm.clearSuggestions()
                                     }
-                                    .padding(horizontal = 10.dp, vertical = 7.dp),
+                                    .padding(horizontal = 10.dp, vertical = 8.dp),
                             )
                         }
                     }
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(
+                    LgField(
                         value = recPrice,
                         onValueChange = { recPrice = it },
-                        label = { Text("收购价（元）", fontSize = 12.sp) },
+                        label = "收购价（元）",
+                        placeholder = "如 800",
+                        number = true,
                         modifier = Modifier.weight(1f),
-                        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
-                        singleLine = true,
                     )
-                    OutlinedTextField(
+                    LgField(
                         value = channel,
                         onValueChange = { channel = it },
-                        label = { Text("渠道", fontSize = 12.sp) },
+                        label = "渠道",
+                        placeholder = "如 路边收",
                         modifier = Modifier.weight(1f),
-                        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
-                        singleLine = true,
                     )
                 }
+                Spacer(Modifier.height(6.dp))
+                ChannelSuggestRow(channels = ui.channels, current = channel, onPick = { channel = it })
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(
+                    LgField(
                         value = salePrice,
                         onValueChange = { salePrice = it },
-                        label = { Text("出货价（可后填）", fontSize = 12.sp) },
+                        label = "出货价（元）",
+                        placeholder = "可后填",
+                        number = true,
                         modifier = Modifier.weight(1f),
-                        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
-                        singleLine = true,
                     )
-                    OutlinedTextField(
-                        value = day,
-                        onValueChange = { day = it },
-                        label = { Text("日期 YYYY-MM-DD", fontSize = 12.sp) },
-                        modifier = Modifier.weight(1f),
-                        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
-                        singleLine = true,
-                    )
+                    OutlinedButton(
+                        onClick = { showDate = true },
+                        modifier = Modifier.weight(1f).height(56.dp),
+                        shape = RoundedCornerShape(12.dp),
+                    ) { Text("📅 $day", fontSize = 13.sp, color = TextPrimary) }
                 }
                 Spacer(Modifier.height(10.dp))
                 Text("状态", fontSize = 12.sp, color = TextSecondary)
@@ -859,6 +881,87 @@ private fun RecordFormDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
     )
+
+    if (showDate) {
+        val initial = try {
+            LocalDate.parse(day).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        } catch (_: Exception) { null }
+        val state = rememberDatePickerState(initialSelectedDateMillis = initial)
+        DatePickerDialog(
+            onDismissRequest = { showDate = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    state.selectedDateMillis?.let {
+                        day = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().toString()
+                    }
+                    showDate = false
+                }) { Text("确定") }
+            },
+            dismissButton = { TextButton(onClick = { showDate = false }) { Text("取消") } },
+        ) { DatePicker(state = state) }
+    }
+}
+
+// ---------- 统一输入框 / 渠道联想 ----------
+
+/** 记账统一输入框：56dp 高度、12dp 圆角、14sp 文字、浮动 label 不遮字 */
+@Composable
+private fun LgField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+    number: Boolean = false,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label, fontSize = 12.sp) },
+        placeholder = if (placeholder.isNotBlank()) {
+            { Text(placeholder, fontSize = 12.sp, color = TextSecondary) }
+        } else null,
+        modifier = modifier.height(56.dp),
+        shape = RoundedCornerShape(12.dp),
+        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp),
+        singleLine = true,
+        keyboardOptions = if (number) {
+            KeyboardOptions(keyboardType = KeyboardType.Number)
+        } else {
+            KeyboardOptions.Default
+        },
+    )
+}
+
+/** 渠道联想 chips：内置常用 + 历史渠道，点击即填入 */
+@Composable
+private fun ChannelSuggestRow(
+    channels: List<String>,
+    current: String,
+    onPick: (String) -> Unit,
+    max: Int = 6,
+) {
+    val show = channels.filter { it != current }.take(max)
+    if (show.isEmpty()) return
+    Row(
+        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        show.forEach { c ->
+            Surface(
+                color = if (c == current) Accent.copy(alpha = 0.15f) else Color(0xFFF2F2F2),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable { onPick(c) },
+            ) {
+                Text(
+                    c,
+                    fontSize = 11.sp,
+                    color = TextPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                )
+            }
+        }
+    }
 }
 
 // ---------- 识别历史选择 ----------

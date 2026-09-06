@@ -59,11 +59,15 @@ data class LedgerUiState(
     val suggestions: List<ModelRow> = emptyList(),
     val suggestionLoading: Boolean = false,
     val historyEntries: List<HistoryEntry> = emptyList(),
+    val channels: List<String> = emptyList(),
 )
 
 class LedgerViewModel(app: Application) : AndroidViewModel(app) {
 
     private val config = ConfigStore(app)
+
+    /** 常用渠道（联想数据源：内置常用 + 历史记录里的渠道） */
+    private val defaultChannels = listOf("路边收", "线上", "熟客", "闲鱼", "转转", "展会", "同行", "快递", "电商平台", "朋友介绍")
 
     private val _ui = MutableStateFlow(LedgerUiState())
     val ui: StateFlow<LedgerUiState> = _ui
@@ -125,7 +129,14 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                 else
                     api.getRecords(period = cur.period, limit = 500)
                 _ui.update {
-                    it.copy(stats = stats, records = records.items, busy = false, loaded = true)
+                    it.copy(
+                        stats = stats,
+                        records = records.items,
+                        busy = false,
+                        loaded = true,
+                        channels = (stats.byChannel.mapNotNull { c -> c.channel.ifBlank { null } } + defaultChannels)
+                            .distinct().take(12),
+                    )
                 }
             } catch (e: Exception) {
                 _ui.update { it.copy(busy = false, error = e.message ?: "加载失败") }
