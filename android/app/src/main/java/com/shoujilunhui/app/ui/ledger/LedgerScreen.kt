@@ -135,6 +135,11 @@ fun LedgerScreen(
     var historyExpanded by remember { mutableStateOf<Long?>(null) }
     var historySelected by remember { mutableStateOf<Set<Pair<Long, Int>>>(emptySet()) }
 
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
+    var promptPick by remember { mutableStateOf("") }
+    var promptTake by remember { mutableStateOf("") }
+    var showPromptPick by remember { mutableStateOf(false) }
+    var showPromptTake by remember { mutableStateOf(false) }
     val pickImages = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
     ) { uris ->
@@ -142,11 +147,6 @@ fun LedgerScreen(
             vm.recognizeToPending(uris, promptPick)
         }
     }
-    var cameraUri by remember { mutableStateOf<Uri?>(null) }
-    var promptPick by remember { mutableStateOf("") }
-    var promptTake by remember { mutableStateOf("") }
-    var showPromptPick by remember { mutableStateOf(false) }
-    var showPromptTake by remember { mutableStateOf(false) }
     val takePhoto = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { ok ->
