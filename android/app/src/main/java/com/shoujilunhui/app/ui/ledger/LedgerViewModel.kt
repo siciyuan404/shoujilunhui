@@ -502,12 +502,13 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     /** 编辑/补图用：上传一张照片，成功后回传 URL */
-    fun uploadRecordPhoto(uri: Uri, onOk: (String) -> Unit) {
+    fun uploadRecordPhoto(uri: Uri, onOk: (String) -> Unit, onFail: (() -> Unit)? = null) {
         viewModelScope.launch {
             try {
                 onOk(uploadPhoto(uri))
             } catch (e: Exception) {
                 showMessage("照片上传失败：${e.message}")
+                onFail?.invoke()
             }
         }
     }

@@ -983,13 +983,22 @@ private fun RecordFormDialog(
     var saleChannel by remember { mutableStateOf(initial?.saleChannel ?: "") }
     var seller by remember { mutableStateOf(initial?.seller ?: "") }
     var photo by remember { mutableStateOf(initial?.photo ?: "") }
+    var photoUploading by remember { mutableStateOf(false) }
     var cameraUri2 by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
+    fun upPhoto(u: Uri) {
+        if (photoUploading) return
+        photoUploading = true
+        vm.uploadRecordPhoto(u,
+            onOk = { photo = it; photoUploading = false },
+            onFail = { photoUploading = false },
+        )
+    }
     val pickOne = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let { u -> vm.uploadRecordPhoto(u) { photo = it } }
+        uri?.let { upPhoto(it) }
     }
     val takeOne = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
-        if (ok) cameraUri2?.let { u -> vm.uploadRecordPhoto(u) { photo = it } }
+        if (ok) cameraUri2?.let { upPhoto(it) }
     }
     var salePrice by remember { mutableStateOf(initial?.salePrice ?: "") }
     var status by remember { mutableStateOf(initial?.status ?: "在库") }
@@ -1113,7 +1122,11 @@ private fun RecordFormDialog(
                 Spacer(Modifier.height(10.dp))
                 Text("照片", fontSize = 12.sp, color = TextSecondary)
                 Spacer(Modifier.height(6.dp))
-                if (photo.isNotBlank()) {
+                if (photoUploading) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("⬆ 正在上传照片…", fontSize = 12.sp, color = TextSecondary)
+                    }
+                } else if (photo.isNotBlank()) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AsyncImage(
                             model = fullImageUrl(vm.serverBaseUrl(), photo),
@@ -1136,6 +1149,9 @@ private fun RecordFormDialog(
                         OutlinedButton(onClick = { pickOne.launch("image/*") }) { Text("🖼 换图", fontSize = 12.sp) }
                         OutlinedButton(onClick = { photo = "" }) { Text("✕ 移除", fontSize = 12.sp, color = MaterialTheme.colorScheme.error) }
                     }
+                    if (photo.isNotBlank() && photo != (initial?.photo ?: "")) {
+                        Text("新照片已上传，点「保存」生效", fontSize = 11.sp, color = Color(0xFF1E9E5A))
+                    }
                 } else {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(onClick = {
@@ -1156,7 +1172,9 @@ private fun RecordFormDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller, photo) }) {
+            TextButton(
+                enabled = !photoUploading,
+                onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller, photo) }) {
                 Text("保存")
             }
         },
