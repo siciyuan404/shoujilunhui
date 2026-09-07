@@ -341,12 +341,9 @@ function recordRange(q) {
 function listRecords(db, q) {
   const where = [];
   const args = [];
-  const day = q.get('day');
-  if (day && /^\d{4}-\d{2}-\d{2}$/.test(day)) { where.push('day = ?'); args.push(day); }
-  const start = q.get('start'), end = q.get('end');
-  if (start && end && /^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end) && start <= end) {
-    where.push('day >= ? AND day <= ?'); args.push(start, end);
-  }
+  const range = recordRange(q);
+  where.push('day >= ? AND day <= ?');
+  args.push(range.start, range.end);
   if (q.get('channel') && q.get('channel') !== '全部') { where.push('channel LIKE ?'); args.push('%' + q.get('channel') + '%'); }
   if (q.get('seller') && q.get('seller') !== '全部') { where.push('seller LIKE ?'); args.push('%' + q.get('seller') + '%'); }
   if (q.get('status') && q.get('status') !== '全部') { where.push('status = ?'); args.push(q.get('status')); }
