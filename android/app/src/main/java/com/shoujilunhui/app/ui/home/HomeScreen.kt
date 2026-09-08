@@ -145,12 +145,58 @@ private val ChipIcon: ImageVector by lazy {
         viewportWidth = 24f,
         viewportHeight = 24f,
     ).apply {
-        path(
-            fill = SolidColor(Color.Black),
-            pathData = androidx.compose.ui.graphics.vector.PathParser()
-                .parsePathString("M15,9H9V15H15V9M22,11V13H19V15A2,2 0 0,1 17,17H15V19H13V17H11V19H9V17H7A2,2 0 0,1 5,15V13H2V11H5V9A2,2 0 0,1 7,7H9V5H11V7H13V5H15V7H17A2,2 0 0,1 19,9V11H22M17,9V7H7V17H17V9Z")
-                .toNodes(),
-        )
+        path(fill = SolidColor(Color.Black)) {
+            // 中央 IC 方块
+            moveTo(7f, 7f)
+            horizontalLineTo(17f)
+            verticalLineTo(17f)
+            horizontalLineTo(7f)
+            close()
+            // 上引脚
+            moveTo(9f, 4f)
+            horizontalLineTo(11f)
+            verticalLineTo(7f)
+            horizontalLineTo(9f)
+            close()
+            moveTo(13f, 4f)
+            horizontalLineTo(15f)
+            verticalLineTo(7f)
+            horizontalLineTo(13f)
+            close()
+            // 下引脚
+            moveTo(9f, 17f)
+            horizontalLineTo(11f)
+            verticalLineTo(20f)
+            horizontalLineTo(9f)
+            close()
+            moveTo(13f, 17f)
+            horizontalLineTo(15f)
+            verticalLineTo(20f)
+            horizontalLineTo(13f)
+            close()
+            // 左引脚
+            moveTo(4f, 9f)
+            horizontalLineTo(7f)
+            verticalLineTo(11f)
+            horizontalLineTo(4f)
+            close()
+            moveTo(4f, 13f)
+            horizontalLineTo(7f)
+            verticalLineTo(15f)
+            horizontalLineTo(4f)
+            close()
+            // 右引脚
+            moveTo(17f, 9f)
+            horizontalLineTo(20f)
+            verticalLineTo(11f)
+            horizontalLineTo(17f)
+            close()
+            moveTo(17f, 13f)
+            horizontalLineTo(20f)
+            verticalLineTo(15f)
+            horizontalLineTo(17f)
+            close()
+        }
     }.build()
 }
 
