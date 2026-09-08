@@ -13,8 +13,8 @@ android {
         applicationId = "com.shoujilunhui.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 33
-        versionName = "1.12.9"
+        versionCode = 34
+        versionName = "1.13.0"
     }
 
     signingConfigs {

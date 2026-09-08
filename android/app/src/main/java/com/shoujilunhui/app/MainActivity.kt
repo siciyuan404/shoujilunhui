@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.shoujilunhui.app.ui.chips.ChipDetailScreen
+import com.shoujilunhui.app.ui.chips.ChipScreen
 import com.shoujilunhui.app.ui.history.HistoryDetailScreen
 import com.shoujilunhui.app.ui.history.HistoryListScreen
 import com.shoujilunhui.app.ui.home.HomeScreen
@@ -49,6 +51,8 @@ object Routes {
     const val HISTORY = "history"
     const val HISTORY_DETAIL = "history/{id}"
     const val LEDGER = "ledger"
+    const val CHIPS = "chips"
+    const val CHIP_DETAIL = "chip/{id}"
 }
 
 @Composable
@@ -60,6 +64,7 @@ fun AppNav() {
                 onOpenSettings = { nav.navigate(Routes.SETTINGS) },
                 onOpenRecognize = { nav.navigate(Routes.RECOGNIZE) },
                 onOpenLedger = { nav.navigate(Routes.LEDGER) },
+                onOpenChips = { nav.navigate(Routes.CHIPS) },
             )
         }
         composable(Routes.LEDGER) {
@@ -73,6 +78,21 @@ fun AppNav() {
         }
         composable(Routes.SETTINGS) {
             SettingsScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.CHIPS) {
+            ChipScreen(
+                onBack = { nav.popBackStack() },
+                onOpenDetail = { id -> nav.navigate(Routes.CHIP_DETAIL.replace("{id}", id.toString())) },
+            )
+        }
+        composable(
+            Routes.CHIP_DETAIL,
+            arguments = listOf(navArgument("id") { type = NavType.LongType })
+        ) { entry ->
+            ChipDetailScreen(
+                chipId = entry.arguments?.getLong("id") ?: 0L,
+                onBack = { nav.popBackStack() },
+            )
         }
         composable(Routes.HISTORY) {
             HistoryListScreen(

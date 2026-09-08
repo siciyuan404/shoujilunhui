@@ -842,6 +842,39 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
   .lg-tb-money { text-align: left; }
   .lg-edit-form { grid-template-columns: 1fr; }
 }
+
+/* ===== 芯片查询页 ===== */
+.chips-panel { max-width: 1080px; margin: 0 auto; padding: 14px 12px 24px; }
+.chip-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.chip-toolbar input[type="text"] {
+  flex: 1 1 220px; min-width: 180px; border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: 13px; background: var(--card); color: var(--text);
+}
+.chip-toolbar select {
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 6px; font-size: 12px;
+  background: var(--card); color: var(--text); max-width: 150px;
+}
+.chip-count { font-size: 13px; color: var(--text-secondary); margin-left: auto; white-space: nowrap; }
+.chip-table-wrap { overflow-x: auto; }
+.chip-table th, .chip-table td { padding: 7px 10px; font-size: 13px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.chip-table th { color: var(--text-secondary); font-weight: 600; background: #fafafa; position: sticky; top: 0; }
+.chip-table tbody tr { cursor: pointer; }
+.chip-table tbody tr:hover { background: #f5f8ff; }
+.chip-pnp { font-family: Consolas, Menlo, monospace; font-weight: 600; }
+.chip-ref { font-weight: 700; color: var(--accent); }
+.chip-pager { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 14px; }
+.chip-page-info { font-size: 13px; color: var(--text-secondary); }
+.chip-badge { background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 8px; font-size: 12px; }
+.chip-model-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.chip-model-table th, .chip-model-table td { padding: 8px 10px; font-size: 13px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.chip-model-table th { color: var(--text-secondary); font-weight: 600; background: #fafafa; }
+.chip-model-table tbody tr { cursor: pointer; }
+.chip-model-table tbody tr:hover { background: #f5f8ff; }
+.chip-price { font-weight: 700; color: var(--price-color); }
+.chip-card { cursor: pointer; transition: box-shadow .2s; }
+.chip-card:hover { box-shadow: 0 4px 14px rgba(114, 46, 209, .14); }
+.chip-card .chip-goto { float: right; font-size: 12px; font-weight: 500; color: #722ed1; }
+.chip-refs { background: #f3e8ff; color: #722ed1; border-radius: 10px; padding: 1px 8px; font-size: 12px; font-weight: 500; margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -861,6 +894,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
     <button class="mode-btn" id="modeVerify" onclick="navTo('#verify')">🔍 验机</button>
     <button class="mode-btn" id="modeRecognize" onclick="navTo('#recognize')">📷 识别</button>
     <button class="mode-btn" id="modeLedger" onclick="navTo('#ledger')">📒 记账</button>
+    <button class="mode-btn" id="modeChips" onclick="navTo('#chips')">🧩 芯片</button>
     <button class="mode-btn" id="modeSettings" onclick="navTo('#settings')">⚙ 设置</button>
   </div>
 </div>
@@ -1019,6 +1053,34 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
       <button class="lg-filter-btn" data-st="__nosale" onclick="lgSetStatusFilter(this)">🔸 未填出货价</button>
     </div>
     <div class="lg-table-wrap" id="lgTableWrap"></div>
+  </div>
+</div>
+
+<!-- 芯片查询页 -->
+<div class="chips-panel" id="chipsPanel" style="display:none">
+  <div class="lg-card">
+    <div class="lg-head">
+      <h2>🧩 存储芯片查询</h2>
+      <p class="lg-sub">对照表芯片库（UMCP / eMCP / UFS / eMMC / LPDDR）· 搜料号/厂商/封装 · 点行或「详情」查看引用机型</p>
+    </div>
+    <div class="chip-toolbar">
+      <input type="text" id="chipSearch" placeholder="搜料号 / 厂商 / 封装，如 KMJS9001、三星、297" autocomplete="off" oninput="chipState.search=this.value;chipPage=1;renderChips()">
+      <select id="chipClassSel" onchange="chipState.chip_class=this.value;chipPage=1;renderChips()"></select>
+      <select id="chipVendorSel" onchange="chipState.vendor=this.value;chipPage=1;renderChips()"></select>
+      <select id="chipRomSel" onchange="chipState.rom_size=this.value;chipPage=1;renderChips()"></select>
+      <select id="chipRamSel" onchange="chipState.ram_size=this.value;chipPage=1;renderChips()"></select>
+      <select id="chipSortSel" onchange="chipState.sort=this.value;chipPage=1;renderChips()">
+        <option value="ref_desc">引用机型↓</option>
+        <option value="ref_asc">引用机型↑</option>
+        <option value="pnp">料号A-Z</option>
+        <option value="vendor">厂商</option>
+        <option value="id">ID</option>
+      </select>
+      <button class="lg-btn" onclick="chipResetFilters()">清空筛选</button>
+      <span class="chip-count" id="chipCount"></span>
+    </div>
+    <div class="chip-table-wrap" id="chipTableWrap"></div>
+    <div class="chip-pager" id="chipPager"></div>
   </div>
 </div>
 
@@ -1349,7 +1411,9 @@ Promise.all([
       screen_size: it.screen_size || '', screen_type: it.screen_type || '', refresh: it.refresh || '',
       battery: it.battery || '', charge: it.charge || '', network: it.network || '', os: it.os || '',
       variants: vars,
-      model_code: it.model_code || ''
+      model_code: it.model_code || '',
+      vendor: it.vendor || '', vendor_pnp: it.vendor_pnp || '', package: it.package || '',
+      rom_type: it.rom_type || '', rom_size: it.rom_size || '', chip_id: it.chip_id || null
     });
   }
   specsData = specData;
@@ -1360,6 +1424,7 @@ Promise.all([
   loadFilterOptions();
   route();
   setupDesktopUpdate();
+  loadChips();
 }).catch(err => {
   document.getElementById('mainContent').innerHTML =
     '<div class="empty-state"><p>数据加载失败：' + err.message + '</p><p style="font-size:13px;margin-top:6px">请确认 API 服务已启动 (node server/src/index.js)</p></div>';
@@ -1743,8 +1808,19 @@ function route() {
     document.getElementById('recognizePanel').style.display = 'none';
     document.getElementById('settingsPanel').style.display = 'none';
     document.getElementById('ledgerPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     renderDetail(brand, model);
+    return;
+  }
+  if (h.startsWith('#chip|')) {
+    const id = Number(h.slice(6));
+    document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    renderChipDetail(id);
     return;
   }
   if (h === '#settings') {
@@ -1755,6 +1831,7 @@ function route() {
     document.getElementById('statsBar').style.display = 'none';
     document.getElementById('recognizePanel').style.display = 'none';
     document.getElementById('ledgerPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'none';
     document.getElementById('settingsPanel').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
     loadSettings();
@@ -1770,6 +1847,7 @@ function route() {
     document.getElementById('recognizePanel').style.display = 'block';
     document.getElementById('settingsPanel').style.display = 'none';
     document.getElementById('ledgerPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'none';
     document.getElementById('mainContent').style.display = 'none';
     updateModeButtons();
     return;
@@ -1782,10 +1860,26 @@ function route() {
     document.getElementById('statsBar').style.display = 'none';
     document.getElementById('recognizePanel').style.display = 'none';
     document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'none';
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('ledgerPanel').style.display = 'block';
     lgInit();
     updateModeButtons();
+    return;
+  }
+  if (h === '#chips') {
+    currentMode = 'chips';
+    lastMode = 'chips';
+    document.getElementById('searchBar').style.display = 'none';
+    document.getElementById('tabsWrap').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('recognizePanel').style.display = 'none';
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('ledgerPanel').style.display = 'none';
+    document.getElementById('chipsPanel').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+    updateModeButtons();
+    renderChips();
     return;
   }
   // list mode
@@ -1797,6 +1891,7 @@ function route() {
   document.getElementById('recognizePanel').style.display = 'none';
   document.getElementById('settingsPanel').style.display = 'none';
   document.getElementById('ledgerPanel').style.display = 'none';
+  document.getElementById('chipsPanel').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
   updateModeButtons();
   initTabs();
@@ -1813,6 +1908,7 @@ function updateModeButtons() {
   document.getElementById('modeVerify').classList.toggle('active', currentMode === 'verify');
   document.getElementById('modeRecognize').classList.toggle('active', currentMode === 'recognize');
   document.getElementById('modeLedger').classList.toggle('active', currentMode === 'ledger');
+  document.getElementById('modeChips').classList.toggle('active', currentMode === 'chips');
   document.getElementById('modeSettings').classList.toggle('active', currentMode === 'settings');
   document.getElementById('sortBtns').style.display = currentMode === 'price' ? 'flex' : 'none';
   document.getElementById('verifyBtns').style.display = currentMode === 'verify' ? 'flex' : 'none';
@@ -1821,6 +1917,163 @@ function updateModeButtons() {
                             : '搜索机型，如：iPhone 15、Mate70、Find X9...';
 }
 function goBack() { navTo('#' + lastMode); }
+
+// ===== 芯片查询（storage_chips） =====
+let chipsData = [];
+let chipMeta = null;
+let chipState = { search: '', chip_class: '全部', vendor: '全部', rom_size: '全部', ram_size: '全部', sort: 'ref_desc' };
+let chipPage = 1;
+const CHIP_PAGE_SIZE = 50;
+
+function loadChips() {
+  return Promise.all([
+    api('/api/chips?limit=0').catch(() => ({ items: [] })),
+    api('/api/chips/meta').catch(() => null)
+  ]).then(([list, meta]) => {
+    chipsData = (list && list.items) || [];
+    chipMeta = meta;
+    buildChipSelects();
+    if ((location.hash || '') === '#chips') renderChips();
+    else {
+      // 详情页可能先于芯片库加载完成，补一次渲染让 RAM/引用数显示完整
+      const m = (location.hash || '').match(/^#detail\|(.+?)\|(.+)$/);
+      if (m) renderDetail(decodeURIComponent(m[1]), decodeURIComponent(m[2]));
+    }
+  }).catch(() => {});
+}
+
+function buildChipSelects() {
+  const put = (id, values) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '<option value="全部">' + (id === 'chipClassSel' ? '全部类别' : id === 'chipVendorSel' ? '全部厂商' : id === 'chipRomSel' ? '全部ROM' : '全部RAM') + '</option>' +
+      (values || []).map(v => `<option value="${escAttr(v)}">${escAttr(v)}</option>`).join('');
+  };
+  if (chipMeta) {
+    put('chipClassSel', chipMeta.classes);
+    put('chipVendorSel', chipMeta.vendors);
+    put('chipRomSel', chipMeta.rom_sizes);
+    put('chipRamSel', chipMeta.ram_sizes);
+  }
+}
+
+function chipResetFilters() {
+  chipState = { search: '', chip_class: '全部', vendor: '全部', rom_size: '全部', ram_size: '全部', sort: chipState.sort };
+  chipPage = 1;
+  document.getElementById('chipSearch').value = '';
+  document.getElementById('chipClassSel').value = '全部';
+  document.getElementById('chipVendorSel').value = '全部';
+  document.getElementById('chipRomSel').value = '全部';
+  document.getElementById('chipRamSel').value = '全部';
+  renderChips();
+}
+
+function chipSortFn(a, b) {
+  const s = chipState.sort;
+  if (s === 'pnp') return (a.vendor_pnp || '').localeCompare(b.vendor_pnp || '');
+  if (s === 'vendor') return (a.vendor || '').localeCompare(b.vendor || '') || (a.vendor_pnp || '').localeCompare(b.vendor_pnp || '');
+  if (s === 'id') return a.id - b.id;
+  if (s === 'ref_asc') return (a.ref_count || 0) - (b.ref_count || 0);
+  return (b.ref_count || 0) - (a.ref_count || 0);
+}
+
+function renderChips() {
+  const wrap = document.getElementById('chipTableWrap');
+  if (!wrap) return;
+  if (!chipsData.length) {
+    wrap.innerHTML = '<div class="empty-state"><p>芯片库未加载（请确认 API 已启动）</p></div>';
+    document.getElementById('chipCount').textContent = '';
+    document.getElementById('chipPager').innerHTML = '';
+    return;
+  }
+  let rows = chipsData;
+  const s = (chipState.search || '').trim().toLowerCase();
+  if (s) {
+    rows = rows.filter(c => (c.vendor_pnp + ' ' + c.vendor + ' ' + c.package + ' ' + c.chip_class).toLowerCase().indexOf(s) >= 0);
+  }
+  if (chipState.chip_class !== '全部') rows = rows.filter(c => c.chip_class === chipState.chip_class);
+  if (chipState.vendor !== '全部') rows = rows.filter(c => c.vendor === chipState.vendor);
+  if (chipState.rom_size !== '全部') rows = rows.filter(c => c.rom_size === chipState.rom_size);
+  if (chipState.ram_size !== '全部') rows = rows.filter(c => c.ram_size === chipState.ram_size);
+  rows = rows.slice().sort(chipSortFn);
+
+  const total = rows.length;
+  document.getElementById('chipCount').textContent = '共 ' + total + ' 条';
+  if (!total) {
+    wrap.innerHTML = '<div class="empty-state"><p>无匹配芯片，试试清空筛选</p></div>';
+    document.getElementById('chipPager').innerHTML = '';
+    return;
+  }
+  const pages = Math.max(1, Math.ceil(total / CHIP_PAGE_SIZE));
+  if (chipPage > pages) chipPage = pages;
+  if (chipPage < 1) chipPage = 1;
+  const slice = rows.slice((chipPage - 1) * CHIP_PAGE_SIZE, chipPage * CHIP_PAGE_SIZE);
+
+  wrap.innerHTML = '<div class="table-wrap"><table class="chip-table"><thead><tr>' +
+    '<th>料号</th><th>类别</th><th>厂商</th><th>封装</th><th>ROM</th><th>RAM</th><th>引用机型</th><th style="width:64px"></th>' +
+    '</tr></thead><tbody>' +
+    slice.map(c => `<tr onclick="openChip(${c.id})">
+      <td class="chip-pnp">${escAttr(c.vendor_pnp)}</td>
+      <td>${escAttr(c.chip_class)}</td>
+      <td>${escAttr(c.vendor)}</td>
+      <td>${escAttr(c.package)}</td>
+      <td>${c.rom_type ? escAttr(c.rom_type) + (c.rom_size ? ' ' : '') : ''}${escAttr(c.rom_size)}</td>
+      <td>${c.ram_type ? escAttr(c.ram_type) + (c.ram_size ? ' ' : '') : ''}${escAttr(c.ram_size)}</td>
+      <td class="chip-ref">${c.ref_count || 0}</td>
+      <td><button class="rr-open" onclick="event.stopPropagation();openChip(${c.id})">详情</button></td>
+    </tr>`).join('') + '</tbody></table></div>';
+
+  const pager = document.getElementById('chipPager');
+  let ph = `<button class="lg-btn" ${chipPage <= 1 ? 'disabled' : ''} onclick="chipPage--;renderChips()">‹ 上一页</button>` +
+    `<span class="chip-page-info">第 ${chipPage} / ${pages} 页</span>` +
+    `<button class="lg-btn" ${chipPage >= pages ? 'disabled' : ''} onclick="chipPage++;renderChips()">下一页 ›</button>`;
+  pager.innerHTML = ph;
+}
+
+function openChip(id) { navTo('#chip|' + id); }
+
+async function renderChipDetail(id) {
+  const el = document.getElementById('mainContent');
+  el.innerHTML = '<div class="empty-state"><p>加载中...</p></div>';
+  let chip;
+  try {
+    chip = await api('/api/chips/' + id);
+  } catch (e) {
+    el.innerHTML = `<div class="empty-state"><p>芯片不存在或加载失败</p>
+      <p style="font-size:13px;margin-top:6px"><a href="#chips" style="color:var(--accent)">← 返回芯片列表</a></p></div>`;
+    return;
+  }
+  const rows = [
+    ['料号', chip.vendor_pnp], ['厂商', chip.vendor], ['类别', chip.chip_class], ['封装', chip.package],
+    ['ROM 类型', chip.rom_type], ['ROM 容量', chip.rom_size], ['RAM 类型', chip.ram_type], ['RAM 容量', chip.ram_size],
+  ];
+  let html = `<div class="detail-card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <h3 style="margin:0">🧩 ${escAttr(chip.vendor_pnp)}</h3>
+      <span class="chip-badge">${escAttr(chip.chip_class)}</span>
+      <span style="margin-left:auto;font-size:13px;color:var(--text-secondary)">被 <b style="color:var(--accent)">${(chip.models || []).length}</b> 款机型引用</span>
+    </div>
+    <table class="spec-full" style="margin-top:12px">
+      ${rows.filter(r => r[1]).map(r => `<tr><td>${r[0]}</td><td>${escAttr(r[1])}</td></tr>`).join('')}
+    </table>
+    <p style="margin:12px 0 4px;font-size:12px;color:var(--text-secondary)">注：同一机型不同批次可能采用不同厂商芯片，此对照为容量匹配的参考值。</p>
+    <div style="margin-top:10px"><a href="#chips" style="color:var(--accent);font-size:14px">← 返回芯片列表</a></div>
+  </div>`;
+
+  const models = chip.models || [];
+  if (models.length) {
+    html += `<div class="detail-card" style="margin-top:14px;overflow:auto">
+      <h3 style="padding:14px 16px 0;margin:0"><span class="bar"></span>📱 引用该芯片的机型（${models.length}）</h3>
+      <table class="chip-model-table"><thead><tr><th>ID</th><th>品牌</th><th>分类</th><th>型号</th><th>回收价</th><th>ROM</th><th>RAM</th></tr></thead><tbody>` +
+      models.map(m => `<tr onclick="navTo('#detail|${encodeURIComponent(m.brand)}|${encodeURIComponent(m.model)}')">
+        <td>${m.id}</td><td>${escAttr(m.brand)}</td><td>${escAttr(m.category)}</td><td>${escAttr(m.model)}</td>
+        <td class="chip-price">${escAttr(m.price)}</td><td>${escAttr(m.rom)}</td><td>${escAttr(m.ram)}</td>
+      </tr>`).join('') + '</tbody></table></div>';
+  } else {
+    html += `<div class="detail-card" style="margin-top:14px;padding:16px"><p style="margin:0;color:var(--text-secondary)">暂无机型引用该芯片</p></div>`;
+  }
+  el.innerHTML = html;
+}
 
 // ===== BOMB GUIDE TOGGLE =====
 function toggleBombGuide() {
@@ -2525,6 +2778,32 @@ function renderDetail(brand, model) {
         vars.map(v => `<tr><td>${escAttr(v.spec)}</td><td class="v-price">${escAttr(v.price)}</td></tr>`).join('') + `</table>`;
     }
     html += `</div>`;
+  }
+
+  // 存储芯片（来自 storage_chips 库，通过 chip_id 关联）
+  if (dbModel) {
+    const chip = dbModel.chip_id ? chipsData.find(c => String(c.id) === String(dbModel.chip_id)) : null;
+    const chipName = dbModel.vendor_pnp || (chip && chip.vendor_pnp) || '';
+    const vendor = dbModel.vendor || (chip && chip.vendor) || '';
+    const pkg = dbModel.package || (chip && chip.package) || '';
+    const romT = dbModel.rom_type || (chip && chip.rom_type) || '';
+    const romS = dbModel.rom_size || (chip && chip.rom_size) || '';
+    const ramT = (chip && chip.ram_type) || '';
+    const ramS = (chip && chip.ram_size) || '';
+    const refs = (chip && chip.ref_count != null) ? chip.ref_count : '';
+    if (chip || chipName || vendor) {
+      html += `<div class="info-card chip-card"${dbModel.chip_id ? ` onclick="navTo('#chip|${dbModel.chip_id}')" title="查看芯片详情"` : ''}>
+        <h3><span class="bar" style="background:#722ed1"></span>🧩 存储芯片${dbModel.chip_id ? '<span class="chip-goto">查看芯片页 →</span>' : ''}</h3>
+        <table class="spec-full">
+          <tr><td>料号</td><td colspan="3"><span class="v chip-pnp">${chipName ? escAttr(chipName) : '<span class="todo">待补充</span>'}</span>${refs !== '' ? ` <span class="chip-refs">被 ${refs} 台机型引用</span>` : ''}</td></tr>
+          <tr><td>厂商</td><td>${vendor ? escAttr(vendor) : '<span class="todo">待补充</span>'}</td><td>封装</td><td>${pkg ? escAttr(pkg) : '<span class="todo">待补充</span>'}</td></tr>
+          <tr><td>ROM</td><td>${(romT && romS) ? escAttr(romT + ' ' + romS) : (romS ? escAttr(romS) : '<span class="todo">待补充</span>')}</td><td>RAM</td><td>${(ramT && ramS) ? escAttr(ramT + ' ' + ramS) : (ramS ? escAttr(ramS) : '<span class="todo">待补充</span>')}</td></tr>
+        </table>
+      </div>`;
+    } else {
+      html += `<div class="info-card"><h3><span class="bar" style="background:#722ed1"></span>🧩 存储芯片</h3>
+        <div class="d-feat empty">该机型尚未匹配存储芯片料号，可在「🧩 芯片」页检索后补录。</div></div>`;
+    }
   }
 
   // Specs

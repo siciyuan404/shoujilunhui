@@ -1,0 +1,8122 @@
+[
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HR21JFA3MEVR-K6M",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HR15JFA3MEVR-K6M",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9RT0GEM6XX023N",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9RT0GEM65X026N",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9RT1G6AS5X037",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9RT0G6AS5X036",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9RT0GEA65X030",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT30AZZZCDAZTOWL-031 W.13U",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT30AZZZDDAZTPEQ-031 W.13Q",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT30AZZZCD9ZTPWL-031 W.165",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT30AZZZCDAZTPWL_031_W16C",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT30AZZZBD9ZTKXM-031 W.20S",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMJS9001RM-BG01",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMAG9001QM-B814",
+    "package": "297-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR5",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ16AECMMDAR-KEM",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ53ACPMMDAR_KEM",
+    "package": "FBGA-254",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ53AECMMDAR_KEM",
+    "package": "FBGA_254",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ22AECMMDAR",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ16AFAMMDAR-KEM",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ15AFAMADAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ15AECMADAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ22AFAMMDAR_KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ21AHDMMDAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ21AFAMZDAR_KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ21AECMZDAR",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ16ACPMMDAR_KMM",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ15AFAMBDAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ15AECMBDAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ21AFAMADAR_KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ54AECMMDAR_KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ21AECMADAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ15ACPMBDAR_KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ54ACPMMDAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HQ16ACPMMDAR-KEM",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT1GGBN6X129",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT0GECN6X145",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT1G6DN6X132",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT0G6CN6X146",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QG9G5AN6X154",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT0G5CN6X156",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9QT1GGCN6X147",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD9FQFSM_046W_G9K",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBD9FQKPR_046W_G9J",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD8FQFSL_046W_G8K",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBD8FQKSM-046W_G8J",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD9FQKPR_046W_G9L",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCDAFQKWL_046W_G0L",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD8FQKSL-046 W.12H",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCDAFQKBA-046 W.G0L",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBD91SLSM-046 W.17X",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBDA1SLPR-046 W.17Z",
+    "package": "254 FPGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD9FQKPR-046 W.G9L",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCDA1SKPR-046 W.181",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD91SKSM-046 W.17Y",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD91SFSM-046W.18C",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD81SFSL-046 W.22C",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM2V7001CM_B706",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM2V8001CM_B707",
+    "package": "FBGA_254",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM2B8001CM_BB01",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5V7001DM_B621",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8B8001JM_BC01",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8V7001JM_B810",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM2H7001CM_B518",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5H7001DM_B424",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8V8001JM_B813",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8F8001JM-B813",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8F8001MM-B813",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5C7001DM-B622",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5V8001DM-B622",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5P8001DM_B424",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5L9001DM-B424",
+    "package": "254 FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8V9001JM-B813",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM2L9001CM-B518",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8F9001JM-B813",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8AA001JM-B623",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM5P9001DM-B424",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8L9001JM-B624",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8F9001MM-B830",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "UMCP-UFS+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM8V7001JM-B810",
+    "package": "254-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2KD6_64G",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2FE4-32G",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2EE9-16G",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2KED-64G-X",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCA2FZA-32G",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCA2FEM-32G",
+    "package": "254 ball FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP52ACPMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP26ACPMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP52AECMMDBR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP16ACPMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP16AECMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP52ACPMADAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP53ACPMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP27ADAMADAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP52ADAMADAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP27ABKMMDAR_KMM",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HP53AECMMDAR",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP16_ML4ATB29",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPQB3224-58A1911",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPQF6424-58A1911",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPRF6432-58A1930",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPNB3216-58A1924",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPRB6432-A3A56N1",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD8DQKSM_053W_9D8",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD9DQKSM_046_W_9K9",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD8DQKSL_046 W.9K8",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBD9DQKPR_046 W.9M9",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZ7D8DQFSL_046W_9J8",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD8GQFSL_046 W.9R8",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD9GQFSM_046 W.9S9",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZBD9GQFPR-046W.9Q9",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD9GQKPR-046W.12L",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZAD9DQKSM-046 W.9K9",
+    "package": "254 VFBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29VZZZCD9GUKPR_046_W215",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMWX10016M-B619",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDH6001DM_B422",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3H6001CM-B515",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3V6001CM_B705",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDH6001DA_B422",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3H6001CA_B515",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDV6001DM_B620",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDD60018M_B320",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDX6001DM_B422",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDD6001DM_B320",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDP6001DA_B425",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM4X6001KM_B321",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDP60018M_B425",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDV6001DA_B620",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3V6001CA_B708",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDX60018M_B425",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3P6001CM-B517",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDP6001DA-B425",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDC6001DM-B625",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDV6001DB-B625",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KM3V6001CB-B708",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMDP6001DB-B425",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADA4CR-64G",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADA4DR-64G",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADA4CR-128G",
+    "package": "254-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4X",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADA4DR_128G",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCM2ED4_16G",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCM28N_08G",
+    "package": "FBGA_254",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPQCAM5_3216",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR4",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPQCCM5_1616",
+    "package": "254 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE28K_08G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE24F-08G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE28K_16G",
+    "package": "221-FPGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE24L-08G",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE28J_08G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE28J_16G",
+    "package": "211-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE2EJ_16G",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE24K_04G",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE2EK_16G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCE2EJ-16G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPN35X_3G3X",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPN35X_1608",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPN35X-0804",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPNA6M4_0804",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPNA6M4_0808",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEPNCCM4_1608",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FOXCONN",
+    "vendor_pnp": "T1616P1VDB_FEB0",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "FOXCONN",
+    "vendor_pnp": "T0808P1VDB_FEB0",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GPBD81S42MFLB_T3E",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GPBD82S44MFLB_T3E",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GPBF41S41MFL0_T3E",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GPBE81S42MFLB_T3E",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GPBU81S42MFL0_T3H",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GigaDevice",
+    "vendor_pnp": "GD9D4M4JYTM_A9",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "GigaDevice",
+    "vendor_pnp": "GD9D8T4JGTM_AD",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ65A8GTMCUR_KTM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ18ABJTMCUR_KTM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ABJTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64A8GTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17A8GTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64ABJTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ADFTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ABJTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64AAETMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ADFTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ32A6BTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "6Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ADFTACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ADFTACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ABJTACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ACLTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ABJTBCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ADFTBCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64A8GTACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17AAETACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ52ACLTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ32A4GTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ52ADFTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17A8GTACUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ26ABJTBCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ADFTBCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ17ABJTCCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64A8GTCCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ64A8GTDCUR_KUM",
+    "package": "221-FPGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ27ADFTMCUR_KUM",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ27ACLTACUR",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ52ADFTACUR_KUM",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ27ABJTMCUR_KUM",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TQ53ACLTMCUR_KUM",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL3CV100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP04_EL3AV100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL3BS100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL3AV100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP08_EL3CV100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_EL3CV100",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL3BT227",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP04_EL3BT227",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_EL3DT527",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_ML3BM500",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP08_EL3BT527",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_NL3DT227",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_ML3GM610",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP08_EL3DT527",
+    "package": "221-FPGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP04_NL3DT227",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16-NL3ET527",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP08_NL3DT527",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP16_EL3GT527",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_EL3DTB28",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP24_EL3FTA28",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP16_EL3DTA28",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP08_NL3DTB28",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP24_EL3JTA28",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_AL3CM627",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP16-EL3GTB29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP24-EL3JTB29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP16_EL3GTB29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EMCP24_EL3JT527",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP24_EL3JTA29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EMCP16-EL3GTA29",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "2GB"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "64EMCP24_EL3JTA29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "3GB"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "32EM16-N3GTX29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "16EM16-N3GTB29",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_NL3DM627",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ0555FS_HMd1",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ5555FS_HMd1_MA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ0555FS_HMd1_MB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ55AAFS_HMD2",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ0505FS_HMd1_MB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ0505GS-HMd1-MB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ5506GS_HMn1_MB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTLQ5566SS-6YKF-6B",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCEPNCCM4_1616",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEPNB1616_58KR124",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ8D5BKFAH_125W_95K",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ4D4BKERL_125W_94M",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ8D4BKFRL_125W_94K",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ5D6YKFAH_125 W.96N",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ5D6JKFRL_107W_96R",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ7D7JKKBT_107W_97V",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ5D6EKFRL-107 W.96R",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ7D7EKKBT_107W_97V",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ7D6EKKFB_107W_96V",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "24GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZAD7EKKCY_107 W_97W",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ8D5JKEZB_107W_95Q",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ8D5JKEPD_107W_95T",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ7D7DKLAH-107 W.9B7",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ5D6DKFRL-107 W.9A6",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ8D6DKEZB_107W_9H6",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ7D7DKLAH_107W_9B7",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZ5D7DKFRL_107W_9A7",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZAD8DKKBT_107W_9F8",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29TZZZAD8DKKFB_107 W.9N8",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMF5X0005C_B211",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ8X000SA_B414",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ5X000SA_B315",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ7X000SA_B315",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR820001M_B609",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRNW0001M_B509(MLC)",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR7X0001M_B511",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ31000SM_B417",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ72000SM_B316",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR310001M_B611",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR4Z0001A_B803",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRE1000BM_B512",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ82000SM_B418",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ310006A_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQN10006M_B318",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR21000BM_B809",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ310013M_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFN10012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQN10013M_B318",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ4Z0013M_B809",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR31000BA_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMF720012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ820013M_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMF820012M_B305",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMF310012M_B305",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFJ20005A_B213",
+    "package": "221FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFJ20007M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "6Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRC1000BM_B809",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRX10014M_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRC10014M_B809",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRX1000BM_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQE10013M_B318",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFE10012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFNX0012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRV50014M_B809",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQX10013M_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQN1000SM_B316",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMR31000BM_B611",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQ310006B_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQN10006B_B318",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRH60014M_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQE60013M_B318",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRX60014M_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMGX6001BM_B514",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFE60012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMGE6001BM_B421",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRH60014A_B614",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMFN60012M_B214",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRD60014M_B512",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMGD6001BM_B421",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQD60013M_B318",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMGP6001BM_B514",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMQX60013M_B419",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMRP60014M_B614",
+    "package": "FBGA_221",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMGX6001BA_B514",
+    "package": "221_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD9DS28K_8G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADB48K_16G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADF4AP_16G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADL2AP_16G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDADL2BP_32G",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0GH221644RC",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYE0HH221657RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0GH121661RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYC0FH121642RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0GH221664RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYE0HH231659RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0HH121662RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYE0IH231658RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYR0IH331667RB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYE0HH221668RA",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR3",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYR0IH331677RB",
+    "package": "221-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP18A8JDMCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A4GDBCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A8JDACPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP26ABLDMCNR_KGM",
+    "package": "186-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP65A8JDACPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A8JDBCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A8JDMCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP17ABLDMCNR_KGM",
+    "package": "186-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A8JDCCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP64A8JDMCPR-KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TP32A4GDDCPR_KGM",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CN2L2HA8A2A",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CN2L2SA5H2A",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CN2L2HA5A2A",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL2BS100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_NL2AS100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_EL2BV100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_NL2CV100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP04_NL2AV100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_EL2AS100",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP04_NL2DT227",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_NL2DM627",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "08EMCP08_NL2DT227",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Kingston",
+    "vendor_pnp": "04EMCP04_AL2BM627",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "KMN0505FS_HMc1_MA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "KMN0555FS_HMC1_MA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29PZZZ8D4WKFEW_18W_6D4",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29PZZZ4D4WKETF_18W_6E4",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29PZZZ8D5BKFTF_18W_95L",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29PZZZ4D4BKESK_18W_94H",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "MT29PZZZ8D4BKFSK_18W_94L",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMN5W000ZM_B207",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK5U000VM_B309",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMKJS000VM_B309",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK7U000VM_B309",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK3U000VM_B410",
+    "package": "186-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMI8U000MA_B605",
+    "package": "186-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK5W000VM_B312",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK7X000VM_B314",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK8U000VM_B410",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK5X000VM_B314",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMK8X000VM_B412",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMN5X000ZM_B209",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "KMNJ2000ZM_B207",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD5D28B_8G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD7DP28C_4G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD7DP28C_8G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD7DP24F_4G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD5D28B_4G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD7DP24C_4G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SD8DR18C_8G",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYC0FH121597RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0GH231624RC",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYC0FH121626RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0HH251623RC",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0FH221627RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0HH231633RC",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0GH221640RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYD0FH221641RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYC0FH121638RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "eMCP-eMMC+LPDDR2",
+    "vendor": "Toshiba",
+    "vendor_pnp": "TYC0FH121660RA",
+    "package": "162-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "LPDDR2",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H58GG6AK8HX094",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H58G76BK8HX095",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "128Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F1536M64D8CL_026_WTB",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F2G64D8CL_026_WTB",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "128Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F1G64D4ZV-026 WT:B",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F1536M64D8CL_023_WTB",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3KL4L40DM_BGCT",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3KL3L30CM_BGCT",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3KL5L50CM_BGCT",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5X",
+    "ram_size": "128Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9JKNNNFB3AECR-N6H",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H58GG6MK6GX037",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H58GU6MK6HX042",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "144Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Hynix",
+    "vendor_pnp": "H58G66AK6HX079",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F1536M64D8CH_031_WTA",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F2G64DAFL_031_WTC",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "128Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Micron",
+    "vendor_pnp": "MT62F1G64D8CH_031_WTB",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3LK4K40CM_BGCP",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3LK7K70BM_BGCP",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3LK6K60BM-BGCP",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "128Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR5",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3LKDKD0CM_BGCP",
+    "package": "496-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR5",
+    "ram_size": "144Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HKNNNFBMMVAR",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HKNNNHAMMVAR",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HKNNNEBMAVAR",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HKNNNCRMAVAR",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HKNNNFBMAVAR",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54GG6AYRHX263",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54GE6AYRHX270",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1G64D4SQ_046_WTA",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53D1536M64D8EG-046 WT:A",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53D768M64D4SQ_046_WTA",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1G64D4SP_046_WTC",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1536M64D8SY_046_WTB",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E512M64D2RR_046_WTB",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3UH7H70AM-AGCL",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3UHAHA0AM-AGCL",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3UH6H60BM-AGCL",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3UH7H70BM-AGCL",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "POP-LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K3UHAHA0BM-AGCL",
+    "package": "556-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD6X32H2A-16Gb",
+    "package": "FBGA_200",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMECX32H2A-16Gb",
+    "package": "FBGA_200",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEAX32H2A-24Gb",
+    "package": "FBGA_200",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME4X32H2A-24Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME9X32H2A-16Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME4X32H2A-48Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEDX32H2A_32Gb_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME8X32H2A-24Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEXX32H2A-24Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEYX32H2A-16Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMZAX32H2A-32Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSR8X32H2A-16G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSRSX32H2A-16Gb-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSRRX32H2A-24G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSRSX32H2A-32G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSRGX32H2A-48G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSRGX32H2A-24G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSR8X32H2A-32G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMZCX32H2A-32G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCCXX32N2A-08G-X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMZAX32H2A_16Gb_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWSR8X32H2A_32G_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEXX32H2A_48Gb_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMZEX32H2A_16G_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2X32N2A_32G _X",
+    "package": "200ball",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC1X32N2A-16G-X",
+    "package": "200-ball",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC4X32N2A_24G_X",
+    "package": "200ball",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC2X32N2A_16G _X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCC1X32N2A_32G_X",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDBCCCDM_MA_M",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB5CCBM-MK-A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB3ABAM-MK",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB5CCBM-MA-A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDBCCCDM_MK_M",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB6CCDM_MA_M",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB5CCAM-MK",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDB4CBAM-MK-A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "CXMT",
+    "vendor_pnp": "CXDBCCCDM-MK-M",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLDXC2ME768M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLDXC1MC512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLDXC2MC001G32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLDXC1MF768M32",
+    "package": "FBGA_200",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MDXC2024G-M4",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "3GB"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "FLXC4004G-C4",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HCNNNCPMALHR-NEE",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9HCNNNFAMMLXR-NEE",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54G56CYRBX247",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54GE6CYRBX262",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54G68CYRBX248",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Hynix",
+    "vendor_pnp": "H54GD6AYRBX273",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "B1621XH5ADGTKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "B2421XC4FDGTKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "B3221XC5GDGTKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "Q4822XC4FDGUKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "Q3222XH6BDGUAR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "B1621XH6BDGTAR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Kingston",
+    "vendor_pnp": "B1621XH7CDGUAR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "MDXC1024G-M3",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCLDXC1MJ512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "MDXC1016G_M2",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "MDXC2016G-M6",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "2GB"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCLDXC2MG512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2004G-30",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCLDXC2MF00AG32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2002G-26",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC4004G-26",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2003G-49",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2002G-N2",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC4004G-N2",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2002G-C4",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Longsys",
+    "vendor_pnp": "FLXC2004G-N1",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E512M32D2NP-053 RS WT: E",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E512M32D2NP-046 WT:E",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53D768M32D2NP-046 WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1G32D4NQ-046 WT:E",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53D768M32D2NP-053 RS WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E768M32D2NP-053 RS WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E2G32D4NQ_046_WTC",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53D1536M32D4NQ-046 WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1G32D2NP-053 RS WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1536M32DDNQ-046 WT:A",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1G32D2NP-046 WT:B",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E1536M32DDNQ_046_WTA",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E3G32D6CY_046_WTC",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4UHE3D4AB-MGCL000",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4U6E3S4AA-MGCL",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4UBE3S4AM-MGCL",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4UJE3T4AA-MGCL",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "48Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4UCE3Q4AB-MGCL",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "64Gb"
+  },
+  {
+    "chip_class": "LPDDR4X",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4UKE3Q4AA-MGCL",
+    "package": "200 FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4X",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD4X32H2A_08Gb",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD8X32H2A_24G",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD4X32H2A_24Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD4X32H2A_16Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD6X32H2A_16Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME9X32H2A-16Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD9X32H2A_24G",
+    "package": "FBGA_200",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD9X32H2A-24Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME4X32H2A-24G",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD8X32H2A-12G",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "96Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD4X32H2A-32Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME8X32H2A-24Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMECX32H2A-08Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEDX32H2A-32Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "32Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWME4X32H2A-16Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMEZX32H2A_16Gb",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "FORESEE",
+    "vendor_pnp": "MDXC2024-M4",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD4C1MA256M32",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD4C2MA768M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD4C2MA512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "GCAI",
+    "vendor_pnp": "GD82B32MJ0_41M2",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "GCAI",
+    "vendor_pnp": "GD62B32MJ0_41M4",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "12Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "GCAI",
+    "vendor_pnp": "GD64B32MJA_41M4",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "GCAI",
+    "vendor_pnp": "GD83B32MJ0_41M2",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "D2516PC1CDGPLR",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "Q5116PH1MDGPAR",
+    "package": "200_FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "Q7616PH2MDGPAR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "B5116PC2WDGPKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "B5116PH3MDGPAR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "B1621PM1WDGTK",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Kingston",
+    "vendor_pnp": "B1621PC6FDGUKR",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCLDXC1MJ512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCLDXC2MG512M32",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Longsys",
+    "vendor_pnp": "FL4C2001G-D9",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Longsys",
+    "vendor_pnp": "MDXC1016G-M2",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR4",
+    "vendor": "Micron",
+    "vendor_pnp": "MT53E512M32D2NP-046 WT:E",
+    "package": "200-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR4",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BW52L256M32D1PF",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "NK42L128M32DI",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD5X32L7B_08Gb",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD5X32L7B_16Gb",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BW52L512M32D2PF",
+    "package": "FBGA178",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "NK42L256M32D2_LF",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWMD3X32L7B-24G",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD3B2256M32",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD3B1128M32",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD3B1256M32",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCLD3B2512M32",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GDT64A32FF0_T3K",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "24Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GDT81A32PF0_T3M",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GDT42A32BF0_T3E",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "GCAI",
+    "vendor_pnp": "GDT82A32PF0_T3H",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9CCNNNN8GTMLAR",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9CCNNNBLTALAR",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb+8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9CCNNN8GTML",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9CCNNNBJTMLAR",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "KB23AADL3E08G",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "KB23AADL3E04G",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Kingston",
+    "vendor_pnp": "KB25AAEL3E08G",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "KFO0055ES3_ZIb1",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "KFO5555ES3_ZIB1",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "KFO005ES3_ZIB1",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Leahkinn",
+    "vendor_pnp": "LTFP0006ES3_ZJN1",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "EDF8132A3MA_JD_F",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "EDFA232A1MA_GD_F",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "EDFA232A2MA_JD_F_R",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Micron",
+    "vendor_pnp": "MT52L512M32D2PF_107_WT",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Nanya",
+    "vendor_pnp": "NT6CL256T32BM_H2",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Nanya",
+    "vendor_pnp": "NT6CL128M32BM_H2",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Nanya",
+    "vendor_pnp": "NT6CL512F32BM_H3",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Nanya",
+    "vendor_pnp": "NT6CL256M32AM_H1",
+    "package": "FBGA178",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Nanya",
+    "vendor_pnp": "NT6CL512T32AM_H1",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4E8E304EE_EGCE",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "4Gb+4Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4E6E304EE_EGCF",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4E8E324EE_EGCF",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4E8E324EB_EGCF",
+    "package": "178-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR3",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4E6E304EB-EGCF",
+    "package": "178 Ball-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR3",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR2",
+    "vendor": "Hynix",
+    "vendor_pnp": "H9TCNNNBLDMMPR",
+    "package": "134-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "EDB8132B3MC_1D_F",
+    "package": "134-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "LPDDR2",
+    "vendor": "Micron",
+    "vendor_pnp": "EDBA232B1MA_1D_F",
+    "package": "134-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4PAG304EB_FGC2",
+    "package": "134-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR2",
+    "ram_size": "16Gb"
+  },
+  {
+    "chip_class": "LPDDR2",
+    "vendor": "Samsung",
+    "vendor_pnp": "K4P8G304EQ_FGC2",
+    "package": "134-FBGA",
+    "rom_type": "",
+    "rom_size": "",
+    "ram_type": "LPDDR2",
+    "ram_size": "8Gb"
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWU2ASV26A128G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWU2ASV46A256G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWU2AQ126A064G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "H28U72301CMR",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T15BZGKX016",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T05BZGKX015",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T25BZGKX017",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T061ZGKX012",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T15DEHKX075",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T25DEHKX077",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8G962EHKX037",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T05DEHKX073",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T062EHKX039",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T162EHKX041",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Hynix",
+    "vendor_pnp": "HN8T35DZHKX079",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "1TB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFAT0T44BAIL",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFAT1T84BAIR",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFCT2T84BAKC",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFAT2T84BAIR",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFGT1E45BAIL",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFGT2T85BAIR",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFGT1E45BAIP",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Kioxia",
+    "vendor_pnp": "THGJFGT2T85BAIU",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC128GAXATEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC256GAXATEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC512GAXATAM_WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC256GAXATHF_WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC128GAXATHF_WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC512GAXATHJ_WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC64GAXAUEA_WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC128GAXAUEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC256GAXAUEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC128GBCAVHF-WT",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC256GBCAVHF-WT",
+    "package": "153 FGBA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Phison",
+    "vendor_pnp": "CSUF22L17-M128SS",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUDG4UHDB-B2D1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG8UHDB-C2D1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG8UHDB-C2E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUDG4UHDC-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG8UHDC-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUFG8RHDB-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG8UHGC-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUDG4UHGC-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUFG8RHGB-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG4RHGB-B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUEG4R1DE_B0F1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLUGGARHGB_B0E1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "1TB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINEDK4-128G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINEDK4-256G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINDDK4-128G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINDDK4-64G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINFDO2_256G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINFDO4_128G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINFDO4_512G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "WD",
+    "vendor_pnp": "SDINFDK4-256G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "WD",
+    "vendor_pnp": "SDINFDK4-128G",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS8B2TE2A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS8A4TB3A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS7A4TB2A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS7B2TE1A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS9B2TE3A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS8A1TE2D1C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS8A1TC2A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS9A1TE3D1C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUS9A1TC3A2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "UFS",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMUSAA1TE4D2C1",
+    "package": "153-FBGA",
+    "rom_type": "UFS",
+    "rom_size": "512GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC8A2TB3A2C3",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC7B0TE1A2C3",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC8B0TE2A2C3",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC6A2TB1A2C3",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC7A2TB2A2C3",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "YMTC(长江存储)",
+    "vendor_pnp": "YMEC9B0TE3A2C3",
+    "package": "153 FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "WD",
+    "vendor_pnp": "SDIN8DR1_8G_V",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "WD",
+    "vendor_pnp": "SDIN8DR1_16G_V",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "WD",
+    "vendor_pnp": "SDINBDV4_128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "WD",
+    "vendor_pnp": "SDINBDV4_64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBMAG7A2JBAIR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBM5G6A2JBAIR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBM5G5A1JBAIR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBM5G7A2JBAIR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBMFG6C1LBAIL",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Toshiba",
+    "vendor_pnp": "THGBMDG5D1LBAIL",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDIN8DE2_16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDIN8DE1_8G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDIN9DS2_16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDIN9DS2-8G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDIN9DS2_32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINADF4_32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINADF4_16G",
+    "package": "FBGA-153",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINBDA4_32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINBDA4_64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Sandisk",
+    "vendor_pnp": "SDINBDV4_32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLMAG2WE4A_A001",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLM8G1WE4A_A001",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLMAG2GE4A_A001",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLMAG2WEMB_B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLM8G1GEND-B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLMAG2WEPD-B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLM8G1WEPD_B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLMBG4WEBD_B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLM8G1GETF-B041",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Samsung",
+    "vendor_pnp": "KLM4G1FEPD-B031",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE4A0SO_X28E",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE4A0SO_64GE",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE4A0TN_64GE",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE7A0YJ_32GE",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE4A0TN_X28GE",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Phison",
+    "vendor_pnp": "PTE4A0TN_X56GE",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC64GAOALEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Micron",
+    "vendor_pnp": "MTFC128GAOALEA-WT",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "MEMA032G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN032G-58K73",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN064G-58K72",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN016G-58A43",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "NCEMASLD-128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN128G-58K72",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN256G-A3A44",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN064G-A3A56",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN032G-A3A55",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN128G-A3A56",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDNN032G-58A46",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "MEMDNN064G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "MEMDNN128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Longsys",
+    "vendor_pnp": "FEMDMW016G-88A43",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CN3K6A",
+    "package": "169-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CV3H5A",
+    "package": "169-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CV4H5A",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "KE4CN4K6A",
+    "package": "169-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "eMMC08G_S100",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC08G_V100",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC16G_V100",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC08G_M325",
+    "package": "153FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC08G-T227",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC04G-M627",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC08G-M728",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC16-T828",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G_TA28",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC16G_TB28",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G_TA28",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G-TA29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G-TA29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G-TD26",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC128-TA29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G-TD26",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G-TX29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G-TX29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC128G-TX29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G-TJ30",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G-TJ30",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC128-TY29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC128-TX29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G-TY29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC32G-PJ30",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC256-TY29",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "256GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC128-TM30",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Kingston",
+    "vendor_pnp": "EMMC64G_TM30",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M42003GMR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M54003EMA",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M41103HPR",
+    "package": "153_FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M52103FMR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26T43001HPR",
+    "package": "153FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M41103HPRL",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26T55001FPR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M52208FPR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M41204HPR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M41208HPR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "Hynix",
+    "vendor_pnp": "H26M74002HMR",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMASD9_16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMASD9_08G",
+    "package": "153-FPGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMASD9-08G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMAD7B_08G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMAM6G_08G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMAD9D_16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMASLD_32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "NCEMASLD_64GB",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "FSEIASOD-16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MEMA016G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MEMA032G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MEMA064G",
+    "package": "153-BGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MEMDNN128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "FORESEE(longsys)",
+    "vendor_pnp": "MEMDNN064G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWAMGTB11A08G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWATGSC21C16G",
+    "package": "169-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTASC11G08G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTASC21G16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWAMAIA11C04G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "4GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTGSC21G32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCMMQ511G08",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "8GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTASC11P32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTASC21P64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTASC41P128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAK411G32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAK421G64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAK611G16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAQE11X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAQE21X128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTA1311X32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTA1321X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTARI11X32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWDMC_16G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "16GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTARJ11X32G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "32GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTARJ21X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTARV21X128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTARV11X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAKJ11X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTAKJ21X128G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "128GB",
+    "ram_type": "",
+    "ram_size": ""
+  },
+  {
+    "chip_class": "eMMC",
+    "vendor": "BIWIN",
+    "vendor_pnp": "BWCTA1511X64G",
+    "package": "153-FBGA",
+    "rom_type": "eMMC",
+    "rom_size": "64GB",
+    "ram_type": "",
+    "ram_size": ""
+  }
+]

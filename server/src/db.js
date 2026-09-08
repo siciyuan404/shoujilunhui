@@ -63,6 +63,13 @@ const SPEC_COLS = [
   ['variants', "TEXT NOT NULL DEFAULT '[]'"],
   // 型号代码：官方型号编码，如华为 P40 Pro → ELS-AN00
   ['model_code', "TEXT NOT NULL DEFAULT ''"],
+  // 存储芯片（对照表关联，storage_chips）：厂商/料号/封装/ROM类型/ROM容量/芯片ID
+  ['vendor', "TEXT NOT NULL DEFAULT ''"],
+  ['vendor_pnp', "TEXT NOT NULL DEFAULT ''"],
+  ['package', "TEXT NOT NULL DEFAULT ''"],
+  ['rom_type', "TEXT NOT NULL DEFAULT ''"],
+  ['rom_size', "TEXT NOT NULL DEFAULT ''"],
+  ['chip_id', "INTEGER NOT NULL DEFAULT 0"],
 ];
 
 function openDb() {
@@ -121,6 +128,23 @@ function openDb() {
     CREATE INDEX IF NOT EXISTS idx_records_day ON records(day);
     CREATE INDEX IF NOT EXISTS idx_records_channel ON records(channel);
     CREATE INDEX IF NOT EXISTS idx_records_model ON records(model);
+    -- 存储芯片库（来源：eet-china 手机平板常用存储型号容量对照表）
+    CREATE TABLE IF NOT EXISTS storage_chips (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      chip_class TEXT NOT NULL DEFAULT '',
+      vendor TEXT NOT NULL DEFAULT '',
+      vendor_pnp TEXT NOT NULL DEFAULT '',
+      package TEXT NOT NULL DEFAULT '',
+      rom_type TEXT NOT NULL DEFAULT '',
+      rom_size TEXT NOT NULL DEFAULT '',
+      ram_type TEXT NOT NULL DEFAULT '',
+      ram_size TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chips_class ON storage_chips(chip_class);
+    CREATE INDEX IF NOT EXISTS idx_chips_rom ON storage_chips(rom_size);
+    CREATE INDEX IF NOT EXISTS idx_chips_ram ON storage_chips(ram_size);
+    CREATE INDEX IF NOT EXISTS idx_chips_pnp ON storage_chips(vendor_pnp);
   `);
   // 老库迁移：补齐缺失列（images + 规格字段）
   const cols = db.prepare('PRAGMA table_info(models)').all();

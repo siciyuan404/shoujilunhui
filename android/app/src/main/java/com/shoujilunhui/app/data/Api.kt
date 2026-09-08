@@ -41,7 +41,68 @@ data class ModelRow(
     val images: List<String>?,
     val variants: List<VariantItem>?,
     @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    @SerializedName("updated_at") val updatedAt: String?,
+    @SerializedName("vendor") val vendor: String? = null,
+    @SerializedName("vendor_pnp") val vendorPnp: String? = null,
+    @SerializedName("package") val packageName: String? = null,
+    @SerializedName("rom_type") val romType: String? = null,
+    @SerializedName("rom_size") val romSize: String? = null,
+    @SerializedName("chip_id") val chipId: Long? = null
+)
+
+// ---------- 存储芯片（storage_chips 库） ----------
+
+data class ChipRow(
+    val id: Long,
+    @SerializedName("chip_class") val chipClass: String? = null,
+    val vendor: String? = null,
+    @SerializedName("vendor_pnp") val vendorPnp: String? = null,
+    @SerializedName("package") val packageName: String? = null,
+    @SerializedName("rom_type") val romType: String? = null,
+    @SerializedName("rom_size") val romSize: String? = null,
+    @SerializedName("ram_type") val ramType: String? = null,
+    @SerializedName("ram_size") val ramSize: String? = null,
+    @SerializedName("ref_count") val refCount: Int = 0
+)
+
+data class ChipsResponse(
+    val total: Int = 0,
+    val page: Int = 1,
+    val limit: Int = 0,
+    val items: List<ChipRow> = emptyList()
+)
+
+data class ChipMeta(
+    val classes: List<String>? = null,
+    val vendors: List<String>? = null,
+    val packages: List<String>? = null,
+    @SerializedName("rom_types") val romTypes: List<String>? = null,
+    @SerializedName("rom_sizes") val romSizes: List<String>? = null,
+    @SerializedName("ram_sizes") val ramSizes: List<String>? = null
+)
+
+data class ChipRefModel(
+    val id: Long,
+    val brand: String,
+    val category: String,
+    val model: String,
+    val price: String,
+    val rom: String? = null,
+    val ram: String? = null
+)
+
+data class ChipDetail(
+    val id: Long,
+    @SerializedName("chip_class") val chipClass: String? = null,
+    val vendor: String? = null,
+    @SerializedName("vendor_pnp") val vendorPnp: String? = null,
+    @SerializedName("package") val packageName: String? = null,
+    @SerializedName("rom_type") val romType: String? = null,
+    @SerializedName("rom_size") val romSize: String? = null,
+    @SerializedName("ram_type") val ramType: String? = null,
+    @SerializedName("ram_size") val ramSize: String? = null,
+    @SerializedName("created_at") val createdAt: String? = null,
+    val models: List<ChipRefModel> = emptyList()
 )
 
 data class ModelsResponse(
@@ -227,6 +288,25 @@ interface Api {
 
     @GET("api/health")
     suspend fun health(): HealthResponse
+
+    // ---------- 存储芯片 ----------
+
+    @GET("api/chips/meta")
+    suspend fun getChipMeta(): ChipMeta
+
+    @GET("api/chips")
+    suspend fun getChips(
+        @Query("search") search: String? = null,
+        @Query("chip_class") chipClass: String? = null,
+        @Query("vendor") vendor: String? = null,
+        @Query("rom_size") romSize: String? = null,
+        @Query("ram_size") ramSize: String? = null,
+        @Query("sort") sort: String? = null,
+        @Query("limit") limit: Int? = null
+    ): ChipsResponse
+
+    @GET("api/chips/{id}")
+    suspend fun getChipDetail(@Path("id") id: Long): ChipDetail
 
     @POST("api/models")
     suspend fun postModel(@Header("X-API-Key") key: String, @Body body: PostBody): ModelRow

@@ -55,6 +55,7 @@ const SPEC_FIELDS = [
   'release_date', 'cpu_brand', 'cpu_model', 'ram', 'rom',
   'back_camera', 'front_camera', 'screen_size', 'screen_type', 'refresh',
   'battery', 'charge', 'network', 'os', 'variants', 'model_code',
+  'vendor', 'vendor_pnp', 'package', 'rom_type', 'rom_size', 'chip_id',
 ];
 
 function json(res, code, data) {
@@ -165,6 +166,64 @@ function requestBase(req) {
   const proto = String(req.headers['x-forwarded-proto'] || 'http').split(',')[0].trim() || 'http';
   const host = req.headers.host || '127.0.0.1:8760';
   return proto + '://' + host;
+}
+
+// ---------- 存储芯片库（storage_chips） ----------
+const CHIP_SORTS = {
+  id: 'c.id ASC',
+  vendor: 'c.vendor ASC, c.vendor_pnp ASC',
+  pnp: 'c.vendor_pnp ASC',
+  ref_desc: 'ref_count DESC, c.id ASC',
+  ref_asc: 'ref_count ASC, c.id ASC',
+};
+
+function listChips(db, q) {
+  const where = [];
+  const args = [];
+  if (q.get('search')) {
+    where.push('(c.vendor_pnp LIKE ? OR c.vendor LIKE ? OR c.package LIKE ? OR c.chip_class LIKE ?)');
+    const s = '%' + q.get('search') + '%';
+    args.push(s, s, s, s);
+  }
+  if (q.get('chip_class') && q.get('chip_class') !== '全部') { where.push('c.chip_class = ?'); args.push(q.get('chip_class')); }
+  if (q.get('vendor') && q.get('vendor') !== '全部') { where.push('c.vendor = ?'); args.push(q.get('vendor')); }
+  if (q.get('rom_size') && q.get('rom_size') !== '全部') { where.push('c.rom_size = ?'); args.push(q.get('rom_size')); }
+  if (q.get('ram_size') && q.get('ram_size') !== '全部') { where.push('c.ram_size = ?'); args.push(q.get('ram_size')); }
+  if (q.get('package') && q.get('package') !== '全部') { where.push('c.package = ?'); args.push(q.get('package')); }
+  const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
+
+  const total = db.prepare(`SELECT COUNT(*) AS c FROM storage_chips c ${whereSql}`).get(...args).c;
+
+  const sortKey = q.get('sort') || 'ref_desc';
+  const orderSql = CHIP_SORTS[sortKey] || CHIP_SORTS.ref_desc;
+
+  let limit = parseInt(q.get('limit') || '0', 10) || 0;
+  if (limit < 0 || limit > 5000) limit = 0;
+  let pageSql = '';
+  if (limit > 0) {
+    const page = Math.max(1, parseInt(q.get('page') || '1', 10));
+    pageSql = ` LIMIT ${limit} OFFSET ${(page - 1) * limit}`;
+  }
+
+  const rows = db.prepare(`
+    SELECT c.*, (SELECT COUNT(*) FROM models m WHERE m.chip_id = c.id) AS ref_count
+    FROM storage_chips c ${whereSql} ORDER BY ${orderSql}${pageSql}
+  `).all(...args);
+  const limitUsed = limit > 0 ? limit : rows.length;
+  const page = limit > 0 ? Math.max(1, parseInt(q.get('page') || '1', 10)) : 1;
+  return { total, page, limit: limitUsed, items: rows };
+}
+
+function chipMeta(db) {
+  const one = (sql) => db.prepare(sql).all().map((r) => r.v);
+  return {
+    classes: one('SELECT DISTINCT chip_class AS v FROM storage_chips ORDER BY v'),
+    vendors: one('SELECT DISTINCT vendor AS v FROM storage_chips ORDER BY v'),
+    packages: one("SELECT DISTINCT package AS v FROM storage_chips WHERE package != '' ORDER BY v"),
+    rom_types: one("SELECT DISTINCT rom_type AS v FROM storage_chips WHERE rom_type != '' ORDER BY v"),
+    rom_sizes: one("SELECT DISTINCT rom_size AS v FROM storage_chips WHERE rom_size != '' ORDER BY v"),
+    ram_sizes: one("SELECT DISTINCT ram_size AS v FROM storage_chips WHERE ram_size != '' ORDER BY v"),
+  };
 }
 
 // 把 variants/images JSON 字符串解析成数组，并把 images 相对路径拼成完整 URL
@@ -576,6 +635,24 @@ function createRouter(db, cfg) {
       const result = listModels(db, q);
       result.items = result.items.map((it) => parseVariants(it, requestBase(req)));
       return json(res, 200, result);
+    }
+
+    // ---------- 存储芯片库：查询与筛选（公开） ----------
+    if (method === 'GET' && pathname === '/api/chips/meta') {
+      return json(res, 200, chipMeta(db));
+    }
+    if (method === 'GET' && pathname === '/api/chips') {
+      return json(res, 200, listChips(db, q));
+    }
+    let cm = pathname.match(/^\/api\/chips\/(\d+)$/);
+    if (cm && method === 'GET') {
+      const id = Number(cm[1]);
+      const row = db.prepare('SELECT * FROM storage_chips WHERE id = ?').get(id);
+      if (!row) return json(res, 404, { error: 'not found' });
+      const models = db.prepare(
+        'SELECT id, brand, category, model, price, rom, ram FROM models WHERE chip_id = ? ORDER BY brand, model'
+      ).all(id);
+      return json(res, 200, Object.assign({}, row, { models }));
     }
 
     // ---------- 收机记账：查询与统计（公开） ----------

@@ -214,6 +214,11 @@ fun DetailSheet(
             "快充" to row.charge,
             "网络" to row.network,
             "系统" to row.os,
+            "存储芯片" to row.vendorPnp,
+            "芯片厂商" to row.vendor,
+            "封装" to row.packageName,
+            "ROM类型" to row.romType,
+            "ROM容量" to row.romSize,
         ).filter { !it.second.isNullOrBlank() }
         if (specs.isEmpty()) {
             Text("待补充", fontSize = 12.sp, color = TextSecondary)

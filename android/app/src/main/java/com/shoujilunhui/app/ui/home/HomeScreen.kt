@@ -136,6 +136,24 @@ private val CameraIcon: ImageVector by lazy {
     }.build()
 }
 
+/** 芯片图标（存储芯片查询入口） */
+private val ChipIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "Chip",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(
+            fill = SolidColor(Color.Black),
+            pathData = androidx.compose.ui.graphics.vector.PathParser()
+                .parsePathString("M15,9H9V15H15V9M22,11V13H19V15A2,2 0 0,1 17,17H15V19H13V17H11V19H9V17H7A2,2 0 0,1 5,15V13H2V11H5V9A2,2 0 0,1 7,7H9V5H11V7H13V5H15V7H17A2,2 0 0,1 19,9V11H22M17,9V7H7V17H17V9Z")
+                .toNodes(),
+        )
+    }.build()
+}
+
 /** 账本图标（记账入口） */
 private val LedgerIcon: ImageVector by lazy {
     ImageVector.Builder(
@@ -189,6 +207,7 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenRecognize: () -> Unit,
     onOpenLedger: () -> Unit,
+    onOpenChips: () -> Unit,
     vm: HomeViewModel = viewModel(),
 ) {
     val ui by vm.ui.collectAsState()
@@ -274,6 +293,7 @@ fun HomeScreen(
                 onOpenSettings = onOpenSettings,
                 onOpenRecognize = onOpenRecognize,
                 onOpenLedger = onOpenLedger,
+                onOpenChips = onOpenChips,
             )
             FilterEntryRow(
                 brand = ui.brand,
@@ -417,6 +437,7 @@ private fun HomeHeader(
     onOpenSettings: () -> Unit,
     onOpenRecognize: () -> Unit,
     onOpenLedger: () -> Unit,
+    onOpenChips: () -> Unit,
 ) {
     Row(
         Modifier
@@ -490,6 +511,23 @@ private fun HomeHeader(
                 Icon(
                     LedgerIcon,
                     contentDescription = "记账",
+                    tint = Accent,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+        // 芯片查询入口
+        Surface(
+            onClick = onOpenChips,
+            shape = CircleShape,
+            color = Color.White,
+            modifier = Modifier.size(40.dp),
+            shadowElevation = 1.dp,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    ChipIcon,
+                    contentDescription = "芯片查询",
                     tint = Accent,
                     modifier = Modifier.size(20.dp),
                 )
