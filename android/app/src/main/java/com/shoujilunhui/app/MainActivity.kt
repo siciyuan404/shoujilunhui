@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.shoujilunhui.app.ui.chips.ChipDetailScreen
 import com.shoujilunhui.app.ui.chips.ChipScreen
+import com.shoujilunhui.app.ui.exam.ExamScreen
 import com.shoujilunhui.app.ui.history.HistoryDetailScreen
 import com.shoujilunhui.app.ui.history.HistoryListScreen
 import com.shoujilunhui.app.ui.home.HomeScreen
@@ -53,6 +54,7 @@ object Routes {
     const val LEDGER = "ledger"
     const val CHIPS = "chips"
     const val CHIP_DETAIL = "chip/{id}"
+    const val EXAM = "exam"
 }
 
 @Composable
@@ -65,10 +67,14 @@ fun AppNav() {
                 onOpenRecognize = { nav.navigate(Routes.RECOGNIZE) },
                 onOpenLedger = { nav.navigate(Routes.LEDGER) },
                 onOpenChips = { nav.navigate(Routes.CHIPS) },
+                onOpenExam = { nav.navigate(Routes.EXAM) },
             )
         }
         composable(Routes.LEDGER) {
             LedgerScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.EXAM) {
+            ExamScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.RECOGNIZE) {
             RecognizeScreen(

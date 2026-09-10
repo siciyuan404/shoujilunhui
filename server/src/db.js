@@ -166,6 +166,13 @@ function openDb() {
       console.log(`[db] 已为 records 表补充 ${col} 列`);
     }
   }
+  // 老库迁移：storage_chips 表补齐 image 列
+  const ccols = db.prepare('PRAGMA table_info(storage_chips)').all();
+  const cnames = new Set(ccols.map((c) => c.name));
+  if (!cnames.has('image')) {
+    db.exec("ALTER TABLE storage_chips ADD COLUMN image TEXT NOT NULL DEFAULT ''");
+    console.log('[db] 已为 storage_chips 表补充 image 列');
+  }
   db.exec('CREATE INDEX IF NOT EXISTS idx_records_seller ON records(seller)');
   return db;
 }

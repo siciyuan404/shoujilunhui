@@ -247,7 +247,13 @@ function parseVariants(row, base) {
       return baseOrigin + '/' + x.replace(/^\/+/, '');
     });
   }
-  return Object.assign({}, row, { variants: v, images: im });
+  const out = Object.assign({}, row, { variants: v, images: im });
+  // chip_id 输出兜底：DB 中若仍存在 TEXT 值（如 ''），归一为数字 0，避免客户端数字解析崩溃
+  if (typeof out.chip_id === 'string') {
+    const n = Number(out.chip_id);
+    out.chip_id = (out.chip_id === '' || !isFinite(n)) ? 0 : Math.trunc(n);
+  }
+  return out;
 }
 
 // 各筛选维度的可选值（供前端构建筛选器）
@@ -292,8 +298,13 @@ function validateModel(body, partial) {
     out.images = JSON.stringify(arr.map((x) => String(x).trim()).filter(Boolean));
   }
   // 规格字段：普通字符串
-  for (const f of SPEC_FIELDS.filter((f) => f !== 'variants')) {
+  for (const f of SPEC_FIELDS.filter((f) => f !== 'variants' && f !== 'chip_id')) {
     if (body[f] !== undefined) out[f] = String(body[f] ?? '').trim();
+  }
+  // chip_id：整数关联键。空串/非数字统一归 0，禁止写入 TEXT（否则安卓端 Gson 解析 Long 抛 NumberFormatException）
+  if (body.chip_id !== undefined) {
+    const n = Number(body.chip_id);
+    out.chip_id = (body.chip_id === null || body.chip_id === '' || !isFinite(n)) ? 0 : Math.trunc(n);
   }
   // variants：JSON 数组 [{spec, price}]
   if (body.variants !== undefined) {
@@ -316,7 +327,7 @@ const INSERT_COLS = ['brand', 'category', 'model', 'price', 'note', 'images',
 const INSERT_PLACE = INSERT_COLS.map(() => '?').join(', ');
 
 function rowValues(f) {
-  return INSERT_COLS.map((c) => (f[c] !== undefined ? f[c] : (c === 'images' || c === 'variants' ? '[]' : '')));
+  return INSERT_COLS.map((c) => (f[c] !== undefined ? f[c] : (c === 'images' || c === 'variants' ? '[]' : (c === 'chip_id' ? 0 : ''))));
 }
 
 // ---------- 收机记账（records） ----------
@@ -706,6 +717,8 @@ function createRouter(db, cfg) {
       ['PUT', /^\/api\/records\/\d+$/],
       ['PATCH', /^\/api\/records\/\d+$/],
       ['DELETE', /^\/api\/records\/\d+$/],
+      ['PUT', /^\/api\/chips\/\d+$/],
+      ['PATCH', /^\/api\/chips\/\d+$/],
     ];
     const isWrite = writeOps.some(([mm, p]) => method === mm && (p instanceof RegExp ? p.test(pathname) : p === pathname));
 
@@ -776,6 +789,23 @@ function createRouter(db, cfg) {
         const r = db.prepare('DELETE FROM records WHERE id = ?').run(id);
         if (!r.changes) return json(res, 404, { error: 'not found' });
         return json(res, 200, { ok: true, id });
+      }
+
+      // ---------- 存储芯片：更新（图片等） ----------
+      const cm2 = pathname.match(/^\/api\/chips\/(\d+)$/);
+      if (cm2 && (method === 'PUT' || method === 'PATCH')) {
+        const id = Number(cm2[1]);
+        const body = await readBody(req);
+        const row = db.prepare('SELECT id FROM storage_chips WHERE id = ?').get(id);
+        if (!row) return json(res, 404, { error: 'not found' });
+        const allowed = ['image', 'vendor', 'vendor_pnp', 'package', 'rom_type', 'rom_size', 'ram_type', 'ram_size', 'chip_class'];
+        const sets = [];
+        const args = [];
+        for (const k of allowed) if (k in body) { sets.push(`${k} = ?`); args.push(String(body[k] ?? '')); }
+        if (!sets.length) return json(res, 400, { error: '无可更新字段' });
+        db.prepare(`UPDATE storage_chips SET ${sets.join(', ')} WHERE id = ?`).run(...args, id);
+        const updated = db.prepare('SELECT * FROM storage_chips WHERE id = ?').get(id);
+        return json(res, 200, updated);
       }
 
       if (method === 'POST' && pathname === '/api/models') {

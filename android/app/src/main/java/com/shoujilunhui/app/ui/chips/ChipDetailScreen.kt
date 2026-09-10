@@ -4,6 +4,7 @@
 
 package com.shoujilunhui.app.ui.chips
 
+import coil.compose.AsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -119,6 +120,8 @@ fun ChipDetailScreen(
                                 romSize = d.romSize,
                                 ramType = d.ramType,
                                 ramSize = d.ramSize,
+                                image = d.image,
+                                baseUrl = vm.baseUrl,
                                 refCount = d.models.size,
                             )
                         }
@@ -195,6 +198,8 @@ private fun ChipSpecCard(
     romSize: String?,
     ramType: String?,
     ramSize: String?,
+    image: String?,
+    baseUrl: String,
     refCount: Int,
 ) {
     Card(
@@ -209,6 +214,16 @@ private fun ChipSpecCard(
                 Surface(color = Accent, shape = RoundedCornerShape(8.dp)) {
                     Text("被 $refCount 款机型引用", fontSize = 11.sp, color = Color.White, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
                 }
+            }
+            if (!image.isNullOrBlank()) {
+                Spacer(Modifier.height(10.dp))
+                val imgUrl = if (image.startsWith("http")) image else baseUrl.trimEnd('/') + "/" + image.trimStart('/')
+                AsyncImage(
+                    model = imgUrl,
+                    contentDescription = pnp,
+                    modifier = Modifier.fillMaxWidth().height(180.dp).background(Color(0xFFF5F5F5), RoundedCornerShape(10.dp)),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                )
             }
             Spacer(Modifier.height(10.dp))
             SpecRow("类别", chipClass)

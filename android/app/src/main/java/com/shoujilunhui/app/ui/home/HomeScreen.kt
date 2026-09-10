@@ -35,6 +35,7 @@ import java.io.File
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.AlertDialog
@@ -254,6 +255,7 @@ fun HomeScreen(
     onOpenRecognize: () -> Unit,
     onOpenLedger: () -> Unit,
     onOpenChips: () -> Unit,
+    onOpenExam: () -> Unit,
     vm: HomeViewModel = viewModel(),
 ) {
     val ui by vm.ui.collectAsState()
@@ -340,6 +342,7 @@ fun HomeScreen(
                 onOpenRecognize = onOpenRecognize,
                 onOpenLedger = onOpenLedger,
                 onOpenChips = onOpenChips,
+                onOpenExam = onOpenExam,
             )
             FilterEntryRow(
                 brand = ui.brand,
@@ -484,6 +487,7 @@ private fun HomeHeader(
     onOpenRecognize: () -> Unit,
     onOpenLedger: () -> Unit,
     onOpenChips: () -> Unit,
+    onOpenExam: () -> Unit,
 ) {
     Row(
         Modifier
@@ -574,6 +578,23 @@ private fun HomeHeader(
                 Icon(
                     ChipIcon,
                     contentDescription = "芯片查询",
+                    tint = Accent,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+        // 认机考试入口
+        Surface(
+            onClick = onOpenExam,
+            shape = CircleShape,
+            color = Color.White,
+            modifier = Modifier.size(40.dp),
+            shadowElevation = 1.dp,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "认机考试",
                     tint = Accent,
                     modifier = Modifier.size(20.dp),
                 )

@@ -895,6 +895,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
     <button class="mode-btn" id="modeRecognize" onclick="navTo('#recognize')">📷 识别</button>
     <button class="mode-btn" id="modeLedger" onclick="navTo('#ledger')">📒 记账</button>
     <button class="mode-btn" id="modeChips" onclick="navTo('#chips')">🧩 芯片</button>
+    <button class="mode-btn" onclick="location.href='/exam.html'">📝 考试</button>
     <button class="mode-btn" id="modeSettings" onclick="navTo('#settings')">⚙ 设置</button>
   </div>
 </div>
@@ -2053,6 +2054,7 @@ async function renderChipDetail(id) {
       <span class="chip-badge">${escAttr(chip.chip_class)}</span>
       <span style="margin-left:auto;font-size:13px;color:var(--text-secondary)">被 <b style="color:var(--accent)">${(chip.models || []).length}</b> 款机型引用</span>
     </div>
+    ${chip.image ? `<img src="${escAttr(chip.image)}" alt="${escAttr(chip.vendor_pnp)}" onclick="window.open(this.src,'_blank')" style="margin-top:12px;max-width:100%;max-height:280px;border-radius:8px;cursor:zoom-in;object-fit:contain;background:#f5f5f5" title="点击放大">` : ''}
     <table class="spec-full" style="margin-top:12px">
       ${rows.filter(r => r[1]).map(r => `<tr><td>${r[0]}</td><td>${escAttr(r[1])}</td></tr>`).join('')}
     </table>

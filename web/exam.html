@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手机认机考试 · 回收实战训练</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh; color: #222;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 20px; }
+  h1 { color: #fff; text-align: center; margin-bottom: 8px; font-size: 28px; }
+  .sub { color: rgba(255,255,255,.75); text-align: center; margin-bottom: 24px; font-size: 14px; }
+
+  .card {
+    background: #fff; border-radius: 16px; padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.2); margin-bottom: 16px;
+  }
+
+  .setup label { display: block; font-size: 13px; color: #666; margin: 10px 0 4px; }
+  .setup select, .setup input {
+    width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .btn {
+    display: block; width: 100%; margin-top: 18px; padding: 14px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: #fff;
+    border: none; border-radius: 10px; font-size: 17px; font-weight: 600; cursor: pointer;
+  }
+  .btn:hover:enabled { opacity: .92; }
+  .btn.secondary { background: #eee; color: #333; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .quiz-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .progress { flex: 1; height: 8px; background: #eee; border-radius: 4px; margin: 0 16px; overflow: hidden; }
+  .progress > div { height: 100%; background: linear-gradient(90deg,#4facfe,#00f2fe); transition: width .3s; }
+  .score-pill { font-size: 13px; color: #666; white-space: nowrap; }
+  .score-pill b { color: #ee5a24; font-size: 16px; }
+
+  .phone-img-wrap {
+    background: #f7f8fa; border-radius: 12px; text-align: center; padding: 20px; margin-bottom: 16px;
+  }
+  .phone-img-wrap img {
+    max-width: 260px; max-height: 300px; object-fit: contain; border-radius: 8px;
+    cursor: zoom-in; transition: transform .15s;
+  }
+  .phone-img-wrap img:hover { transform: scale(1.03); }
+
+  /* 灯箱 */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,.88);
+    display: none; align-items: center; justify-content: center;
+    z-index: 9999; cursor: zoom-out; overflow: hidden; touch-action: none;
+  }
+  .lightbox.show { display: flex; }
+  .lightbox img {
+    max-width: 96vw; max-height: 96vh; object-fit: contain; border-radius: 8px;
+    box-shadow: 0 20px 80px rgba(0,0,0,.6);
+    transform-origin: center center;
+    transition: transform .05s;
+  }
+  .lightbox.zoomed { cursor: grab; }
+  .lightbox.zoomed img { transition: none; }
+  .lightbox .lb-hint {
+    position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,.7); font-size: 13px; pointer-events: none;
+  }
+  .lightbox .lb-zoom-bar {
+    position: absolute; top: 20px; right: 20px;
+    background: rgba(0,0,0,.5); border-radius: 8px; padding: 6px;
+    display: flex; gap: 4px;
+  }
+  .lightbox .lb-zoom-bar button {
+    width: 36px; height: 36px; border: none; background: rgba(255,255,255,.15);
+    color: #fff; font-size: 18px; border-radius: 6px; cursor: pointer;
+  }
+  .lightbox .lb-zoom-bar button:hover { background: rgba(255,255,255,.3); }
+  .hint-label { font-size: 12px; color: #999; margin-bottom: 8px; }
+
+  .field { margin-bottom: 12px; }
+  .field label { font-size: 13px; color: #555; display: block; margin-bottom: 4px; font-weight: 600; }
+  .field label .tag { display: inline-block; background:#fff3e0; color:#e65100; font-size:11px; padding:1px 6px; border-radius:8px; margin-left:6px; font-weight: normal; }
+  .field input {
+    width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px;
+  }
+  .field input:focus { outline: none; border-color: #4facfe; }
+
+  /* 选择题选项 */
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .options.single { grid-template-columns: 1fr; }
+  .opt {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border: 2px solid #e5e7eb; border-radius: 8px;
+    cursor: pointer; font-size: 14px; transition: all .15s;
+    user-select: none;
+  }
+  .opt:hover { border-color: #4facfe; background: #f0f7ff; }
+  .opt.selected { border-color: #2196f3; background: #e3f2fd; }
+  .opt input { accent-color: #2196f3; width: 16px; height: 16px; cursor: pointer; }
+  .opt .opt-text { flex: 1; }
+
+  .result { margin-top: 16px; padding: 14px; border-radius: 10px; font-size: 14px; line-height: 1.8; display: none; }
+  .result.show { display: block; }
+  .result.ok { background: #f0fff4; border: 1px solid #95d4a5; }
+  .result.bad { background: #fff5f5; border: 1px solid #f5b5b5; }
+  .result .right { color: #1a7f37; font-weight: 600; }
+  .result .wrong { color: #c0392b; }
+  .result .skip { color: #888; }
+  .result .ans { background: #fffbe6; padding: 10px 12px; border-radius: 6px; margin-top: 8px; }
+  .result .ans b { color: #d63031; }
+  .result .tips { background:#e8f4fd; padding:10px 12px; border-radius:6px; margin-top:8px; font-size:13px; }
+
+  .report h2 { text-align: center; margin-bottom: 12px; }
+  .big-score { text-align: center; font-size: 64px; font-weight: 800; color: #ee5a24; margin: 8px 0; }
+  .big-score small { font-size: 18px; color: #999; }
+  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 16px 0; }
+  .stat { background: #f7f8fa; border-radius: 10px; padding: 12px; text-align: center; }
+  .stat b { display: block; font-size: 20px; color: #2a5298; }
+  .stat span { font-size: 12px; color: #888; }
+
+  .wrong-list { margin-top: 12px; max-height: 360px; overflow-y: auto; }
+  .wrong-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; line-height: 1.7; }
+  .wrong-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; vertical-align: middle; margin-right: 8px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📱 手机认机考试</h1>
+  <div class="sub">模拟客户拿手机过来，凭照片说出型号、上市年、芯片、存储配置、料号</div>
+
+  <!-- 设置页 -->
+  <div class="card setup" id="setupPage">
+    <div class="row">
+      <div>
+        <label>品牌范围</label>
+        <select id="brandSel"><option value="">全部品牌</option></select>
+      </div>
+      <div>
+        <label>题目数量</label>
+        <select id="qCount">
+          <option>10</option><option selected>15</option><option>20</option><option>30</option>
+        </select>
+      </div>
+      <div>
+        <label>难度</label>
+        <select id="difficulty">
+          <option value="easy">入门：型号 + 上市年</option>
+          <option value="normal" selected>标准：型号+上市年+芯片+存储+料号</option>
+          <option value="hard">精通：同标准，题目更随机</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" id="startBtn" disabled="disabled">📚 正在加载题库…</button>
+    <div style="margin-top:10px; font-size:12px;color:#999;text-align:center;">
+      题库来自本地手机回收数据库，要求机型有照片
+    </div>
+  </div>
+
+  <!-- 考试页 -->
+  <div class="card hidden" id="quizPage">
+    <div class="quiz-head">
+      <span id="qNum">第 1 / 15 题</span>
+      <div class="progress"><div id="bar" style="width:0%"></div></div>
+      <span class="score-pill">当前分 <b id="curScore">0</b></span>
+    </div>
+
+    <div class="phone-img-wrap">
+      <div class="hint-label">📷 客户送来的手机（背面照）· 点击图片可放大</div>
+      <img id="phoneImg" src="" alt="phone">
+    </div>
+
+    <div class="field">
+      <label>① 这是什么型号？</label>
+      <input id="ansModel" placeholder="例如：华为 Mate 60 Pro" autocomplete="off">
+    </div>
+    <div class="field" id="yearField">
+      <label>② 哪年上市的？<span class="tag">单选</span></label>
+      <div class="options single" id="yearOpts"></div>
+    </div>
+    <div class="field hidden" id="chipField">
+      <label>③ 用的什么芯片？<span class="tag">单选</span></label>
+      <div class="options" id="chipOpts"></div>
+    </div>
+    <div class="field hidden" id="ramField">
+      <label>④ 有哪几种内存+存储版本？<span class="tag">多选</span></label>
+      <div class="options" id="ramOpts"></div>
+    </div>
+    <div class="field hidden" id="chipPartField">
+      <label>⑤ 存储芯片代表料号？<span class="tag">单选</span></label>
+      <div class="options" id="partOpts"></div>
+      <div style="font-size:12px;color:#999;margin-top:4px;">💡 同型号不同批次可能混用三星/海力士/美光，这是代表性料号</div>
+    </div>
+    <div class="field hidden" id="ballField">
+      <label>⑥ 芯片球数（BGA balls）？<span class="tag">单选</span></label>
+      <div class="options single" id="ballOpts"></div>
+    </div>
+    <div class="field">
+      <label>⑦ 你出多少钱收？<span class="tag">最终目的</span></label>
+      <input id="ansPrice" placeholder="例如：350（单位：元）" inputmode="decimal" autocomplete="off">
+    </div>
+
+    <div id="hintBox" style="background:#fff8e1;border:1px dashed #f0c040;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px;display:none;">
+      <b>💡 提示：</b><span id="hintText"></span>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button class="btn secondary" id="hintBtn" style="margin-top:0;flex:0 0 auto;padding:14px 18px;">💡 提示</button>
+      <button class="btn" id="submitBtn" style="margin-top:0;flex:1;">✍️ 提交答案</button>
+    </div>
+    <div class="result" id="resultBox"></div>
+    <button class="btn secondary hidden" id="nextBtn">下一题 →</button>
+  </div>
+
+  <!-- 成绩单页 -->
+  <div class="card report hidden" id="reportPage">
+    <h2>🎉 本轮成绩</h2>
+    <div class="big-score"><span id="finalScore">0</span><small> 分</small></div>
+    <div class="stats">
+      <div class="stat"><b id="stModel">0</b><span>型号</span></div>
+      <div class="stat"><b id="stYear">0</b><span>上市年</span></div>
+      <div class="stat"><b id="stChip">0</b><span>芯片</span></div>
+      <div class="stat"><b id="stRam">0</b><span>存储/料号</span></div>
+      <div class="stat"><b id="stPrice">0</b><span>报价准</span></div>
+    </div>
+    <div id="wrongBox">
+      <div style="font-weight:600;margin-bottom:6px;">📖 错题回顾</div>
+      <div class="wrong-list" id="wrongList"></div>
+    </div>
+    <button class="btn" id="againBtn">🔁 再来一轮</button>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-zoom-bar">
+    <button id="zoomOutBtn" title="缩小">−</button>
+    <button id="zoomResetBtn" title="重置">⟲</button>
+    <button id="zoomInBtn" title="放大">+</button>
+  </div>
+  <img id="lightboxImg" src="" alt="preview">
+  <div class="lb-hint">滚轮缩放 · 双指捏合 · 拖动平移 · 点击空白/ESC 关闭</div>
+</div>
+
+<script>
+const API = 'http://localhost:8760';
+let pool = [];
+let distractorPool = { years: [], chips: [], roms: [], parts: [] };
+let queue = [];
+let idx = 0;
+let score = 0;
+let stats = { model:0, year:0, chip:0, ram:0, price:0, total:0 };
+let wrongSet = [];
+let difficulty = 'normal';
+let hintsUsed = 0;
+let priceTotal = 0, priceOk = 0;
+
+function norm(s) {
+  return (s||'').toString().toLowerCase()
+    .replace(/[\s\-_+＋]/g,'')
+    .replace(/plus/gi,'')
+    .replace(/(版|全网通|5g|4g|全网)/g,'')
+    .trim();
+}
+
+// 型号判分
+function checkModel(user, answer) {
+  if (!user || !user.trim()) return false;
+  const u = norm(user), a = norm(answer);
+  if (!a) return false;
+  if (a.length >= 3 && (u.includes(a) || a.includes(u))) return true;
+  const m = answer.match(/(\d{2,4})/);
+  if (m && u.includes(m[1])) {
+    const letters = answer.replace(/[^a-zA-Z]/g,'');
+    if (!letters || u.includes(letters.toLowerCase())) return true;
+  }
+  return false;
+}
+
+// 上市年判分：答案 release_date 如 "2024年2月" / "2021" / "2010-2013年"
+function checkYear(user, releaseDate) {
+  if (!user || !user.trim()) return null;
+  if (!releaseDate) return null;
+  const u = user.match(/\d{4}/);
+  if (!u) return false;
+  const userYear = parseInt(u[0], 10);
+  // 答案可能是 "2024年2月" 或 "2021-2023年" 或 "2010-2013"
+  const yrs = releaseDate.match(/\d{4}/g) || [];
+  if (yrs.length === 0) return null;
+  if (yrs.length === 1) return Math.abs(parseInt(yrs[0],10) - userYear) <= 0;
+  // 跨年范围：落在范围内即对
+  const lo = Math.min(...yrs.map(y=>parseInt(y,10)));
+  const hi = Math.max(...yrs.map(y=>parseInt(y,10)));
+  return userYear >= lo && userYear <= hi;
+}
+
+// 芯片判分
+function checkChip(user, answer) {
+  if (!user || !user.trim()) return false;
+  if (!answer) return null;
+  const u = norm(user).replace(/\s/g,''), a = norm(answer).replace(/\s/g,'');
+  if (!a) return null;
+  if (u.includes(a) || a.includes(u)) return true;
+  const nums = answer.match(/[A-Za-z]*\s*\d+(?:\.\d+)?(?:\s*[Gg]en\s*\d+)?/g);
+  if (nums) {
+    for (const n of nums) {
+      const nn = norm(n).replace(/\s/g,'');
+      if (nn.length >= 2 && u.includes(nn)) return true;
+    }
+  }
+  return false;
+}
+
+// 存储配置判分：答案 ram="12/16GB" rom="256/512GB/1T"
+// 用户输入 "12+256 / 16+512"，只要命中其中一个配置组合即算对
+function checkRam(user, ram, rom) {
+  if (!user || !user.trim()) return null;
+  if (!ram && !rom) return null;
+  const u = user.replace(/\s/g,'').toLowerCase();
+  // 答案里的 ram 档位
+  const ramOpts = (ram||'').match(/\d{1,2}\s*(?:gb|mb|g)/gi)?.map(s=>s.replace(/[^0-9]/g,'')) || [];
+  // 答案里的 rom 档位（含 1T）
+  const romOpts = [];
+  const romText = (rom||'').toLowerCase();
+  const romTMatches = romText.match(/(\d+)\s*t/gi) || [];
+  romTMatches.forEach(t => romOpts.push({ size: parseInt(t)*1024, isT:true }));
+  const romGMatches = romText.match(/(\d{2,4})\s*g(?:b)?/gi) || [];
+  romGMatches.forEach(g => romOpts.push({ size: parseInt(g), isT:false }));
+
+  // 用户输入里的所有 "数字+数字" 组合
+  const pairs = u.match(/(\d{1,3})\s*\+\s*(\d{1,4})\s*(t|g|gb)?/gi) || [];
+  for (const p of pairs) {
+    const m = p.match(/(\d{1,3})\s*\+\s*(\d{1,4})/);
+    if (!m) continue;
+    const ur = parseInt(m[1],10), uRom = parseInt(m[2],10);
+    // 用户 rom 写的是 1T → 按 1024 比较
+    const isT = /\d+\s*t\b/i.test(p);
+    const uRomSize = isT ? uRom*1024 : uRom;
+    const ramHit = !ramOpts.length || ramOpts.some(r => parseInt(r,10) === ur);
+    const romHit = !romOpts.length || romOpts.some(o => o.size === uRomSize);
+    if (ramHit && romHit) return true;
+  }
+  // 用户只写了 rom 档位，命中即对
+  const singles = u.match(/(\d{2,4})\s*(t|g|b)/gi) || [];
+  for (const s of singles) {
+    const isT = /t/i.test(s);
+    const num = parseInt(s,10) * (isT?1024:1);
+    if (romOpts.some(o => o.size === num)) return true;
+  }
+  return false;
+}
+
+// 工具：从 arr 里随机取 n 个不重复元素
+function sample(arr, n) {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+}
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+// 生成单选选项：正确答案 + 3个干扰项
+function makeSingleOpts(correct, distractors, containerId, name) {
+  const set = new Set([correct]);
+  const picks = [];
+  for (const d of distractors) {
+    if (d && !set.has(d) && d !== correct) { set.add(d); picks.push(d); }
+    if (picks.length >= 3) break;
+  }
+  const all = shuffle([correct, ...picks]);
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  all.forEach(val => {
+    const lab = document.createElement('label');
+    lab.className = 'opt';
+    lab.innerHTML = `<input type="radio" name="${name}" value="${val.replace(/"/g,'&quot;')}"><span class="opt-text">${val}</span>`;
+    lab.addEventListener('click', () => {
+      c.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+      lab.classList.add('selected');
+      lab.querySelector('input').checked = true;
+    });
+    c.appendChild(lab);
+  });
+}
+
+// 生成多选选项：正确答案数组 + 3个干扰项
+function makeMultiOpts(correctArr, distractors, containerId, name) {
+  const set = new Set(correctArr);
+  const picks = [];
+  for (const d of distractors) {
+    if (d && !set.has(d)) { set.add(d); picks.push(d); }
+    if (picks.length >= 3) break;
+  }
+  const all = shuffle([...correctArr, ...picks]);
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  all.forEach(val => {
+    const lab = document.createElement('label');
+    lab.className = 'opt';
+    lab.innerHTML = `<input type="checkbox" name="${name}" value="${val.replace(/"/g,'&quot;')}"><span class="opt-text">${val}</span>`;
+    lab.addEventListener('click', () => {
+      lab.classList.toggle('selected', lab.querySelector('input').checked);
+    });
+    c.appendChild(lab);
+  });
+}
+
+function getSelected(containerId) {
+  return [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
+}
+
+// 报价判分：用户报价 vs 数据库 price
+// 完全对（±15%内）：3分；接近（±30%内）：1分；差太远：0分
+function checkPrice(userPrice, dbPrice) {
+  if (!userPrice || isNaN(parseFloat(userPrice))) return null;
+  const up = parseFloat(userPrice);
+  const dp = parseFloat(dbPrice);
+  if (isNaN(dp) || dp <= 0) return null;
+  const diff = Math.abs(up - dp) / dp;
+  if (diff <= 0.15) return 3;
+  if (diff <= 0.30) return 1;
+  return 0;
+}
+
+// 生成提示：按点的次数给不同线索
+function makeHints(p) {
+  const hints = [];
+  if (p.brand) hints.push(`这是 <b style="color:#1565c0">${p.brand}</b> 的机子`);
+  if (p.category) hints.push(`属于 <b style="color:#1565c0">${p.category}</b> 系列`);
+  if (p.release_date) hints.push(`上市时间约 <b style="color:#1565c0">${p.release_date}</b>`);
+  if (p.cpu_model) hints.push(`芯片是 <b style="color:#1565c0">${p.cpu_brand||''} ${p.cpu_model}</b>`);
+  if (p.screen_size) hints.push(`屏幕 <b style="color:#1565c0">${p.screen_size}</b>`);
+  if (p.battery) hints.push(`电池 <b style="color:#1565c0">${p.battery}</b>`);
+  if (p.network) hints.push(`网络制式 <b style="color:#1565c0">${p.network}</b>`);
+  if (p.back_camera) hints.push(`后摄 <b style="color:#1565c0">${p.back_camera}</b>`);
+  return hints;
+}
+function checkPart(user, vendor, pnp) {
+  if (!user || !user.trim()) return null;
+  if (!pnp && !vendor) return null;
+  const u = norm(user).replace(/[-\s]/g,'');
+  if (pnp) {
+    const a = norm(pnp).replace(/[-\s]/g,'');
+    if (u.includes(a) || a.includes(u)) return true;
+    // 取料号核心字母数字（前6位）比对
+    const core = pnp.replace(/[^A-Za-z0-9]/g,'').slice(0,6);
+    if (core.length >= 4 && u.includes(core.toLowerCase())) return true;
+  }
+  if (vendor) {
+    const v = norm(vendor);
+    if (v && u.includes(v)) return true;
+  }
+  return false;
+}
+
+async function loadPool() {
+  const all = [];
+  let page = 1;
+  while (true) {
+    const r = await fetch(`${API}/api/models?limit=200&page=${page}`);
+    const o = await r.json();
+    all.push(...o.items);
+    if (all.length >= o.total) break;
+    page++;
+  }
+  // 只要有图、是手机
+  pool = all.filter(p =>
+    p.images && p.images.length > 0 && p.images[0] &&
+    p.category && !/iPad|平板/i.test(p.category)
+  );
+  const brands = [...new Set(pool.map(p => p.brand))].sort();
+  const sel = document.getElementById('brandSel');
+  brands.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b; opt.textContent = b;
+    sel.appendChild(opt);
+  });
+
+  // 预计算干扰项池
+  const yearSet = new Set(), chipSet = new Set(), romSet = new Set(), partSet = new Set();
+  for (const p of pool) {
+    const ym = (p.release_date||'').match(/\d{4}/);
+    if (ym) yearSet.add(ym[0]);
+    if (p.cpu_model && p.cpu_model.trim()) chipSet.add((p.cpu_brand?p.cpu_brand+' ':'') + p.cpu_model);
+    if (p.rom) {
+      (p.rom.match(/\d{2,4}\s*(?:g|gb|t)/gi)||[]).forEach(r => romSet.add(r.replace(/\s/gi,'').toUpperCase()));
+    }
+    if (p.vendor_pnp && p.vendor_pnp.trim()) partSet.add((p.vendor?p.vendor+' ':'') + p.vendor_pnp);
+  }
+  distractorPool = {
+    years: [...yearSet],
+    chips: [...chipSet],
+    roms: [...romSet],
+    parts: [...partSet],
+    balls: [...new Set(pool.map(p => (p.package||'').match(/\d{2,4}/)?.[0]).filter(Boolean))],
+  };
+  console.log('干扰池:', Object.fromEntries(Object.entries(distractorPool).map(([k,v])=>[k,v.length])));
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('startBtn').textContent = `🚀 开始考试（题库 ${pool.length} 款）`;
+}
+
+function pickQuestions() {
+  const brand = document.getElementById('brandSel').value;
+  const n = parseInt(document.getElementById('qCount').value, 10);
+  difficulty = document.getElementById('difficulty').value;
+  let cands = brand ? pool.filter(p => p.brand === brand) : pool;
+  // 困难/标准模式都要求有完整存储料号数据，保证每题都能考
+  if (difficulty !== 'easy') {
+    cands = cands.filter(p => p.vendor_pnp && p.vendor_pnp.trim() && p.ram && p.ram.trim());
+  }
+  cands = [...cands].sort(() => Math.random() - 0.5);
+  queue = cands.slice(0, Math.min(n, cands.length));
+}
+
+function showQuestion() {
+  const p = queue[idx];
+  document.getElementById('qNum').textContent = `第 ${idx+1} / ${queue.length} 题`;
+  document.getElementById('bar').style.width = (idx/queue.length*100) + '%';
+  document.getElementById('phoneImg').src = p.images[0].startsWith('http') ? p.images[0] : API + p.images[0];
+  document.getElementById('ansModel').value = '';
+  document.getElementById('ansPrice').value = '';
+  hintsUsed = 0;
+  document.getElementById('hintBox').style.display = 'none';
+  document.getElementById('hintBtn').disabled = false;
+  document.getElementById('hintBtn').textContent = '💡 提示';
+  const box = document.getElementById('resultBox');
+  box.className = 'result'; box.innerHTML = '';
+  document.getElementById('nextBtn').classList.add('hidden');
+  document.getElementById('submitBtn').classList.remove('hidden');
+  document.getElementById('hintBtn').classList.remove('hidden');
+
+  const needChip = difficulty !== 'easy';
+  const needStorage = difficulty !== 'easy';
+  document.getElementById('chipField').classList.toggle('hidden', !needChip);
+  document.getElementById('ramField').classList.toggle('hidden', !needStorage);
+  document.getElementById('chipPartField').classList.toggle('hidden', !needStorage);
+  document.getElementById('ballField').classList.toggle('hidden', !needStorage);
+
+  // ② 上市年单选
+  const yMatch = (p.release_date||'').match(/\d{4}/);
+  const yCorrect = yMatch ? yMatch[0] : '2020';
+  makeSingleOpts(yCorrect, distractorPool.years, 'yearOpts', 'year');
+
+  // ③ 芯片单选
+  if (needChip) {
+    const cCorrect = (p.cpu_brand ? p.cpu_brand+' ' : '') + (p.cpu_model||'');
+    makeSingleOpts(cCorrect.trim(), distractorPool.chips, 'chipOpts', 'chip');
+  }
+
+  // ④ 存储版本多选：从 p.rom 里解析所有 ROM 档位
+  if (needStorage) {
+    const romText = (p.rom||'').toLowerCase();
+    const correctRoms = [];
+    const tMs = romText.match(/(\d+)\s*t\b/g) || [];
+    tMs.forEach(t => correctRoms.push(t.toUpperCase()));
+    const gMs = romText.match(/(\d{2,4})\s*g(?:b)?/g) || [];
+    gMs.forEach(g => correctRoms.push(g.toUpperCase().replace(/\s/g,'')));
+    makeMultiOpts(correctRoms.length ? [...new Set(correctRoms)] : ['256GB'],
+      distractorPool.roms, 'ramOpts', 'ram');
+  }
+
+  // ⑤ 料号单选
+  if (needStorage) {
+    const kCorrect = (p.vendor ? p.vendor+' ' : '') + (p.vendor_pnp||'');
+    makeSingleOpts(kCorrect.trim(), distractorPool.parts, 'partOpts', 'part');
+  }
+
+  // ⑥ 球数单选：从 package 提取数字
+  if (needStorage) {
+    const bMatch = (p.package||'').match(/(\d{2,4})/);
+    const bCorrect = bMatch ? bMatch[1] : '254';
+    makeSingleOpts(bCorrect + ' balls', distractorPool.balls.map(b => b + ' balls'), 'ballOpts', 'ball');
+  }
+
+  document.getElementById('ansModel').focus();
+}
+
+function submit() {
+  const p = queue[idx];
+  const uModel = document.getElementById('ansModel').value;
+  const uPrice = document.getElementById('ansPrice').value;
+
+  const mOk = checkModel(uModel, p.model);
+  const pRes = checkPrice(uPrice, p.price);
+
+  // 读选择题答案
+  const ySel = getSelected('yearOpts')[0] || '';
+  const cSel = getSelected('chipOpts')[0] || '';
+  const rSel = getSelected('ramOpts');
+  const kSel = getSelected('partOpts')[0] || '';
+
+  const yCorrect = (p.release_date||'').match(/\d{4}/)?.[0] || '';
+  const yRes = ySel ? (ySel === yCorrect) : false;
+  const cRes = difficulty === 'easy' ? null : (cSel === ((p.cpu_brand?p.cpu_brand+' ':'')+(p.cpu_model||'')).trim());
+
+  // 存储多选：完全命中（选了所有正确项、没选错）才对
+  const romText = (p.rom||'').toLowerCase();
+  const correctRoms = new Set();
+  (romText.match(/(\d+)\s*t\b/g)||[]).forEach(t => correctRoms.add(t.toUpperCase()));
+  (romText.match(/(\d{2,4})\s*g(?:b)?/g)||[]).forEach(g => correctRoms.add(g.toUpperCase().replace(/\s/g,'')));
+  let rRes = null;
+  if (difficulty !== 'easy') {
+    if (!correctRoms.size) { rRes = null; }
+    else {
+      const userSet = new Set(rSel.map(s => s.toUpperCase()));
+      const allRight = [...correctRoms].every(x => userSet.has(x));
+      const noWrong = [...userSet].every(x => correctRoms.has(x));
+      rRes = allRight && noWrong;
+    }
+  }
+  const kRes = difficulty === 'easy'
+    ? null
+    : (kSel === ((p.vendor?p.vendor+' ':'')+(p.vendor_pnp||'')).trim());
+
+  const bSel = getSelected('ballOpts')[0] || '';
+  const bMatch = (p.package||'').match(/(\d{2,4})/);
+  const bCorrect = bMatch ? bMatch[1] + ' balls' : '';
+  const bRes = (difficulty === 'easy' || !bCorrect) ? null : (bSel === bCorrect);
+
+  let gained = 0;
+  const parts = [];
+  parts.push(`<div><b>型号：</b>${mOk?'<span class="right">✓ 正确</span>':'<span class="wrong">✗ 答错</span>'}　标准答案：<b>${p.brand} ${p.model}</b></div>`);
+  if (mOk) { gained += 3; stats.model++; }
+
+  parts.push(`<div><b>上市：</b>${yRes?'<span class="right">✓ 正确</span>':'<span class="wrong">✗ 答错</span>'}　你选了 <b>${ySel||'(未选)'}</b>，标准答案：<b>${p.release_date||'-'}</b></div>`);
+  if (yRes === true) { gained += 2; stats.year++; }
+
+  if (cRes !== null) {
+    parts.push(`<div><b>芯片：</b>${cRes?'<span class="right">✓ 正确</span>':'<span class="wrong">✗ 答错</span>'}　你选了 <b>${cSel||'(未选)'}</b>，标准答案：<b>${p.cpu_brand||''} ${p.cpu_model}</b></div>`);
+    if (cRes === true) { gained += 3; stats.chip++; }
+  }
+  if (rRes !== null) {
+    parts.push(`<div><b>存储版本：</b>${rRes?'<span class="right">✓ 全对</span>':'<span class="wrong">✗ 有误</span>'}　你选了 <b>${[...rSel].join(' / ')||'(未选)'}</b>，标准答案：<b>${p.rom||'-'}</b></div>`);
+    if (rRes === true) { gained += 3; stats.ram++; }
+  }
+  if (kRes !== null) {
+    const kTxt = (p.vendor||'-') + (p.vendor_pnp ? ' ' + p.vendor_pnp : '') + (p.package ? '（'+p.package+'）' : '');
+    parts.push(`<div><b>存储料号：</b>${kRes?'<span class="right">✓ 正确</span>':'<span class="wrong">✗ 答错</span>'}　你选了 <b>${kSel||'(未选)'}</b>，标准答案：<b>${kTxt}</b></div>`);
+    if (kRes === true) { gained += 2; stats.ram++; }
+  }
+  if (bRes !== null) {
+    parts.push(`<div><b>芯片球数：</b>${bRes?'<span class="right">✓ 正确</span>':'<span class="wrong">✗ 答错</span>'}　你选了 <b>${bSel||'(未选)'}</b>，标准答案：<b>${p.package||'-'}</b></div>`);
+    if (bRes === true) { gained += 2; stats.ram++; }
+  }
+  if (pRes !== null) {
+    priceTotal++;
+    const up = parseFloat(uPrice), dp = parseFloat(p.price);
+    const diff = Math.abs(up - dp);
+    parts.push(`<div><b>报价：</b>${pRes===3?'<span class="right">✓ 精准</span>':(pRes===1?'<span style="color:#f0a000">≈ 接近</span>':'<span class="wrong">✗ 差太远</span>')}　你出 <b>¥${up}</b>，实际回收价 <b style="color:#ee5a24">¥${dp}</b>（差 ¥${diff}）</div>`);
+    gained += pRes;
+    if (pRes === 3) { priceOk++; stats.price++; }
+  }
+  if (hintsUsed > 0) {
+    gained = Math.max(0, gained - hintsUsed);
+    parts.push(`<div style="color:#999;font-size:12px;">（本题用了 ${hintsUsed} 次提示，扣 ${hintsUsed} 分）</div>`);
+  }
+  stats.total++;
+  score += gained;
+  document.getElementById('curScore').textContent = score;
+
+  const ansLines = [
+    `📌 回收参考价：<b style="color:#ee5a24;font-size:16px">¥${p.price||'-'}</b>　（你出 ¥${uPrice||'-'}）`,
+    `上市：${p.release_date||'-'}　网络：${p.network||'-'}　系统：${p.os||'-'}`,
+    `屏幕：${p.screen_size||'-'} ${p.screen_type||'-'}${p.refresh?' '+p.refresh:''}`,
+    `电池：${p.battery||'-'} 充电：${p.charge||'-'}`,
+    `主摄：${p.back_camera||'-'}　前摄：${p.front_camera||'-'}`,
+  ].join('<br>');
+  const tip = `💡 <b>怎么看配置：</b>① 开机进 设置→关于本机 看 RAM/ROM/型号；② 看后盖下方小字（型号 A2xxxx / PGKM10 等）；③ 电池仓 / 卡槽里有 IMEI 贴纸；④ 同系列不同存储版本外观一样，只能开机或看标签区分。<br>📌 <b>料号说明：</b>同一型号不同批次可能混用三星/海力士/美光，答案里给的是该型号代表性料号，实战中以主板上丝印为准。`;
+
+  const box = document.getElementById('resultBox');
+  box.className = 'result show ' + (gained >= 8 ? 'ok' : 'bad');
+  box.innerHTML = parts.join('') +
+    `<div class="ans">${ansLines}</div>` +
+    `<div class="tips">${tip}</div>`;
+
+  if (!mOk || !yRes || cRes === false || rRes === false || kRes === false || pRes === 0) {
+    wrongSet.push({ p, uModel, uPrice, gained });
+  }
+  document.getElementById('submitBtn').classList.add('hidden');
+  document.getElementById('hintBtn').classList.add('hidden');
+  const nb = document.getElementById('nextBtn');
+  nb.textContent = idx === queue.length-1 ? '📊 查看成绩 →' : '下一题 →';
+  nb.classList.remove('hidden');
+}
+
+function next() {
+  idx++;
+  if (idx >= queue.length) return showReport();
+  showQuestion();
+}
+
+function showReport() {
+  document.getElementById('quizPage').classList.add('hidden');
+  document.getElementById('reportPage').classList.remove('hidden');
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('stModel').textContent = stats.model + '/' + queue.length;
+  document.getElementById('stYear').textContent = stats.year + '/' + queue.length;
+  document.getElementById('stChip').textContent = stats.chip + '/' + queue.length;
+  document.getElementById('stRam').textContent = stats.ram + '/' + queue.length;
+  document.getElementById('stPrice').textContent = stats.price + '/' + priceTotal;
+  const wl = document.getElementById('wrongList');
+  if (wrongSet.length === 0) {
+    wl.innerHTML = '<div style="color:#1a7f37;padding:10px;">🎉 全对，太厉害了！</div>';
+  } else {
+    wl.innerHTML = wrongSet.map(w => `
+      <div class="wrong-item">
+        <img src="${w.p.images[0].startsWith('http')?w.p.images[0]:API+w.p.images[0]}" alt="">
+        <b>${w.p.brand} ${w.p.model}</b>（${w.p.release_date||'-'}）<br>
+        芯片：${w.p.cpu_brand||''} ${w.p.cpu_model||'-'}　存储：${w.p.ram||'-'}/${w.p.rom||'-'}<br>
+        料号：${w.p.vendor||'-'} ${w.p.vendor_pnp||''}<br>
+        <span style="color:#999">你的答案：型号"${w.uModel||'(空)'}" 年"${w.uYear||'(空)'}"${difficulty!=='easy'?' 芯片"'+(w.uChip||'(空)')+'"':''}${difficulty==='hard'?' 存储"'+(w.uRam||'(空)')+'" 料号"'+(w.uPart||'(空)')+'"':''}</span>
+      </div>`).join('');
+  }
+}
+
+document.getElementById('startBtn').onclick = () => {
+  pickQuestions();
+  if (queue.length < 3) { alert('该品牌题库不足，换个品牌或选全部'); return; }
+  document.getElementById('setupPage').classList.add('hidden');
+  document.getElementById('quizPage').classList.remove('hidden');
+  idx = 0; score = 0;
+  stats = { model:0, year:0, chip:0, ram:0, total:0 };
+  wrongSet = [];
+  document.getElementById('curScore').textContent = '0';
+  showQuestion();
+};
+document.getElementById('submitBtn').onclick = submit;
+document.getElementById('nextBtn').onclick = next;
+document.getElementById('hintBtn').onclick = () => {
+  const p = queue[idx];
+  const hints = makeHints(p);
+  if (hintsUsed >= hints.length) {
+    document.getElementById('hintText').innerHTML = '已经没有更多提示了～';
+    return;
+  }
+  hintsUsed++;
+  document.getElementById('hintBox').style.display = 'block';
+  document.getElementById('hintText').innerHTML = hints.slice(0, hintsUsed).join('<br>');
+  document.getElementById('hintBtn').textContent = `💡 再给一条（已用 ${hintsUsed}）`;
+};
+document.getElementById('againBtn').onclick = () => {
+  document.getElementById('reportPage').classList.add('hidden');
+  document.getElementById('setupPage').classList.remove('hidden');
+};
+
+// 图片放大灯箱：滚轮缩放 + 双指捏合 + 拖动
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightboxImg');
+let lbScale = 1, lbX = 0, lbY = 0;
+let isDragging = false, dragStartX = 0, dragStartY = 0, startTX = 0, startTY = 0;
+let pinchDist = 0;
+
+function applyTransform() {
+  lbImg.style.transform = `translate(${lbX}px, ${lbY}px) scale(${lbScale})`;
+  lb.classList.toggle('zoomed', lbScale > 1.05);
+}
+function resetZoom() {
+  lbScale = 1; lbX = 0; lbY = 0; applyTransform();
+}
+function setScale(newScale, cx, cy) {
+  const old = lbScale;
+  lbScale = Math.max(1, Math.min(8, newScale));
+  // 以鼠标/触点为中心缩放：调整 translate 让锚点不动
+  if (cx !== undefined && old !== lbScale) {
+    const rect = lbImg.getBoundingClientRect();
+    const imgCenterX = rect.left + rect.width/2;
+    const imgCenterY = rect.top + rect.height/2;
+    // 鼠标相对图片中心的偏移
+    const relX = cx - imgCenterX;
+    const relY = cy - imgCenterY;
+    lbX = cx - (imgCenterX + relX * (lbScale/old) + lbX * (lbScale/old - 1));
+    // 简化：直接按比例调整
+    lbX = cx - (cx - lbX) * (lbScale/old);
+    lbY = cy - (cy - lbY) * (lbScale/old);
+  }
+  applyTransform();
+}
+
+document.getElementById('phoneImg').addEventListener('click', (e) => {
+  lbImg.src = e.target.src;
+  resetZoom();
+  lb.classList.add('show');
+});
+lb.addEventListener('click', (e) => {
+  // 点空白处（不是图片、不是按钮）关闭
+  if (e.target === lb || e.target.classList.contains('lb-hint')) {
+    lb.classList.remove('show');
+  }
+});
+document.getElementById('zoomInBtn').onclick = (e) => { e.stopPropagation(); setScale(lbScale * 1.3); };
+document.getElementById('zoomOutBtn').onclick = (e) => { e.stopPropagation(); setScale(lbScale / 1.3); };
+document.getElementById('zoomResetBtn').onclick = (e) => { e.stopPropagation(); resetZoom(); };
+
+// 滚轮缩放
+lb.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const cx = e.clientX, cy = e.clientY;
+  const factor = e.deltaY < 0 ? 1.15 : 1/1.15;
+  setScale(lbScale * factor, cx, cy);
+}, { passive: false });
+
+// 拖动
+lbImg.addEventListener('mousedown', (e) => {
+  if (lbScale <= 1.05) return;
+  isDragging = true;
+  dragStartX = e.clientX; dragStartY = e.clientY;
+  startTX = lbX; startTY = lbY;
+  e.preventDefault();
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  lbX = startTX + (e.clientX - dragStartX);
+  lbY = startTY + (e.clientY - dragStartY);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { isDragging = false; });
+
+// 双指捏合（触屏）
+lbImg.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 2) {
+    const [a, b] = e.touches;
+    pinchDist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  } else if (e.touches.length === 1 && lbScale > 1.05) {
+    isDragging = true;
+    dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
+    startTX = lbX; startTY = lbY;
+  }
+}, { passive: true });
+lbImg.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 2 && pinchDist > 0) {
+    e.preventDefault();
+    const [a, b] = e.touches;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const cx = (a.clientX + b.clientX) / 2;
+    const cy = (a.clientY + b.clientY) / 2;
+    setScale(lbScale * (d / pinchDist), cx, cy);
+    pinchDist = d;
+  } else if (e.touches.length === 1 && isDragging) {
+    lbX = startTX + (e.touches[0].clientX - dragStartX);
+    lbY = startTY + (e.touches[0].clientY - dragStartY);
+    applyTransform();
+  }
+}, { passive: false });
+lbImg.addEventListener('touchend', () => { isDragging = false; pinchDist = 0; });
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') lb.classList.remove('show');
+});
+
+loadPool().catch(e => {
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').textContent = '❌ 无法连接本地数据库 ' + e.message;
+});
+</script>
+</body>
+</html>

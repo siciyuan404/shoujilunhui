@@ -101,6 +101,7 @@ data class ChipDetail(
     @SerializedName("rom_size") val romSize: String? = null,
     @SerializedName("ram_type") val ramType: String? = null,
     @SerializedName("ram_size") val ramSize: String? = null,
+    val image: String? = null,
     @SerializedName("created_at") val createdAt: String? = null,
     val models: List<ChipRefModel> = emptyList()
 )
