@@ -47,6 +47,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -356,12 +357,16 @@ fun HomeScreen(
                 when {
                     ui.error != null -> ErrorView(ui.error!!, onRetry = vm::loadAll)
                     ui.loaded && ui.models.isEmpty() -> EmptyView()
-                    else -> ModelList(
-                        models = ui.models,
-                        baseUrl = vm.baseUrl,
-                        onClick = { detailRow = it },
-                        onLongClick = { deleteRow = it },
-                    )
+                    else -> PickerBody(
+                    brands = ui.brands,
+                    brand = ui.brand,
+                    searching = ui.search.isNotBlank(),
+                    models = ui.models,
+                    baseUrl = vm.baseUrl,
+                    onBrandChange = vm::onBrandChange,
+                    onClick = { detailRow = it },
+                    onLongClick = { deleteRow = it },
+                )
                 }
                 if (ui.loading && ui.models.isEmpty() && ui.error == null) {
                     CircularProgressIndicator(
@@ -651,116 +656,158 @@ private fun FilterEntryRow(
     }
 }
 
-// ---------- 列表（卡片） ----------
+// ---------- 快速选机：左品牌栏 + 右系列分组列表 ----------
 
 @Composable
-private fun ModelList(
+private fun PickerBody(
+    brands: List<String>,
+    brand: String,
+    searching: Boolean,
     models: List<ModelRow>,
     baseUrl: String,
+    onBrandChange: (String) -> Unit,
     onClick: (ModelRow) -> Unit,
     onLongClick: (ModelRow) -> Unit,
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 6.dp, bottom = 76.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        items(models, key = { it.id }) { row ->
-            ModelCard(
-                row = row,
-                baseUrl = baseUrl,
-                onClick = { onClick(row) },
-                onLongClick = { onLongClick(row) },
+    Row(Modifier.fillMaxSize()) {
+        // 搜索时不显示左侧品牌栏，单列展示跨品牌结果
+        if (!searching) {
+            SideBrandBar(
+                brands = brands,
+                selected = brand,
+                onSelect = onBrandChange,
+                modifier = Modifier.width(76.dp),
             )
+        }
+        GroupedModelList(
+            models = models,
+            baseUrl = baseUrl,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun SideBrandBar(
+    brands: List<String>,
+    selected: String,
+    onSelect: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.background(Color(0xFFF6F6F6)),
+    ) {
+        items(brands, key = { it }) { b ->
+            val active = b == selected
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { onSelect(b) },
+                        onLongClick = { onSelect(b) },
+                    )
+                    .background(if (active) Color.White else Color.Transparent)
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    b,
+                    fontSize = 13.sp,
+                    color = if (active) PriceRed else TextSecondary,
+                    fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
+                    maxLines = 1,
+                )
+                if (active) {
+                    Box(
+                        Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 0.dp)
+                            .width(3.dp)
+                            .height(20.dp)
+                            .background(PriceRed),
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun ModelCard(row: ModelRow, baseUrl: String, onClick: () -> Unit, onLongClick: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+private fun GroupedModelList(
+    models: List<ModelRow>,
+    baseUrl: String,
+    onClick: (ModelRow) -> Unit,
+    onLongClick: (ModelRow) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    // 按 category 分组，保持 API 返回顺序
+    val grouped = remember(models) {
+        models.groupBy { it.category.ifBlank { "其他" } }
+    }
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 4.dp, bottom = 80.dp),
     ) {
-        Row(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            val imgs = row.images?.filter { it.isNotBlank() }.orEmpty()
-            if (imgs.isNotEmpty()) {
-                AsyncImage(
-                    model = fullImageUrl(baseUrl, imgs.first()),
-                    contentDescription = row.model,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(52.dp)
-                        .background(Color(0xFFEEEEEE), RoundedCornerShape(10.dp)),
-                )
-                Spacer(Modifier.width(10.dp))
-            }
-            Column(Modifier.weight(1f)) {
+        grouped.forEach { (cat, items) ->
+            item(key = "h-$cat") {
                 Text(
-                    row.model,
-                    fontSize = 14.5.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = TextPrimary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    "${row.brand} · ${row.category}",
-                    fontSize = 11.sp,
-                    color = TextSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                val modelCode = row.modelCode?.takeIf { it.isNotBlank() }
-                Text(
-                    modelCode ?: "型号代码待补",
-                    fontSize = 10.5.sp,
-                    color = if (modelCode != null) TextSecondary else Color(0xFFC0C6D0),
-                    fontStyle = if (modelCode != null) FontStyle.Normal else FontStyle.Italic,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 1.dp),
-                )
-                val specs = buildList {
-                    if (!row.cpuModel.isNullOrBlank()) add(row.cpuModel)
-                    if (!row.releaseDate.isNullOrBlank()) add(row.releaseDate.take(4) + "年")
-                    if (!row.backCamera.isNullOrBlank()) add(row.backCamera)
-                }
-                if (specs.isNotEmpty()) {
-                    Text(
-                        specs.joinToString(" · "),
-                        fontSize = 10.5.sp,
-                        color = TextSecondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 1.dp),
-                    )
-                }
-            }
-            Spacer(Modifier.width(8.dp))
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    if (row.price.isNotBlank()) "¥${row.price}" else "面议",
+                    cat,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.ExtraBold,
                     color = PriceRed,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 14.dp, bottom = 4.dp),
                 )
-                if (!row.note.isNullOrBlank()) {
-                    Text(
-                        row.note,
-                        fontSize = 10.sp,
-                        color = TextSecondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 1.dp),
-                    )
-                }
+            }
+            items(items, key = { it.id }) { row ->
+                PickerRow(
+                    row = row,
+                    onClick = { onClick(row) },
+                    onLongClick = { onLongClick(row) },
+                )
             }
         }
     }
+}
+
+@Composable
+private fun PickerRow(row: ModelRow, onClick: () -> Unit, onLongClick: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            .padding(vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        // 单选圆圈装饰
+        Box(
+            Modifier
+                .size(18.dp)
+                .background(Color(0xFFE2E2E2), CircleShape),
+        )
+        Spacer(Modifier.width(10.dp))
+        Text(
+            row.model,
+            fontSize = 15.5.sp,
+            color = TextPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        Spacer(Modifier.width(8.dp))
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                if (row.price.isNotBlank()) "¥${row.price}" else "面议",
+                color = PriceRed,
+                fontSize = 15.5.sp,
+                fontWeight = FontWeight.Bold,
+            )
+            Text("预计可卖", fontSize = 11.sp, color = TextSecondary)
+        }
+    }
+    // 底部分隔线
+    HorizontalDivider(thickness = 0.5.dp, color = Color(0xFFF0F0F0))
 }
 
 // ---------- 空 / 错误态 ----------
