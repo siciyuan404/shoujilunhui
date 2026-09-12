@@ -742,9 +742,12 @@ private fun GroupedModelList(
     onLongClick: (ModelRow) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // 按 category 分组，保持 API 返回顺序
+    // 按 category 分组，组内再按上市时间倒序（新机型在前）
     val grouped = remember(models) {
         models.groupBy { it.category.ifBlank { "其他" } }
+            .mapValues { (_, items) ->
+                items.sortedByDescending { it.releaseDate ?: "" }
+            }
     }
     LazyColumn(
         modifier = modifier,
