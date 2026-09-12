@@ -89,7 +89,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             val resp = ApiClient.api(baseUrl).getModels(
                 brand = if (s.brand == "全部") null else s.brand,
                 search = s.search.ifBlank { null },
-                sort = "brand",
+                sort = "release_desc",
                 year = if (s.year == "全部") null else s.year,
                 cpuBrand = if (s.cpuBrand == "全部") null else s.cpuBrand,
                 cameraMin = if (s.cameraMin <= 0) null else s.cameraMin,
