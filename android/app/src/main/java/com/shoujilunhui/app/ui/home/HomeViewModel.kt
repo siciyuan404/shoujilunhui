@@ -1,4 +1,4 @@
-package com.shoujilunhui.app.ui.home
+﻿package com.shoujilunhui.app.ui.home
 
 import android.app.Application
 import android.net.Uri
@@ -234,6 +234,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         return try {
             ApiClient.api(baseUrl).uploadImage(apiKey, body).url
         } catch (e: Exception) {
+            _message.value = "上传失败："
             null
         }
     }

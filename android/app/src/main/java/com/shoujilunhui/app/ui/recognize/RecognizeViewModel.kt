@@ -229,9 +229,14 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         images: List<Uri>,
     ) {
         if (config.baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
+        if (config.apiKey.isBlank()) { _message.value = "收录/补图需要 API Key，请先在设置中填写"; return }
         viewModelScope.launch {
             try {
                 val urls = images.mapNotNull { uri -> uploadImage(uri) }
+                if (images.isNotEmpty() && urls.isEmpty()) {
+                    _message.value = "图片上传失败：请检查网络/API Key后重试"
+                    return@launch
+                }
                 val created = ApiClient.api(config.baseUrl).postModel(
                     config.apiKey,
                     PostBody(brand, category, model, price, note, images = urls.ifEmpty { null }),
@@ -257,6 +262,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
         return try {
             ApiClient.api(config.baseUrl).uploadImage(config.apiKey, body).url
         } catch (e: Exception) {
+            _message.value = "上传失败：${e.message}"
             null
         }
     }
