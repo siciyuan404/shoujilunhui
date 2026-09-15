@@ -407,9 +407,9 @@ fun RecognizeScreen(
                                 if (r.row == null) "—"
                                 else if (ui.showChannelPrice) "¥${r.row.price}"
                                 else "¥${vm.fmt(vm.customerPrice(r.row) ?: 0.0)}",
-                                color = if (r.row != null) PriceRed else TextSecondary,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
+                                color = if (r.row != null && ui.showChannelPrice) PriceRed else TextSecondary,
+                                fontSize = if (ui.showChannelPrice) 15.sp else 12.sp,
+                                fontWeight = if (ui.showChannelPrice) FontWeight.Bold else FontWeight.Normal,
                             )
                         }
                         Row(
@@ -474,7 +474,7 @@ private fun TotalCard(ui: RecognizeUiState, vm: RecognizeViewModel) {
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    if (showChannel) "渠道报价总计（内部）" else "客户报价总计（比例 ${ratio}%）",
+                    if (showChannel) "渠道报价总计（原价·内部）" else "折后报价总计（默认隐藏原价）",
                     fontSize = 12.sp,
                     color = TextSecondary,
                 )
@@ -486,14 +486,20 @@ private fun TotalCard(ui: RecognizeUiState, vm: RecognizeViewModel) {
                 )
                 if (showChannel) {
                     Text(
-                        "客户价 = 渠道价 × ${ratio}%，点击右侧按钮切换后隐藏渠道价",
+                        "折后价 = 原价 × ${ratio}%，点击右侧按钮切换后隐藏原价",
+                        fontSize = 10.5.sp,
+                        color = TextSecondary,
+                    )
+                } else {
+                    Text(
+                        "对半折报价（原价 × ${ratio}%），小字显示，点右侧可看原价",
                         fontSize = 10.5.sp,
                         color = TextSecondary,
                     )
                 }
             }
             TextButton(onClick = vm::togglePriceMode) {
-                Text(if (showChannel) "隐藏报价" else "显示渠道价", fontSize = 12.5.sp)
+                Text(if (showChannel) "隐藏原价" else "显示原价", fontSize = 12.5.sp)
             }
         }
     }
@@ -661,9 +667,12 @@ private fun RecognitionOverlay(
             val color = if (matched) MatchGreen else MatchOrange
             // 外框
             drawRect(color, topLeft = Offset(l, t), size = Size(w, h), style = Stroke(width = 4f))
-            // 顶部标签条：编号 + 型号 + 价格
+            // 顶部标签条：编号 + 型号 + 价格（折后价模式用小字，不显眼）
             val label = buildAnnotationLabel(i, r, showPrice, showModel, showChannelPrice, priceFor)
-            val style = TextStyle(color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            val style = TextStyle(
+                color = Color.White, fontSize = if (showChannelPrice) 15.sp else 12.sp,
+                fontWeight = if (showChannelPrice) FontWeight.Bold else FontWeight.Normal,
+            )
             val layout = textMeasurer.measure(
                 text = AnnotatedString(label),
                 style = style,
@@ -690,7 +699,6 @@ private fun buildAnnotationLabel(
     if (showModel) { sb.append(' ').append(r.model) }
     if (showPrice) {
         sb.append(if (showModel) " · " else " ")
-        if (r.row != null && !showChannelPrice) sb.append("客")
         sb.append(priceFor(r))
     }
     return sb.toString()

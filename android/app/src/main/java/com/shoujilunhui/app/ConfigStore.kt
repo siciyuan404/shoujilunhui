@@ -57,9 +57,9 @@ class ConfigStore(context: Context) {
         get() = prefs.getBoolean("annotateModel", true)
         set(v) = prefs.edit().putBoolean("annotateModel", v).apply()
 
-    /** 客户报价比例（%）：识别出机器后展示给客户的报价 = 渠道报价 × 比例，默认 60 */
+    /** 报价比例（%）：识别后展示的折后价 = 渠道价 × 比例，默认 50（对半折） */
     var priceRatio: Int
-        get() = prefs.getInt("priceRatio", 60)
+        get() = prefs.getInt("priceRatio", 50)
         set(v) = prefs.edit().putInt("priceRatio", v.coerceIn(1, 100)).apply()
 
     /** 用于检测从设置页返回后配置是否变化 */

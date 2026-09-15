@@ -45,8 +45,8 @@ data class RecognizeUiState(
     val annotate: Boolean = true,
     val annotatePrice: Boolean = true,
     val annotateModel: Boolean = true,
-    /** true=显示渠道报价（内部用）；false=显示客户报价（渠道价×比例，隐藏渠道价，给客户看） */
-    val showChannelPrice: Boolean = true,
+    /** true=显示渠道报价（原价，内部核对用）；false=显示折后报价（原价×比例，默认对半折，隐藏原价给客户看） */
+    val showChannelPrice: Boolean = false,
     /** 识别页当前选中的模型 ID（空=按服务商默认），可在识别页直接切换 */
     val model: String = "",
     /** 用户填写的识别提示词（选填，引导模型提高识别率） */
@@ -349,7 +349,7 @@ class RecognizeViewModel(app: Application) : AndroidViewModel(app) {
                 }
                 _ui.update { it.copy(status = "已识别 ${all.size} 台，正在匹配报价...") }
                 val matched = all.count { it.row != null }
-                val total = channelTotal(all)
+                val total = customerTotal(all)
                 val tail = if (failMsg != null) "（${failMsg}）" else ""
                 // 自动保存历史（复制图片到私有目录 + 明细入库；失败不影响展示）
                 val urisToSave = _ui.value.previewUris
