@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 /** 离线数据包下载状态 */
 sealed class OfflineState {
     object Idle : OfflineState()
-    object Downloading : OfflineState()
+    data class Downloading(val phase: Int, val current: Int, val total: Int) : OfflineState()
     data class Ready(val info: OfflineStore.Info) : OfflineState()
     data class Error(val message: String) : OfflineState()
 }
@@ -149,7 +149,7 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         _offlineState.value = info?.let { OfflineState.Ready(it) } ?: OfflineState.Idle
     }
 
-    /** 下载/更新离线包：从已保存的服务器地址拉取全量机型 */
+    /** 下载/更新离线包：从已保存的服务器地址拉取全量机型+图片 */
     fun downloadOffline() {
         if (_offlineState.value is OfflineState.Downloading) return
         val url = config.baseUrl.trim()
@@ -158,8 +158,11 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
         viewModelScope.launch {
-            _offlineState.value = OfflineState.Downloading
-            OfflineStore.download(getApplication(), url)
+            OfflineStore.download(getApplication(), url, object : OfflineStore.Progress {
+                override fun onProgress(phase: Int, current: Int, total: Int) {
+                    _offlineState.value = OfflineState.Downloading(phase, current, total)
+                }
+            })
                 .onSuccess { _offlineState.value = OfflineState.Ready(it) }
                 .onFailure { _offlineState.value = OfflineState.Error(it.message ?: "下载失败") }
         }

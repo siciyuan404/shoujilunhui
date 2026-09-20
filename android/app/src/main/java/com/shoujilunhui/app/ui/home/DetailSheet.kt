@@ -1,4 +1,4 @@
-@file:OptIn(
+﻿@file:OptIn(
     androidx.compose.material3.ExperimentalMaterial3Api::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class,
     androidx.compose.foundation.layout.ExperimentalLayoutApi::class,
@@ -63,6 +63,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.shoujilunhui.app.data.ModelRow
+import com.shoujilunhui.app.data.OfflineStore
 import com.shoujilunhui.app.ui.theme.Accent
 import com.shoujilunhui.app.ui.theme.Danger
 import com.shoujilunhui.app.ui.theme.PriceBg
@@ -70,12 +71,27 @@ import com.shoujilunhui.app.ui.theme.PriceRed
 import com.shoujilunhui.app.ui.theme.TextPrimary
 import com.shoujilunhui.app.ui.theme.TextSecondary
 
+/**
+ * 解析图片加载源：离线模式下优先用本地离线包文件，否则用服务器 URL。
+ */
+@Composable
+private fun rememberImageModel(baseUrl: String, rawUrl: String, offlineMode: Boolean): Any {
+    val context = LocalContext.current
+    return remember(rawUrl, offlineMode, baseUrl) {
+        if (offlineMode) {
+            OfflineStore.localImageFile(context, rawUrl) ?: fullImageUrl(baseUrl, rawUrl)
+        } else {
+            fullImageUrl(baseUrl, rawUrl)
+        }
+    }
+}
 // ---------- 详情底部弹层（紧凑） ----------
 
 @Composable
 fun DetailSheet(
     row: ModelRow,
     baseUrl: String,
+    offlineMode: Boolean = false,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onImageClick: (List<String>, Int) -> Unit,
@@ -123,7 +139,7 @@ fun DetailSheet(
                         .background(Color(0xFFEEEEEE)),
                 ) { page ->
                     AsyncImage(
-                        model = fullImageUrl(baseUrl, imgs[page]),
+                        model = rememberImageModel(baseUrl, imgs[page], offlineMode),
                         contentDescription = "${row.model} 图${page + 1}",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -163,7 +179,7 @@ fun DetailSheet(
                     imgs.forEach { url ->
                         Box {
                             AsyncImage(
-                                model = fullImageUrl(baseUrl, url),
+                                model = rememberImageModel(baseUrl, url, offlineMode),
                                 contentDescription = "机型图片",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -293,6 +309,7 @@ fun ImageViewerDialog(
     urls: List<String>,
     startIndex: Int,
     baseUrl: String,
+    offlineMode: Boolean = false,
     onDismiss: () -> Unit,
 ) {
     Dialog(
@@ -304,7 +321,7 @@ fun ImageViewerDialog(
                 val pagerState = rememberPagerState(initialPage = startIndex, pageCount = { urls.size })
                 HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                     AsyncImage(
-                        model = fullImageUrl(baseUrl, urls[page]),
+                        model = rememberImageModel(baseUrl, urls[page], offlineMode),
                         contentDescription = "图片 ${page + 1}",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.fillMaxSize(),

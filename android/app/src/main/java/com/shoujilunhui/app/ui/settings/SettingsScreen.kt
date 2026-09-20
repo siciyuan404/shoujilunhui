@@ -462,13 +462,18 @@ private fun OfflineSection(vm: SettingsViewModel) {
             ) { Text("下载离线包", fontSize = 13.5.sp) }
         }
         is OfflineState.Downloading -> {
-            Text("正在下载离线包…（约 1.3 MB，请稍候）", fontSize = 12.5.sp, color = TextSecondary)
+            val label = if (s.phase == 0) "正在下载机型数据…" else "正在下载图片 ${s.current}/${s.total}"
+            Text(label, fontSize = 12.5.sp, color = TextSecondary)
             Spacer(Modifier.height(8.dp))
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            val pct = if (s.total > 0) s.current.toFloat() / s.total else 0f
+            LinearProgressIndicator(
+                progress = { pct },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
         is OfflineState.Ready -> {
             Text(
-                "已收录 ${s.info.count} 款机型",
+                "已收录 ${s.info.count} 款机型 · ${s.info.imageCount} 张图片",
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = Accent,

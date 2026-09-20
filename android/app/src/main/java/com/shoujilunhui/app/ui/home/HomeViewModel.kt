@@ -341,5 +341,106 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
         fun cameraOption(value: Int): String =
             if (value <= 0) "全部" else "≥${value}万"
+
+        /**
+         * 从机型名推断所属系列（用于首页分组标题，如"Mate系列"、"P系列"）。
+         * 基于型号名开头关键词做匹配，未匹配到归"其他"。
+         */
+        fun seriesOf(brand: String, model: String): String {
+            val m = model.trim()
+            val lower = m.lowercase()
+            return when (brand) {
+                "华为" -> when {
+                    lower.startsWith("mate x") || lower.startsWith("matex") -> "Mate系列"
+                    lower.startsWith("mate") -> "Mate系列"
+                    lower.startsWith("pura") -> "P系列"
+                    lower.matches(Regex("^p\\d.*")) -> "P系列"
+                    lower.startsWith("hinova") || lower.startsWith("nova") -> "nova系列"
+                    lower.startsWith("畅享") -> "畅享系列"
+                    lower.startsWith("麦芒") -> "麦芒系列"
+                    lower.startsWith("畅玩") -> "畅玩系列"
+                    lower.startsWith("pocket") -> "Pocket折叠"
+                    lower.contains("pad") || m.contains("平板") -> "平板"
+                    else -> "其他"
+                }
+                "Apple", "苹果" -> when {
+                    lower.contains("ipad") -> "iPad"
+                    lower.contains("iphone") || lower.matches(Regex("^苹果\\d")) -> "iPhone"
+                    lower.contains("迷你") || lower.contains("mini") -> "iPad mini"
+                    else -> "其他"
+                }
+                "OPPO" -> when {
+                    lower.startsWith("find") -> "Find系列"
+                    lower.startsWith("reno") -> "Reno系列"
+                    lower.matches(Regex("^a\\d.*")) -> "A系列"
+                    lower.startsWith("k") -> "K系列"
+                    lower.startsWith("r") -> "R系列"
+                    else -> "其他"
+                }
+                "vivo" -> when {
+                    lower.startsWith("xfold") || lower.startsWith("x fold") -> "X Fold折叠"
+                    lower.startsWith("iqoo") || lower.startsWith("iqo") -> "iQOO系列"
+                    lower.startsWith("x") -> "X系列"
+                    lower.startsWith("y") -> "Y系列"
+                    lower.startsWith("z") -> "Z系列"
+                    lower.startsWith("s") -> "S系列"
+                    else -> "其他"
+                }
+                "小米" -> when {
+                    lower.contains("mix fold") || lower.contains("mixfold") -> "MIX Fold折叠"
+                    lower.contains("mix") -> "MIX系列"
+                    lower.contains("civi") -> "Civi系列"
+                    lower.matches(Regex("^小米\\d")) -> "小米数字系列"
+                    else -> "其他"
+                }
+                "红米" -> when {
+                    lower.contains("pad") -> "Redmi Pad"
+                    lower.contains("note") -> "Redmi Note"
+                    lower.matches(Regex("^红米[kK]")) || lower.startsWith("k") -> "Redmi K"
+                    else -> "其他"
+                }
+                "三星" -> when {
+                    lower.startsWith("w") -> "W系列（心系天下）"
+                    lower.startsWith("z") -> "Z折叠"
+                    lower.startsWith("s") -> "Galaxy S"
+                    lower.startsWith("a") -> "Galaxy A"
+                    lower.startsWith("note") -> "Galaxy Note"
+                    else -> "其他"
+                }
+                "荣耀" -> when {
+                    lower.startsWith("magic") -> "Magic系列"
+                    lower.startsWith("play") -> "Play系列"
+                    lower.contains("畅玩") -> "畅玩系列"
+                    lower.contains("pad") || m.contains("平板") -> "平板"
+                    else -> "数字/X系列"
+                }
+                "一加" -> when {
+                    lower.startsWith("ace") -> "Ace系列"
+                    lower.contains("nord") -> "Nord系列"
+                    else -> "数字系列"
+                }
+                "真我" -> when {
+                    lower.startsWith("gt") -> "GT系列"
+                    lower.startsWith("x") -> "X系列"
+                    lower.startsWith("v") -> "V系列"
+                    else -> "其他"
+                }
+                "魅族" -> when {
+                    m.contains("魅蓝") -> "魅蓝"
+                    lower.contains("mx") -> "MX系列"
+                    lower.contains("pro") -> "Pro系列"
+                    else -> "数字系列"
+                }
+                "努比亚" -> when {
+                    m.contains("红魔") -> "红魔系列"
+                    else -> "Z系列"
+                }
+                "锤子" -> when {
+                    m.contains("坚果") -> "坚果系列"
+                    else -> "锤子系列"
+                }
+                else -> "其他"
+            }
+        }
     }
 }

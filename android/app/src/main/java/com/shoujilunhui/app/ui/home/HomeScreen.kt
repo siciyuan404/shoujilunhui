@@ -1,4 +1,4 @@
-@file:OptIn(
+﻿@file:OptIn(
     androidx.compose.material3.ExperimentalMaterial3Api::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class,
 )
@@ -755,9 +755,9 @@ private fun GroupedModelList(
     onLongClick: (ModelRow) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // 按 category 分组，组内再按上市时间倒序（新机型在前）
+    // 按系列分组，组内再按上市时间倒序（新机型在前）
     val grouped = remember(models) {
-        models.groupBy { it.category.ifBlank { "其他" } }
+        models.groupBy { HomeViewModel.seriesOf(it.brand, it.model) }
             .mapValues { (_, items) ->
                 items.sortedByDescending { it.releaseDate ?: "" }
             }

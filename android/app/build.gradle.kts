@@ -1,4 +1,4 @@
-import java.util.Base64
+﻿import java.util.Base64
 
 plugins {
     id("com.android.application")
@@ -13,8 +13,8 @@ android {
         applicationId = "com.shoujilunhui.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 38
-        versionName = "1.16.0"
+        versionCode = 39
+        versionName = "1.17.0"
     }
 
     signingConfigs {
