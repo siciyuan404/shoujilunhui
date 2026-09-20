@@ -793,7 +793,7 @@ private fun PickerRow(row: ModelRow, onClick: () -> Unit, onLongClick: () -> Uni
         Modifier
             .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .padding(vertical = 14.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // 单选圆圈装饰
@@ -803,14 +803,32 @@ private fun PickerRow(row: ModelRow, onClick: () -> Unit, onLongClick: () -> Uni
                 .background(Color(0xFFE2E2E2), CircleShape),
         )
         Spacer(Modifier.width(10.dp))
-        Text(
-            row.model,
-            fontSize = 15.5.sp,
-            color = TextPrimary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
-        )
+        // 中间：型号名 + 规格摘要
+        Column(Modifier.weight(1f)) {
+            Text(
+                row.model,
+                fontSize = 15.5.sp,
+                color = TextPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            // 关键规格摘要：CPU · RAM · ROM
+            val specParts = buildList {
+                row.cpuModel?.takeIf { it.isNotBlank() }?.let { add(it) }
+                row.ram?.takeIf { it.isNotBlank() }?.let { add(it) }
+                row.rom?.takeIf { it.isNotBlank() }?.let { add(it) }
+            }
+            if (specParts.isNotEmpty()) {
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    specParts.joinToString(" · "),
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
         Spacer(Modifier.width(8.dp))
         Column(horizontalAlignment = Alignment.End) {
             Text(

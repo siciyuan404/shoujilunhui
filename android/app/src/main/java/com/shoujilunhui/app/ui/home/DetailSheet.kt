@@ -214,37 +214,58 @@ fun DetailSheet(
         // 参数
         Spacer(Modifier.height(10.dp))
         SectionTitle("详细参数")
-        val specs = listOf(
-            "型号代码" to row.modelCode,
-            "上市时间" to row.releaseDate,
-            "CPU品牌" to row.cpuBrand,
-            "CPU型号" to row.cpuModel,
-            "运行内存" to row.ram,
-            "存储" to row.rom,
-            "后置主摄" to row.backCamera,
-            "前置" to row.frontCamera,
-            "屏幕" to row.screenSize,
-            "屏幕材质" to row.screenType,
-            "刷新率" to row.refresh,
-            "电池" to row.battery,
-            "快充" to row.charge,
-            "网络" to row.network,
-            "系统" to row.os,
-            "存储芯片" to row.vendorPnp,
-            "芯片厂商" to row.vendor,
-            "封装" to row.packageName,
-            "ROM类型" to row.romType,
-            "ROM容量" to row.romSize,
-        ).filter { !it.second.isNullOrBlank() }
-        if (specs.isEmpty()) {
-            Text("待补充", fontSize = 12.sp, color = TextSecondary)
-        } else {
-            specs.forEach { (k, v) ->
-                Row(Modifier.fillMaxWidth().padding(vertical = 1.5.dp)) {
-                    Text(k, fontSize = 12.sp, color = TextSecondary, modifier = Modifier.width(68.dp))
-                    Text(v ?: "", fontSize = 12.sp, color = TextPrimary)
+        val groups = listOf(
+            "处理器" to listOf(
+                "CPU品牌" to row.cpuBrand,
+                "CPU型号" to row.cpuModel,
+            ),
+            "内存与存储" to listOf(
+                "运行内存" to row.ram,
+                "机身存储" to row.rom,
+                "存储芯片厂" to row.vendor,
+                "芯片料号" to row.vendorPnp,
+                "封装" to row.packageName,
+                "ROM类型" to row.romType,
+                "ROM容量" to row.romSize,
+            ),
+            "屏幕" to listOf(
+                "屏幕尺寸" to row.screenSize,
+                "屏幕材质" to row.screenType,
+                "刷新率" to row.refresh,
+            ),
+            "相机" to listOf(
+                "后置主摄" to row.backCamera,
+                "前置镜头" to row.frontCamera,
+            ),
+            "电池与充电" to listOf(
+                "电池容量" to row.battery,
+                "快充功率" to row.charge,
+            ),
+            "其他" to listOf(
+                "型号代码" to row.modelCode,
+                "上市时间" to row.releaseDate,
+                "网络" to row.network,
+                "系统" to row.os,
+            ),
+        )
+        var anySpec = false
+        groups.forEach { (gname, items) ->
+            val filtered = items.filter { !it.second.isNullOrBlank() }
+            if (filtered.isNotEmpty()) {
+                anySpec = true
+                Spacer(Modifier.height(6.dp))
+                Text(gname, fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Accent)
+                Spacer(Modifier.height(2.dp))
+                filtered.forEach { (k, v) ->
+                    Row(Modifier.fillMaxWidth().padding(vertical = 1.5.dp)) {
+                        Text(k, fontSize = 12.sp, color = TextSecondary, modifier = Modifier.width(76.dp))
+                        Text(v ?: "", fontSize = 12.sp, color = TextPrimary)
+                    }
                 }
             }
+        }
+        if (!anySpec) {
+            Text("待补充", fontSize = 12.sp, color = TextSecondary)
         }
 
         // 内存版本报价
