@@ -64,7 +64,8 @@ object ApiClient {
     @Volatile
     private var cachedBase: String? = null
 
-    private val gson: Gson = GsonBuilder()
+    /** 容错 Gson：公开供本地 JSON（离线包等）复用，空串数字字段不会崩 */
+    val gson: Gson = GsonBuilder()
         .registerTypeAdapterFactory(LenientNumberAdapterFactory())
         .create()
 

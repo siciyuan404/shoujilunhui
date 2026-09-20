@@ -1,4 +1,4 @@
-﻿package com.shoujilunhui.app.ui.home
+package com.shoujilunhui.app.ui.home
 
 import android.app.Application
 import android.net.Uri
@@ -8,6 +8,7 @@ import com.shoujilunhui.app.ConfigStore
 import com.shoujilunhui.app.data.ApiClient
 import com.shoujilunhui.app.data.ModelRow
 import com.shoujilunhui.app.data.ModelPatchBody
+import com.shoujilunhui.app.data.OfflineStore
 import com.shoujilunhui.app.data.PostBody
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,6 +23,10 @@ data class HomeUiState(
     val loading: Boolean = false,
     val loaded: Boolean = false,
     val error: String? = null,
+    /** 是否处于离线包模式（只读快照，增删改走在线提示） */
+    val offlineMode: Boolean = false,
+    /** 是否存在已下载的离线包（决定空态引导文案） */
+    val hasOffline: Boolean = false,
     val brands: List<String> = listOf("全部"),
     val brand: String = "全部",
     val search: String = "",
@@ -49,35 +54,64 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     val baseUrl: String get() = config.baseUrl
     private val apiKey: String get() = config.apiKey
 
-    private var configSignature = config.signature()
+    private var configSignature = config.signature() + "|" + OfflineStore.info(getApplication())?.updatedAt
     private var searchJob: Job? = null
 
-    /** 界面每次回到前台调用：配置变化（如刚保存设置）则全量重载 */
+    /** 离线模式下内存中的全量机型；在线模式为空（分页接口数据即当前 models） */
+    private var allModels: List<ModelRow> = emptyList()
+
+    /** 界面每次回到前台调用：配置或离线包变化则全量重载 */
     fun onResume() {
-        val sig = config.signature()
+        val sig = config.signature() + "|" + OfflineStore.info(getApplication())?.updatedAt
         if (sig != configSignature) {
             configSignature = sig
-            if (config.baseUrl.isNotBlank()) loadAll()
+            loadAll()
         }
     }
 
     // ---------- 加载 ----------
 
     fun loadAll() {
-        if (baseUrl.isBlank()) return
         _ui.update { it.copy(loading = true, error = null) }
         viewModelScope.launch {
+            // 1) 优先离线包：有就本地加载，完全不走网络
+            val local = OfflineStore.loadModels(getApplication())
+            if (local != null) {
+                allModels = local
+                _ui.update { s ->
+                    s.copy(
+                        loading = false, loaded = true, error = null,
+                        offlineMode = true, hasOffline = true,
+                        brand = if (s.brand == "全部") "全部" else s.brand,
+                    )
+                }
+                applyLocalFilter()
+                return@launch
+            }
+            // 2) 无离线包：走在线
+            allModels = emptyList()
+            if (baseUrl.isBlank()) {
+                _ui.update {
+                    it.copy(
+                        loading = false, loaded = true, error = null,
+                        offlineMode = false, hasOffline = false,
+                        brands = listOf("全部"), models = emptyList(), total = 0,
+                    )
+                }
+                return@launch
+            }
             try {
                 val brands = ApiClient.api(baseUrl).getBrands().items.map { it.brand }
-                _ui.update { it.copy(brands = listOf("全部") + brands) }
+                _ui.update { it.copy(brands = listOf("全部") + brands, offlineMode = false, hasOffline = false) }
                 loadModelsInternal()
             } catch (e: Exception) {
-                _ui.update { it.copy(loading = false, loaded = true, error = "加载失败：${e.message}") }
+                _ui.update { it.copy(loading = false, loaded = true, error = "加载失败：${e.message}", offlineMode = false, hasOffline = false) }
             }
         }
     }
 
     fun loadModels() {
+        if (_ui.value.offlineMode) { applyLocalFilter(); return }
         if (baseUrl.isBlank()) return
         _ui.update { it.copy(loading = true, error = null) }
         viewModelScope.launch { loadModelsInternal() }
@@ -105,6 +139,51 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /** 离线模式：在内存全量上做与服务器一致的本地过滤 */
+    private fun applyLocalFilter() {
+        val s = _ui.value
+        val q = s.search.trim()
+        val filtered = allModels.filter { m ->
+            // 品牌
+            if (s.brand != "全部" && m.brand != s.brand) return@filter false
+            // CPU 品牌
+            if (s.cpuBrand != "全部" && (m.cpuBrand ?: "") != s.cpuBrand) return@filter false
+            // 年份：releaseDate 前 4 位
+            if (s.year != "全部") {
+                val rd = m.releaseDate ?: ""
+                if (rd.length < 4 || rd.substring(0, 4) != s.year) return@filter false
+            }
+            // 相机：back_camera 形如 "5000万像素"，取开头连续数字（与服务器 CAST 一致）
+            if (s.cameraMin > 0) {
+                val bc = m.backCamera ?: ""
+                val head = bc.takeWhile { it.isDigit() || it == '.' }
+                val num = head.toDoubleOrNull() ?: 0.0
+                if (num < s.cameraMin) return@filter false
+            }
+            // 搜索：与服务器一致，匹配 model/note/brand/category/cpuModel/releaseDate/modelCode
+            if (q.isNotEmpty()) {
+                val hit = (m.model.contains(q, ignoreCase = true)
+                    || (m.note ?: "").contains(q, ignoreCase = true)
+                    || m.brand.contains(q, ignoreCase = true)
+                    || m.category.contains(q, ignoreCase = true)
+                    || (m.cpuModel ?: "").contains(q, ignoreCase = true)
+                    || (m.releaseDate ?: "").contains(q, ignoreCase = true)
+                    || (m.modelCode ?: "").contains(q, ignoreCase = true))
+                if (!hit) return@filter false
+            }
+            true
+        }
+        // 品牌列表：从全量里按首次出现顺序去重
+        val brandList = linkedSetOf<String>().apply { allModels.forEach { add(it.brand) } }.toList()
+        _ui.update {
+            it.copy(
+                loading = false, loaded = true, error = null,
+                brands = listOf("全部") + brandList,
+                models = filtered, total = filtered.size,
+            )
+        }
+    }
+
     // ---------- 筛选 / 搜索 ----------
 
     /** 搜索输入：300ms 防抖（与原逻辑一致） */
@@ -128,9 +207,18 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         loadModels()
     }
 
-    // ---------- 增 / 改 / 删 ----------
+    // ---------- 增 / 改 / 删（离线包为只读快照，给在线提示） ----------
+
+    private fun offlineGuard(what: String): Boolean {
+        if (_ui.value.offlineMode) {
+            _message.value = "当前为离线包（只读快照），$what 需连接服务器后操作"
+            return true
+        }
+        return false
+    }
 
     fun addModel(brand: String, category: String, model: String, price: String, note: String, images: List<Uri> = emptyList()) {
+        if (offlineGuard("添加机型")) return
         if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
         viewModelScope.launch {
             try {
@@ -147,6 +235,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun updateModel(row: ModelRow, price: String, note: String, modelCode: String? = null) {
+        if (offlineGuard("修改机型")) return
         viewModelScope.launch {
             try {
                 val updated = ApiClient.api(baseUrl).putModel(
@@ -167,6 +256,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun deleteModel(row: ModelRow) {
+        if (offlineGuard("删除机型")) return
         viewModelScope.launch {
             try {
                 ApiClient.api(baseUrl).deleteModel(row.id, apiKey)
@@ -184,6 +274,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     /** 相册多选补图：逐张上传 → 合并写回机型 images（首图为封面） */
     fun addModelImages(row: ModelRow, uris: List<Uri>) {
+        if (offlineGuard("补图")) return
         if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
         if (apiKey.isBlank()) { _message.value = "补图需要 API Key，请先在设置中填写"; return }
         viewModelScope.launch {
@@ -206,6 +297,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     /** 删除机型的一张图片 */
     fun removeModelImage(row: ModelRow, url: String) {
+        if (offlineGuard("删图")) return
         if (baseUrl.isBlank()) { _message.value = "请先设置服务器地址"; return }
         if (apiKey.isBlank()) { _message.value = "删图需要 API Key，请先在设置中填写"; return }
         viewModelScope.launch {

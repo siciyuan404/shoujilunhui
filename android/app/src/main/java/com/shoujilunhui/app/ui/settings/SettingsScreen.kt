@@ -145,6 +145,13 @@ fun SettingsScreen(
                 }
             }
 
+            // 离线数据包分组
+            item {
+                SettingsGroup(title = "离线数据包") {
+                    OfflineSection(vm)
+                }
+            }
+
             // 拍照识别设置组（支持豆包方舟 / DeepSeek 双服务商）
             item {
                 SettingsGroup(title = "拍照识别") {
@@ -427,6 +434,63 @@ private fun UpdateSection(vm: SettingsViewModel) {
             Spacer(Modifier.height(8.dp))
             OutlinedButton(
                 onClick = { vm.checkForUpdate() },
+                modifier = Modifier.fillMaxWidth().height(38.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("重试", fontSize = 13.sp) }
+        }
+    }
+}
+
+// ---------- 离线数据包区 ----------
+
+@Composable
+private fun OfflineSection(vm: SettingsViewModel) {
+    val state by vm.offlineState.collectAsState()
+    when (val s = state) {
+        is OfflineState.Idle -> {
+            Text(
+                "未下载。下载后首页无需联网即可查询全部机型与回收价。",
+                fontSize = 12.sp,
+                color = TextSecondary,
+                lineHeight = 17.sp,
+            )
+            Spacer(Modifier.height(10.dp))
+            Button(
+                onClick = { vm.downloadOffline() },
+                modifier = Modifier.fillMaxWidth().height(42.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("下载离线包", fontSize = 13.5.sp) }
+        }
+        is OfflineState.Downloading -> {
+            Text("正在下载离线包…（约 1.3 MB，请稍候）", fontSize = 12.5.sp, color = TextSecondary)
+            Spacer(Modifier.height(8.dp))
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
+        is OfflineState.Ready -> {
+            Text(
+                "已收录 ${s.info.count} 款机型",
+                fontSize = 13.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = Accent,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "更新于 ${s.info.updatedText} · ${s.info.sizeText}",
+                fontSize = 11.5.sp,
+                color = TextSecondary,
+            )
+            Spacer(Modifier.height(10.dp))
+            OutlinedButton(
+                onClick = { vm.downloadOffline() },
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                shape = RoundedCornerShape(10.dp),
+            ) { Text("更新离线包", fontSize = 13.sp) }
+        }
+        is OfflineState.Error -> {
+            Text("下载失败：${s.message}", fontSize = 12.sp, color = Danger)
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { vm.downloadOffline() },
                 modifier = Modifier.fillMaxWidth().height(38.dp),
                 shape = RoundedCornerShape(10.dp),
             ) { Text("重试", fontSize = 13.sp) }

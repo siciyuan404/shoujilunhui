@@ -8,6 +8,7 @@ package com.shoujilunhui.app.ui.home
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
@@ -295,13 +297,17 @@ fun HomeScreen(
         onPauseOrDispose { }
     }
 
-    // 首次进入：未配置服务器则提示并引导去设置
+    // 首次进入：优先离线包；没有离线包且没配服务器地址才引导去设置
     LaunchedEffect(Unit) {
-        if (vm.baseUrl.isBlank()) {
-            snackbar.showSnackbar("请先在设置中填写服务器地址")
+        vm.loadAll()
+    }
+    // 加载完成后再判断：无离线包且没配服务器地址 → 引导（只跳一次）
+    var guidedNoServer by remember { mutableStateOf(false) }
+    LaunchedEffect(ui.loaded, ui.loading) {
+        if (!guidedNoServer && ui.loaded && !ui.loading && !ui.hasOffline && vm.baseUrl.isBlank()) {
+            guidedNoServer = true
+            snackbar.showSnackbar("请先在设置中填写服务器地址，并下载离线数据包")
             onOpenSettings()
-        } else {
-            vm.loadAll()
         }
     }
 
@@ -312,7 +318,8 @@ fun HomeScreen(
     val ptr = rememberPullToRefreshState()
     if (ptr.isRefreshing) {
         LaunchedEffect(true) {
-            if (vm.baseUrl.isBlank()) ptr.endRefresh() else vm.loadAll()
+            // 离线包模式下本地数据即最新，下拉刷新直接结束；在线模式才重新拉取
+            if (ui.offlineMode || vm.baseUrl.isBlank()) ptr.endRefresh() else vm.loadAll()
         }
     }
     LaunchedEffect(ui.loading) {
@@ -345,6 +352,10 @@ fun HomeScreen(
                 onOpenChips = onOpenChips,
                 onOpenExam = onOpenExam,
             )
+            // 离线包模式提示条：点击进入设置可更新离线包
+            if (ui.offlineMode) {
+                OfflineBanner(total = ui.total, onClick = onOpenSettings)
+            }
             FilterEntryRow(
                 brand = ui.brand,
                 cpu = ui.cpuBrand,
@@ -356,6 +367,8 @@ fun HomeScreen(
             Box(Modifier.fillMaxSize().nestedScroll(ptr.nestedScrollConnection)) {
                 when {
                     ui.error != null -> ErrorView(ui.error!!, onRetry = vm::loadAll)
+                    ui.loaded && ui.models.isEmpty() && !ui.hasOffline ->
+                        NoOfflineView(onDownload = onOpenSettings)
                     ui.loaded && ui.models.isEmpty() -> EmptyView()
                     else -> PickerBody(
                     brands = ui.brands,
@@ -814,6 +827,51 @@ private fun PickerRow(row: ModelRow, onClick: () -> Unit, onLongClick: () -> Uni
 }
 
 // ---------- 空 / 错误态 ----------
+
+/** 离线包模式提示条 */
+@Composable
+private fun OfflineBanner(total: Int, onClick: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 2.dp)
+            .background(Color(0x1A00A878), RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text("📦", fontSize = 13.sp)
+        Spacer(Modifier.width(6.dp))
+        Text(
+            "离线包模式 · $total 款机型（点我更新）",
+            fontSize = 11.5.sp,
+            color = Color(0xFF00A878),
+            modifier = Modifier.weight(1f),
+        )
+        Text("去设置", fontSize = 11.sp, color = Color(0xFF00A878))
+    }
+}
+
+/** 未下载离线包空态：引导去设置下载 */
+@Composable
+private fun NoOfflineView(onDownload: () -> Unit) {
+    Column(
+        Modifier.fillMaxSize().padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text("📦", fontSize = 36.sp)
+        Spacer(Modifier.height(8.dp))
+        Text("尚未下载离线数据包", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "下载后无需联网即可查询全部机型与回收价",
+            color = TextSecondary, fontSize = 12.sp,
+        )
+        Spacer(Modifier.height(14.dp))
+        Button(onClick = onDownload) { Text("去下载离线包", fontSize = 13.sp) }
+    }
+}
 
 @Composable
 private fun EmptyView() {

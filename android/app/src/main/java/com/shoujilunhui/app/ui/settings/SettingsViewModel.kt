@@ -8,10 +8,19 @@ import com.shoujilunhui.app.ConfigStore
 import com.shoujilunhui.app.UpdateState
 import com.shoujilunhui.app.Updater
 import com.shoujilunhui.app.data.ApiClient
+import com.shoujilunhui.app.data.OfflineStore
 import com.shoujilunhui.app.recognize.PhoneRecognizer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
+/** 离线数据包下载状态 */
+sealed class OfflineState {
+    object Idle : OfflineState()
+    object Downloading : OfflineState()
+    data class Ready(val info: OfflineStore.Info) : OfflineState()
+    data class Error(val message: String) : OfflineState()
+}
 
 class SettingsViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -124,6 +133,35 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
             Updater.installApk(getApplication(), ready.apkPath)
         } catch (e: Exception) {
             _updateState.value = UpdateState.Error(e.message ?: "无法启动安装器")
+        }
+    }
+
+    // ===== 离线数据包 =====
+
+    private val _offlineState = MutableStateFlow<OfflineState>(
+        OfflineStore.info(getApplication())?.let { OfflineState.Ready(it) } ?: OfflineState.Idle
+    )
+    val offlineState: StateFlow<OfflineState> = _offlineState
+
+    /** 重新读取本地离线包状态（下载完成/进入页面时调用） */
+    fun refreshOffline() {
+        val info = OfflineStore.info(getApplication())
+        _offlineState.value = info?.let { OfflineState.Ready(it) } ?: OfflineState.Idle
+    }
+
+    /** 下载/更新离线包：从已保存的服务器地址拉取全量机型 */
+    fun downloadOffline() {
+        if (_offlineState.value is OfflineState.Downloading) return
+        val url = config.baseUrl.trim()
+        if (url.isBlank()) {
+            _offlineState.value = OfflineState.Error("请先填写服务器地址并保存")
+            return
+        }
+        viewModelScope.launch {
+            _offlineState.value = OfflineState.Downloading
+            OfflineStore.download(getApplication(), url)
+                .onSuccess { _offlineState.value = OfflineState.Ready(it) }
+                .onFailure { _offlineState.value = OfflineState.Error(it.message ?: "下载失败") }
         }
     }
 }
