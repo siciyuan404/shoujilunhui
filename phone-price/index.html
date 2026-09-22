@@ -357,6 +357,74 @@ tr:hover td { background: var(--hover-bg); }
   .detail-hero h2 { font-size: 20px; }
 }
 mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; }
+
+/* ===== Chip components (on detail page) ===== */
+.chip-section { margin-top: 14px; }
+.chip-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text-secondary);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.chip-section-title .count { color: var(--accent); font-weight: 700; }
+.chip-groups { display: flex; flex-direction: column; gap: 12px; }
+.chip-group-label {
+  font-size: 11.5px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+}
+.chip-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #f0f7ff; border: 1px solid #d6e8ff; border-radius: 8px;
+  padding: 7px 12px; font-size: 13px; font-weight: 600; color: var(--accent);
+  cursor: pointer; transition: all .15s; text-decoration: none;
+}
+.chip-tag:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(22,119,255,.25); }
+.chip-tag .chip-vendor { font-size: 11px; font-weight: 400; opacity: .7; }
+.chip-tag:hover .chip-vendor { opacity: .85; }
+.chip-empty { font-size: 12.5px; color: var(--text-secondary); font-style: italic; padding: 4px 0; }
+
+/* ===== Chip detail page ===== */
+.chip-detail-hero {
+  position: relative; padding: 28px 24px; color: #fff; overflow: hidden;
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+}
+.chip-detail-hero::after {
+  content: ''; position: absolute; right: -50px; top: -50px; width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%); border-radius: 50%;
+}
+.chip-detail-hero .chip-type-badge {
+  display: inline-block; background: rgba(255,255,255,.2); color: #fff;
+  padding: 4px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,.28); margin-bottom: 10px; position: relative; z-index: 1;
+}
+.chip-detail-hero h2 { font-size: 26px; font-weight: 800; margin: 4px 0 8px; position: relative; z-index: 1; }
+.chip-detail-hero .chip-vendor-line { font-size: 14px; opacity: .9; position: relative; z-index: 1; }
+.chip-spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.chip-spec-item { background: #f8fafc; border-radius: 10px; padding: 12px 14px; }
+.chip-spec-item .k { color: var(--text-secondary); font-size: 12px; display: block; margin-bottom: 4px; }
+.chip-spec-item .v { font-weight: 700; font-size: 14px; line-height: 1.5; }
+.chip-desc-block { font-size: 14px; line-height: 1.8; color: var(--text); margin-bottom: 14px; }
+.chip-desc-block .label { font-weight: 700; color: var(--text); display: block; margin-bottom: 4px; font-size: 13.5px; }
+.chip-risk-block { background: #fff7f5; border: 1px solid #ffccc7; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.chip-risk-block .label { font-weight: 700; color: var(--danger); font-size: 13.5px; margin-bottom: 6px; display: block; }
+.chip-risk-block p { font-size: 13.5px; line-height: 1.8; color: var(--text); }
+.chip-phones-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.chip-phones-title .count { color: var(--accent); }
+.chip-phone-list { display: flex; flex-direction: column; gap: 0; }
+.chip-phone-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer;
+  transition: background .15s; border-radius: 6px;
+}
+.chip-phone-row:hover { background: var(--accent-light); }
+.chip-phone-row:last-child { border-bottom: none; }
+.chip-phone-brand { font-size: 12px; color: var(--text-secondary); margin-right: 8px; }
+.chip-phone-model { font-weight: 600; font-size: 14px; color: var(--text); }
+.chip-phone-context { font-size: 11.5px; color: var(--text-secondary); max-width: 50%; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 600px) {
+  .chip-spec-grid { grid-template-columns: 1fr; }
+  .chip-phone-context { display: none; }
+  .chip-detail-hero h2 { font-size: 20px; }
+}
 </style>
 </head>
 <body>
@@ -417,6 +485,7 @@ mark { background: #ffe58f; color: inherit; border-radius: 2px; padding: 0 2px; 
 let allData = [];
 let originalData = '';
 let specsData = null;
+let chipsData = null;
 let currentMode = 'price';
 let lastMode = 'price';
 let currentBrand = '全部';
@@ -428,16 +497,18 @@ let dirtyCount = 0;
 // ===== LOAD =====
 Promise.all([
   fetch('./data.json').then(r => r.json()),
-  fetch('./phone-specs.json').then(r => r.json()).catch(() => null)
-]).then(([priceData, specData]) => {
+  fetch('./phone-specs.json').then(r => r.json()).catch(() => null),
+  fetch('./chips.json').then(r => r.json()).catch(() => null)
+]).then(([priceData, specData, chipData]) => {
   allData = priceData;
   originalData = JSON.stringify(priceData);
   specsData = specData;
+  chipsData = chipData;
   document.getElementById('updateInfo').textContent = '📅 报价日期：2026-08-22';
   route();
 }).catch(err => {
   document.getElementById('mainContent').innerHTML =
-    '<div class="empty-state"><p>数据加载失败，请检查 data.json / phone-specs.json 文件</p></div>';
+    '<div class="empty-state"><p>数据加载失败，请检查 data.json / phone-specs.json / chips.json 文件</p></div>';
 });
 
 // ===== ROUTING (hash based, shareable detail pages) =====
@@ -452,6 +523,12 @@ function route() {
     const model = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
     showListControls(false);
     renderDetail(brand, model);
+    return;
+  }
+  if (h.startsWith('#chip|')) {
+    const chipId = decodeURIComponent((h.slice(6) || '').replace(/\+/g, ' '));
+    showListControls(false);
+    renderChipDetail(chipId);
     return;
   }
   // list mode
@@ -852,6 +929,33 @@ function renderDetail(brand, model) {
   } else if (!(spec && spec.motherboardImg)) {
     html += `<div class="mb-desc empty">暂无主板结构资料，待补充。</div>`;
   }
+
+  // On-board chips (clickable)
+  if (spec && spec.components && spec.components.length) {
+    html += `<div class="chip-section">`;
+    html += `<div class="chip-section-title">🔍 板载芯片清单 <span class="count">(${spec.components.length} 种，点击查看详情)</span></div>`;
+    // Group by type
+    const byType = {};
+    spec.components.forEach(c => {
+      if (!byType[c.type]) byType[c.type] = [];
+      byType[c.type].push(c);
+    });
+    const typeOrder = ["soc","storage","ram","modem","pmic","connectivity","nfc","audio","imaging","rf","sensor","other"];
+    html += `<div class="chip-groups">`;
+    typeOrder.forEach(t => {
+      if (!byType[t]) return;
+      const typeLabel = byType[t][0].typeLabel || t;
+      html += `<div><div class="chip-group-label">${typeLabel}</div><div class="chip-tags">`;
+      byType[t].forEach(c => {
+        const vendorShort = c.vendor ? c.vendor.split('(')[0].trim() : '';
+        html += `<a class="chip-tag" onclick="navTo('#chip|${enc(c.chipId)}')" title="${c.name} — ${c.vendor}">${c.name}${vendorShort ? `<span class="chip-vendor">${vendorShort}</span>` : ''}</a>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `</div></div>`;
+  } else if (spec) {
+    html += `<div class="chip-section"><div class="chip-empty">暂无板载芯片清单，待拆机资料补充后可点击查看芯片详情。</div></div>`;
+  }
   html += `</div>`;
 
   // Bomb lines
@@ -916,6 +1020,101 @@ function findPrice(brand, model) {
     });
   });
   return exact || fuzzy;
+}
+
+// ===== CHIP DETAIL =====
+function getChipById(chipId) {
+  if (!chipsData || !chipsData.chips) return null;
+  return chipsData.chips.find(c => c.id === chipId) || null;
+}
+
+function findPhonesWithChip(chipId) {
+  const result = [];
+  if (!specsData || !specsData.specs) return result;
+  specsData.specs.forEach(s => {
+    if (s.components && s.components.length) {
+      const match = s.components.find(c => c.chipId === chipId);
+      if (match) {
+        result.push({ brand: s.brand, model: s.model, context: match.context || '', matched: match.matched || '' });
+      }
+    }
+  });
+  return result;
+}
+
+function renderChipDetail(chipId) {
+  const chip = getChipById(chipId);
+  if (!chip) {
+    document.getElementById('mainContent').innerHTML =
+      `<div class="detail-back"><button onclick="goBack()">← 返回</button></div>
+       <div class="empty-state"><div class="icon">🔍</div><p>未找到芯片「${chipId}」的资料</p>
+       <p style="font-size:13px;margin-top:6px">该芯片可能尚未录入芯片库</p></div>`;
+    return;
+  }
+
+  const phones = findPhonesWithChip(chipId);
+  const typeLabel = (chipsData.meta && chipsData.meta.types && chipsData.meta.types[chip.type]) || chip.type;
+
+  let html = `<div class="detail-back"><button onclick="goBack()">← 返回列表</button></div>`;
+  html += `<div class="detail-card">`;
+
+  // Hero
+  html += `<div class="chip-detail-hero">
+    <div class="chip-type-badge">${typeLabel}</div>
+    <h2>${chip.name}</h2>
+    <div class="chip-vendor-line">🏭 ${chip.vendor || '厂商待补充'}</div>
+  </div>`;
+
+  // Body
+  html += `<div style="padding: 20px 24px 26px;">`;
+
+  // Specs
+  html += `<div class="chip-spec-grid">`;
+  html += `<div class="chip-spec-item"><span class="k">芯片型号</span><span class="v">${chip.name}</span></div>`;
+  html += `<div class="chip-spec-item"><span class="k">厂商</span><span class="v">${chip.vendor || '-'}</span></div>`;
+  html += `<div class="chip-spec-item"><span class="k">类型</span><span class="v">${typeLabel}</span></div>`;
+  if (chip.spec) {
+    html += `<div class="chip-spec-item"><span class="k">规格参数</span><span class="v">${chip.spec}</span></div>`;
+  }
+  html += `</div>`;
+
+  // Purpose
+  if (chip.purpose) {
+    html += `<div class="chip-desc-block"><span class="label">📌 主要用途</span>${chip.purpose}</div>`;
+  }
+
+  // Risk
+  if (chip.risk) {
+    html += `<div class="chip-risk-block"><span class="label">⚠️ 回收/维修风险提示</span><p>${chip.risk}</p></div>`;
+  }
+
+  // Aliases
+  if (chip.aliases && chip.aliases.length) {
+    html += `<div class="chip-desc-block" style="margin-bottom:14px"><span class="label">🏷 别名 / 常见叫法</span>`;
+    html += chip.aliases.map(a => `<span style="display:inline-block;background:#f0f0f0;padding:2px 10px;border-radius:12px;font-size:12.5px;margin:2px 4px 2px 0">${a}</span>`).join('');
+    html += `</div>`;
+  }
+
+  // Phones using this chip
+  html += `<div class="info-card" style="margin-top:8px"><h3><span class="bar"></span>📱 使用该芯片的机型 <span class="count" style="color:var(--accent)">(${phones.length} 款)</span></h3>`;
+  if (phones.length) {
+    html += `<div class="chip-phone-list">`;
+    phones.forEach(p => {
+      html += `<div class="chip-phone-row" onclick="navTo('#detail|${enc(p.brand)}|${enc(p.model)}')">
+        <div><span class="chip-phone-brand">${p.brand}</span><span class="chip-phone-model">${p.model}</span></div>
+        <div class="chip-phone-context">${p.context || ''}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="chip-empty" style="padding:10px 0">暂无已录入的机型使用该芯片</div>`;
+  }
+  html += `</div>`;
+
+  html += `</div>`; // end body padding
+  html += `</div>`; // end card
+
+  document.getElementById('mainContent').innerHTML = html;
 }
 
 function enc(s) { return encodeURIComponent(s); }

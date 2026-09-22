@@ -519,8 +519,11 @@ fun LedgerScreen(
             title = { Text("删除这条记录？") },
             text = { Text("${row.model} · ${row.day} · 收 ¥${row.recPrice}", fontSize = 13.sp) },
             confirmButton = {
-                TextButton(onClick = { vm.deleteRecord(row.id, row.model); deleteRow = null }) {
-                    Text("删除", color = MaterialTheme.colorScheme.error)
+                TextButton(
+                    enabled = !ui.saving,
+                    onClick = { vm.deleteRecord(row.id, row.model); deleteRow = null }
+                ) {
+                    Text(if (ui.saving) "删除中..." else "删除", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = { TextButton(onClick = { deleteRow = null }) { Text("取消") } },
@@ -1173,9 +1176,9 @@ private fun RecordFormDialog(
         },
         confirmButton = {
             TextButton(
-                enabled = !photoUploading,
+                enabled = !photoUploading && !ui.saving,
                 onClick = { onSave(model, recPrice, channel, saleChannel, salePrice, status, day, seller, photo) }) {
-                Text("保存")
+                Text(if (ui.saving) "保存中..." else "保存")
             }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },

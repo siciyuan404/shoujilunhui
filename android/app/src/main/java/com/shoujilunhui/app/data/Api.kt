@@ -151,7 +151,9 @@ data class RecordRow(
     val status: String,
     val note: String?,
     @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    @SerializedName("updated_at") val updatedAt: String?,
+    /** 服务端幂等/去重返回标记：true=已存在未重复写入 */
+    val duplicate: Boolean? = null,
 )
 
 data class RecordsResponse(
@@ -236,12 +238,23 @@ data class RecordPostBody(
     val seller: String? = null,
     val day: String? = null,
     val status: String? = null,
-    val note: String? = null
+    val note: String? = null,
+    /** 幂等令牌：同一操作重复提交时服务端直接返回上次结果，不重复写入 */
+    @SerializedName("clientToken") val clientToken: String? = null,
 )
 
 data class UploadResponse(val ok: Boolean, val url: String?, val name: String?)
 
-data class RecordBatchBody(val items: List<RecordPostBody>)
+data class RecordBatchBody(
+    val items: List<RecordPostBody>,
+    @SerializedName("clientToken") val clientToken: String? = null,
+)
+
+/** 批量入账时被跳过的重复项 */
+data class SkipItem(
+    val model: String? = null,
+    val reason: String? = null,
+)
 
 data class RecordPatchBody(
     val model: String? = null,
@@ -256,7 +269,9 @@ data class RecordPatchBody(
     val day: String? = null,
     val status: String? = null,
     val note: String? = null,
-    val photo: String? = null
+    val photo: String? = null,
+    /** 幂等令牌：同一操作重复提交时服务端直接返回上次结果，不重复写入 */
+    @SerializedName("clientToken") val clientToken: String? = null,
 )
 
 data class ModelPatchBody(
@@ -266,7 +281,13 @@ data class ModelPatchBody(
     @SerializedName("model_code") val modelCode: String? = null
 )
 
-data class BatchResult(val ok: Boolean, val inserted: Int)
+data class BatchResult(
+    val ok: Boolean,
+    val inserted: Int,
+    val skipped: Int = 0,
+    @SerializedName("skippedDetail") val skippedDetail: List<SkipItem>? = null,
+    @SerializedName("insertedRecords") val insertedRecords: List<RecordRow>? = null,
+)
 
 data class IdResult(val ok: Boolean, val id: Long)
 

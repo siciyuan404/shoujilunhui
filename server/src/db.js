@@ -174,6 +174,7 @@ function openDb() {
     console.log('[db] 已为 storage_chips 表补充 image 列');
   }
   db.exec('CREATE INDEX IF NOT EXISTS idx_records_seller ON records(seller)');
+  db.exec('CREATE INDEX IF NOT EXISTS idx_records_photo ON records(photo)');
   return db;
 }
 

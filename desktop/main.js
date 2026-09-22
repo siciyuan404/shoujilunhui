@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, screen } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
 
 const PORT = 8760;
 const GITHUB_REPO = 'siciyuan404/shoujilunhui';
@@ -12,6 +13,51 @@ const SERVER_JS = app.isPackaged
   : path.join(__dirname, '..', 'server', 'src', 'index.js');
 let serverProc = null;
 let mainWindow = null;
+
+// ===== 窗口状态持久化（手写，参考 electron-window-state / VS Code 思路，零依赖） =====
+const MIN_W = 760, MIN_H = 520;
+const DEFAULT_STATE = { width: 1280, height: 860, x: undefined, y: undefined, isMaximized: false };
+
+function stateFile() {
+  return path.join(app.getPath('userData'), 'window-state.json');
+}
+
+// 读取上次窗口状态（含基础校验：尺寸下限、位置不跑出屏幕）
+function loadWindowState() {
+  const s = Object.assign({}, DEFAULT_STATE);
+  try {
+    if (fs.existsSync(stateFile())) {
+      const j = JSON.parse(fs.readFileSync(stateFile(), 'utf-8'));
+      s.width = Math.max(MIN_W, Number(j.width) || 1280);
+      s.height = Math.max(MIN_H, Number(j.height) || 860);
+      s.isMaximized = !!j.isMaximized;
+      if (typeof j.x === 'number' && typeof j.y === 'number') { s.x = j.x; s.y = j.y; }
+    }
+  } catch (e) {}
+  // 位置校验：窗口必须至少 40px 可见，否则回退到主屏居中
+  if (s.x !== undefined && s.y !== undefined) {
+    const displays = screen.getAllDisplays();
+    const visible = displays.some((d) => {
+      const wa = d.workArea;
+      return s.x + 40 < wa.x + wa.width && s.x + s.width - 40 > wa.x &&
+             s.y + 40 < wa.y + wa.height && s.y + s.height - 40 > wa.y;
+    });
+    if (!visible) { s.x = undefined; s.y = undefined; }
+  }
+  return s;
+}
+
+// 保存窗口状态：最大化时记录"还原后"的边界
+function saveWindowState(win) {
+  try {
+    if (!win || win.isDestroyed()) return;
+    const isMax = win.isMaximized();
+    const b = win.getNormalBounds();
+    const s = { x: b.x, y: b.y, width: Math.max(MIN_W, b.width), height: Math.max(MIN_H, b.height), isMaximized: isMax };
+    fs.mkdirSync(path.dirname(stateFile()), { recursive: true });
+    fs.writeFileSync(stateFile(), JSON.stringify(s), 'utf-8');
+  } catch (e) {}
+}
 
 function checkServer() {
   return new Promise((resolve) => {
@@ -103,50 +149,24 @@ async function ensureServer() {
   throw new Error('API 服务启动超时');
 }
 
+// 注入样式：系统标题栏（titleBarOverlay）方案。
+// - 不再需要 html transparent / body 圆角阴影（窗口边框与圆角由系统绘制）
+// - header 为拖拽区，内部所有可交互元素标记 no-drag
+// - 保留失焦时头部压暗反馈（窗口级阴影由系统自动处理）
 const injectCss = `
-  html { background: transparent !important; padding: 8px !important; overflow: hidden !important; }
-  body {
-    border-radius: 14px !important;
-    box-shadow: 0 12px 48px rgba(0,0,0,.38) !important;
-    min-height: calc(100vh - 16px) !important;
-    max-height: calc(100vh - 16px) !important;
-    overflow-y: auto;
-    transition: box-shadow .25s !important;
+  body { min-height: 100vh !important; }
+  .header { -webkit-app-region: drag; -webkit-user-select: none; }
+  .header button, .header a, .header input, .header select, .header .mode-switch,
+  .header .update-info, .header .app-update-bar, .header .update-check-btn, .header .mode-btn {
+    -webkit-app-region: no-drag;
   }
-  body.win-blur { box-shadow: 0 4px 18px rgba(0,0,0,.18) !important; }
   body.win-blur .header { filter: saturate(.6) brightness(.92); }
-  .header { -webkit-app-region: drag; }
-  .header .mode-switch, .header .update-info { -webkit-app-region: no-drag; }
-  .header .mode-btn { -webkit-app-region: no-drag; }
-  .win-ctrl {
-    position: fixed; top: 10px; right: 12px; z-index: 99999;
-    display: flex; gap: 2px; -webkit-app-region: no-drag;
-  }
-  .win-ctrl button {
-    width: 30px; height: 26px; border: none; border-radius: 6px; cursor: pointer;
-    background: rgba(255,255,255,.16); color: #fff; font-size: 13px; line-height: 1;
-    font-family: inherit; transition: background .15s;
-  }
-  .win-ctrl button:hover { background: rgba(255,255,255,.35); }
-  .win-ctrl button.win-close:hover { background: #e81123; }
-  .win-ctrl svg { width: 12px; height: 12px; fill: currentColor; }
 `;
 
 const injectJs = `
   (function () {
-    if (document.getElementById('winCtrlBar')) return;
-    const bar = document.createElement('div');
-    bar.id = 'winCtrlBar';
-    bar.className = 'win-ctrl';
-    bar.innerHTML = [
-      '<button id="wcMin" title="最小化"><svg viewBox="0 0 12 12"><rect x="1" y="5.5" width="10" height="1"/></svg></button>',
-      '<button id="wcMax" title="最大化/还原"><svg viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>',
-      '<button id="wcClose" class="win-close" title="关闭"><svg viewBox="0 0 12 12"><path d="M1.5 1.5 L10.5 10.5 M10.5 1.5 L1.5 10.5" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></button>',
-    ].join('');
-    document.body.appendChild(bar);
-    document.getElementById('wcMin').onclick = () => window.__desktop.minimize();
-    document.getElementById('wcMax').onclick = () => window.__desktop.toggleMaximize();
-    document.getElementById('wcClose').onclick = () => window.__desktop.close();
+    if (window.__desktopInjected) return;
+    window.__desktopInjected = true;
     document.addEventListener('keydown', (e) => {
       if (e.key === 'F5') { e.preventDefault(); location.reload(); }
     });
@@ -156,14 +176,21 @@ const injectJs = `
 async function createWindow() {
   await ensureServer();
 
+  const winState = loadWindowState();
+
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 860,
-    minWidth: 760,
-    minHeight: 520,
-    frame: false,
-    transparent: true,
-    backgroundColor: '#00000000',
+    x: winState.x,
+    y: winState.y,
+    width: winState.width,
+    height: winState.height,
+    minWidth: MIN_W,
+    minHeight: MIN_H,
+    // 隐藏系统标题栏内容，但保留系统原生边框/阴影/圆角与 Snap 行为
+    titleBarStyle: 'hidden',
+    frame: true,
+    // Windows 11：右上角放回系统原生窗口按钮（最小化/最大化/关闭），颜色匹配页面蓝色渐变头部
+    titleBarOverlay: { color: '#0d5fd9', symbolColor: '#ffffff', height: 40 },
+    backgroundColor: '#f0f2f5',
     show: false,
     icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
@@ -172,6 +199,8 @@ async function createWindow() {
       nodeIntegration: false,
     },
   });
+
+  if (winState.isMaximized) mainWindow.maximize();
 
   // Ctrl+滚轮 缩放
   mainWindow.webContents.setVisualZoomLevelLimits(1, 3);
@@ -184,7 +213,7 @@ async function createWindow() {
     mainWindow.webContents.executeJavaScript(injectJs);
   });
 
-  // 焦点状态视觉区分
+  // 焦点状态视觉区分（仅头部压暗；窗口阴影由系统随焦点自动变化）
   const setBlur = (on) => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.executeJavaScript(
@@ -195,12 +224,17 @@ async function createWindow() {
   mainWindow.on('blur', () => setBlur(true));
   mainWindow.on('focus', () => setBlur(false));
 
-  // 最大化时移除圆角
-  mainWindow.on('maximize', () => {
-    mainWindow.webContents.insertCSS('html { padding: 0 !important; } body { border-radius: 0 !important; min-height: 100vh !important; max-height: 100vh !important; }').catch(() => {});
-  });
-  mainWindow.on('unmaximize', () => {
-    mainWindow.webContents.insertCSS(injectCss).catch(() => {});
+  // 窗口状态自动记忆（防抖写盘 + 关闭时兜底保存）
+  let stateTimer = null;
+  const scheduleSave = () => {
+    if (stateTimer) clearTimeout(stateTimer);
+    stateTimer = setTimeout(() => { stateTimer = null; saveWindowState(mainWindow); }, 400);
+  };
+  mainWindow.on('resize', scheduleSave);
+  mainWindow.on('move', scheduleSave);
+  mainWindow.on('close', () => {
+    if (stateTimer) clearTimeout(stateTimer);
+    saveWindowState(mainWindow);
   });
 
   mainWindow.on('closed', () => { mainWindow = null; });

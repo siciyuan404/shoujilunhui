@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { toLegacyExport } = require('./db');
+const oss = require('./oss');
 
 const UPLOAD_DIR = path.join(__dirname, '..', 'uploads');
 const EXT_BY_CT = {
@@ -98,6 +99,34 @@ function requireKey(req, cfg) {
   const h = req.headers['x-api-key'] || '';
   const q = new URL(req.url, 'http://x').searchParams.get('key') || '';
   return h === cfg.apiKey || q === cfg.apiKey;
+}
+
+// ---------- 写操作幂等去重 ----------
+// 同一操作（双击 / 网络重试 / 延迟重复提交）携带相同 clientToken 时，直接返回上次结果，不再重复写入。
+const recentWrites = new Map(); // token -> { at, result }
+const WRITE_TTL_MS = 120 * 1000;
+
+function writeToken(req, body) {
+  const t = String((body && body.clientToken) || req.headers['x-client-token'] || '').trim();
+  return t || null;
+}
+
+// 命中缓存返回上次结果（并附 duplicate:true），未命中返回 null
+function replayHit(token) {
+  if (!token) return null;
+  const now = Date.now();
+  if (recentWrites.size > 500) {
+    for (const [k, v] of recentWrites) if (now - v.at > WRITE_TTL_MS) recentWrites.delete(k);
+  }
+  const hit = recentWrites.get(token);
+  if (hit && now - hit.at < WRITE_TTL_MS) return hit.result;
+  return null;
+}
+
+function rememberWrite(token, result) {
+  if (!token) return;
+  if (recentWrites.size > 500) recentWrites.clear();
+  recentWrites.set(token, { at: Date.now(), result });
 }
 
 // 排序白名单
@@ -499,6 +528,7 @@ function recordStats(db, range) {
 }
 
 function createRouter(db, cfg) {
+  oss.init(cfg);
   return async function handle(req, res, pathname, q) {
     const method = req.method;
 
@@ -736,8 +766,24 @@ function createRouter(db, cfg) {
         if (!ext) return json(res, 400, { error: '仅支持图片文件（Content-Type 需为 image/*）' });
         const buf = await readRawBody(req);
         if (!buf || !buf.length) return json(res, 400, { error: '文件内容为空' });
-        if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
         const fname = `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        // OSS 优先：图片存到阿里云 OSS（私有桶），本地不留副本；失败时回退本地 uploads（保证上传不丢）
+        if (oss.enabled()) {
+          const tmp = path.join(UPLOAD_DIR, '.tmp_' + fname);
+          try {
+            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+            fs.writeFileSync(tmp, buf);
+            try {
+              await oss.upload(tmp, fname);
+              return json(res, 201, { ok: true, url: '/uploads/' + fname, name: fname, storage: 'oss' });
+            } finally {
+              try { fs.unlinkSync(tmp); } catch (_) {}
+            }
+          } catch (e) {
+            console.warn('[upload] OSS 上传失败，回退本地存储：' + e.message);
+          }
+        }
+        if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
         fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
         return json(res, 201, { ok: true, url: '/uploads/' + fname, name: fname });
       }
@@ -745,30 +791,61 @@ function createRouter(db, cfg) {
       // ---------- 收机记账：写入（需 API Key） ----------
       if (method === 'POST' && pathname === '/api/records') {
         const body = await readBody(req);
+        const token = writeToken(req, body);
+        const replay = replayHit(token);
+        if (replay) return json(res, 200, Object.assign({ duplicate: true, replay: true }, replay));
         const f = validateRecord(body, false);
         if (!f.day) f.day = new Date().toLocaleDateString('sv');
+        // 同一照片重复入账（重复识别/重复确认同一张图）直接返回已有记录
+        if (f.photo) {
+          const same = db.prepare('SELECT * FROM records WHERE photo = ? AND model = ? AND day = ? ORDER BY id DESC LIMIT 1').get(f.photo, f.model, f.day);
+          if (same) {
+            const row = parseRecord(same, requestBase(req));
+            rememberWrite(token, row);
+            return json(res, 200, Object.assign({ duplicate: true }, row));
+          }
+        }
         const r = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`)
           .run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.seller || '', f.day, f.status || '在库', f.note || '');
-        return json(res, 201, parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
+        const row = parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(r.lastInsertRowid), requestBase(req));
+        rememberWrite(token, row);
+        return json(res, 201, row);
       }
 
       if (method === 'POST' && pathname === '/api/records/batch') {
         const body = await readBody(req);
+        const token = writeToken(req, body);
+        const replay = replayHit(token);
+        if (replay) return json(res, 200, Object.assign({ duplicate: true, replay: true }, replay));
         const items = Array.isArray(body.items) ? body.items : (Array.isArray(body) ? body : null);
         if (!Array.isArray(items) || !items.length) return json(res, 400, { error: 'items 数组必填' });
         const ins = db.prepare(`INSERT INTO records (${RECORD_INSERT_COLS.join(', ')}) VALUES (${RECORD_INSERT_COLS.map(() => '?').join(', ')})`);
         const today = new Date().toLocaleDateString('sv');
+        // 去重键：照片+型号+日期+收价+渠道+来源。同批内重复项或库中已存在项跳过（防止重复识别/重复确认堆记录）
+        const dedupKey = (it, f) => [f.photo || '', f.model, f.day || today, f.rec_price || '', f.channel || '', f.seller || ''].join('|');
+        const seen = new Set();
+        const skippedDetail = [];
+        const insertedRows = [];
         let n = 0;
         db.exec('BEGIN');
         try {
           for (const it of items) {
             const f = validateRecord(it, false);
-            ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.seller || '', f.day || today, f.status || '在库', f.note || '');
+            const key = dedupKey(it, f);
+            if (seen.has(key)) { skippedDetail.push({ model: f.model, reason: '同批重复' }); continue; }
+            const dup = db.prepare('SELECT id FROM records WHERE photo = ? AND model = ? AND day = ? AND rec_price = ? AND channel = ? AND seller = ? LIMIT 1')
+              .get(f.photo || '', f.model, f.day || today, f.rec_price || '', f.channel || '', f.seller || '');
+            if (dup) { skippedDetail.push({ model: f.model, reason: '已存在' }); continue; }
+            const insR = ins.run(f.photo || '', f.brand || '', f.category || '', f.model, f.model_id ?? null, f.rec_price || '', f.sale_price || '', f.channel || '', f.sale_channel || '', f.seller || '', f.day || today, f.status || '在库', f.note || '');
+            insertedRows.push(parseRecord(db.prepare('SELECT * FROM records WHERE id = ?').get(insR.lastInsertRowid), requestBase(req)));
+            seen.add(key);
             n++;
           }
           db.exec('COMMIT');
         } catch (e) { db.exec('ROLLBACK'); throw e; }
-        return json(res, 201, { ok: true, inserted: n });
+        const result = { ok: true, inserted: n, skipped: skippedDetail.length, skippedDetail, insertedRecords: insertedRows };
+        rememberWrite(token, result);
+        return json(res, 201, result);
       }
 
       const rm = pathname.match(/^\/api\/records\/(\d+)$/);
@@ -810,10 +887,22 @@ function createRouter(db, cfg) {
 
       if (method === 'POST' && pathname === '/api/models') {
         const body = await readBody(req);
+        const token = writeToken(req, body);
+        const replay = replayHit(token);
+        if (replay) return json(res, 200, Object.assign({ duplicate: true, replay: true }, replay));
         const f = validateModel(body, false);
+        // 同品牌+分类+型号去重：重复录入直接返回已有记录，避免堆出重复行
+        const exist = db.prepare('SELECT * FROM models WHERE brand = ? AND category = ? AND model = ?').get(f.brand, f.category, f.model);
+        if (exist) {
+          const row = parseVariants(exist, requestBase(req));
+          rememberWrite(token, row);
+          return json(res, 200, Object.assign({ duplicate: true }, row));
+        }
         const vals = rowValues(f);
         const r = db.prepare(`INSERT INTO models (${INSERT_COLS.join(', ')}) VALUES (${INSERT_PLACE})`).run(...vals);
-        return json(res, 201, parseVariants(db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid), requestBase(req)));
+        const row = parseVariants(db.prepare('SELECT * FROM models WHERE id = ?').get(r.lastInsertRowid), requestBase(req));
+        rememberWrite(token, row);
+        return json(res, 201, row);
       }
 
       if (method === 'POST' && pathname === '/api/models/bulk') {

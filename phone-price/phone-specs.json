@@ -73,6 +73,35 @@
       "sources": [
         "https://www.ifixit.com/Guide/iPhone+15+Logic+Board+Replacement/165728",
         "https://www.allpcb.com/allelectrohub/iphone-15-series-teardown-highlights"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a16",
+          "name": "A16 仿生",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A16 仿生 6.1″ OLED 60Hz；灵动岛；USB-C(USB2…",
+          "matched": "A16 仿生"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…A16 SoC与SK海力士LPDDR5内存采用PoP叠封，配Kioxia NAND、高通/苹果电源管理IC、TI充电/充电IC、Broadco…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…丝固定、9个按压连接器与中框相连；A16 SoC与SK海力士LPDDR5内存采用PoP叠封，配Kioxia NAND、高通/苹果电源…",
+          "matched": "LPDDR5"
+        }
       ]
     },
     {
@@ -104,6 +133,35 @@
       "sources": [
         "https://www.ifixit.com/Guide/iPhone+15+Logic+Board+Replacement/165728",
         "https://www.ifixit.com/Device/iPhone_16_Plus?revisionid=1289777"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a16",
+          "name": "A16 仿生",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A16 仿生 6.7″ OLED 60Hz；灵动岛；USB-C 与iPh…",
+          "matched": "A16 仿生"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…连接；A16 SoC配SK海力士LPDDR5（PoP叠封），Kioxia NAND、高通PMIC、TI充电IC、Broadcom无线充电、NX…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…立柱螺丝固定、多个按压连接器连接；A16 SoC配SK海力士LPDDR5（PoP叠封），Kioxia NAND、高通PMIC、TI充…",
+          "matched": "LPDDR5"
+        }
       ]
     },
     {
@@ -137,6 +195,53 @@
         "https://www.techspot.com/news/100251-teardown-shows-off-iphone-15-pro-internal-hardware.html",
         "https://wccftech.com/first-iphone-15-pro-teardown-gets-published/",
         "https://www.allpcb.com/allelectrohub/iphone-15-series-teardown-highlights"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a17pro",
+          "name": "A17 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A17 Pro 6.1″ OLED 120Hz；钛金属中框；Action…",
+          "matched": "A17 Pro"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…于三明治中央、下方叠封SK海力士8GB LPDDR5，正面为Kioxia NAND；覆盖更大面积的石墨散热膜（实测散热改善有限），L形电池带拉…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…7 Pro SoC位于三明治中央、下方叠封SK海力士8GB LPDDR5，正面为Kioxia NAND；覆盖更大面积的石墨散热膜（实…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "qualcomm-x70",
+          "name": "高通骁龙X70 基带",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…的石墨散热膜（实测散热改善有限），L形电池带拉环。主板含高通骁龙X70基带、USI Wi‑Fi/蓝牙、NXP NFC、UWB、ST…",
+          "matched": "骁龙X70"
+        },
+        {
+          "chipId": "st-esim",
+          "name": "ST eSIM安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "意法半导体 (ST)",
+          "context": "…70基带、USI Wi‑Fi/蓝牙、NXP NFC、UWB、ST eSIM安全芯片及多颗电源管理IC，面容ID原深感模组与激光雷达集中…",
+          "matched": "ST eSIM"
+        }
       ]
     },
     {
@@ -169,6 +274,44 @@
       "sources": [
         "https://www.ifixit.com/Guide/iPhone+15+Pro+Max+Chip+ID/165320",
         "https://www.techspot.com/news/100251-teardown-shows-off-iphone-15-pro-internal-hardware.html"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a17pro",
+          "name": "A17 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A17 Pro 6.7″ OLED 120Hz；钛金属中框；5x 长焦 与…",
+          "matched": "A17 Pro"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…辑板，A17 Pro（APL1V02）叠封SK海力士8GB LPDDR5，背面Kioxia 256GB NAND；高通骁龙X70基带…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "qualcomm-x70",
+          "name": "高通骁龙X70 基带",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…LPDDR5，背面Kioxia 256GB NAND；高通骁龙X70基带、USI Wi‑Fi/蓝牙、NXP NFC、Apple…",
+          "matched": "骁龙X70"
+        },
+        {
+          "chipId": "st-esim",
+          "name": "ST eSIM安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "意法半导体 (ST)",
+          "context": "…SI Wi‑Fi/蓝牙、NXP NFC、Apple UWB、ST eSIM安全元件，并配备5倍四棱镜长焦与激光雷达。L形电池带拉环，石…",
+          "matched": "ST eSIM"
+        }
       ]
     },
     {
@@ -201,6 +344,35 @@
       "sources": [
         "https://ifixit.com/Guide/iPhone+16+Chip+ID/177222",
         "https://www.ifixit.com/News/100352/we-hot-wired-the-iphone-16"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a18",
+          "name": "A18",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 6.1″ OLED 60Hz；相机控制键；USB-C 采用…",
+          "matched": "A18"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…F板+主板），A18（APL1V08）叠封SK海力士8GB LPDDR5X于主板正面，背面Kioxia 128GB NAND；高通SD…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx71m",
+          "name": "高通 SDX71M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…5X于主板正面，背面Kioxia 128GB NAND；高通SDX71M调制解调器、USI Wi‑Fi/蓝牙、NXP NFC+UWB…",
+          "matched": "SDX71M"
+        }
       ]
     },
     {
@@ -233,6 +405,53 @@
       "sources": [
         "https://ifixit.com/Guide/iPhone+16+Chip+ID/177222",
         "https://www.ifixit.com/Device/iPhone_16_Plus?revisionid=1289777"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a18",
+          "name": "A18",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 6.7″ OLED 60Hz；相机控制键 与iPhone…",
+          "matched": "A18"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…叠层逻辑板，A18叠封SK海力士8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙、NXP N…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…，采用两块双面PCB叠层逻辑板，A18叠封SK海力士8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx71m",
+          "name": "高通 SDX71M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…力士8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙、NXP NFC/UWB、Br…",
+          "matched": "SDX71M"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…Wi‑Fi/蓝牙、NXP NFC/UWB、Broadcom/Skyworks/Qorvo前端模块、TI充电与USB-C控制器。散热为A1…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -265,6 +484,44 @@
       "sources": [
         "https://zh.ifixit.com/Guide/Identificaci%C3%B3n+del+chip+del+iPhone+16e/182268",
         "https://zh.ifixit.com/Teardown/iPhone+16e+%E6%8B%86%E8%A7%A3%E6%95%99%E7%A8%8B/182375"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a18",
+          "name": "A18",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 6.1″ OLED 60Hz；单摄；Apple C1 基带…",
+          "matched": "A18"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…板+射频板），A18（APL1V08）叠封SK海力士8GB LPDDR5X，主板背面Kioxia 128GB NAND；最大亮点是首发…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "apple-c1",
+          "name": "苹果 C1 自研基带",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 6.1″ OLED 60Hz；单摄；Apple C1 基带 采用双层主板（逻辑板+射频板），A18（APL1V0…",
+          "matched": "Apple C1"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…1 5G基带（APL1114），配USI Wi‑Fi/蓝牙、NXP SN300 NFC（含eSIM安全元件）、Broadcom前端、Ren…",
+          "matched": "NXP SN300"
+        }
       ]
     },
     {
@@ -297,6 +554,71 @@
       "sources": [
         "https://zh.ifixit.com/Guide/%D0%98%D0%B4%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%B8+%D1%87%D0%B8%D0%BF%D0%BE%D0%B2+iPhone+16+Pro/177358",
         "https://www.ifixit.com/News/100693/more-modular-than-ever-before-iphone-16-pro-and-pro-max-teardown"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a18",
+          "name": "A18",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "…；5x 长焦 采用两块双面PCB叠层逻辑板（RF板+主板），A18 Pro（APL1V07）叠封美光8GB LPDDR5X于主…",
+          "matched": "A18"
+        },
+        {
+          "chipId": "apple-a18pro",
+          "name": "A18 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 Pro 6.3″ OLED 120Hz；钛中框；相机控制键；5x…",
+          "matched": "A18 Pro"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…板+主板），A18 Pro（APL1V07）叠封美光8GB LPDDR5X于主板正面，背面Kioxia 128GB NAND；高通SD…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx71m",
+          "name": "高通 SDX71M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…5X于主板正面，背面Kioxia 128GB NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙、NXP NFC+UWB（US…",
+          "matched": "SDX71M"
+        },
+        {
+          "chipId": "usi-wifi-bt",
+          "name": "USI Wi-Fi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "环旭电子 (USI)",
+          "context": "…、USI Wi‑Fi/蓝牙、NXP NFC+UWB（USI 339M00326）、Broadcom/Skyworks/Qorvo前端、TI…",
+          "matched": "339M00326"
+        },
+        {
+          "chipId": "st-esim",
+          "name": "ST eSIM安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "意法半导体 (ST)",
+          "context": "…works/Qorvo前端、TI充电/USB-C/显示电源、ST eSIM安全芯片。双入口（背板/屏幕均可拆）设计，Taptic En…",
+          "matched": "ST eSIM"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…C+UWB（USI 339M00326）、Broadcom/Skyworks/Qorvo前端、TI充电/USB-C/显示电源、ST eS…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -329,6 +651,71 @@
       "sources": [
         "https://www.ifixit.com/News/100693/more-modular-than-ever-before-iphone-16-pro-and-pro-max-teardown",
         "https://www.ifixit.com/Guide/iPhone+16+Pro+Chip+ID/177358"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a18",
+          "name": "A18",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "…中框；相机控制键；5x 长焦 与16 Pro同款叠层逻辑板，A18 Pro（APL1V07）叠封美光8GB LPDDR5X，背…",
+          "matched": "A18"
+        },
+        {
+          "chipId": "apple-a18pro",
+          "name": "A18 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A18 Pro 6.9″ OLED 120Hz；钛中框；相机控制键；5x…",
+          "matched": "A18 Pro"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…Pro（APL1V07）叠封美光8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙与UWB、N…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…叠层逻辑板，A18 Pro（APL1V07）叠封美光8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx71m",
+          "name": "高通 SDX71M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…美光8GB LPDDR5X，背面Kioxia NAND；高通SDX71M基带、USI Wi‑Fi/蓝牙与UWB、NXP NFC、Br…",
+          "matched": "SDX71M"
+        },
+        {
+          "chipId": "st-esim",
+          "name": "ST eSIM安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "意法半导体 (ST)",
+          "context": "…works/Qorvo前端、TI充电/USB-C/显示电源、ST eSIM安全芯片、激光雷达。钛金属中框，双入口设计，5倍四棱镜长焦。…",
+          "matched": "ST eSIM"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…Wi‑Fi/蓝牙与UWB、NXP NFC、Broadcom/Skyworks/Qorvo前端、TI充电/USB-C/显示电源、ST eS…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -362,6 +749,26 @@
         "https://tech.news.am/eng/print/6420/",
         "https://iphonewired.com/industry/1046059/",
         "https://pt.ifixit.com/Device/iPhone_17"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a19",
+          "name": "A19",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A19 6.3″ OLED 120Hz(标准版首上高刷)；相机控制…",
+          "matched": "A19"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…相机控制键 采用紧凑的叠层/双层逻辑板，A19（3nm）叠封LPDDR5X内存，配苹果自研C1蜂窝基带与N1 Wi‑Fi 7/蓝牙6/…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -395,6 +802,62 @@
         "https://www.toutiao.com/a7671128551302709802",
         "https://iphonewired.com/news/1115797/",
         "https://www.sina.cn/news/detail/5329242995036518.html"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a19",
+          "name": "A19",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A19 6.1″ OLED；入门定位 内部结构与iPhone 16…",
+          "matched": "A19"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…L1V13，台积电第三代3nm）PoP叠封SK海力士8GB LPDDR5，射频板换用苹果自研C1X基带（APL1114，较C1提速约…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "apple-c1",
+          "name": "苹果 C1 自研基带",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "苹果 (Apple)",
+          "context": "…K海力士8GB LPDDR5，射频板换用苹果自研C1X基带（APL1114，较C1提速约一倍、更省电）、USI Wi‑Fi/蓝牙、Br…",
+          "matched": "APL1114"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…蓝牙、Broadcom/Skyworks/Murata前端、NXP SN300 NFC（含eSIM）、ST/Renesas无线充电与PMI…",
+          "matched": "NXP SN300"
+        },
+        {
+          "chipId": "murata-fem",
+          "name": "Murata 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "村田 (Murata)",
+          "context": "…SI Wi‑Fi/蓝牙、Broadcom/Skyworks/Murata前端、NXP SN300 NFC（含eSIM）、ST/Ren…",
+          "matched": "Murata"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…一倍、更省电）、USI Wi‑Fi/蓝牙、Broadcom/Skyworks/Murata前端、NXP SN300 NFC（含eSIM）…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -428,6 +891,80 @@
         "https://www.ifixit.com/Guide/iPhone+17+Pro+Chip+ID/196117",
         "https://www.ithinkdiff.com/iphone-17-pro-teardown/",
         "https://iphonewired.com/news/1021555/"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a19",
+          "name": "A19",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "…横向摄像头模组 采用更紧凑的叠层逻辑板（处理器板+射频板），A19 Pro（APL1V12）叠封三星12GB LPDDR5X于…",
+          "matched": "A19"
+        },
+        {
+          "chipId": "apple-a19pro",
+          "name": "A19 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A19 Pro 6.3″ OLED 120Hz；后置横向摄像头模组 采用更…",
+          "matched": "A19 Pro"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…射频板），A19 Pro（APL1V12）叠封三星12GB LPDDR5X于处理器板内侧，外侧Kioxia 256GB NAND；高通…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx80m",
+          "name": "高通 SDX80M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…于处理器板内侧，外侧Kioxia 256GB NAND；高通SDX80M基带、USI 339M00399 Wi‑Fi 7/蓝牙6/T…",
+          "matched": "SDX80M"
+        },
+        {
+          "chipId": "usi-wifi-bt",
+          "name": "USI Wi-Fi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "环旭电子 (USI)",
+          "context": "…xia 256GB NAND；高通SDX80M基带、USI 339M00399 Wi‑Fi 7/蓝牙6/Thread（含Apple N1）…",
+          "matched": "339M00399"
+        },
+        {
+          "chipId": "apple-n1",
+          "name": "苹果 N1 Wi-Fi 7芯片",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "苹果 (Apple)",
+          "context": "…339M00399 Wi‑Fi 7/蓝牙6/Thread（含Apple N1）、Broadcom/Skyworks/Qorvo前端、NX…",
+          "matched": "Apple N1"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、USI UWB（含U2）、TI充电/…",
+          "matched": "NXP SN300"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…牙6/Thread（含Apple N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -460,6 +997,71 @@
       "sources": [
         "https://www.ifixit.com/Device/iPhone_17_Pro_Max?revisionid=1421822",
         "https://wccftech.com/iphone-17-pro-internal-changes-battery-replacement-repairs/amp/"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a19",
+          "name": "A19",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "…像头模组 与17 Pro同款叠层逻辑板（处理器板+射频板），A19 Pro叠封三星12GB LPDDR5X，外侧Kioxia…",
+          "matched": "A19"
+        },
+        {
+          "chipId": "apple-a19pro",
+          "name": "A19 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A19 Pro 6.9″ OLED 120Hz；后置横向摄像头模组 与17…",
+          "matched": "A19 Pro"
+        },
+        {
+          "chipId": "kioxia-nand",
+          "name": "Kioxia NAND Flash",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "铠侠 (Kioxia，原东芝存储)",
+          "context": "…频板），A19 Pro叠封三星12GB LPDDR5X，外侧Kioxia NAND（最高2TB）；高通SDX80M基带、USI Wi‑Fi 7…",
+          "matched": "Kioxia NAND"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…逻辑板（处理器板+射频板），A19 Pro叠封三星12GB LPDDR5X，外侧Kioxia NAND（最高2TB）；高通SDX80M…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdx80m",
+          "name": "高通 SDX80M 调制解调器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…PDDR5X，外侧Kioxia NAND（最高2TB）；高通SDX80M基带、USI Wi‑Fi 7/蓝牙6/Thread（含N1）…",
+          "matched": "SDX80M"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、USI UWB、TI/Qualcom…",
+          "matched": "NXP SN300"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…Fi 7/蓝牙6/Thread（含N1）、Broadcom/Skyworks/Qorvo前端、NXP SN300 NFC（含eSIM）、…",
+          "matched": "Skyworks"
+        }
       ]
     },
     {
@@ -492,6 +1094,26 @@
         "https://www.ifixit.com/News/113171/iphone-air-teardown",
         "https://www.ithinkdiff.com/iphone-air-teardown/",
         "https://www.cultofmac.com/news/iphone-air-teardown"
+      ],
+      "components": [
+        {
+          "chipId": "apple-a19",
+          "name": "A19",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "…au”区域（而非堆叠于电池之上），主板为叠层三明治结构，集成A19 Pro、自研C1X基带与全新N1 Wi‑Fi芯片；机身中部…",
+          "matched": "A19"
+        },
+        {
+          "chipId": "apple-a19pro",
+          "name": "A19 Pro",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "苹果 (Apple)",
+          "context": "A19 Pro 超薄机身；单摄；6.5″ 左右 OLED 超薄（5.64m…",
+          "matched": "A19 Pro"
+        }
       ]
     },
     {
@@ -523,6 +1145,44 @@
         "https://www.cls.cn/detail/1450057",
         "https://www.electronicspecifier.com/?p=30810",
         "https://www.gizmochina.com/page/1445/?attachment_id"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9000s",
+          "name": "麒麟9000S",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9000s 6.69″ OLED 曲屏；卫星通话；HarmonyOS…",
+          "matched": "麒麟9000s"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…A0/GFCV120）位于下层、上方通过PoP堆叠SK海力士LPDDR5（部分为LPDDR5X）DRAM，下方为闪存；华为海思提供W…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…）位于下层、上方通过PoP堆叠SK海力士LPDDR5（部分为LPDDR5X）DRAM，下方为闪存；华为海思提供Wi‑Fi/蓝牙、电源管…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "cetc-msc06a",
+          "name": "中电科54所 MSC06A 卫星通信芯片",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "中电科54所 (CETC 54)",
+          "context": "…处金属片加固、屏蔽罩覆铜箔；标准版仅支持双向北斗卫星消息（无天通卫星通话芯片满血开启）。维修性较差：屏幕粘合极紧、电池无快拆，P…",
+          "matched": "天通卫星"
+        }
       ]
     },
     {
@@ -555,6 +1215,44 @@
         "https://www.coolapk.com/feed/48902640",
         "https://m.gsmarena.com/newsdetail.php3?idNews=59720",
         "https://gizchina.com/news/unveiling-the-inner-secrets-of-the-huawei-mate-60-pro-a-teardown-experience"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9000s",
+          "name": "麒麟9000S",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9000s 6.82″ OLED 曲屏；卫星通话+消息；前置三挖孔 主…",
+          "matched": "麒麟9000s"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…构，麒麟9000S SoC位于下层，上方PoP堆叠SK海力士LPDDR5/LPDDR5X DRAM、下方为闪存；华为海思负责Wi‑F…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…0S SoC位于下层，上方PoP堆叠SK海力士LPDDR5/LPDDR5X DRAM、下方为闪存；华为海思负责Wi‑Fi/蓝牙、电源管…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "cetc-msc06a",
+          "name": "中电科54所 MSC06A 卫星通信芯片",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "中电科54所 (CETC 54)",
+          "context": "…电源管理IC与射频功放，并搭载独立卫星通信芯片（中电科54所MSC06A）实现天通卫星通话。散热为屏下约7000mm²超大铜合金VC…",
+          "matched": "MSC06A"
+        }
       ]
     },
     {
@@ -584,6 +1282,62 @@
         "https://electronics360.globalspec.com/article/21039/techinsights-teardown-huawei-mate-60-pro",
         "https://www.eet-china.com/mp/a255136.html",
         "https://dy.163.com/article/IFM70BOB055652DD.html"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9000s",
+          "name": "麒麟9000S",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9000s 6.82″ OLED；玄武钢化玻璃 主板设计与Mate 6…",
+          "matched": "麒麟9000s"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…Pro完全相同（双叠板），核心均为麒麟9000S + 海力士LPDDR5X + 中电科54所MSC06A卫星通信芯片，差异仅在影像模组…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "cetc-msc06a",
+          "name": "中电科54所 MSC06A 卫星通信芯片",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "中电科54所 (CETC 54)",
+          "context": "…为麒麟9000S + 海力士LPDDR5X + 中电科54所MSC06A卫星通信芯片，差异仅在影像模组（主摄/超广角更大、欧菲光可变…",
+          "matched": "MSC06A"
+        },
+        {
+          "chipId": "sgmicro-ldo",
+          "name": "SGMicro LDO 低压差稳压器",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "圣邦微 (SGMicro)",
+          "context": "…源追踪与PMIC、AWINIC音频放大、OnMicro功放、SGMicro LDO、Bosch六轴与Goertek气压计，并有独立副板…",
+          "matched": "SGMicro"
+        },
+        {
+          "chipId": "maxscend-rf",
+          "name": "Maxscend 射频调谐/开关",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "卓胜微 (Maxscend)",
+          "context": "…斗卫星消息为满血开启。TechInsights列出主板上另有Maxscend射频调谐/开关、海思包络电源追踪与PMIC、AWINIC音频…",
+          "matched": "Maxscend"
+        },
+        {
+          "chipId": "onmicro-pa",
+          "name": "OnMicro 功率放大器",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "昂瑞微 (OnMicro)",
+          "context": "…谐/开关、海思包络电源追踪与PMIC、AWINIC音频放大、OnMicro功放、SGMicro LDO、Bosch六轴与Goertek…",
+          "matched": "OnMicro"
+        }
       ]
     },
     {
@@ -615,6 +1369,17 @@
         "https://www.toutiao.com/article/7444707906135540251",
         "https://www.toutiao.com/article/7644439846647251490",
         "https://www.phoneworld.com.pk/huawei-mate-70-rs-ultimate-disassembled-to-extract-kirin-9020"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9020",
+          "name": "麒麟9020",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9020 6.7″ OLED 直屏；红枫原色影像；HarmonyOS…",
+          "matched": "麒麟9020"
+        }
       ]
     },
     {
@@ -645,6 +1410,17 @@
         "https://www.toutiao.com/article/7648226828045402667",
         "https://tsight.io/articles/17535265",
         "微机分（酷安/什么值得买）Mate 70 Pro+ 深度拆解：双层叠板、上层奥特斯0.45mm/下层华通0.6mm、麒麟9020 Hi36C0、约7000mm² VC、侧边指纹"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9020",
+          "name": "麒麟9020",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9020 6.9″ OLED 曲屏；红枫影像 主板为双层叠板，上层板…",
+          "matched": "麒麟9020"
+        }
       ]
     },
     {
@@ -674,6 +1450,17 @@
       "sources": [
         "https://www.toutiao.com/article/7648226828045402667",
         "微机分（酷安/什么值得买）Mate 70 Pro+ 深度拆解：双层叠板、麒麟9020 Hi36C0、约7000mm² VC、侧边指纹、玄武架构电池反包"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9020",
+          "name": "麒麟9020",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9020 6.9″ OLED 曲屏；高亮钛中框 拆解显示主板设计与P…",
+          "matched": "麒麟9020"
+        }
       ]
     },
     {
@@ -706,6 +1493,17 @@
         "https://c.m.163.com/news/a/KFB2QQCK0556722C.html",
         "https://tsight.io/articles/18468756",
         "https://m.toutiao.com/article/7573692172713607730/"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9030",
+          "name": "麒麟9030",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9030 新一代麒麟；N+1 增强工艺；泰山V3+马良930 GPU…",
+          "matched": "麒麟9030"
+        }
       ]
     },
     {
@@ -737,6 +1535,62 @@
         "https://www.eet-china.com/mp/a312840.html",
         "https://www.cnbeta.com.tw/articles/tech/1431334.htm",
         "老戴（抖音）Pura 70 Ultra 拆解：双层主板、VC约6000mm²、麒麟9010 under 海力士DRAM"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9000s",
+          "name": "麒麟9000S",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…设计（核心芯片分上下两层、部分接口叠层垫高），麒麟9010（Hi36A0 GFCV121）位于SK海力士LPDDR5 DRAM下方（…",
+          "matched": "Hi36A0"
+        },
+        {
+          "chipId": "kirin-9010",
+          "name": "麒麟9010",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9010 6.6″ OLED 直屏；超聚光伸缩摄像头 标准版主板为叠…",
+          "matched": "麒麟9010"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…，麒麟9010（Hi36A0 GFCV121）位于SK海力士LPDDR5 DRAM下方（PoP堆叠），与Mate 60系列共享型号基…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "sgmicro-ldo",
+          "name": "SGMicro LDO 低压差稳压器",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "圣邦微 (SGMicro)",
+          "context": "…i6/蓝牙/GNSS/红外，南芯SC8565快充IC、立锜/圣邦微等电源管理。散热为屏下约6000mm²复合材料VC均热板+铜…",
+          "matched": "圣邦微"
+        },
+        {
+          "chipId": "nanxin-sc8565",
+          "name": "南芯 SC8565 快充IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "南芯半导体 (Southchip)",
+          "context": "…底；海思Hi1105提供Wi‑Fi6/蓝牙/GNSS/红外，南芯SC8565快充IC、立锜/圣邦微等电源管理。散热为屏下约6000mm²…",
+          "matched": "南芯SC8565"
+        },
+        {
+          "chipId": "hisilicon-hi1105",
+          "name": "海思 Hi1105 WiFi/蓝牙/GNSS/红外",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…RAM下方（PoP堆叠），与Mate 60系列共享型号基底；海思Hi1105提供Wi‑Fi6/蓝牙/GNSS/红外，南芯SC8565快充…",
+          "matched": "海思Hi1105"
+        }
       ]
     },
     {
@@ -767,6 +1621,98 @@
         "https://www.gamingdeputy.com/huawei-pura-70-pro-disassembly-90-of-internal-components-are-made-in-china-fast-technology-technology-changes-the-future/",
         "https://zh.ifixit.com/Guide/Pura+70+Pro+Chip+ID/172264",
         "https://electronics360.globalspec.com/article/21569/techinsights-teadown-huawei-pura-70-pro"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9000s",
+          "name": "麒麟9000S",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…echInsights拆解详实：主板SoC面，麒麟9010（Hi36A0 GFCV121）堆叠在12GB SK海力士LPDDR5下方…",
+          "matched": "Hi36A0"
+        },
+        {
+          "chipId": "kirin-9010",
+          "name": "麒麟9010",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9010 6.8″ OLED 曲屏 iFixit/TechInsig…",
+          "matched": "麒麟9010"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…0（Hi36A0 GFCV121）堆叠在12GB SK海力士LPDDR5下方；另一面为海思Hi6421/Hi6423 PMIC、海思…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "sgmicro-ldo",
+          "name": "SGMicro LDO 低压差稳压器",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "圣邦微 (SGMicro)",
+          "context": "…芯SC8565开关电容电源转换、立锜RT9471D充电IC、圣邦微升压、艾为触觉/音频、Bosch BMI270六轴、维普无线…",
+          "matched": "圣邦微"
+        },
+        {
+          "chipId": "nanxin-sc8565",
+          "name": "南芯 SC8565 快充IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "南芯半导体 (Southchip)",
+          "context": "…IC、海思Hi1105 Wi‑Fi6/蓝牙/GNSS/红外、南芯SC8565开关电容电源转换、立锜RT9471D充电IC、圣邦微升压、艾…",
+          "matched": "南芯SC8565"
+        },
+        {
+          "chipId": "hisilicon-pmic",
+          "name": "海思 Hi6421/Hi6423 PMIC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…1）堆叠在12GB SK海力士LPDDR5下方；另一面为海思Hi6421/Hi6423 PMIC、海思Hi1105 Wi‑Fi6/蓝…",
+          "matched": "Hi6421"
+        },
+        {
+          "chipId": "richtek-rt9471d",
+          "name": "立锜 RT9471D 充电IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "立锜科技 (Richtek)",
+          "context": "…6/蓝牙/GNSS/红外、南芯SC8565开关电容电源转换、立锜RT9471D充电IC、圣邦微升压、艾为触觉/音频、Bosch BMI27…",
+          "matched": "立锜RT9471D"
+        },
+        {
+          "chipId": "hisilicon-hi1105",
+          "name": "海思 Hi1105 WiFi/蓝牙/GNSS/红外",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…R5下方；另一面为海思Hi6421/Hi6423 PMIC、海思Hi1105 Wi‑Fi6/蓝牙/GNSS/红外、南芯SC8565开关电…",
+          "matched": "海思Hi1105"
+        },
+        {
+          "chipId": "onmicro-pa",
+          "name": "OnMicro 功率放大器",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "昂瑞微 (OnMicro)",
+          "context": "…I270六轴、维普无线充。RF子板含海思射频收发/前端模块与昂瑞微多模功放。散热为屏下约6000mm²复合材料VC均热板+铜箔…",
+          "matched": "昂瑞微"
+        },
+        {
+          "chipId": "bosch-imu",
+          "name": "Bosch BMI270 六轴传感器",
+          "type": "sensor",
+          "typeLabel": "传感器",
+          "vendor": "博世 (Bosch)",
+          "context": "…换、立锜RT9471D充电IC、圣邦微升压、艾为触觉/音频、Bosch BMI270六轴、维普无线充。RF子板含海思射频收发/前端模块与昂瑞微多…",
+          "matched": "Bosch BMI270"
+        }
       ]
     },
     {
@@ -792,6 +1738,71 @@
         "https://electronics360.globalspec.com/article/21569/techinsights-teadown-huawei-pura-70-pro",
         "https://www.eet-china.com/mp/a312840.html",
         "iMobile/微机分 Pura 70 Pro+ 拆解：叠层PCB、破板下沉、麒麟9010 under 海力士DRAM、南芯SC8565"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9010",
+          "name": "麒麟9010",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9010 6.8″ OLED 曲屏；高亮钛 拆解显示主板为叠层PCB…",
+          "matched": "麒麟9010"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…面积镂空，核心芯片分布上下两层、部分接口叠层垫高；B面海力士LPDDR5 DRAM下方压着麒麟9010（点胶固定），旁有南芯SC85…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "3peak-switch",
+          "name": "3Peak 开关IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "思瑞浦 (3Peak)",
+          "context": "…海思Wi‑Fi6/蓝牙/PMIC/平均功率追踪、昂瑞微功放、3Peak开关、Tsingteng NFC、Bosch六轴；RF板含海…",
+          "matched": "3Peak"
+        },
+        {
+          "chipId": "nanxin-sc8565",
+          "name": "南芯 SC8565 快充IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "南芯半导体 (Southchip)",
+          "context": "…LPDDR5 DRAM下方压着麒麟9010（点胶固定），旁有南芯SC8565快充IC，国产/长存NAND（CN标识）。TechInsig…",
+          "matched": "南芯SC8565"
+        },
+        {
+          "chipId": "tsingteng-nfc",
+          "name": "Tsingteng NFC控制器",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "紫光同芯 (Tsingteng)",
+          "context": "…/蓝牙/PMIC/平均功率追踪、昂瑞微功放、3Peak开关、Tsingteng NFC、Bosch六轴；RF板含海思前端模块。散热为VC均热板+散…",
+          "matched": "Tsingteng NFC"
+        },
+        {
+          "chipId": "maxscend-rf",
+          "name": "Maxscend 射频调谐/开关",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "卓胜微 (Maxscend)",
+          "context": "…）。TechInsights列主板上含长存1TB NAND、Maxscend Wi‑Fi FEM/RF开关、海思Wi‑Fi6/蓝牙/PM…",
+          "matched": "Maxscend"
+        },
+        {
+          "chipId": "onmicro-pa",
+          "name": "OnMicro 功率放大器",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "昂瑞微 (OnMicro)",
+          "context": "…/RF开关、海思Wi‑Fi6/蓝牙/PMIC/平均功率追踪、昂瑞微功放、3Peak开关、Tsingteng NFC、Bosch…",
+          "matched": "昂瑞微"
+        }
       ]
     },
     {
@@ -823,6 +1834,35 @@
         "https://nanoreview.net/en/phone/huawei-pura-80",
         "https://www.toutiao.com/a7656365509205557795",
         "微机分 Pura 80 Pro/Pro+/Ultra 三连拆：双层叠板、麒麟9020、约5700mm² VC、侧边指纹、主摄破板下沉"
+      ],
+      "components": [
+        {
+          "chipId": "kirin-9010",
+          "name": "麒麟9010",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "麒麟9010S 6.8″ OLED 曲屏；一英寸主摄 标准版（麒麟901…",
+          "matched": "麒麟9010"
+        },
+        {
+          "chipId": "kirin-9020",
+          "name": "麒麟9020",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "华为海思 (HiSilicon)",
+          "context": "…石墨烯。公开三连拆主要覆盖Pro/Pro+/Ultra（均用麒麟9020、双层叠板、约5700mm² VC、侧边指纹、无屏下指纹），…",
+          "matched": "麒麟9020"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…延续Pura 70系列的叠层PCB+PoP堆叠（海力士/国产LPDDR5X+UFS）、海思自研Wi‑Fi/蓝牙/电源与北斗卫星消息模块…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -855,6 +1895,80 @@
         "微机分 拆机（公众号）",
         "MyMobileIndia 小米15/15 Ultra 报道 (mymobileindia.com)",
         "今日头条 小米15拆机评测 (m.toutiao.com/article/7626744398855930411)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite 6.36″ OLED 直屏 120Hz；徕卡影像；台积电3…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…计（0.65mm板材，方正代工），骁龙8 Elite与海力士LPDDR5X内存、UFS4.0闪存以PoP方式堆叠（RAM位于SoC下方…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr753",
+          "name": "高通 SDR753 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…/蓝牙由WCN7861承担（前代WCN7851），射频IC为SDR753，信号增强仅一颗澎湃T1S；NFC线圈置于后摄模组右下角，前…",
+          "matched": "SDR753"
+        },
+        {
+          "chipId": "xiaomi-pengpai-g1",
+          "name": "小米澎湃 G1 电池管理芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…沙江电池为单电芯双接口、带快拆拉胶设计，保护板SiP封装内含澎湃G1。维修性：前摄/传感器小板为独立模块化便于更换，但BTB基座…",
+          "matched": "澎湃G1"
+        },
+        {
+          "chipId": "xiaomi-pengpai-p3",
+          "name": "小米澎湃 P3 快充芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…以PoP方式堆叠（RAM位于SoC下方）。充电IC为小米自研澎湃P3，WiFi/蓝牙由WCN7861承担（前代WCN7851），…",
+          "matched": "澎湃P3"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…为小米自研澎湃P3，WiFi/蓝牙由WCN7861承担（前代WCN7851），射频IC为SDR753，信号增强仅一颗澎湃T1S；NFC…",
+          "matched": "WCN7851"
+        },
+        {
+          "chipId": "qualcomm-wcn7861",
+          "name": "高通 WCN7861 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…于SoC下方）。充电IC为小米自研澎湃P3，WiFi/蓝牙由WCN7861承担（前代WCN7851），射频IC为SDR753，信号增强…",
+          "matched": "WCN7861"
+        },
+        {
+          "chipId": "xiaomi-t1s",
+          "name": "小米澎湃 T1S 信号增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…前代WCN7851），射频IC为SDR753，信号增强仅一颗澎湃T1S；NFC线圈置于后摄模组右下角，前摄因空间受限集成在主板盖板…",
+          "matched": "澎湃T1S"
+        }
       ]
     },
     {
@@ -888,6 +2002,62 @@
         "Gizmochina 小米15 Ultra teardown (gizmochina.com/2025/03/03)",
         "MyMobileIndia (mymobileindia.com)",
         "小米香港官网规格 (mi.com/hk/xiaomi-15-ultra)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite 6.73″ OLED 曲屏；2亿长焦；徕卡 采用传统三段式…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…框以压缩厚度，广角与SoC背靠背。骁龙8 Elite与海力士LPDDR5X、UFS4.1以PoP堆叠，右下角为小米自研澎湃P3充电IC…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "cetc-msc06a",
+          "name": "中电科54所 MSC06A 卫星通信芯片",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "中电科54所 (CETC 54)",
+          "context": "…叠，右下角为小米自研澎湃P3充电IC，上层板集成中电五十四所MSC06A卫星通信基带及两颗澎湃T1S+一颗T1信号增强芯片。散热为不…",
+          "matched": "MSC06A"
+        },
+        {
+          "chipId": "xiaomi-pengpai-g2",
+          "name": "小米澎湃 G2 电池管理芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…沙江单电芯双接口6000mAh电池带快拆拉胶、SiP保护板含澎湃G2，并配上下双NFC线圈。维修性：装配复杂（大量螺丝+塑料固定…",
+          "matched": "澎湃G2"
+        },
+        {
+          "chipId": "xiaomi-pengpai-p3",
+          "name": "小米澎湃 P3 快充芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…士LPDDR5X、UFS4.1以PoP堆叠，右下角为小米自研澎湃P3充电IC，上层板集成中电五十四所MSC06A卫星通信基带及两…",
+          "matched": "澎湃P3"
+        },
+        {
+          "chipId": "xiaomi-t1s",
+          "name": "小米澎湃 T1S 信号增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…电IC，上层板集成中电五十四所MSC06A卫星通信基带及两颗澎湃T1S+一颗T1信号增强芯片。散热为不锈钢环形冷泵VC（约5300…",
+          "matched": "澎湃T1S"
+        }
       ]
     },
     {
@@ -920,6 +2090,62 @@
         "网易 小米14标准版拆解 (163.com/dy/article/ITIL4JT005119FS5.html)",
         "EET-China 小米14供应商/主板元件 (eet-china.com/mp/a269423.html)",
         "小米香港官网规格 (mi.com/hk/product/xiaomi-14)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.36″ OLED 直屏 120Hz；徕卡 主板为单层设…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…薄，利于控制厚度与散热；骁龙8 Gen3下方PoP堆叠海力士LPDDR5X（16GB），旁为三星UFS4.0闪存，右下角为小米自研澎湃…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr753",
+          "name": "高通 SDR753 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…4.0闪存，右下角为小米自研澎湃P2充电IC，射频IC为高通SDR753、WiFi/蓝牙为WCN7851、电源IC为pm8550bh…",
+          "matched": "SDR753"
+        },
+        {
+          "chipId": "xiaomi-pengpai-p2",
+          "name": "小米澎湃 P2 快充芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…5X（16GB），旁为三星UFS4.0闪存，右下角为小米自研澎湃P2充电IC，射频IC为高通SDR753、WiFi/蓝牙为WCN…",
+          "matched": "澎湃P2"
+        },
+        {
+          "chipId": "qualcomm-pm8550",
+          "name": "高通 PM8550 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…高通SDR753、WiFi/蓝牙为WCN7851、电源IC为pm8550bh、功放为高通77042。B面大范围覆铜箔并加硅脂辅助散热，主…",
+          "matched": "pm8550bh"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…湃P2充电IC，射频IC为高通SDR753、WiFi/蓝牙为WCN7851、电源IC为pm8550bh、功放为高通77042。B面大范…",
+          "matched": "WCN7851"
+        }
       ]
     },
     {
@@ -952,6 +2178,53 @@
         "小米官方规格 (mi.com/prod/redmi-k80/specs)",
         "GSMArena Redmi K80 (gsmarena.com)",
         "爱搞机/igao7 红米K80发布报道 (igao7.com)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.67″ OLED 2K 直屏；金属中框；澎湃OS 未找…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…三段式、单层/叠板混合结构。已核实配置：骁龙8 Gen3搭配LPDDR5x+UFS4.0，标配小米自研澎湃P3充电芯片与澎湃G1电量计…",
+          "matched": "LPDDR5x"
+        },
+        {
+          "chipId": "xiaomi-pengpai-g1",
+          "name": "小米澎湃 G1 电池管理芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…LPDDR5x+UFS4.0，标配小米自研澎湃P3充电芯片与澎湃G1电量计芯片，支持90W有线快充、6550mAh金沙江单电芯（…",
+          "matched": "澎湃G1"
+        },
+        {
+          "chipId": "xiaomi-pengpai-p3",
+          "name": "小米澎湃 P3 快充芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…龙8 Gen3搭配LPDDR5x+UFS4.0，标配小米自研澎湃P3充电芯片与澎湃G1电量计芯片，支持90W有线快充、6550m…",
+          "matched": "澎湃P3"
+        },
+        {
+          "chipId": "xiaomi-t1s",
+          "name": "小米澎湃 T1S 信号增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…0W有线快充、6550mAh金沙江单电芯（无无线充），并搭载澎湃T1S信号增强芯片与汇顶超声波屏下指纹。散热采用5400mm²双环…",
+          "matched": "澎湃T1S"
+        }
       ]
     },
     {
@@ -982,6 +2255,44 @@
         "IT之家 红米K70参数 (ku.ithome.com/item/22519/canshu.html)",
         "Kimovil 小米Redmi K70 (kimovil.com)",
         "ThePhoneTalks Redmi K70 (thephonetalks.com)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen2",
+          "name": "骁龙8 Gen2 (第二代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen2 6.67″ OLED 2K 直屏；金属中框 未找到详细拆机…",
+          "matched": "骁龙8 Gen2"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…en2平台预期为三段式结构。已核实配置：骁龙8 Gen2搭配LPDDR5x+UFS4.0，采用小米自研澎湃P2快充芯片与澎湃G1电池管…",
+          "matched": "LPDDR5x"
+        },
+        {
+          "chipId": "xiaomi-pengpai-g1",
+          "name": "小米澎湃 G1 电池管理芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…LPDDR5x+UFS4.0，采用小米自研澎湃P2快充芯片与澎湃G1电池管理芯片，双电芯串联支持120W有线快充、5000mAh…",
+          "matched": "澎湃G1"
+        },
+        {
+          "chipId": "xiaomi-pengpai-p2",
+          "name": "小米澎湃 P2 快充芯片",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "小米 (Xiaomi)",
+          "context": "…龙8 Gen2搭配LPDDR5x+UFS4.0，采用小米自研澎湃P2快充芯片与澎湃G1电池管理芯片，双电芯串联支持120W有线快…",
+          "matched": "澎湃P2"
+        }
       ]
     },
     {
@@ -1012,6 +2323,35 @@
         "今日头条拆机综述 https://m.toutiao.com/article/7626747314098504202/",
         "vivo 官网 X200 页面 https://m.vivo.com.cn/vivo/x200/",
         "Cellspare 主板配件页 https://www.cellspare.com/vivo-x200-512gb-12gb-motherboard-pcb-module"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9400",
+          "name": "天玑9400",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9400 6.67″ OLED 曲屏 120Hz；蔡司影像；台积电3…",
+          "matched": "联发科 天玑9400"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…oC，内存/存储为 LPDDR5X Ultra Pro + UFS 4.0（SoC 与内存通常为 PoP 堆叠）。拆机资料显示采用大面…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…晶×天玑9400（台积电3nm全大核）SoC，内存/存储为 LPDDR5X Ultra Pro + UFS 4.0（SoC 与内存通常…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1044,6 +2384,26 @@
         "vivo 官网 X300 参数页 https://www.vivo.com.cn/vivo/param/x300",
         "vivo 社区 X300 散热/信号介绍 https://bbs.vivo.com.cn/newbbs/thread/38791603",
         "NotebookCheck Vivo X300 https://www.notebookcheck.info/Vivo-X300.1178914.0.html"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9500",
+          "name": "天玑9500",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9500 6.7″ OLED 直屏 120Hz；蔡司；新一代旗舰 v…",
+          "matched": "天玑9500"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…全大核，Mali-G1 Ultra MC12），RAM 为 LPDDR5X Ultra 四通道、ROM 为 UFS 4.1（SoC+内…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1076,6 +2436,44 @@
         "TechInsights Vivo X100 拆解 https://techinsights.com/ko/node/54698",
         "FirmwaresPro 拆解步骤 https://firmwarespro.com/disassemble/vivo-x100-detail",
         "vivo X100s 官网（V2 影像芯片说明） https://www.vivo.com.cn/vivo/x100s/"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9300",
+          "name": "天玑9300",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9300 6.78″ OLED 曲屏 120Hz；蔡司 vivo X…",
+          "matched": "天玑9300"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…9v1_64）搭载天玑9300，SoC 与 LPDDR5X/UFS 4.0 内存通常为 PoP 堆叠。TechInsights 拆解确…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…台代号 k6989v1_64）搭载天玑9300，SoC 与 LPDDR5X/UFS 4.0 内存通常为 PoP 堆叠。TechInsi…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "maxscend-rf",
+          "name": "Maxscend 射频调谐/开关",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "卓胜微 (Maxscend)",
+          "context": "…器、GPS 接收器；射频前端含 Qorvo 3 颗 FEM、Maxscend 1 颗 RxD FEM 及多家开关。影像由天玑9300 I…",
+          "matched": "Maxscend"
+        }
       ]
     },
     {
@@ -1102,6 +2500,35 @@
         "IT之家 iQOO 13 配置曝光 https://www.ithome.com/0/804/266.htm",
         "vivo 官方 iQOO 13 常见问题 https://m.vivo.com.cn/service/questions/all?categoryId=73&questionId=1849",
         "百度百科 iQOO 13 https://baike.baidu.com/en/item/iQOO%2013/1490334"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…144Hz；电竞 iQOO 13 搭载蓝晶×骁龙8 至尊版（Snapdragon 8 Elite，台积电3nm，2+6 全大核，Adreno 830），配自…",
+          "matched": "Snapdragon 8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…，配自研电竞芯片 Q2 与 LPDDR5X Ultra + UFS 4.0（SoC+内存 PoP）。官方资料明确为单层主板设计，散热采…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…全大核，Adreno 830），配自研电竞芯片 Q2 与 LPDDR5X Ultra + UFS 4.0（SoC+内存 PoP）。官…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1128,6 +2555,35 @@
         "TechInsights iQOO 12 拆解 https://www.techinsights.com/ja/node/57077",
         "今日头条 iQOO 12 拆解评测 https://m.toutiao.com/w/1782050042009732/",
         "淘宝百科 iQOO12 拆机主板 https://bk.taobao.com/k/shoujilingbujian_4478/a3bef1083bead41d5fc4a1c44ab2e35b"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.78″ OLED 直屏 144Hz iQOO 12（I…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…制，BGA 4.3×3.9mm），内存 LPDDR5X + UFS 4.0 与 SoC 以 BGA‑POP 堆叠封装。TechInsi…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…（Novatek 定制，BGA 4.3×3.9mm），内存 LPDDR5X + UFS 4.0 与 SoC 以 BGA‑POP 堆叠封…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1154,6 +2610,44 @@
         "https://www.evolife.cn/mobile/315085.html",
         "https://www.vopmart.com/blog/post/honor-magic6-teardown.html",
         "https://nanoreview.net/en/phone/honor-magic-6"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.78″ OLED 曲屏 120Hz；鹰眼相机 荣耀 M…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "micron-ufs40",
+          "name": "美光 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "美光 (Micron)",
+          "context": "…做叠层处理；骁龙8 Gen3 与美光 LPDDR5X 内存、美光 UFS 4.0 闪存以 PoP 方式堆叠，处理器区涂硅脂并对应中框下沉凹槽…",
+          "matched": "美光 UFS 4.0"
+        },
+        {
+          "chipId": "micron-lpddr5x",
+          "name": "美光 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "美光 (Micron)",
+          "context": "…单层 PCB、仅右上角一小块做叠层处理；骁龙8 Gen3 与美光 LPDDR5X 内存、美光 UFS 4.0 闪存以 PoP 方式堆叠，处理…",
+          "matched": "美光 LPDDR5X"
+        },
+        {
+          "chipId": "honor-c1plus",
+          "name": "荣耀 HONOR C1+ 射频增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "荣耀 (HONOR)",
+          "context": "…、麦克风与瑞声振动马达，指纹为短焦镜头方案；射频侧搭载自研 HONOR C1+ 增强芯片及独立 Wi-Fi/蓝牙前端。后盖为四曲面点胶内嵌…",
+          "matched": "HONOR C1+"
+        }
       ]
     },
     {
@@ -1186,6 +2680,44 @@
         "https://www.toutiao.com/article/7500388979431997993/",
         "https://www.honor.com/cn/phones/honor-magic7/spec/",
         "http://nanoreview.net/en/phone/honor-magic-7"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite 6.78″ OLED 曲屏 120Hz；AI 鹰眼 荣耀…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "skhynix-ufs40",
+          "name": "SK海力士 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…o 同宗同源），骁龙8 Elite 与三星 LPDDR5X、海力士 UFS 4.0 以 PoP 堆叠，配 VC 均热板并做外部点胶密封与主板封…",
+          "matched": "海力士 UFS 4.0"
+        },
+        {
+          "chipId": "samsung-lpddr5x",
+          "name": "三星 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "三星 (Samsung)",
+          "context": "…拆机指其与 GT Pro 同宗同源），骁龙8 Elite 与三星 LPDDR5X、海力士 UFS 4.0 以 PoP 堆叠，配 VC 均热板…",
+          "matched": "三星 LPDDR5X"
+        },
+        {
+          "chipId": "honor-c1plus",
+          "name": "荣耀 HONOR C1+ 射频增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "荣耀 (HONOR)",
+          "context": "…配 VC 均热板并做外部点胶密封与主板封胶。射频侧搭载自研 HONOR C1+ 射频增强芯片，支持 Wi-Fi 7、BT5.4、NFC；第…",
+          "matched": "HONOR C1+"
+        }
       ]
     },
     {
@@ -1217,6 +2749,35 @@
       "sources": [
         "https://nanoreview.net/en/phone-compare/honor-300-vs-honor-200",
         "拆机资料稀少（仅平台级与参数推断）"
+      ],
+      "components": [
+        {
+          "chipId": "sd-7gen3",
+          "name": "骁龙7 Gen3",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙7 Gen3 6.7″ OLED 直屏 120Hz；轻薄 荣耀 300…",
+          "matched": "骁龙7 Gen3"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…，应为典型主+副板结构，骁龙7 Gen3（台积电4nm）与 LPDDR5、UFS 3.1 以 PoP 堆叠，并配 VC 均热板+石墨…",
+          "matched": "LPDDR5"
+        },
+        {
+          "chipId": "honor-c1plus",
+          "name": "荣耀 HONOR C1+ 射频增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "荣耀 (HONOR)",
+          "context": "…-C、SIM 卡槽与指纹/振动马达，射频侧通常沿用荣耀自研 C1+ 射频增强芯片；5300mAh 硅碳电池与后盖均以胶固定，电池应为易拉…",
+          "matched": "C1+ 射频增强"
+        }
       ]
     },
     {
@@ -1244,6 +2805,26 @@
         "https://vrm24.com/instructions/how-to-disassemble-honor-200/",
         "https://de.ifixit.com/Device/HONOR_200",
         "https://nanoreview.net/en/phone-compare/honor-300-vs-honor-200"
+      ],
+      "components": [
+        {
+          "chipId": "sd-7gen3",
+          "name": "骁龙7 Gen3",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙7 Gen3 6.7″ OLED 曲屏 120Hz；雅顾影像 荣耀 20…",
+          "matched": "骁龙7 Gen3"
+        },
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…，主副板由互连排线+两条同轴电缆连接。骁龙7 Gen3 与 LPDDR5、UFS 3.1 以 PoP 堆叠；后置三摄置于独立小框、可…",
+          "matched": "LPDDR5"
+        }
       ]
     },
     {
@@ -1275,6 +2856,116 @@
         "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
         "https://www.ifixit.com/Device/Samsung_Galaxy_S25",
         "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite for Galaxy 6.2″ AMOLED 120Hz；…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…Galaxy 与 LPDDR5X 内存以 PoP 堆叠、配 UFS 4.0；电源管理含 ADI（MAX77751/MAX77775P）…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…板+射频板），骁龙8 Elite for Galaxy 与 LPDDR5X 内存以 PoP 堆叠、配 UFS 4.0；电源管理含 AD…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr875",
+          "name": "高通 SDR875 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…g S2MPB 系列 PMIC。射频侧为 Qualcomm SDR875-004 收发器、WCN7851-101 Wi-Fi 7/B…",
+          "matched": "SDR875"
+        },
+        {
+          "chipId": "adi-max77751",
+          "name": "ADI MAX77751 USB-C充电器",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "亚德诺 (ADI / Maxim)",
+          "context": "…、配 UFS 4.0；电源管理含 ADI（MAX77751/MAX77775P）USB-C 充电器、Silicon Mitus SM544…",
+          "matched": "MAX77775P"
+        },
+        {
+          "chipId": "mitus-sm5443",
+          "name": "Silicon Mitus SM5443 开关电容充电IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "Silicon Mitus",
+          "context": "…（MAX77751/MAX77775P）USB-C 充电器、Silicon Mitus SM5443 开关电容电池充电、Qualcomm PM8550 系列与…",
+          "matched": "Silicon Mitus SM5443"
+        },
+        {
+          "chipId": "samsung-s2mpb",
+          "name": "三星 S2MPB 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "三星 (Samsung)",
+          "context": "…电、Qualcomm PM8550 系列与 Samsung S2MPB 系列 PMIC。射频侧为 Qualcomm SDR875-…",
+          "matched": "S2MPB"
+        },
+        {
+          "chipId": "qualcomm-pm8550",
+          "name": "高通 PM8550 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…itus SM5443 开关电容电池充电、Qualcomm PM8550 系列与 Samsung S2MPB 系列 PMIC。射频侧…",
+          "matched": "PM8550"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…。射频侧为 Qualcomm SDR875-004 收发器、WCN7851-101 Wi-Fi 7/BT5.4、NXP SN300 N…",
+          "matched": "WCN7851"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…收发器、WCN7851-101 Wi-Fi 7/BT5.4、NXP SN300 NFC+SE、NXP SR200D UWB 及各频段前端模…",
+          "matched": "NXP SN300"
+        },
+        {
+          "chipId": "nxp-sr200d",
+          "name": "NXP SR200D UWB芯片",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…i-Fi 7/BT5.4、NXP SN300 NFC+SE、NXP SR200D UWB 及各频段前端模块（与 Ultra 同平台，但标准版…",
+          "matched": "NXP SR200D"
+        },
+        {
+          "chipId": "wacom-wez02",
+          "name": "Wacom WEZ02 S Pen数字化控制器",
+          "type": "other",
+          "typeLabel": "其他专用芯片",
+          "vendor": "Wacom",
+          "context": "…模块（与 Ultra 同平台，但标准版无 S Pen、故无 Wacom 数字化控制器）。电池 4000mAh 用易拉胶固定（同代 Ultr…",
+          "matched": "Wacom 数字化"
+        }
       ]
     },
     {
@@ -1301,6 +2992,53 @@
         "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
         "https://www.ifixit.com/Device/Samsung_Galaxy_S25",
         "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite for Galaxy 6.7″ AMOLED 120Hz…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…板）：骁龙8 Elite 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 ADI USB-C 充电器+Silicon M…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…分体式双层主板（处理器板+射频板）：骁龙8 Elite 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 ADI USB-…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr875",
+          "name": "高通 SDR875 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…mm/Samsung 系列 PMIC。射频/连接同 S25（SDR875-004、WCN7851-101 Wi-Fi7/BT5.4、…",
+          "matched": "SDR875"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…系列 PMIC。射频/连接同 S25（SDR875-004、WCN7851-101 Wi-Fi7/BT5.4、NXP NFC+UWB、…",
+          "matched": "WCN7851"
+        }
       ]
     },
     {
@@ -1332,6 +3070,134 @@
         "https://www.ifixit.com/Guide/Samsung+Galaxy+S25+Ultra+Chip+ID/181690",
         "https://nl.ifixit.com/News/108201/galaxy-s25-ultra-teardown-quick-battery-fix-slow-progress-on-repairability",
         "https://m.gsmarena.com/newsdetail.php3?idNews=66507&c=10001"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite for Galaxy 6.9″ AMOLED 120Hz；…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…PDDR5X（PoP 堆叠）+ Samsung 256GB UFS 4.0，以及 ADI MAX77751/MAX77775P USB…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…板）：处理器板正面为骁龙8 Elite + 美光 12GB LPDDR5X（PoP 堆叠）+ Samsung 256GB UFS 4.…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr875",
+          "name": "高通 SDR875 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…ung S2DOS07 显示 PM，以及 Qualcomm SDR875-004 收发器、NXP SN300 NFC+SE、NXP…",
+          "matched": "SDR875"
+        },
+        {
+          "chipId": "adi-max77751",
+          "name": "ADI MAX77751 USB-C充电器",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "亚德诺 (ADI / Maxim)",
+          "context": "…堆叠）+ Samsung 256GB UFS 4.0，以及 ADI MAX77751/MAX77775P USB-C 充电器、Silicon M…",
+          "matched": "ADI MAX77751"
+        },
+        {
+          "chipId": "mitus-sm5443",
+          "name": "Silicon Mitus SM5443 开关电容充电IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "Silicon Mitus",
+          "context": "…MAX77751/MAX77775P USB-C 充电器、Silicon Mitus SM5443 开关电容充电、Samsung S2MPBA3 与 TI 音…",
+          "matched": "Silicon Mitus SM5443"
+        },
+        {
+          "chipId": "samsung-s2mpb",
+          "name": "三星 S2MPB 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "三星 (Samsung)",
+          "context": "…n Mitus SM5443 开关电容充电、Samsung S2MPBA3 与 TI 音频放大；背面含 Qualcomm PM8550…",
+          "matched": "S2MPBA3"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…P SN300 NFC+SE、NXP SR200D UWB、WCN7851-101 Wi-Fi7/BT5.4、Skyworks/Mur…",
+          "matched": "WCN7851"
+        },
+        {
+          "chipId": "nxp-sn300",
+          "name": "NXP SN300 NFC + 安全元件",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…PM，以及 Qualcomm SDR875-004 收发器、NXP SN300 NFC+SE、NXP SR200D UWB、WCN7851…",
+          "matched": "NXP SN300"
+        },
+        {
+          "chipId": "nxp-sr200d",
+          "name": "NXP SR200D UWB芯片",
+          "type": "nfc",
+          "typeLabel": "NFC / 安全元件",
+          "vendor": "恩智浦 (NXP)",
+          "context": "…R875-004 收发器、NXP SN300 NFC+SE、NXP SR200D UWB、WCN7851-101 Wi-Fi7/BT5.4、…",
+          "matched": "NXP SR200D"
+        },
+        {
+          "chipId": "cirrus-taptic",
+          "name": "Cirrus Logic 触觉驱动IC",
+          "type": "audio",
+          "typeLabel": "音频 / 触觉驱动",
+          "vendor": "凌云逻辑 (Cirrus Logic)",
+          "context": "…Samsung S2MPB02 电源管理、ST 无线充收发、Cirrus Logic 触觉驱动。射频板集成 Wacom WEZ02 S Pen 数字化…",
+          "matched": "Cirrus Logic 触觉"
+        },
+        {
+          "chipId": "murata-fem",
+          "name": "Murata 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "村田 (Murata)",
+          "context": "…851-101 Wi-Fi7/BT5.4、Skyworks/Murata/Qualcomm/Infineon 前端模块与 ST/Bo…",
+          "matched": "Murata"
+        },
+        {
+          "chipId": "skyworks-fem",
+          "name": "Skyworks 射频前端模块",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "Skyworks (思佳讯)",
+          "context": "…UWB、WCN7851-101 Wi-Fi7/BT5.4、Skyworks/Murata/Qualcomm/Infineon 前端模块…",
+          "matched": "Skyworks"
+        },
+        {
+          "chipId": "wacom-wez02",
+          "name": "Wacom WEZ02 S Pen数字化控制器",
+          "type": "other",
+          "typeLabel": "其他专用芯片",
+          "vendor": "Wacom",
+          "context": "…无线充收发、Cirrus Logic 触觉驱动。射频板集成 Wacom WEZ02 S Pen 数字化控制器、Samsung S2DOS07…",
+          "matched": "Wacom WEZ02"
+        }
       ]
     },
     {
@@ -1363,6 +3229,44 @@
         "https://www.ifixit.com/Device/Samsung_Galaxy_S24",
         "https://www.ifixit.com/Guide/Motherboard+Removal/175781",
         "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 for Galaxy 6.2″ AMOLED 120Hz；…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…SM8650-AC）与 LPDDR5X 内存 PoP 堆叠、UFS 4.0，电源管理为骁龙平台配套的 Qualcomm PM855x…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…8 Gen3 for Galaxy（SM8650-AC）与 LPDDR5X 内存 PoP 堆叠、UFS 4.0，电源管理为骁龙平台配套…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "samsung-s2mpb",
+          "name": "三星 S2MPB 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "三星 (Samsung)",
+          "context": "…配套的 Qualcomm PM855x 与 Samsung S2MPB 系列 PMIC、ADI USB-C 充电器及 Silico…",
+          "matched": "S2MPB"
+        }
       ]
     },
     {
@@ -1392,6 +3296,35 @@
         "https://www.ifixit.com/Device/Samsung_Galaxy_S24",
         "https://www.ifixit.com/Guide/Motherboard+Removal/175781",
         "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 for Galaxy 6.7″ AMOLED 120Hz…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…频板）：骁龙8 Gen3 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 Qualcomm/Samsung 系列 PMI…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…，分体式双层主板（处理器板+射频板）：骁龙8 Gen3 与 LPDDR5X PoP 堆叠、UFS 4.0，电源管理为 Qualcomm…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1424,6 +3357,44 @@
         "https://zh.ifixit.com/Guide/Samsung+Galaxy+S24+Ultra+%E5%90%8E%E7%BD%AE%E6%91%84%E5%83%8F%E5%A4%B4%E6%9B%B4%E6%8D%A2/175785",
         "https://www.yahoo.com/tech/galaxy-s25-ultra-fairs-well-175520300.html",
         "https://wap.zol.com.cn/1466/1465383/index.html"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 for Galaxy 6.8″ AMOLED 120Hz；…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…8650-AB）与 12GB LPDDR5X PoP 堆叠、UFS 4.0（至1TB），电源管理为 Qualcomm PM855x 与…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…3 for Galaxy（SM8650-AB）与 12GB LPDDR5X PoP 堆叠、UFS 4.0（至1TB），电源管理为 Qu…",
+          "matched": "LPDDR5X"
+        },
+        {
+          "chipId": "samsung-s2mpb",
+          "name": "三星 S2MPB 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "三星 (Samsung)",
+          "context": "…管理为 Qualcomm PM855x 与 Samsung S2MPB 系列 PMIC、ADI USB-C 充电器及 Silico…",
+          "matched": "S2MPB"
+        }
       ]
     },
     {
@@ -1449,6 +3420,62 @@
       "sources": [
         "搜狐 微机分《深入剖析真我 GT6:拆机后的惊艳发现》https://www.sohu.com/a/792220802_121876672",
         "FoneArena realme GT 6 review (散热/充电说明) https://www.fonearena.com/blog/?p=426709"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.78″ OLED 直屏 120Hz；GT 性能 主板为…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…力士 LPDDR5X 内存（PoP 叠于 SoC 之上）+ 三星 UFS 4.0 闪存 + 高通第三代骁龙 8；已确认电源管理为高通 PM8…",
+          "matched": "三星 UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…镜头），正反屏蔽罩均覆铜箔并涂硅脂/导热硅胶片。核心三大件为海力士 LPDDR5X 内存（PoP 叠于 SoC 之上）+ 三星 UFS 4.0…",
+          "matched": "海力士 LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr753",
+          "name": "高通 SDR753 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…认电源管理为高通 PM8550BH/PM8550VS、射频 SDR753、Wi-Fi/蓝牙 WCN7851。不锈钢 VC 均热板双层…",
+          "matched": "SDR753"
+        },
+        {
+          "chipId": "qualcomm-pm8550",
+          "name": "高通 PM8550 系列电源管理IC",
+          "type": "pmic",
+          "typeLabel": "电源管理 / 充电 IC",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…FS 4.0 闪存 + 高通第三代骁龙 8；已确认电源管理为高通 PM8550BH/PM8550VS、射频 SDR753、Wi-Fi/蓝牙…",
+          "matched": "高通 PM8550"
+        },
+        {
+          "chipId": "qualcomm-wcn7851",
+          "name": "高通 WCN7851 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…H/PM8550VS、射频 SDR753、Wi-Fi/蓝牙 WCN7851。不锈钢 VC 均热板双层堆叠（官方宣传 11472mm²）…",
+          "matched": "WCN7851"
+        }
       ]
     },
     {
@@ -1475,6 +3502,35 @@
         "微机分 realme GT7 拆解（搜狐/今日头条）",
         "MyMobileIndia《Realme GT 7 Repair Costs Revealed》https://mymobileindia.com/web-stories/realme-gt-7-repair-costs-revealed-display-battery-cameras-more/",
         "realme 官网规格 https://www.realme.com/ph/realme-gt-7-5g/specs"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9400",
+          "name": "天玑9400",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9400e（国际）/ 天玑9400+（国行） 6.8″ OLED 直…",
+          "matched": "联发科 天玑9400"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…角架于主板但未与核心重叠；核心为海力士 LPDDR5X + 三星 UFS 4.0 + 联发科天玑 9400+（国行）/9400e（国际版）。…",
+          "matched": "三星 UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…摄“破板下沉”直触中框、超广角架于主板但未与核心重叠；核心为海力士 LPDDR5X + 三星 UFS 4.0 + 联发科天玑 9400+（国行…",
+          "matched": "海力士 LPDDR5X"
+        }
       ]
     },
     {
@@ -1506,6 +3562,53 @@
         "微机分/什么值得买《【享拆】一加 13 拆解》https://post.m.smzdm.com/zz/p/azz40pgo/",
         "今日头条《一加 13 首发拆解》https://m.toutiao.com/zixun/7511549857715439666",
         "iFixit OnePlus 13 专题 https://it.ifixit.com/Topic/OnePlus_13"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite 6.82″ OLED 直屏 120Hz；哈苏影像 主板为双…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…（经注胶孔灌充）强化散热；核心为海力士 LPDDR5X + UFS 4.0 + 高通骁龙 8 至尊版，Wi-Fi/蓝牙为 WCN786…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…SoC 与核心区注入导热凝胶（经注胶孔灌充）强化散热；核心为海力士 LPDDR5X + UFS 4.0 + 高通骁龙 8 至尊版，Wi-Fi/…",
+          "matched": "海力士 LPDDR5X"
+        },
+        {
+          "chipId": "qualcomm-sdr753",
+          "name": "高通 SDR753 射频收发器",
+          "type": "modem",
+          "typeLabel": "基带 / 射频收发",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…骁龙 8 至尊版，Wi-Fi/蓝牙为 WCN7861、射频 SDR753。潜望长焦采用 Find X8 同款 CMOS 倒置“舰式”…",
+          "matched": "SDR753"
+        },
+        {
+          "chipId": "qualcomm-wcn7861",
+          "name": "高通 WCN7861 WiFi/蓝牙模块",
+          "type": "connectivity",
+          "typeLabel": "WiFi / 蓝牙 / 连接模块",
+          "vendor": "高通 (Qualcomm)",
+          "context": "…FS 4.0 + 高通骁龙 8 至尊版，Wi-Fi/蓝牙为 WCN7861、射频 SDR753。潜望长焦采用 Find X8 同款 C…",
+          "matched": "WCN7861"
+        }
       ]
     },
     {
@@ -1536,6 +3639,35 @@
         "NanoReview OnePlus Ace 5 https://www.nanoreview.net/en/phone/oneplus-ace-5",
         "RepairFully OnePlus Ace 5 https://repairfully.com/devices/oneplus/ace/ace-5",
         "Beebom 规格 https://gadgets.beebom.com/mobile/oneplus-ace-5?view=specs"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.78″ OLED 直屏 120Hz 公开实测拆机资料较…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…双层叠板主板，SoC 与 LPDDR5X 内存（PoP）+ UFS 4.0 闪存堆叠，并配不锈钢 VC 均热板（天工散热系统）。641…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…期：传统三段式机身、likely 双层叠板主板，SoC 与 LPDDR5X 内存（PoP）+ UFS 4.0 闪存堆叠，并配不锈钢 V…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1566,6 +3698,26 @@
         "微机分 Find X9 系列对比拆解（搜狐/今日头条）",
         "GridMobile OPPO Find X9 规格 https://gridmobile.com.sg/phone/oppo-find-x9",
         "OPPO 官网 Find X9 Pro 规格（同平台参考）https://www.oppo.com/au/smartphones/series-find-x/find-x9-pro/specs/"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9500",
+          "name": "天玑9500",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9500 6.59″ OLED 直屏 120Hz；哈苏；台积电3nm…",
+          "matched": "天玑9500"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…直触中框与 VC 均热板；核心为联发科天玑 9500，搭配 LPDDR5X + UFS 4.1（内存以 PoP 叠于 SoC 之上）。…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1594,6 +3746,35 @@
         "Phone Repair Guru《Oppo Find X9 Pro Teardown》https://www.phonerepairguru.com/news/i-tore-down-the-oppo-find-x9-pro-in-china-and-it-completely-blew-my-mind",
         "今日头条《OPPO Find X9 Pro拆解曝光》https://m.toutiao.com/article/7562233905441456675/",
         "OPPO 官网规格 https://www.oppo.com/au/smartphones/series-find-x/find-x9-pro/specs/"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9500",
+          "name": "天玑9500",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9500 6.78″ OLED 曲屏 120Hz；哈苏；2亿长焦 采…",
+          "matched": "天玑9500"
+        },
+        {
+          "chipId": "samsung-lpddr5x",
+          "name": "三星 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "三星 (Samsung)",
+          "context": "…填充导热凝胶（Z 字涂布）。核心为联发科天玑 9500 + 三星 LPDDR5X + UFS 4.1，另含自研山海通信增强芯片（OPPO R…",
+          "matched": "三星 LPDDR5X"
+        },
+        {
+          "chipId": "oppo-r100",
+          "name": "OPPO R100 山海通信增强芯片",
+          "type": "rf",
+          "typeLabel": "射频前端 / 功放",
+          "vendor": "OPPO",
+          "context": "…PDDR5X + UFS 4.1，另含自研山海通信增强芯片（OPPO R100）与哈苏 LUMO 影像相关协处理。7500mAh 单电芯硅…",
+          "matched": "OPPO R100"
+        }
       ]
     },
     {
@@ -1627,6 +3808,26 @@
         "今日头条《OPPO Reno15全面评测|硬核拆机》https://www.toutiao.com/article/7626744135080329782/",
         "OPPO 官方参数 https://support.oppo.com/cn/answer/?aid=2260833",
         "OPPO India Reno15 系列规格 https://www.oppo.com/in/newsroom/press/oppo-india-launches-all-new-reno-15-series/"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-8450",
+          "name": "天玑8450",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑8450 6.3″ OLED 直屏 120Hz；ColorOS 16…",
+          "matched": "天玑8450"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…三段式机身、双层叠板主板，SoC 联发科天玑 8450 与 LPDDR5X + UFS 3.1 堆叠，配不锈钢 VC 均热板；有拆机视…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1653,6 +3854,17 @@
         "OPPO 商城 Reno16 规格 https://store.oppo.com/cn/web/products/40712.html",
         "GeekWills OPPO Reno 16 https://www.geekwills.com/oppo-reno-16.html",
         "Gizmochina Oppo Reno 16 https://www.gizmochina.com/product/oppo-reno-16/"
+      ],
+      "components": [
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…双层叠板主板，SoC 联发科天玑 8550 SUPER 与 LPDDR5X + UFS 3.1 堆叠，配不锈钢 VC 均热板与 80W…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1685,6 +3897,35 @@
         "中关村在线(ZOL) 小米15 Pro",
         "小米官网 mi.com/prod/xiaomi-15-pro",
         "京东 小米15 Pro 商品页"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8elite",
+          "name": "骁龙8 Elite (骁龙8至尊版)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Elite 6.73″ 2K 直屏 120Hz、徕卡潜望长焦三摄(光影…",
+          "matched": "高通 骁龙8 Elite"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…(台积电3nm)与 LPDDR5X 运行内存 PoP 叠封、UFS 4.0 闪存焊接于主板。6100mAh 单电芯金沙江电池，支持 9…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…采用典型旗舰双层堆叠主板，骁龙8至尊版(台积电3nm)与 LPDDR5X 运行内存 PoP 叠封、UFS 4.0 闪存焊接于主板。6…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1715,6 +3956,35 @@
         "中关村在线(ZOL) 小米14 Pro",
         "小米官网 mi.com/xiaomi-14-pro",
         "快懂百科 小米14 Pro"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.73″ 2K 全等深微曲屏、徕卡1024级可变光圈三摄…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…3(台积电4nm) 与 LPDDR5X 内存 PoP 叠封、UFS 4.0 闪存方案。充电管理采用小米澎湃 P2 快充芯片 + 澎湃…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…米14 Pro 主板为骁龙8 Gen3(台积电4nm) 与 LPDDR5X 内存 PoP 叠封、UFS 4.0 闪存方案。充电管理采用…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1745,6 +4015,35 @@
         "中关村在线(ZOL) 小米14 Ultra",
         "小米台湾官网 mi.com/tw/product/xiaomi-14-ultra",
         "中关村在线 小米14 Ultra 参数页"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.73″ 2K 全等深微曲屏、一英寸 LYT-900 徕…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…Gen3(台积电4nm) + LPDDR5X PoP + UFS 4.0，采用小米澎湃 P2 充电芯片与澎湃 G1 电池管理芯片，9…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…Ultra 主板集成骁龙8 Gen3(台积电4nm) + LPDDR5X PoP + UFS 4.0，采用小米澎湃 P2 充电芯片与…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1775,6 +4074,35 @@
         "小米官网(新加坡) mi.com/sg/product/xiaomi-13/specs",
         "小米中国官网 小米13 规格页",
         "Wikimedia Commons: File:Xiaomi 13 front.jpg"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen2",
+          "name": "骁龙8 Gen2 (第二代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen2 6.36″ FHD+ OLED 直屏 120Hz、徕卡三摄…",
+          "matched": "骁龙8 Gen2"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…2(台积电4nm) + LPDDR5X 满血版 PoP + UFS 4.0。散热采用 4642mm² 大 VC 液冷。4500mAh…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…小尺寸直屏旗舰，主板为骁龙8 Gen2(台积电4nm) + LPDDR5X 满血版 PoP + UFS 4.0。散热采用 4642mm…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1805,6 +4133,35 @@
         "中关村在线(ZOL) 小米13 Pro 参数/行情",
         "中关村在线 小米13 Pro 问答",
         "京东 小米13 Pro 商品页(入网型号2210132C)"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen2",
+          "name": "骁龙8 Gen2 (第二代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen2 6.73″ 2K 三星E6 曲面屏、一英寸 IMX989…",
+          "matched": "骁龙8 Gen2"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…为骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0 旗舰方案。6.73″ 三星 E6 2K 曲面屏，散热为 3…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…米13 Pro 主板为骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0 旗舰方案。6.73″ 三星 E6 2K…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1836,6 +4193,35 @@
         "中关村在线(ZOL) 小米13 Ultra",
         "小米官网 mi.com/xiaomi-13-ultra",
         "小米官网(新加坡) mi.com/sg/product/xiaomi-13-ultra/specs"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen2",
+          "name": "骁龙8 Gen2 (第二代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen2 6.73″ 2K C7 LTPO 曲屏、一英寸 IMX98…",
+          "matched": "骁龙8 Gen2"
+        },
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…成骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0，配备小米澎湃 P2 快充芯片与澎湃 G1 电池管理芯片，9…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…Ultra 主板集成骁龙8 Gen2(台积电4nm) + LPDDR5X + UFS 4.0，配备小米澎湃 P2 快充芯片与澎湃 G…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1868,6 +4254,26 @@
         "中关村在线(ZOL) 小米Civi 4 Pro",
         "小米官网 mi.com/prod/xiaomi-civi-4-pro",
         "新浪财经 小米Civi 4 Pro 发布报道"
+      ],
+      "components": [
+        {
+          "chipId": "samsung-ufs40",
+          "name": "三星 UFS 4.0",
+          "type": "storage",
+          "typeLabel": "存储芯片 (NAND / UFS / eMMC)",
+          "vendor": "三星 (Samsung)",
+          "context": "…骁龙8s Gen3(台积电4nm) + LPDDR5X + UFS 4.0 轻薄方案，布板面积更小以适配 7.45mm 机身。配备自研…",
+          "matched": "UFS 4.0"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…4 Pro 主板为骁龙8s Gen3(台积电4nm) + LPDDR5X + UFS 4.0 轻薄方案，布板面积更小以适配 7.45…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1898,6 +4304,26 @@
         "中关村在线 wap.zol.com.cn/1611/1610864",
         "小米官网 www.mi.com/redmi-k70-pro",
         "TechSpecs www.techspecs.info/xiaomi-redmi-k70-pro"
+      ],
+      "components": [
+        {
+          "chipId": "sd-8gen3",
+          "name": "骁龙8 Gen3 (第三代骁龙8)",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "高通 (Qualcomm)",
+          "context": "高通 骁龙8 Gen3 6.67英寸2K OLED直屏(华星C8,3200×144…",
+          "matched": "高通 骁龙8 Gen3"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…为典型 Redmi K 系列矩形堆叠,骁龙8 Gen3 与 LPDDR5X 内存采用 PoP 叠层封装于主板正面,散热为 5000mm…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1930,6 +4356,26 @@
         "中关村在线 wap.zol.com.cn/2082/2081390",
         "小米官网 www.mi.com/prod/redmi-k70-ultra",
         "快懂百科 www.baike.com/wikiid/7398360709355520035"
+      ],
+      "components": [
+        {
+          "chipId": "dimensity-9300",
+          "name": "天玑9300",
+          "type": "soc",
+          "typeLabel": "SoC / 应用处理器",
+          "vendor": "联发科 (MediaTek)",
+          "context": "联发科 天玑9300+ 6.67英寸1.5K AMOLED直屏(2712×122…",
+          "matched": "天玑9300"
+        },
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…8,120W/5500mAh。 主板集成天玑9300+ 与 LPDDR5X 内存 PoP 叠层,并外挂狂暴游戏独显 D1 芯片与小米澎…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -1964,6 +4410,17 @@
         "中关村在线 wap.zol.com.cn/1404/1403108",
         "Newton百科 newton.com.tw/wiki/紅米K60",
         "Gadgets360 www.gadgets360.com/redmi-k60-price-in-india-114959"
+      ],
+      "components": [
+        {
+          "chipId": "skhynix-lpddr5",
+          "name": "SK海力士 LPDDR5",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…形液冷 VC(约5000mm²)覆盖骁龙8+ Gen1 与 LPDDR5 内存;公开拆解资料较少,按 K 系列平台预期其 SoC+R…",
+          "matched": "LPDDR5"
+        }
       ]
     },
     {
@@ -1994,6 +4451,17 @@
         "中关村在线 wap.zol.com.cn/1839/1838409",
         "搜狗百科 baike.sogou.com/v216065704",
         "GSMArena gsmarena.ae/product/xiaomi-redmi-k60-ultra"
+      ],
+      "components": [
+        {
+          "chipId": "skhynix-lpddr5x",
+          "name": "SK海力士 LPDDR5X",
+          "type": "ram",
+          "typeLabel": "运行内存 (DRAM / LPDDR)",
+          "vendor": "SK海力士 (SK Hynix)",
+          "context": "…8,120W/5000mAh。 主板集成天玑9200+ 与 LPDDR5X 内存 PoP 叠层,外挂 Pixelworks 独显 X7…",
+          "matched": "LPDDR5X"
+        }
       ]
     },
     {
@@ -2027,7 +4495,8 @@
       "sources": [
         "小米台湾 www.mi.com/tw/product/redmi-note-14-pro-5g",
         "Cashify compare xiaomi-redmi-note-14r-pro-vs-xiaomi-redmi-note-14-pro"
-      ]
+      ],
+      "components": []
     },
     {
       "brand": "红米",
@@ -2057,7 +4526,8 @@
         "中关村在线 wap.zol.com.cn/1796/1795866",
         "小米官网 www.mi.com/redmi-note-13-pro",
         "小米香港 www.mi.com/hk/product/redmi-note-13-pro-5g/specs"
-      ]
+      ],
+      "components": []
     }
   ]
 }

@@ -59,6 +59,8 @@ data class LedgerUiState(
     val stats: StatsResponse? = null,
     val records: List<RecordRow> = emptyList(),
     val busy: Boolean = false,
+    /** 写操作（新增/编辑/删除）进行中，用于按钮防重复提交 */
+    val saving: Boolean = false,
     val loaded: Boolean = false,
     val error: String? = null,
     val pending: List<PendingRecord> = emptyList(),
@@ -155,6 +157,54 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    // ===== 写操作防重复 + 乐观更新 =====
+
+    /** 幂等令牌：同一操作重复提交时，服务端 120 秒内直接返回上次结果，不重复写入 */
+    private fun newToken(): String =
+        System.currentTimeMillis().toString(36) + "_" + kotlin.random.Random.nextInt(100000, 999999)
+
+    /** 新记录是否落在当前视图（日期区间 + 状态筛选），决定要不要乐观插入列表 */
+    private fun recordInView(r: RecordRow): Boolean {
+        val st = _ui.value
+        if (st.status == "__nosale" && r.salePrice.isNotBlank()) return false
+        if (st.status.isNotBlank() && st.status != "__nosale" && r.status != st.status) return false
+        val range = st.stats?.range ?: return true
+        return r.day >= range.start && r.day <= range.end
+    }
+
+    /** 后台静默刷新统计+列表（不置 busy，不打断界面；用于乐观更新后的数据同步） */
+    private fun loadSilently() {
+        val baseUrl = config.baseUrl
+        if (baseUrl.isBlank()) return
+        viewModelScope.launch {
+            try {
+                val cur = _ui.value
+                val isCustom = cur.period == "custom" &&
+                    cur.customStart.isNotBlank() && cur.customEnd.isNotBlank()
+                val api = ApiClient.api(baseUrl)
+                val stats = if (isCustom)
+                    api.getRecordStats(start = cur.customStart, end = cur.customEnd)
+                else
+                    api.getRecordStats(period = cur.period)
+                val records = if (isCustom)
+                    api.getRecords(start = cur.customStart, end = cur.customEnd, limit = 500)
+                else
+                    api.getRecords(period = cur.period, limit = 500)
+                _ui.update {
+                    it.copy(
+                        stats = stats,
+                        records = records.items,
+                        loaded = true,
+                        channels = ((stats.byChannel?.mapNotNull { c -> c.channel.ifBlank { null } } ?: emptyList()) + defaultChannels)
+                            .distinct().take(12),
+                        sellers = (stats.bySeller?.mapNotNull { s -> s.seller.ifBlank { null } } ?: emptyList())
+                            .distinct().take(12),
+                    )
+                }
+            } catch (_: Exception) { /* 静默失败，下次操作或手动刷新再同步 */ }
+        }
+    }
+
     // ===== 手动录入 =====
 
     /** 按输入搜索报价库，供型号输入联想 */
@@ -206,6 +256,8 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
     ) {
         if (model.isBlank()) { showMessage("请填写型号"); return }
         if (!hasWriteKey()) { showMessage("请先在设置中填写服务器 API Key"); return }
+        if (_ui.value.saving) { showMessage("正在保存，请稍候"); return }
+        _ui.update { it.copy(saving = true) }
         viewModelScope.launch {
             try {
                 val row = matchModel(model)
@@ -222,12 +274,25 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     salePrice = salePrice.ifBlank { null },
                     status = status,
                     day = day.ifBlank { todayStr() },
+                    clientToken = newToken(),
                 )
-                ApiClient.api(config.baseUrl).postRecord(config.apiKey, body)
-                showMessage("已入账：${body.model}")
+                val created = ApiClient.api(config.baseUrl).postRecord(config.apiKey, body)
+                if (created.duplicate == true) {
+                    showMessage("同照片已入账过该型号，未重复添加")
+                } else {
+                    showMessage("已入账：${body.model}")
+                }
                 onDone()
-                load()
+                if (created.duplicate != true && recordInView(created)) {
+                    _ui.update { st ->
+                        st.copy(records = (listOf(created) + st.records).take(500), saving = false)
+                    }
+                } else {
+                    _ui.update { it.copy(saving = false) }
+                }
+                loadSilently()
             } catch (e: Exception) {
+                _ui.update { it.copy(saving = false) }
                 showMessage("入账失败：${e.message}")
             }
         }
@@ -248,6 +313,8 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
     ) {
         if (model.isBlank()) { showMessage("请填写型号"); return }
         if (!hasWriteKey()) { showMessage("请先在设置中填写服务器 API Key"); return }
+        if (_ui.value.saving) { showMessage("正在保存，请稍候"); return }
+        _ui.update { it.copy(saving = true) }
         viewModelScope.launch {
             try {
                 val row = matchModel(model)
@@ -264,12 +331,15 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     salePrice = salePrice,
                     status = status,
                     day = day.ifBlank { todayStr() },
+                    clientToken = newToken(),
                 )
-                ApiClient.api(config.baseUrl).putRecord(id, config.apiKey, patch)
+                val updated = ApiClient.api(config.baseUrl).putRecord(id, config.apiKey, patch)
                 showMessage("已保存")
                 onDone()
-                load()
+                _ui.update { st -> st.copy(saving = false, records = st.records.map { if (it.id == id) updated else it }) }
+                loadSilently()
             } catch (e: Exception) {
+                _ui.update { it.copy(saving = false) }
                 showMessage("保存失败：${e.message}")
             }
         }
@@ -277,12 +347,16 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun deleteRecord(id: Long, model: String) {
         if (!hasWriteKey()) { showMessage("请先在设置中填写服务器 API Key"); return }
+        if (_ui.value.saving) { showMessage("正在处理，请稍候"); return }
+        _ui.update { it.copy(saving = true) }
         viewModelScope.launch {
             try {
                 ApiClient.api(config.baseUrl).deleteRecord(id, config.apiKey)
                 showMessage("已删除：$model")
-                load()
+                _ui.update { st -> st.copy(saving = false, records = st.records.filter { it.id != id }) }
+                loadSilently()
             } catch (e: Exception) {
+                _ui.update { it.copy(saving = false) }
                 showMessage("删除失败：${e.message}")
             }
         }
@@ -522,6 +596,7 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
         val cur = _ui.value
         if (cur.pending.isEmpty()) { showMessage("没有待入账的记录"); return }
         if (!hasWriteKey()) { showMessage("请先在设置中填写服务器 API Key"); return }
+        if (cur.pendingBusy) { showMessage("正在保存，请稍候"); return }
         val toSave = cur.pending.filter { it.checked }
         if (toSave.isEmpty()) { showMessage("请先勾选要入账的机器"); return }
         viewModelScope.launch {
@@ -543,13 +618,23 @@ class LedgerViewModel(app: Application) : AndroidViewModel(app) {
                     )
                 }
                 val res = ApiClient.api(config.baseUrl)
-                    .postRecordsBatch(config.apiKey, RecordBatchBody(items))
+                    .postRecordsBatch(config.apiKey, RecordBatchBody(items, newToken()))
                 val n = res.inserted
+                val skipped = res.skipped
                 val remaining = cur.pending.filterNot { it.checked }
-                showMessage("已入账 $n 台" + if (remaining.isNotEmpty()) "，未勾选 ${remaining.size} 台保留" else "")
-                _ui.update { it.copy(pending = remaining, pendingStatus = "") }
+                showMessage("已入账 $n 台" +
+                    (if (skipped > 0) "，跳过重复 $skipped 台（已存在或同批重复）" else "") +
+                    (if (remaining.isNotEmpty()) "，未勾选 ${remaining.size} 台保留" else ""))
+                val inserted = res.insertedRecords.orEmpty().filter { recordInView(it) }
+                _ui.update {
+                    it.copy(
+                        pending = remaining,
+                        pendingStatus = "",
+                        records = (inserted + it.records).take(500),
+                    )
+                }
                 onDone()
-                load()
+                loadSilently()
             } catch (e: Exception) {
                 showMessage("入账失败：${e.message}")
             }

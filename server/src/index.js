@@ -4,10 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const { openDb, autoMigrate, loadConfig, DB_FILE } = require('./db');
 const { createRouter } = require('./api');
+const oss = require('./oss');
 
 const cfg = loadConfig();
 const db = openDb();
 autoMigrate(db);
+oss.init(cfg);
 
 const WEB_ROOT = path.join(__dirname, '..', '..', 'web');
 const LEGACY_ROOT = path.join(__dirname, '..', '..', 'phone-price');
@@ -49,17 +51,31 @@ http.createServer(async (req, res) => {
   let file = pathname === '/' ? 'index.html' : pathname.slice(1);
   let p;
   if (pathname.startsWith('/uploads/')) {
-    p = safeJoin(UPLOAD_ROOT, pathname.slice('/uploads/'.length));
-    if (!p || !fs.existsSync(p) || fs.statSync(p).isDirectory()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      return res.end('404 Not Found');
+    const rel = pathname.slice('/uploads/'.length);
+    p = safeJoin(UPLOAD_ROOT, rel);
+    const localFile = (p && fs.existsSync(p) && !fs.statSync(p).isDirectory()) ? p : null;
+    if (localFile) {
+      fs.readFile(localFile, (e, d) => {
+        if (e) { res.writeHead(500); return res.end('500'); }
+        res.writeHead(200, { 'Content-Type': mime[path.extname(localFile).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+        res.end(d);
+      });
+      return;
     }
-    fs.readFile(p, (e, d) => {
-      if (e) { res.writeHead(500); return res.end('500'); }
-      res.writeHead(200, { 'Content-Type': mime[path.extname(p).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
-      res.end(d);
-    });
-    return;
+    // 本地无此文件：从 OSS（私有桶）拉取，兼容"图片已上云"后的访问
+    if (oss.enabled()) {
+      try {
+        const data = await oss.read(rel);
+        if (data && data.length) {
+          res.writeHead(200, { 'Content-Type': mime[path.extname(rel).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+          return res.end(data);
+        }
+      } catch (e) {
+        console.warn('[uploads] OSS 读取失败：' + e.message);
+      }
+    }
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('404 Not Found');
   }
   p = safeJoin(WEB_ROOT, file);
   if (!p || !fs.existsSync(p) || fs.statSync(p).isDirectory()) {
