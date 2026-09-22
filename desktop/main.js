@@ -132,6 +132,73 @@ function maybePromptUpdate() {
   }).catch(() => {});
 }
 
+// ===== 应用内下载安装包并拉起安装程序（免跳浏览器，一键覆盖更新） =====
+// GitHub release 下载会 301/302 跳转到 objects.githubusercontent.com，需手动跟随重定向
+function downloadFile(url, dest, onProgress, redirects) {
+  redirects = redirects === undefined ? 5 : redirects;
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: { 'User-Agent': 'phone-recycle-desktop' } }, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        res.resume();
+        if (redirects <= 0) return reject(new Error('下载重定向过多'));
+        return resolve(downloadFile(res.headers.location, dest, onProgress, redirects - 1));
+      }
+      if (res.statusCode !== 200) {
+        res.resume();
+        return reject(new Error('下载失败（HTTP ' + res.statusCode + '）'));
+      }
+      const file = fs.createWriteStream(dest);
+      const total = Number(res.headers['content-length']) || 0;
+      let received = 0;
+      const fail = (e) => {
+        file.destroy();
+        try { fs.unlinkSync(dest); } catch (_) {}
+        reject(e);
+      };
+      res.on('data', (c) => {
+        received += c.length;
+        if (onProgress) onProgress(received, total);
+      });
+      res.pipe(file);
+      file.on('finish', () => file.close(() => resolve(dest)));
+      file.on('error', fail);
+      res.on('error', fail);
+    });
+    req.on('error', (e) => reject(e));
+    req.setTimeout(30000, () => req.destroy(new Error('下载连接超时')));
+  });
+}
+
+// 下载最新版安装包到临时目录（带进度推送），返回本地路径
+async function downloadLatestSetup() {
+  const info = await checkUpdate();
+  if (!info) throw new Error('无法获取更新信息');
+  const exe = (info.assets || []).find((a) => /\.exe$/i.test(a.name));
+  if (!exe) throw new Error('最新版本未找到安装包');
+  const dest = path.join(app.getPath('temp'), 'shoujilunhui-setup-' + info.latestTag + '.exe');
+  // 已下载且体积吻合则直接复用（断点续装场景）
+  if (fs.existsSync(dest)) {
+    const st = fs.statSync(dest);
+    if (st.size > 0 && (!exe.size || st.size === exe.size)) return { filePath: dest, info, cached: true };
+  }
+  const send = (received, total) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('update:progress', {
+        received, total,
+        percent: total ? Math.round((received / total) * 100) : 0,
+      });
+    }
+  };
+  await downloadFile(exe.url, dest, send);
+  // 下载完整性校验：与 release 声明的体积比对
+  const st = fs.statSync(dest);
+  if (exe.size && Math.abs(st.size - exe.size) > 1024) {
+    try { fs.unlinkSync(dest); } catch (_) {}
+    throw new Error('下载校验失败（体积不符），请重试');
+  }
+  return { filePath: dest, info };
+}
+
 async function ensureServer() {
   if (await checkServer()) { console.log('[desktop] API 服务已在运行'); return; }
   console.log('[desktop] 拉起 API 服务...');
@@ -246,6 +313,29 @@ async function createWindow() {
   });
   ipcMain.handle('win:close', () => mainWindow && mainWindow.close());
   ipcMain.handle('update:check', () => checkUpdate());
+  // 一键更新：下载安装包 → 拉起安装程序（下一步下一步，覆盖安装）
+  ipcMain.handle('update:download', async () => {
+    try {
+      const r = await downloadLatestSetup();
+      return { ok: true, filePath: r.filePath, tag: r.info.latestTag, cached: !!r.cached };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  });
+  ipcMain.handle('update:install', (_e, filePath) => {
+    if (!filePath || typeof filePath !== 'string' || !fs.existsSync(filePath)) {
+      return { ok: false, error: '安装包不存在或已删除' };
+    }
+    try {
+      const child = spawn(filePath, [], { detached: true, stdio: 'ignore' });
+      child.unref();
+      // 给安装器一点启动时间后退出应用，由 NSIS 安装向导接管（完成后自动运行新版本）
+      setTimeout(() => { try { app.quit(); } catch (_) {} }, 1500);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  });
   ipcMain.handle('app:version', () => app.getVersion());
   ipcMain.handle('shell:open', (_e, url) => shell.openExternal(url));
 

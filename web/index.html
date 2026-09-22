@@ -1556,12 +1556,47 @@ function showUpdateBar(info) {
   bar.style.display = 'inline-flex';
 }
 function hideUpdateBar() { document.getElementById('appUpdateBar').style.display = 'none'; }
-function downloadUpdate() {
+let updateProgressUnsub = null;
+async function downloadUpdate() {
   if (!appUpdateInfo) return;
-  if (window.__desktop && window.__desktop.openExternal) {
-    window.__desktop.openExternal(appUpdateInfo.url);
-  } else {
+  const btn = document.getElementById('appUpdateBtn');
+  const txt = document.getElementById('appUpdateText');
+  if (btn) btn.disabled = true;
+  // 网页端：无桌面 IPC，保持跳转 release 页面
+  if (!window.__desktop || !window.__desktop.downloadUpdate) {
     window.open(appUpdateInfo.url, '_blank');
+    if (btn) btn.disabled = false;
+    return;
+  }
+  // 桌面端：应用内下载 → 自动拉起安装程序
+  if (updateProgressUnsub) { updateProgressUnsub(); updateProgressUnsub = null; }
+  updateProgressUnsub = window.__desktop.onUpdateProgress((p) => {
+    const pct = p && p.percent != null ? p.percent : 0;
+    if (txt) txt.textContent = '正在下载更新… ' + pct + '%';
+  });
+  if (txt) txt.textContent = '正在下载更新…';
+  try {
+    const res = await window.__desktop.downloadUpdate();
+    if (res && res.ok) {
+      if (txt) txt.textContent = '下载完成，正在启动安装程序…';
+      const inst = await window.__desktop.installUpdate(res.filePath);
+      if (inst && inst.ok) {
+        if (txt) txt.textContent = '安装程序已启动，请按提示完成安装（应用将自动关闭）';
+        if (btn) btn.style.display = 'none';
+      } else {
+        if (txt) txt.textContent = '启动安装程序失败：' + ((inst && inst.error) || '未知错误') + '，可手动下载';
+        if (btn) { btn.disabled = false; btn.textContent = '立即下载'; }
+        if (window.__desktop && window.__desktop.openExternal) window.__desktop.openExternal(appUpdateInfo.url);
+      }
+    } else {
+      if (txt) txt.textContent = '下载失败：' + ((res && res.error) || '未知错误') + '，可手动下载';
+      if (btn) { btn.disabled = false; btn.textContent = '立即下载'; }
+      if (window.__desktop && window.__desktop.openExternal) window.__desktop.openExternal(appUpdateInfo.url);
+    }
+  } catch (e) {
+    if (txt) txt.textContent = '下载失败：' + e.message + '，可手动下载';
+    if (btn) { btn.disabled = false; btn.textContent = '立即下载'; }
+    if (window.__desktop && window.__desktop.openExternal) window.__desktop.openExternal(appUpdateInfo.url);
   }
 }
 
