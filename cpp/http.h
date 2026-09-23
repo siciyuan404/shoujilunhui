@@ -105,6 +105,79 @@ inline bool getUrl(const std::string& url, std::string& body, int timeoutMs = 30
     return ok;
 }
 
+// 通用请求：method GET/POST，可带 Content-Type 与额外 Header（如 X-API-Key），返回 HTTP 状态码（0=失败），响应写入 resp
+inline int request(const std::string& url, const std::string& method, const std::string& body,
+                   const std::string& contentType, const std::string& extraHeaders,
+                   std::string& resp, int timeoutMs = 30000) {
+    resp.clear();
+    bool secure = false;
+    std::string rest;
+    if (url.compare(0, 8, "https://") == 0) { secure = true; rest = url.substr(8); }
+    else if (url.compare(0, 7, "http://") == 0) { rest = url.substr(7); }
+    else return 0;
+    size_t slash = rest.find('/');
+    std::string hostpart = (slash == std::string::npos) ? rest : rest.substr(0, slash);
+    std::string path = (slash == std::string::npos) ? "/" : rest.substr(slash);
+    int port = secure ? 443 : 80;
+    size_t colon = hostpart.rfind(':');
+    if (colon != std::string::npos) {
+        port = atoi(hostpart.substr(colon + 1).c_str());
+        hostpart = hostpart.substr(0, colon);
+    }
+    HINTERNET hSession = WinHttpOpen(L"PhoneRecycleCpp/1.0", WINHTTP_ACCESS_TYPE_NO_PROXY,
+                                     WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    if (!hSession) return 0;
+    HINTERNET hConn = WinHttpConnect(hSession, utf8ToWide(hostpart).c_str(), (INTERNET_PORT)port, 0);
+    int status = 0;
+    if (hConn) {
+        HINTERNET hReq = WinHttpOpenRequest(hConn, utf8ToWide(method).c_str(), utf8ToWide(path).c_str(), nullptr,
+                                            WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
+                                            secure ? WINHTTP_FLAG_SECURE : 0);
+        if (hReq) {
+            DWORD to = (DWORD)timeoutMs;
+            WinHttpSetTimeouts(hSession, to, to, to, to);
+            std::wstring ct = utf8ToWide(contentType);
+            std::wstring ex = utf8ToWide(extraHeaders);
+            LPCWSTR hdrs = nullptr;
+            std::wstring allHdrs;
+            if (!ct.empty() || !ex.empty()) {
+                allHdrs = L"Content-Type: " + ct + L"\r\n" + ex;
+                hdrs = allHdrs.c_str();
+            }
+            const void* sendData = WINHTTP_NO_REQUEST_DATA;
+            DWORD sendLen = 0;
+            if (method == "POST" && !body.empty()) { sendData = body.data(); sendLen = (DWORD)body.size(); }
+            if (WinHttpSendRequest(hReq, hdrs, hdrs ? (DWORD)wcslen(hdrs) : 0, (LPVOID)sendData, sendLen, sendLen, 0) &&
+                WinHttpReceiveResponse(hReq, nullptr)) {
+                DWORD sl = sizeof(status);
+                WinHttpQueryHeaders(hReq, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
+                                    WINHTTP_HEADER_NAME_BY_INDEX, &status, &sl, WINHTTP_NO_HEADER_INDEX);
+                DWORD avail = 0;
+                while (WinHttpQueryDataAvailable(hReq, &avail) && avail > 0) {
+                    std::string chunk; chunk.resize(avail);
+                    DWORD read = 0;
+                    if (!WinHttpReadData(hReq, &chunk[0], avail, &read)) break;
+                    chunk.resize(read);
+                    resp += chunk;
+                }
+            }
+            WinHttpCloseHandle(hReq);
+        }
+        WinHttpCloseHandle(hConn);
+    }
+    WinHttpCloseHandle(hSession);
+    return status;
+}
+
+// POST JSON/二进制到本地 API（带 X-API-Key），200/201 视为成功
+inline bool postUrl(const std::string& url, const std::string& body, const std::string& contentType,
+                    const std::string& apiKey, std::string& resp, int timeoutMs = 30000) {
+    std::string ex;
+    if (!apiKey.empty()) ex = "X-API-Key: " + apiKey + "\r\n";
+    int sc = request(url, "POST", body, contentType, ex, resp, timeoutMs);
+    return sc == 200 || sc == 201;
+}
+
 // UTF-8 -> UTF-16（Windows API 参数用）
 inline std::wstring utf8ToWide(const std::string& s) {
     if (s.empty()) return L"";

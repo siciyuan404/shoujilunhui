@@ -31,11 +31,16 @@
 // ---------- 常量 ----------
 #define PORT 8760
 const wchar_t* HOST = L"127.0.0.1";
+#define APP_VERSION "2.3.0"        // 与 GitHub Release tag 保持一致
+#define APP_VERSION_W L"2.3.0"
+#define API_BASE "http://127.0.0.1:8760"          // 本地 API
+const char* API_KEY = "sk-e756xogvi0lmt9miamt";   // 写操作鉴权（多端同步上传/删除）
 
 #define WM_APP_SERVER_OK   (WM_APP + 1)
 #define WM_APP_SERVER_FAIL (WM_APP + 2)
 #define WM_APP_DATA_READY  (WM_APP + 3)
 #define WM_APP_THUMB_READY (WM_APP + 6)
+#define WM_APP_UPDATE_READY (WM_APP + 7)   // 新版本已下载就绪
 
 const COLORREF CLR_BG        = RGB(245, 246, 248);
 const COLORREF CLR_BORDER    = RGB(221, 226, 233);
@@ -62,6 +67,7 @@ HWND g_hSearch = nullptr;
 HWND g_hList = nullptr;
 HWND g_hStatus = nullptr;
 HWND g_hRefresh = nullptr;
+HWND g_hUpdateBtn = nullptr;   // 「更新」按钮（发现新版本时显示）
 HWND g_btnPrev = nullptr;
 HWND g_btnNext = nullptr;
 std::vector<Model> g_models;
@@ -81,7 +87,14 @@ HFONT g_fontSmall = nullptr;
 HFONT g_fontGal = nullptr;
 
 // ---------- 图集状态 ----------
-struct GalleryItem { std::wstring path; std::string data; bool local; Gdiplus::Image* img = nullptr; };
+struct GalleryItem {
+    std::wstring path;       // 本地文件路径（local=true 时有效）
+    std::string data;        // 内存图片数据（下载/粘贴）
+    bool local = false;      // 本地文件
+    bool cloud = false;      // 云端用户图（gallery 表，可删）
+    long long cloudId = 0;   // gallery 表记录 id
+    Gdiplus::Image* img = nullptr;
+};
 // 调试日志
 static void galLog(const char* s) {
     FILE* f = nullptr;
@@ -380,6 +393,123 @@ static bool httpGetText(const std::string& path, std::string& body) {
     return http::get(HOST, wstr(path), body, 20000, PORT);
 }
 static bool healthCheck() { std::string b; return httpGetText("/api/health", b); }
+
+// ---------- 自动更新（静默检查 + 后台下载 + 重启替换，滚动生效） ----------
+static std::string g_updateVer;          // 已就绪的新版本号
+static std::atomic<bool> g_updateReady{false};
+
+static std::vector<int> parseVer(const std::string& v) {
+    std::vector<int> out;
+    std::string s = v;
+    if (!s.empty() && (s[0] == 'v' || s[0] == 'V')) s = s.substr(1);
+    std::string cur;
+    for (char c : s) {
+        if (c >= '0' && c <= '9') cur += c;
+        else if ((c == '.' || c == '-') && !cur.empty()) { out.push_back(atoi(cur.c_str())); cur.clear(); }
+        else break;
+    }
+    if (!cur.empty()) out.push_back(atoi(cur.c_str()));
+    return out;
+}
+static bool verNewer(const std::string& a, const std::string& b) {
+    auto x = parseVer(a), y = parseVer(b);
+    size_t n = std::max(x.size(), y.size());
+    for (size_t i = 0; i < n; i++) {
+        int xi = i < x.size() ? x[i] : 0, yi = i < y.size() ? y[i] : 0;
+        if (xi != yi) return xi > yi;
+    }
+    return false;
+}
+
+// 后台线程：查 GitHub 最新 Release，有新版则静默下载 update.exe
+static void updateThread() {
+    Sleep(8000);
+    std::string body;
+    if (!http::getUrl("https://api.github.com/repos/siciyuan404/shoujilunhui/releases/latest", body, 15000)) return;
+    std::string tag;
+    size_t p = body.find("\"tag_name\":");
+    if (p != std::string::npos) {
+        p = body.find('"', p + 11);
+        size_t p2 = body.find('"', p + 1);
+        if (p2 != std::string::npos) tag = body.substr(p + 1, p2 - p - 1);
+    }
+    if (tag.empty()) return;
+    if (!verNewer(tag, APP_VERSION)) return;   // 已是最新
+    std::string dlUrl;
+    p = 0;
+    while ((p = body.find("\"browser_download_url\":", p)) != std::string::npos) {
+        p += 24;
+        size_t p2 = body.find('"', p);
+        std::string u = body.substr(p, p2 - p);
+        if (u.find("phone-recycle.exe") != std::string::npos) { dlUrl = u; break; }
+        p = p2;
+    }
+    if (dlUrl.empty()) return;
+    std::string bin;
+    if (!http::getUrl(dlUrl, bin, 60000) || bin.size() < 100000) return;  // 完整性下限
+    wchar_t buf[MAX_PATH]; GetModuleFileNameW(nullptr, buf, MAX_PATH);
+    std::wstring exe = buf;
+    size_t sl = exe.find_last_of(L"\\/");
+    std::wstring upPath = exe.substr(0, sl) + L"\\phone-recycle.update.exe";
+    HANDLE hf = CreateFileW(upPath.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hf == INVALID_HANDLE_VALUE) return;
+    DWORD w = 0;
+    WriteFile(hf, bin.data(), (DWORD)bin.size(), &w, nullptr);
+    CloseHandle(hf);
+    g_updateVer = tag;
+    g_updateReady = true;
+    PostMessage(g_hWnd, WM_APP_UPDATE_READY, 0, 0);
+}
+
+// 生成 update.cmd 并以隐藏窗口运行：等本进程退出 → 用新 exe 覆盖自身 → 启动新版
+static void restartToUpdate() {
+    wchar_t buf[MAX_PATH]; GetModuleFileNameW(nullptr, buf, MAX_PATH);
+    std::wstring exe = buf;
+    size_t sl = exe.find_last_of(L"\\/");
+    std::wstring dir = exe.substr(0, sl);
+    std::wstring cmdFile = dir + L"\\update.cmd";
+    char script[1024];
+    snprintf(script, sizeof(script),
+        "@echo off\r\n"
+        "cd /d \"%s\"\r\n"
+        "timeout /t 2 /nobreak >nul\r\n"
+        "move /y \"phone-recycle.update.exe\" \"phone-recycle.exe\" >nul 2>&1\r\n"
+        "start \"\" \"phone-recycle.exe\"\r\n"
+        "del /q \"update.cmd\" >nul 2>&1\r\n",
+        std::string(dir.begin(), dir.end()).c_str());
+    int n = WideCharToMultiByte(CP_ACP, 0, cmdFile.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    std::string cmdA(n, 0);
+    WideCharToMultiByte(CP_ACP, 0, cmdFile.c_str(), -1, &cmdA[0], n, nullptr, nullptr);
+    HANDLE hf = CreateFileW(cmdFile.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hf != INVALID_HANDLE_VALUE) {
+        DWORD w = 0;
+        WriteFile(hf, script, (DWORD)strlen(script), &w, nullptr);
+        CloseHandle(hf);
+    }
+    ShellExecuteW(nullptr, L"open", L"cmd.exe", (L"/c \"" + cmdFile + L"\"").c_str(), dir.c_str(), SW_HIDE);
+    PostQuitMessage(0);   // 退出当前进程，由 cmd 完成替换并启动新版
+}
+
+// 启动早期：若存在已下载的 update.exe 且版本更新，询问是否立即应用（滚动更新）
+static void checkPendingUpdate() {
+    galLog("checkPendingUpdate: enter");
+    wchar_t buf[MAX_PATH]; GetModuleFileNameW(nullptr, buf, MAX_PATH);
+    std::wstring exe = buf;
+    size_t sl = exe.find_last_of(L"\\/");
+    std::wstring dir = exe.substr(0, sl);
+    std::wstring upPath = dir + L"\\phone-recycle.update.exe";
+    if (GetFileAttributesW(upPath.c_str()) == INVALID_FILE_ATTRIBUTES) { galLog("checkPendingUpdate: no update.exe"); return; }
+    galLog("checkPendingUpdate: found update.exe");
+    int r = MessageBoxW(g_hWnd,
+        L"检测到已下载的新版本安装包，是否现在应用并重启？\n（新版本将替换当前程序）",
+        L"发现新版本", MB_YESNO | MB_ICONINFORMATION);
+    if (r == IDYES) {
+        restartToUpdate();
+    } else if (r == IDNO) {
+        DeleteFileW(upPath.c_str());   // 用户放弃 → 清除，避免每次启动都询问
+    }
+    // 其他返回值（弹窗异常等）→ 保留 update.exe，下次启动再提示
+}
 
 // ---------- 服务拉起（后台线程） ----------
 static std::string findNode() {
@@ -818,6 +948,24 @@ static void loadGalleryItems() {
             g_gal.items.push_back(it);
         }
     }
+    // 云端用户图（多端同步）：拉取本机型 gallery 记录，URL 经 server 读取（OSS 优先）
+    std::string gbody;
+    if (httpGetText("/api/gallery?model_id=" + std::to_string(g_gal.model.id), gbody)) {
+        auto root = json::parse(gbody);
+        auto items = root->get("items");
+        if (items && items->isArray()) {
+            for (auto& itp : items->arr) {
+                std::string url = itp->getStr("url");
+                long long gid = itp->getInt("id", 0);
+                if (url.empty()) continue;
+                std::string body;
+                if (http::getUrl(std::string(API_BASE) + url, body, 20000) && !body.empty()) {
+                    GalleryItem it; it.local = false; it.cloud = true; it.cloudId = gid; it.data = std::move(body);
+                    g_gal.items.push_back(it);
+                }
+            }
+        }
+    }
     if (g_gal.cur >= (int)g_gal.items.size()) g_gal.cur = (int)g_gal.items.size() - 1;
 }
 // 等比例绘制大图
@@ -895,7 +1043,20 @@ static void galleryDelete() {
     int idx = g_gal.cur;
     if (idx < 0 || idx >= (int)g_gal.items.size()) return;
     GalleryItem& it = g_gal.items[idx];
-    if (!it.local) { MessageBoxW(g_gal.hwnd, L"远程图片不可删除（由服务器管理）", L"提示", MB_OK); return; }
+    if (it.cloud) {
+        // 云端用户图：删除 gallery 记录（多端同步删除）
+        std::string url = std::string(API_BASE) + "/api/gallery/" + std::to_string(it.cloudId);
+        std::string resp;
+        if (http::request(url, "DELETE", "", "", "X-API-Key: " + std::string(API_KEY) + "\r\n", resp, 15000) == 200) {
+            galLog("galleryDelete: cloud deleted");
+            loadGalleryItems();
+            if (g_gal.hwnd) InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+        } else {
+            MessageBoxW(g_gal.hwnd, L"云端删除失败（请检查服务连接）", L"提示", MB_OK);
+        }
+        return;
+    }
+    if (!it.local) { MessageBoxW(g_gal.hwnd, L"官方图片不可删除（由服务器管理）", L"提示", MB_OK); return; }
     // GDI+ 图片对象会锁定文件句柄，必须先释放再删除，否则 DeleteFileW 失败
     if (it.img) { delete it.img; it.img = nullptr; }
     if (DeleteFileW(it.path.c_str())) {
@@ -907,11 +1068,45 @@ static void galleryDelete() {
         MessageBoxW(g_gal.hwnd, L"删除失败（文件可能正被占用）", L"提示", MB_OK);
     }
 }
+// 上传本地图到云端（POST /api/gallery?model_id=，OSS 优先），成功则删除本地副本（云端权威）
+static bool uploadLocalToCloud(const std::wstring& path) {
+    HANDLE hf = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+    if (hf == INVALID_HANDLE_VALUE) return false;
+    DWORD sz = GetFileSize(hf, nullptr);
+    if (sz == INVALID_FILE_SIZE || sz == 0 || sz > 20 * 1024 * 1024) { CloseHandle(hf); return false; }
+    std::string data(sz, 0);
+    DWORD rd = 0;
+    ReadFile(hf, &data[0], sz, &rd, nullptr);
+    CloseHandle(hf);
+    if (rd != sz) return false;
+    std::string ct = "image/jpeg";
+    std::wstring ext;
+    size_t dp = path.find_last_of(L'.');
+    if (dp != std::wstring::npos) { ext = path.substr(dp + 1); for (auto& c : ext) c = (wchar_t)towlower(c); }
+    if (ext == L"png") ct = "image/png";
+    else if (ext == L"bmp") ct = "image/bmp";
+    else if (ext == L"webp") ct = "image/webp";
+    else if (ext == L"gif") ct = "image/gif";
+    std::string url = std::string(API_BASE) + "/api/gallery?model_id=" + std::to_string(g_gal.model.id);
+    std::string resp;
+    if (!http::postUrl(url, data, ct, API_KEY, resp, 60000)) {
+        galLog("uploadLocalToCloud: POST FAIL");
+        return false;
+    }
+    auto root = json::parse(resp);
+    auto okp = root->get("ok");
+    if (!okp || !okp->b) { galLog("uploadLocalToCloud: resp not ok"); return false; }
+    DeleteFileW(path.c_str());   // 已上云，删除本地副本，图集以云端为准
+    galLog("uploadLocalToCloud: OK -> cloud");
+    return true;
+}
+
 // 从剪贴板粘贴图片（支持：资源管理器复制的图片文件 CF_HDROP、截图/复制图像 CF_DIB）
 static void galleryPaste() {
     galLog("galleryPaste: enter");
     if (!OpenClipboard(g_gal.hwnd)) { galLog("galleryPaste: OpenClipboard FAIL"); return; }
     bool ok = false;
+    std::vector<std::wstring> saved;   // 粘贴保存成功的本地文件
     std::wstring dir = galModelDir();
     // 1) 剪贴板中是图片文件
     if (IsClipboardFormatAvailable(CF_HDROP)) {
@@ -933,7 +1128,7 @@ static void galleryPaste() {
                 int k = 1;
                 while (GetFileAttributesW(dst.c_str()) != INVALID_FILE_ATTRIBUTES)
                     dst = dir + std::to_wstring(k++) + L"_" + fn;
-                if (CopyFileW(src.c_str(), dst.c_str(), FALSE)) ok = true;
+                if (CopyFileW(src.c_str(), dst.c_str(), FALSE)) { ok = true; saved.push_back(dst); }
             }
         }
     }
@@ -964,7 +1159,7 @@ static void galleryPaste() {
                             dst = dir + std::to_wstring(k++) + L"_" + base;
                         CLSID pngClsid;
                         CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid); // image/png
-                        if (bmp.Save(dst.c_str(), &pngClsid, nullptr) == Gdiplus::Ok) ok = true;
+                        if (bmp.Save(dst.c_str(), &pngClsid, nullptr) == Gdiplus::Ok) { ok = true; saved.push_back(dst); }
                     }
                     DeleteObject(hbm);
                 }
@@ -974,9 +1169,17 @@ static void galleryPaste() {
     }
     CloseClipboard();
     if (ok) {
-        galLog("galleryPaste: OK, reloading");
+        // 多端同步：上传云端（成功则删本地副本，云端权威）
+        int upOk = 0;
+        for (auto& f : saved) if (uploadLocalToCloud(f)) upOk++;
+        galLog(("galleryPaste: uploaded " + std::to_string(upOk) + "/" + std::to_string(saved.size())).c_str());
         loadGalleryItems();
         if (g_gal.hwnd) InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+        if (upOk > 0) {
+            std::wstring msg = L"已粘贴并同步到云端 " + std::to_wstring(upOk) + L" 张（其他设备打开该机型图集可见）";
+            if (upOk < (int)saved.size()) msg += L"\n" + std::to_wstring((int)saved.size() - upOk) + L" 张上传失败，已保留在本地";
+            MessageBoxW(g_gal.hwnd, msg.c_str(), L"提示", MB_OK);
+        }
     } else {
         galLog("galleryPaste: nothing usable");
         MessageBoxW(g_gal.hwnd, L"剪贴板中没有可粘贴的图片（可复制图片文件或截图后再粘贴）", L"提示", MB_OK);
@@ -997,9 +1200,9 @@ static LRESULT CALLBACK GalleryWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
         RECT rc; GetClientRect(hwnd, &rc);
         HBRUSH wb = CreateSolidBrush(RGB(255, 255, 255));
         FillRect(hdc, &rc, wb); DeleteObject(wb);
-        int nLocal = 0; for (auto& it : g_gal.items) if (it.local) nLocal++;
+        int nLocal = 0, nCloud = 0; for (auto& it : g_gal.items) { if (it.local) nLocal++; if (it.cloud) nCloud++; }
         std::wstring t = http::utf8ToWide(g_gal.model.brand + " " + g_gal.model.model);
-        t += L" — 图集（共 " + std::to_wstring((int)g_gal.items.size()) + L" 张，本地 " + std::to_wstring(nLocal) + L"）";
+        t += L" — 图集（共 " + std::to_wstring((int)g_gal.items.size()) + L" 张，云端 " + std::to_wstring(nCloud) + L"，本地 " + std::to_wstring(nLocal) + L"）";
         SetWindowTextW(hwnd, t.c_str());
         // 大图预览区
         RECT prev = { 16, 44, rc.right - 16, 464 };
@@ -1123,6 +1326,9 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         g_hRefresh = CreateWindowW(L"BUTTON", L"⟳ 刷新", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                                    0, 0, 0, 0, hwnd, (HMENU)1002, GetModuleHandleW(nullptr), nullptr);
         SetWindowFont(g_hRefresh, g_fontUI, TRUE);
+        g_hUpdateBtn = CreateWindowW(L"BUTTON", L"⬆ 更新", WS_CHILD | BS_PUSHBUTTON,
+                                     0, 0, 0, 0, hwnd, (HMENU)1005, GetModuleHandleW(nullptr), nullptr);
+        SetWindowFont(g_hUpdateBtn, g_fontUI, TRUE);
         g_btnPrev = CreateWindowW(L"BUTTON", L"◀", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                                   0, 0, 0, 0, hwnd, (HMENU)1010, GetModuleHandleW(nullptr), nullptr);
         SetWindowFont(g_btnPrev, g_fontUI, TRUE);
@@ -1206,10 +1412,21 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         // 列表缩略图后台加载完成 → 重绘列表
         if (g_hList) InvalidateRect(g_hList, nullptr, TRUE);
         break;
+    case WM_APP_UPDATE_READY: {
+        // 新版本已静默下载：显示「更新」按钮并提示
+        std::wstring st = L"已下载新版本 v";
+        st += http::utf8ToWide(g_updateVer);
+        st += L"，点击「⬆ 更新」重启生效";
+        SetWindowTextW(g_hStatus, st.c_str());
+        if (g_hUpdateBtn) ShowWindow(g_hUpdateBtn, SW_SHOW);
+        layout(hwnd);
+        break;
+    }
     case WM_COMMAND:
         if (LOWORD(wp) == 1002) refreshData();
         else if (LOWORD(wp) == 1010) scrollBrands(-120);
         else if (LOWORD(wp) == 1011) scrollBrands(120);
+        else if (LOWORD(wp) == 1005) restartToUpdate();
         if (HIWORD(wp) == EN_CHANGE && LOWORD(wp) == 1001) {
             int n = GetWindowTextLengthW(g_hSearch) + 1;
             std::wstring w(n, 0);
@@ -1338,12 +1555,14 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, PWSTR, int nCmdShow) {
     wg.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
     wg.lpszClassName = L"PhoneRecycleGallery";
     RegisterClassExW(&wg);
-    HWND hwnd = CreateWindowExW(0, wc.lpszClassName, L"手机回收查价 v2.2.0（C++ 轻量版）",
+    HWND hwnd = CreateWindowExW(0, wc.lpszClassName, L"手机回收查价 v" APP_VERSION_W L"（C++ 轻量版）",
                                 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1100, 720,
                                 nullptr, nullptr, hInst, nullptr);
     if (!hwnd) return 1;
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
+    checkPendingUpdate();            // 滚动更新：应用已下载的新版本（若用户确认）
+    std::thread(updateThread).detach();   // 静默检查 GitHub 最新版并后台下载
     MSG msg;
     while (GetMessageW(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);
