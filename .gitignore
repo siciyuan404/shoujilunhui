@@ -16,3 +16,8 @@ builds/
 
 # 签名密钥（严禁提交）
 android/keys/
+
+# C++ 轻量版：构建产物与调试文件（源码保留）
+cpp/*.exe
+cpp/*.o
+cpp/crash.log
