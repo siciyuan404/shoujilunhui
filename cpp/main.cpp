@@ -9,6 +9,13 @@
 #include <algorithm>
 #include <thread>
 #include <atomic>
+#include <mutex>
+#include <deque>
+#include <map>
+#include <set>
+#include <gdiplus.h>
+#include <shobjidl.h>
+#include <shlwapi.h>
 
 #include "json.h"
 #include "http.h"
@@ -17,6 +24,9 @@
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
+#pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "shlwapi.lib")
 
 // ---------- 常量 ----------
 #define PORT 8760
@@ -25,6 +35,7 @@ const wchar_t* HOST = L"127.0.0.1";
 #define WM_APP_SERVER_OK   (WM_APP + 1)
 #define WM_APP_SERVER_FAIL (WM_APP + 2)
 #define WM_APP_DATA_READY  (WM_APP + 3)
+#define WM_APP_THUMB_READY (WM_APP + 6)
 
 const COLORREF CLR_BG        = RGB(245, 246, 248);
 const COLORREF CLR_BORDER    = RGB(221, 226, 233);
@@ -42,6 +53,7 @@ struct Model {
     std::string brand, category, model, price, note, updated_at;
     std::string series;              // 分组键（品牌 + 分类）
     std::vector<Variant> variants;
+    std::vector<std::string> images; // 图片 URL 列表（图集）
 };
 
 // ---------- 全局状态 ----------
@@ -66,6 +78,124 @@ int g_scrollX = 0;                  // 品牌条滚动偏移
 HFONT g_fontUI = nullptr;
 HFONT g_fontBig = nullptr;
 HFONT g_fontSmall = nullptr;
+HFONT g_fontGal = nullptr;
+
+// ---------- 图集状态 ----------
+struct GalleryItem { std::wstring path; std::string data; bool local; Gdiplus::Image* img = nullptr; };
+// 调试日志
+static void galLog(const char* s) {
+    FILE* f = nullptr;
+    fopen_s(&f, "gallery.log", "a");
+    if (f) { fprintf(f, "%s\n", s); fclose(f); }
+}
+#include <dbghelp.h>
+static LONG WINAPI crashDump(EXCEPTION_POINTERS* ep) {
+    typedef BOOL(WINAPI* MiniDumpFn)(HANDLE, DWORD, HANDLE, DWORD, PMINIDUMP_EXCEPTION_INFORMATION, PMINIDUMP_USER_STREAM_INFORMATION, PMINIDUMP_CALLBACK_INFORMATION);
+    HMODULE h = LoadLibraryW(L"dbghelp.dll");
+    if (h) {
+        auto fn = (MiniDumpFn)GetProcAddress(h, "MiniDumpWriteDump");
+        if (fn) {
+            HANDLE f = CreateFileW(L"crash.dmp", GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+            if (f != INVALID_HANDLE_VALUE) {
+                MINIDUMP_EXCEPTION_INFORMATION mei = { GetCurrentThreadId(), ep, FALSE };
+                fn(GetCurrentProcess(), GetCurrentProcessId(), f, MiniDumpWithFullMemory, &mei, nullptr, nullptr);
+                CloseHandle(f);
+            }
+        }
+    }
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+struct GalleryState {
+    HWND hwnd = nullptr;
+    Model model;
+    std::vector<GalleryItem> items;
+    int cur = 0;
+    int thumbScroll = 0;
+};
+static GalleryState g_gal;
+
+// ---------- 列表图集列缩略图（懒加载 + 缓存） ----------
+struct ThumbJob { long long id = 0; std::string url; };
+static std::mutex g_thumbMtx;
+static std::deque<ThumbJob> g_thumbQueue;
+static std::map<long long, Gdiplus::Image*> g_thumbCache;  // 机型 id -> 缩略图
+static std::deque<long long> g_thumbOrder;                 // FIFO 淘汰顺序
+static std::set<long long> g_thumbQueued;                  // 已入队（防重复）
+static const size_t THUMB_CACHE_MAX = 600;
+
+// 从内存数据解码为 GDI+ 图像（返回新对象，失败返回 nullptr）
+static Gdiplus::Image* decodeMemImg(const std::string& data) {
+    HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, data.size());
+    if (!hg) return nullptr;
+    void* mem = GlobalLock(hg);
+    memcpy(mem, data.data(), data.size());
+    GlobalUnlock(hg);
+    Gdiplus::Image* img = nullptr;
+    IStream* st = nullptr;
+    if (CreateStreamOnHGlobal(hg, TRUE, &st) == S_OK) {
+        img = new Gdiplus::Image(st);
+        st->Release();
+    } else GlobalFree(hg);
+    if (img && img->GetLastStatus() != Gdiplus::Ok) { delete img; return nullptr; }
+    return img;
+}
+// 取缩略图：命中缓存直接返回；未命中则入下载队列并返回 nullptr（由后台线程补）
+static Gdiplus::Image* thumbOf(long long id, const std::string& url) {
+    std::lock_guard<std::mutex> lk(g_thumbMtx);
+    auto it = g_thumbCache.find(id);
+    if (it != g_thumbCache.end()) return it->second;
+    if (!g_thumbQueued.count(id)) { g_thumbQueued.insert(id); g_thumbQueue.push_back({ id, url }); }
+    return nullptr;
+}
+// 后台缩略图下载线程
+static void thumbThread() {
+    for (;;) {
+        ThumbJob job; bool has = false;
+        {
+            std::lock_guard<std::mutex> lk(g_thumbMtx);
+            if (!g_thumbQueue.empty()) { job = g_thumbQueue.front(); g_thumbQueue.pop_front(); has = true; }
+        }
+        if (!has) { Sleep(150); continue; }
+        std::string body;
+        bool loaded = false;
+        galLog(("thumb: try id=" + std::to_string(job.id) + " url=" + job.url).c_str());
+        if (http::getUrl(job.url, body, 15000) && !body.empty()) {
+            galLog(("thumb: got id=" + std::to_string(job.id) + " bytes=" + std::to_string(body.size())).c_str());
+            Gdiplus::Image* img = decodeMemImg(body);
+            if (img) {
+                galLog(("thumb: decoded id=" + std::to_string(job.id)).c_str());
+                std::lock_guard<std::mutex> lk(g_thumbMtx);
+                if (g_thumbCache.size() >= THUMB_CACHE_MAX && !g_thumbOrder.empty()) {
+                    long long oldest = g_thumbOrder.front(); g_thumbOrder.pop_front();
+                    auto o = g_thumbCache.find(oldest);
+                    if (o != g_thumbCache.end()) { delete o->second; g_thumbCache.erase(o); }
+                }
+                g_thumbCache[job.id] = img;
+                g_thumbOrder.push_back(job.id);
+                g_thumbQueued.erase(job.id);
+                loaded = true;
+            }
+        }
+        if (!loaded) {  // 失败允许重试
+            galLog(("thumb: FAIL id=" + std::to_string(job.id) + " bodyLen=" + std::to_string(body.size())).c_str());
+            std::lock_guard<std::mutex> lk(g_thumbMtx);
+            g_thumbQueued.erase(job.id);
+        }
+        PostMessageW(g_hWnd, WM_APP_THUMB_READY, 0, 0);
+    }
+}
+// 列表行内小缩略图（居中绘制）
+static void drawListThumb(HDC hdc, Gdiplus::Image* img, int x, int y, int sz) {
+    Gdiplus::Graphics g(hdc);
+    g.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+    int iw = (int)img->GetWidth(), ih = (int)img->GetHeight();
+    if (iw <= 0 || ih <= 0) return;
+    float sc = (float)std::min((sz - 2) / (float)iw, (sz - 2) / (float)ih);
+    int dw = (int)(iw * sc), dh = (int)(ih * sc);
+    if (dw < 1) dw = 1;
+    if (dh < 1) dh = 1;
+    g.DrawImage(img, x + (sz - dw) / 2, y + (sz - dh) / 2, dw, dh);
+}
 
 const int TB_H = 48;
 const int BRAND_H = 40;
@@ -328,6 +458,9 @@ static void loadDataThread() {
                 m.updated_at = it->getStr("updated_at");
                 std::string sn = seriesOf(m.brand, m.model);
                 m.series = m.brand + "||" + (sn.empty() ? m.category : sn);
+                auto ims = it->get("images");
+                if (ims && ims->isArray())
+                    for (auto& u : ims->arr) m.images.push_back(u->isString() ? u->str : "");
                 if (m.updated_at > maxUp) maxUp = m.updated_at;
                 auto vs = it->get("variants");
                 if (vs && vs->isArray()) {
@@ -431,6 +564,8 @@ static void fillList() {
         ListView_SetItemText(g_hList, (int)i, 2, (LPWSTR)price.c_str());
         std::wstring up = wstr(shortTime(m.updated_at));
         ListView_SetItemText(g_hList, (int)i, 3, (LPWSTR)up.c_str());
+        std::wstring gc = m.images.empty() ? L"" : (std::to_wstring((int)m.images.size()) + L" 图");
+        ListView_SetItemText(g_hList, (int)i, 4, (LPWSTR)gc.c_str());
     }
     std::string st = "共 " + std::to_string(g_view.size()) + " 条";
     if (!g_lastUpdated.empty())
@@ -440,6 +575,10 @@ static void fillList() {
 
 // ---------- 列表自绘 ----------
 static LRESULT drawList(LPNMLVCUSTOMDRAW cd) {
+    DWORD ispec = cd->nmcd.dwItemSpec;
+    if (ispec >= (DWORD)g_view.size()) return CDRF_DODEFAULT;
+    int vidx = g_view[ispec];
+    if (vidx < 0 || vidx >= (int)g_models.size()) return CDRF_DODEFAULT;
     switch (cd->nmcd.dwDrawStage) {
     case CDDS_PREPAINT:
         return CDRF_NOTIFYITEMDRAW;
@@ -464,6 +603,10 @@ static LRESULT drawList(LPNMLVCUSTOMDRAW cd) {
         return CDRF_NOTIFYSUBITEMDRAW;
     }
     case CDDS_SUBITEM | CDDS_ITEMPREPAINT: {
+        DWORD isub = cd->nmcd.dwItemSpec;
+        if (isub >= (DWORD)g_view.size()) return CDRF_DODEFAULT;
+        int mi = g_view[isub];
+        if (mi < 0 || mi >= (int)g_models.size()) return CDRF_DODEFAULT;
         int sub = cd->iSubItem;
         HDC hdc = cd->nmcd.hdc;
         RECT rc = cd->nmcd.rc;
@@ -490,10 +633,27 @@ static LRESULT drawList(LPNMLVCUSTOMDRAW cd) {
             SetTextColor(hdc, CLR_PRICE);
             SelectObject(hdc, g_fontBig);
             DrawTextW(hdc, wstr(m.price).c_str(), -1, &rc, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
-        } else {
+        } else if (sub == 3) {
             SetTextColor(hdc, CLR_SUB);
             SelectObject(hdc, g_fontSmall);
             DrawTextW(hdc, wstr(shortTime(m.updated_at)).c_str(), -1, &rc, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
+        } else if (sub == 4) {
+            // 图集列：有图显示第一张实例图，无图显示"无图"
+            if (m.images.empty()) {
+                SetTextColor(hdc, RGB(160, 170, 185));
+                SelectObject(hdc, g_fontSmall);
+                RECT tr2 = rc; tr2.left -= 4;
+                DrawTextW(hdc, L"无图", -1, &tr2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            } else {
+                Gdiplus::Image* th = thumbOf(m.id, m.images[0]);
+                if (th) {
+                    int sz = 22;
+                    int x = rc.left + (rc.right - rc.left - sz) / 2;
+                    int y = rc.top + (rc.bottom - rc.top - sz) / 2;
+                    drawListThumb(hdc, th, x, y, sz);
+                }
+                // 未加载完成：留白，后台线程加载完发 WM_APP_THUMB_READY 重绘
+            }
         }
         return CDRF_SKIPDEFAULT;
     }
@@ -589,6 +749,357 @@ static void scrollBrands(int delta) {
     InvalidateRect(g_hWnd, &r, TRUE);
 }
 
+
+// ---------- 图集窗口 ----------
+static std::wstring galBaseDir() {
+    wchar_t buf[MAX_PATH]; GetModuleFileNameW(nullptr, buf, MAX_PATH);
+    std::wstring d(buf);
+    size_t pos = d.find_last_of(L"\\/");
+    return d.substr(0, pos + 1) + L"gallery\\";
+}
+static std::wstring galModelDir() {
+    return galBaseDir() + std::to_wstring(g_gal.model.id) + L"\\";
+}
+// 加载图片（本地文件或内存数据），缓存 img
+static Gdiplus::Image* loadGalImage(const GalleryItem& it) {
+    if (it.img) return it.img;
+    Gdiplus::Image* img = nullptr;
+    if (!it.path.empty()) img = new Gdiplus::Image(it.path.c_str());
+    else if (!it.data.empty()) {
+        HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, it.data.size());
+        if (hg) {
+            void* mem = GlobalLock(hg);
+            memcpy(mem, it.data.data(), it.data.size());
+            GlobalUnlock(hg);
+            IStream* st = nullptr;
+            if (CreateStreamOnHGlobal(hg, TRUE, &st) == S_OK) {
+                img = new Gdiplus::Image(st);
+                st->Release();
+            } else GlobalFree(hg);
+        }
+    }
+    if (img && img->GetLastStatus() != Gdiplus::Ok) { delete img; return nullptr; }
+    const_cast<GalleryItem&>(it).img = img;
+    return img;
+}
+// 组装图集：本地收集照片（gallery\<id>\）+ 远程 images（内存加载）
+static void loadGalleryItems() {
+    for (auto& it : g_gal.items) if (it.img) { delete it.img; it.img = nullptr; }
+    g_gal.items.clear();
+    g_gal.cur = 0;
+    g_gal.thumbScroll = 0;
+    std::wstring base = galBaseDir();
+    std::wstring dir = galModelDir();
+    CreateDirectoryW(base.c_str(), nullptr);
+    CreateDirectoryW(dir.c_str(), nullptr);
+    WIN32_FIND_DATAW fd;
+    HANDLE hf = FindFirstFileW((dir + L"*").c_str(), &fd);
+    if (hf != INVALID_HANDLE_VALUE) {
+        do {
+            std::wstring fn = fd.cFileName;
+            if (fn == L"." || fn == L"..") continue;
+            std::wstring ext;
+            size_t dp = fn.find_last_of(L'.');
+            if (dp != std::wstring::npos) { ext = fn.substr(dp + 1); for (auto& c : ext) c = (wchar_t)towlower(c); }
+            if (ext == L"jpg" || ext == L"jpeg" || ext == L"png" || ext == L"bmp" || ext == L"webp" || ext == L"gif") {
+                GalleryItem it; it.path = dir + fn; it.local = true;
+                g_gal.items.push_back(it);
+            }
+        } while (FindNextFileW(hf, &fd));
+        FindClose(hf);
+    }
+    std::sort(g_gal.items.begin(), g_gal.items.end(),
+              [](const GalleryItem& a, const GalleryItem& b) { return a.path < b.path; });
+    galLog("loadGalleryItems: local scan done");
+    for (auto& url : g_gal.model.images) {
+        std::string body;
+        if (http::getUrl(url, body, 20000) && !body.empty()) {
+            GalleryItem it; it.local = false; it.data = std::move(body);
+            g_gal.items.push_back(it);
+        }
+    }
+    if (g_gal.cur >= (int)g_gal.items.size()) g_gal.cur = (int)g_gal.items.size() - 1;
+}
+// 等比例绘制大图
+static void drawScaled(HDC hdc, Gdiplus::Image* img, RECT rc) {
+    Gdiplus::Graphics g(hdc);
+    g.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+    int iw = (int)img->GetWidth(), ih = (int)img->GetHeight();
+    if (iw <= 0 || ih <= 0) return;
+    int rw = rc.right - rc.left, rh = rc.bottom - rc.top;
+    float sc = (float)std::min(rw, rh) > 0 ? (float)std::min(rw / (float)iw, rh / (float)ih) : 1.0f;
+    int dw = (int)(iw * sc), dh = (int)(ih * sc);
+    int dx = rc.left + (rw - dw) / 2, dy = rc.top + (rh - dh) / 2;
+    g.DrawImage(img, dx, dy, dw, dh);
+}
+// 绘制缩略图
+static void drawThumb(HDC hdc, Gdiplus::Image* img, int x, int y, int sz, bool sel) {
+    Gdiplus::Graphics g(hdc);
+    g.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+    Gdiplus::SolidBrush wb(Gdiplus::Color(255, 255, 255, 255));
+    g.FillRectangle(&wb, x, y, sz, sz);
+    int iw = (int)img->GetWidth(), ih = (int)img->GetHeight();
+    if (iw > 0 && ih > 0) {
+        float sc = (float)std::min((sz - 4) / (float)iw, (sz - 4) / (float)ih);
+        int dw = (int)(iw * sc), dh = (int)(ih * sc);
+        g.DrawImage(img, x + (sz - dw) / 2, y + (sz - dh) / 2, dw, dh);
+    }
+    if (sel) { Gdiplus::Pen pen(Gdiplus::Color(255, 22, 119, 255), 2.0f); g.DrawRectangle(&pen, x, y, sz, sz); }
+    else { Gdiplus::Pen pen(Gdiplus::Color(255, 200, 210, 225), 1.0f); g.DrawRectangle(&pen, x, y, sz, sz); }
+}
+// 添加照片（多选文件对话框）
+static void galleryAddPhotos() {
+    IFileOpenDialog* dlg = nullptr;
+    HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&dlg));
+    if (FAILED(hr) || !dlg) return;
+    COMDLG_FILTERSPEC fs[] = {
+        { L"图片文件", L"*.jpg;*.jpeg;*.png;*.bmp;*.webp;*.gif" },
+        { L"所有文件", L"*.*" }
+    };
+    dlg->SetFileTypes(2, fs);
+    DWORD opts = 0; dlg->GetOptions(&opts);
+    dlg->SetOptions(opts | FOS_ALLOWMULTISELECT | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST);
+    if (dlg->Show(g_gal.hwnd) == S_OK) {
+        IShellItemArray* arr = nullptr;
+        if (dlg->GetResults(&arr) == S_OK) {
+            DWORD n = 0; arr->GetCount(&n);
+            std::wstring dir = galModelDir();
+            CreateDirectoryW(dir.c_str(), nullptr);
+            for (DWORD i = 0; i < n; i++) {
+                IShellItem* si = nullptr;
+                if (arr->GetItemAt(i, &si) == S_OK) {
+                    PWSTR p = nullptr;
+                    if (si->GetDisplayName(SIGDN_FILESYSPATH, &p) == S_OK && p) {
+                        std::wstring src(p);
+                        std::wstring fn = src.substr(src.find_last_of(L"\\/") + 1);
+                        std::wstring dst = dir + fn;
+                        int k = 1;
+                        while (GetFileAttributesW(dst.c_str()) != INVALID_FILE_ATTRIBUTES)
+                            dst = dir + std::to_wstring(k++) + L"_" + fn;
+                        CopyFileW(src.c_str(), dst.c_str(), FALSE);
+                        CoTaskMemFree(p);
+                    }
+                    si->Release();
+                }
+            }
+            arr->Release();
+        }
+    }
+    dlg->Release();
+    loadGalleryItems();
+    if (g_gal.hwnd) InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+}
+// 删除当前（仅本地照片）
+static void galleryDelete() {
+    if (g_gal.items.empty()) return;
+    int idx = g_gal.cur;
+    if (idx < 0 || idx >= (int)g_gal.items.size()) return;
+    GalleryItem& it = g_gal.items[idx];
+    if (!it.local) { MessageBoxW(g_gal.hwnd, L"远程图片不可删除（由服务器管理）", L"提示", MB_OK); return; }
+    // GDI+ 图片对象会锁定文件句柄，必须先释放再删除，否则 DeleteFileW 失败
+    if (it.img) { delete it.img; it.img = nullptr; }
+    if (DeleteFileW(it.path.c_str())) {
+        galLog("galleryDelete: deleted");
+        loadGalleryItems();
+        if (g_gal.hwnd) InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+    } else {
+        galLog("galleryDelete: DeleteFileW FAIL");
+        MessageBoxW(g_gal.hwnd, L"删除失败（文件可能正被占用）", L"提示", MB_OK);
+    }
+}
+// 从剪贴板粘贴图片（支持：资源管理器复制的图片文件 CF_HDROP、截图/复制图像 CF_DIB）
+static void galleryPaste() {
+    galLog("galleryPaste: enter");
+    if (!OpenClipboard(g_gal.hwnd)) { galLog("galleryPaste: OpenClipboard FAIL"); return; }
+    bool ok = false;
+    std::wstring dir = galModelDir();
+    // 1) 剪贴板中是图片文件
+    if (IsClipboardFormatAvailable(CF_HDROP)) {
+        HDROP drop = (HDROP)GetClipboardData(CF_HDROP);
+        if (drop) {
+            UINT n = DragQueryFileW(drop, 0xFFFFFFFF, nullptr, 0);
+            CreateDirectoryW(dir.c_str(), nullptr);
+            for (UINT i = 0; i < n; i++) {
+                wchar_t p[MAX_PATH] = { 0 };
+                DragQueryFileW(drop, i, p, MAX_PATH);
+                std::wstring src(p);
+                if (src.empty()) continue;
+                std::wstring ext;
+                size_t dp = src.find_last_of(L'.');
+                if (dp != std::wstring::npos) { ext = src.substr(dp + 1); for (auto& c : ext) c = (wchar_t)towlower(c); }
+                if (ext != L"jpg" && ext != L"jpeg" && ext != L"png" && ext != L"bmp" && ext != L"webp" && ext != L"gif") continue;
+                std::wstring fn = src.substr(src.find_last_of(L"\\/") + 1);
+                std::wstring dst = dir + fn;
+                int k = 1;
+                while (GetFileAttributesW(dst.c_str()) != INVALID_FILE_ATTRIBUTES)
+                    dst = dir + std::to_wstring(k++) + L"_" + fn;
+                if (CopyFileW(src.c_str(), dst.c_str(), FALSE)) ok = true;
+            }
+        }
+    }
+    // 2) 剪贴板中是位图（截图等）
+    if (!ok && IsClipboardFormatAvailable(CF_DIB)) {
+        HANDLE h = GetClipboardData(CF_DIB);
+        if (h) {
+            BITMAPINFO* bi = (BITMAPINFO*)GlobalLock(h);
+            if (bi && bi->bmiHeader.biSize >= sizeof(BITMAPINFOHEADER)) {
+                DWORD clr = (bi->bmiHeader.biBitCount <= 8) ? (1u << bi->bmiHeader.biBitCount) : 0u;
+                if (bi->bmiHeader.biClrUsed) clr = bi->bmiHeader.biClrUsed;
+                DWORD off = bi->bmiHeader.biSize;
+                if (bi->bmiHeader.biCompression == BI_BITFIELDS) off += 3 * sizeof(DWORD);
+                const BYTE* bits = (const BYTE*)bi + off + clr * sizeof(RGBQUAD);
+                HDC hdc = GetDC(g_gal.hwnd);
+                HBITMAP hbm = CreateDIBitmap(hdc, &bi->bmiHeader, CBM_INIT, bits, bi, DIB_RGB_COLORS);
+                ReleaseDC(g_gal.hwnd, hdc);
+                if (hbm) {
+                    Gdiplus::Bitmap bmp(hbm, (HPALETTE)nullptr);
+                    if (bmp.GetLastStatus() == Gdiplus::Ok) {
+                        CreateDirectoryW(dir.c_str(), nullptr);
+                        SYSTEMTIME st; GetLocalTime(&st);
+                        wchar_t base[64];
+                        swprintf(base, 64, L"粘贴_%04d%02d%02d_%02d%02d%02d.png", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+                        std::wstring dst = dir + base;
+                        int k = 1;
+                        while (GetFileAttributesW(dst.c_str()) != INVALID_FILE_ATTRIBUTES)
+                            dst = dir + std::to_wstring(k++) + L"_" + base;
+                        CLSID pngClsid;
+                        CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid); // image/png
+                        if (bmp.Save(dst.c_str(), &pngClsid, nullptr) == Gdiplus::Ok) ok = true;
+                    }
+                    DeleteObject(hbm);
+                }
+            }
+            GlobalUnlock(h);
+        }
+    }
+    CloseClipboard();
+    if (ok) {
+        galLog("galleryPaste: OK, reloading");
+        loadGalleryItems();
+        if (g_gal.hwnd) InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+    } else {
+        galLog("galleryPaste: nothing usable");
+        MessageBoxW(g_gal.hwnd, L"剪贴板中没有可粘贴的图片（可复制图片文件或截图后再粘贴）", L"提示", MB_OK);
+    }
+}
+static LRESULT CALLBACK GalleryWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+    switch (msg) {
+    case WM_CREATE:
+        CreateWindowW(L"BUTTON", L"＋ 添加照片", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 16, 560, 110, 30, hwnd, (HMENU)2001, GetModuleHandleW(nullptr), nullptr);
+        CreateWindowW(L"BUTTON", L"删除", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 136, 560, 70, 30, hwnd, (HMENU)2002, GetModuleHandleW(nullptr), nullptr);
+        CreateWindowW(L"BUTTON", L"◀ 上一张", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 330, 560, 100, 30, hwnd, (HMENU)2003, GetModuleHandleW(nullptr), nullptr);
+        CreateWindowW(L"BUTTON", L"下一张 ▶", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 440, 560, 100, 30, hwnd, (HMENU)2004, GetModuleHandleW(nullptr), nullptr);
+        CreateWindowW(L"BUTTON", L"关闭", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 760, 560, 70, 30, hwnd, (HMENU)2005, GetModuleHandleW(nullptr), nullptr);
+        SetFocus(hwnd);   // 窗口本体拿焦点，便于 Ctrl+V 粘贴
+        break;
+    case WM_PAINT: {
+        PAINTSTRUCT ps; HDC hdc = BeginPaint(hwnd, &ps);
+        RECT rc; GetClientRect(hwnd, &rc);
+        HBRUSH wb = CreateSolidBrush(RGB(255, 255, 255));
+        FillRect(hdc, &rc, wb); DeleteObject(wb);
+        int nLocal = 0; for (auto& it : g_gal.items) if (it.local) nLocal++;
+        std::wstring t = http::utf8ToWide(g_gal.model.brand + " " + g_gal.model.model);
+        t += L" — 图集（共 " + std::to_wstring((int)g_gal.items.size()) + L" 张，本地 " + std::to_wstring(nLocal) + L"）";
+        SetWindowTextW(hwnd, t.c_str());
+        // 大图预览区
+        RECT prev = { 16, 44, rc.right - 16, 464 };
+        if (g_gal.items.empty()) {
+            SetTextColor(hdc, RGB(150, 158, 172));
+            SetBkMode(hdc, TRANSPARENT);
+            SelectObject(hdc, g_fontUI);
+            RECT tr = prev;
+            DrawTextW(hdc, L"暂无图片 — 点击「添加照片」上传你收集的图片", -1, &tr, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        } else {
+            int idx = std::max(0, std::min(g_gal.cur, (int)g_gal.items.size() - 1));
+            Gdiplus::Image* img = loadGalImage(g_gal.items[idx]);
+            if (img) drawScaled(hdc, img, prev);
+            else { SetTextColor(hdc, RGB(150, 158, 172)); SetBkMode(hdc, TRANSPARENT); SelectObject(hdc, g_fontUI); RECT tr = prev; DrawTextW(hdc, L"图片加载失败", -1, &tr, DT_CENTER | DT_VCENTER | DT_SINGLELINE); }
+        }
+        // 缩略图条
+        int cell = 72, tsx = 16 - g_gal.thumbScroll;
+        for (size_t i = 0; i < g_gal.items.size(); i++) {
+            if (tsx + 64 < 16) { tsx += cell; continue; }
+            if (tsx > rc.right - 16) break;
+            Gdiplus::Image* t = loadGalImage(g_gal.items[i]);
+            if (t) drawThumb(hdc, t, tsx, 478, 64, (int)i == g_gal.cur);
+            tsx += cell;
+        }
+        EndPaint(hwnd, &ps);
+        break;
+    }
+    case WM_KEYDOWN:
+        // Ctrl+V 粘贴图片（截图 / 复制的图片文件）
+        if (wp == 'V' && (GetAsyncKeyState(VK_CONTROL) & 0x8000)) galleryPaste();
+        break;
+    case WM_LBUTTONDOWN: {
+        SetFocus(hwnd);   // 点击窗口内任意处后焦点回窗口，保证下次 Ctrl+V 生效
+        int x = GET_X_LPARAM(lp), y = GET_Y_LPARAM(lp);
+        if (y >= 478 && y <= 554) {
+            int idx = (x - 16 + g_gal.thumbScroll) / 72;
+            if (idx >= 0 && idx < (int)g_gal.items.size()) {
+                g_gal.cur = idx;
+                InvalidateRect(hwnd, nullptr, TRUE);
+            }
+        }
+        break;
+    }
+    case WM_MOUSEWHEEL: {
+        POINT pt = { GET_X_LPARAM(lp), GET_Y_LPARAM(lp) };
+        ScreenToClient(hwnd, &pt);
+        if (pt.y >= 478 && pt.y <= 554) {
+            RECT rc; GetClientRect(hwnd, &rc);
+            int visible = ((rc.right - rc.left - 32) / 72) * 72;
+            int maxScroll = (int)(g_gal.items.size() * 72) - visible;
+            g_gal.thumbScroll += GET_WHEEL_DELTA_WPARAM(wp) / 120 * 36;
+            if (g_gal.thumbScroll < 0) g_gal.thumbScroll = 0;
+            if (g_gal.thumbScroll > maxScroll && maxScroll > 0) g_gal.thumbScroll = maxScroll;
+            InvalidateRect(hwnd, nullptr, TRUE);
+        }
+        break;
+    }
+    case WM_COMMAND:
+        switch (LOWORD(wp)) {
+        case 2001: galleryAddPhotos(); break;
+        case 2002: galleryDelete(); break;
+        case 2003:
+            if (!g_gal.items.empty()) { g_gal.cur = (g_gal.cur - 1 + (int)g_gal.items.size()) % (int)g_gal.items.size(); InvalidateRect(hwnd, nullptr, TRUE); }
+            break;
+        case 2004:
+            if (!g_gal.items.empty()) { g_gal.cur = (g_gal.cur + 1) % (int)g_gal.items.size(); InvalidateRect(hwnd, nullptr, TRUE); }
+            break;
+        case 2005: DestroyWindow(hwnd); break;
+        }
+        if (LOWORD(wp) != 2005) SetFocus(hwnd);   // 点击按钮后焦点回窗口，便于连续粘贴
+        break;
+    case WM_CLOSE:
+        DestroyWindow(hwnd);
+        break;
+    case WM_DESTROY:
+        g_gal.hwnd = nullptr;
+        for (auto& it : g_gal.items) if (it.img) delete it.img;
+        g_gal.items.clear();
+        break;
+    default:
+        return DefWindowProcW(hwnd, msg, wp, lp);
+    }
+    return 0;
+}
+// 打开某机型的图集窗口
+static void openGallery(const Model& m) {
+    g_gal.model = m;
+    if (g_gal.hwnd) { DestroyWindow(g_gal.hwnd); g_gal.hwnd = nullptr; }
+    g_gal.hwnd = CreateWindowExW(0, L"PhoneRecycleGallery", L"机型图集",
+                                 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 880, 610,
+                                 nullptr, nullptr, GetModuleHandleW(nullptr), nullptr);
+    if (!g_gal.hwnd) { galLog("openGallery: CreateWindowExW FAILED"); return; }
+    galLog("openGallery: window created");
+    ShowWindow(g_gal.hwnd, SW_SHOW);
+    SetForegroundWindow(g_gal.hwnd);
+    galLog("openGallery: shown, loading items");
+    loadGalleryItems();
+    galLog("openGallery: items loaded, invalidate");
+    InvalidateRect(g_gal.hwnd, nullptr, TRUE);
+}
 // ---------- 主窗口过程 ----------
 static void refreshData();
 
@@ -635,6 +1146,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         ListView_InsertColumn(g_hList, 2, &col);
         col.cx = 130; col.iSubItem = 3; col.pszText = (LPWSTR)L"更新";
         ListView_InsertColumn(g_hList, 3, &col);
+        col.cx = 78; col.iSubItem = 4; col.pszText = (LPWSTR)L"图集";
+        ListView_InsertColumn(g_hList, 4, &col);
         g_hStatus = CreateWindowW(L"STATIC", L"正在启动 API 服务…",
                                   WS_CHILD | WS_VISIBLE | SS_LEFT,
                                   0, 0, 0, 0, hwnd, (HMENU)1004, GetModuleHandleW(nullptr), nullptr);
@@ -689,6 +1202,10 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         }
         break;
     }
+    case WM_APP_THUMB_READY:
+        // 列表缩略图后台加载完成 → 重绘列表
+        if (g_hList) InvalidateRect(g_hList, nullptr, TRUE);
+        break;
     case WM_COMMAND:
         if (LOWORD(wp) == 1002) refreshData();
         else if (LOWORD(wp) == 1010) scrollBrands(-120);
@@ -733,6 +1250,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
         }
         break;
     }
+
     case WM_NOTIFY: {
         NMHDR* h = (NMHDR*)lp;
         if (h->hwndFrom == g_hList) {
@@ -743,18 +1261,30 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
                 else { g_sortCol = lv->iSubItem; g_sortDesc = (lv->iSubItem == 2); }
                 sortView();
                 fillList();
-            } else if (h->code == NM_DBLCLK) {
+            } else if (h->code == NM_CLICK) {
+                // 单击"图集"列 → 展开图集（整行双击 / Enter 仍可用）
+                POINT pt; GetCursorPos(&pt);
+                ScreenToClient(g_hList, &pt);
+                LVHITTESTINFO ht = {};
+                ht.pt = pt;
+                ListView_SubItemHitTest(g_hList, &ht);
+                if (ht.iItem >= 0 && ht.iSubItem == 4 && ht.iItem < (int)g_view.size()) {
+                    const Model& m = g_models[g_view[ht.iItem]];
+                    openGallery(m);
+                }
+            } else if (h->code == NM_RETURN) {
                 int sel = ListView_GetNextItem(g_hList, -1, LVNI_SELECTED);
                 if (sel >= 0 && sel < (int)g_view.size()) {
                     const Model& m = g_models[g_view[sel]];
-                    std::string msg = m.brand + " " + m.model;
-                    if (!m.category.empty() && m.category != m.brand) msg += "（" + m.category + "）";
-                    msg += "\n回收价：¥" + m.price;
-                    std::string sp = specText(m);
-                    if (!sp.empty()) msg += "\n规格：" + sp;
-                    if (!m.note.empty()) msg += "\n备注：" + m.note;
-                    msg += "\n更新：" + m.updated_at;
-                    MessageBoxW(hwnd, wstr(msg).c_str(), L"机型详情", MB_OK | MB_ICONINFORMATION);
+                    openGallery(m);
+                }
+            } else if (h->code == NM_DBLCLK) {
+                galLog("NM_DBLCLK received");
+                int sel = ListView_GetNextItem(g_hList, -1, LVNI_SELECTED);
+                if (sel >= 0 && sel < (int)g_view.size()) {
+                    const Model& m = g_models[g_view[sel]];
+                    galLog(("NM_DBLCLK sel=" + std::to_string(sel)).c_str());
+                    openGallery(m);
                 }
             }
         }
@@ -784,6 +1314,12 @@ static void refreshData() {
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, PWSTR, int nCmdShow) {
     SetProcessDPIAware();
+    SetUnhandledExceptionFilter(crashDump);
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    Gdiplus::GdiplusStartupInput gsi;
+    ULONG_PTR gdiToken = 0;
+    Gdiplus::GdiplusStartup(&gdiToken, &gsi, nullptr);
+    std::thread(thumbThread).detach();   // 列表图集列缩略图后台加载
     INITCOMMONCONTROLSEX icc = { sizeof(icc), ICC_LISTVIEW_CLASSES | ICC_STANDARD_CLASSES };
     InitCommonControlsEx(&icc);
     WNDCLASSEXW wc = {};
@@ -794,7 +1330,15 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, PWSTR, int nCmdShow) {
     wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
     wc.lpszClassName = L"PhoneRecycleCpp";
     RegisterClassExW(&wc);
-    HWND hwnd = CreateWindowExW(0, wc.lpszClassName, L"手机回收查价 v1.1（C++ 轻量版）",
+    WNDCLASSEXW wg = {};
+    wg.cbSize = sizeof(wg);
+    wg.lpfnWndProc = GalleryWndProc;
+    wg.hInstance = hInst;
+    wg.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+    wg.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    wg.lpszClassName = L"PhoneRecycleGallery";
+    RegisterClassExW(&wg);
+    HWND hwnd = CreateWindowExW(0, wc.lpszClassName, L"手机回收查价 v2.2.0（C++ 轻量版）",
                                 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1100, 720,
                                 nullptr, nullptr, hInst, nullptr);
     if (!hwnd) return 1;
@@ -805,5 +1349,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, PWSTR, int nCmdShow) {
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
+    if (gdiToken) Gdiplus::GdiplusShutdown(gdiToken);
+    CoUninitialize();
     return (int)msg.wParam;
 }

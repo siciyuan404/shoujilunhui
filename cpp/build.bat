@@ -12,7 +12,7 @@ REM Compile manifest resource (enables comctl32 v6 + per-monitor DPI)
 if %errorlevel% neq 0 ( echo [fail] windres & exit /b 1 )
 
 echo [build] clang++ -O2 ...
-%CC% -O2 -std=c++17 -municode -static -s "%SRC%" %~dp0app_res.o -o "%OUT%" -lwinhttp -lcomctl32 -lshell32 -lgdi32 -luser32 -lkernel32 2>&1
+%CC% -O2 -std=c++17 -municode -static -s "%SRC%" %~dp0app_res.o -o "%OUT%" -lwinhttp -lcomctl32 -lshell32 -lgdi32 -luser32 -lgdiplus -lole32 -lshlwapi -luuid -lkernel32 2>&1
 if %errorlevel%==0 (
     echo [ok] built: %OUT%
     for %%F in ("%OUT%") do echo [size] %%~zF bytes
