@@ -31,8 +31,8 @@
 // ---------- 常量 ----------
 #define PORT 8760
 const wchar_t* HOST = L"127.0.0.1";
-#define APP_VERSION "2.3.0"        // 与 GitHub Release tag 保持一致
-#define APP_VERSION_W L"2.3.0"
+#define APP_VERSION "2.3.1"        // 与 GitHub Release tag 保持一致
+#define APP_VERSION_W L"2.3.1"
 #define API_BASE "http://127.0.0.1:8760"          // 本地 API
 const char* API_KEY = "sk-e756xogvi0lmt9miamt";   // 写操作鉴权（多端同步上传/删除）
 
@@ -134,6 +134,7 @@ static std::deque<ThumbJob> g_thumbQueue;
 static std::map<long long, Gdiplus::Image*> g_thumbCache;  // 机型 id -> 缩略图
 static std::deque<long long> g_thumbOrder;                 // FIFO 淘汰顺序
 static std::set<long long> g_thumbQueued;                  // 已入队（防重复）
+static std::map<int, RECT> g_copyBtns;                     // 型号列"复制"按钮：行索引 -> 按钮矩形
 static const size_t THUMB_CACHE_MAX = 600;
 
 // 从内存数据解码为 GDI+ 图像（返回新对象，失败返回 nullptr）
@@ -752,9 +753,28 @@ static LRESULT drawList(LPNMLVCUSTOMDRAW cd) {
         const Model& m = g_models[g_view[idx]];
         SetBkMode(hdc, TRANSPARENT);
         if (sub == 0) {
+            // 型号文本（右侧预留"复制"按钮空间）
+            RECT tr = rc; tr.right -= 64;
             SetTextColor(hdc, CLR_TEXT);
             SelectObject(hdc, g_fontUI);
-            DrawTextW(hdc, wstr(m.brand + " " + m.model).c_str(), -1, &rc, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
+            DrawTextW(hdc, wstr(m.brand + " " + m.model).c_str(), -1, &tr, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
+            // 一键复制按钮
+            RECT br = { rc.right - 60, rc.top + 3, rc.right - 4, rc.bottom - 3 };
+            g_copyBtns[(int)cd->nmcd.dwItemSpec] = br;
+            HBRUSH bbg = CreateSolidBrush(RGB(245, 247, 250));
+            FillRect(hdc, &br, bbg);
+            DeleteObject(bbg);
+            HPEN pen = CreatePen(PS_SOLID, 1, RGB(200, 210, 225));
+            HPEN oldp = (HPEN)SelectObject(hdc, pen);
+            HBRUSH oldb = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+            RoundRect(hdc, br.left, br.top, br.right, br.bottom, 6, 6);
+            SelectObject(hdc, oldp);
+            SelectObject(hdc, oldb);
+            DeleteObject(pen);
+            SetTextColor(hdc, RGB(66, 133, 244));
+            SelectObject(hdc, g_fontSmall);
+            RECT lr = br; lr.left += 2; lr.right -= 2;
+            DrawTextW(hdc, L"复制", -1, &lr, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
         } else if (sub == 1) {
             SetTextColor(hdc, CLR_SUB);
             SelectObject(hdc, g_fontUI);
@@ -1479,12 +1499,36 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
                 sortView();
                 fillList();
             } else if (h->code == NM_CLICK) {
-                // 单击"图集"列 → 展开图集（整行双击 / Enter 仍可用）
+                // 单击"复制"按钮 → 一键复制型号；单击"图集"列 → 展开图集
                 POINT pt; GetCursorPos(&pt);
                 ScreenToClient(g_hList, &pt);
                 LVHITTESTINFO ht = {};
                 ht.pt = pt;
                 ListView_SubItemHitTest(g_hList, &ht);
+                if (ht.iItem >= 0 && ht.iItem < (int)g_view.size()) {
+                    auto bit = g_copyBtns.find(ht.iItem);
+                    if (bit != g_copyBtns.end() && ht.iSubItem == 0) {
+                        RECT br = bit->second;
+                        if (pt.x >= br.left && pt.x <= br.right && pt.y >= br.top && pt.y <= br.bottom) {
+                            wchar_t buf[512];
+                            ListView_GetItemText(g_hList, ht.iItem, 0, buf, 512);
+                            if (OpenClipboard(hwnd)) {
+                                EmptyClipboard();
+                                int cl = (int)wcslen(buf);
+                                HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, (cl + 1) * sizeof(wchar_t));
+                                if (hg) {
+                                    wchar_t* p = (wchar_t*)GlobalLock(hg);
+                                    if (p) { wcscpy_s(p, cl + 1, buf); GlobalUnlock(hg); }
+                                    SetClipboardData(CF_UNICODETEXT, hg);
+                                }
+                                CloseClipboard();
+                                std::wstring st = L"已复制型号：" + std::wstring(buf);
+                                SetWindowTextW(g_hStatus, st.c_str());
+                            }
+                            break;   // 已处理，不再走图集列逻辑
+                        }
+                    }
+                }
                 if (ht.iItem >= 0 && ht.iSubItem == 4 && ht.iItem < (int)g_view.size()) {
                     const Model& m = g_models[g_view[ht.iItem]];
                     openGallery(m);
