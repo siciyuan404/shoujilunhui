@@ -107,10 +107,10 @@ object Updater {
                 // 强制更新：当前版本低于 forceBelow 则无视灰度直接更新
                 val force = info.forceBelow.isNotBlank() && !isNewer(currentVersion, info.forceBelow)
                 if (!force && !inGray(deviceId(activity), info.gray)) {
-                    Log.d(TAG, "新版本 v${info.latest} 存在，但本设备未命中 ${info.gray}% 灰度，暂不更新")
+                    Log.d(TAG, "新版本 v${info.latest.removePrefix("v")} 存在，但本设备未命中 ${info.gray}% 灰度，暂不更新")
                     return@launch
                 }
-                Log.d(TAG, "开始后台下载 v${info.latest}（force=$force, gray=${info.gray}%）")
+                Log.d(TAG, "开始后台下载 v${info.latest.removePrefix("v")}（force=$force, gray=${info.gray}%）")
                 downloadAndNotify(activity, info)
             } catch (e: Exception) {
                 Log.w(TAG, "静默检查失败: ${e.message}")
@@ -198,7 +198,7 @@ object Updater {
         )
         val notif = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("新版本 v${info.latest} 已就绪")
+            .setContentTitle("新版本 v${info.latest.removePrefix("v")} 已就绪")
             .setContentText("已在后台下载完成，点击安装")
             .setContentIntent(pi)
             .setAutoCancel(true)
