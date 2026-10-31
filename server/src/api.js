@@ -678,6 +678,14 @@ function createRouter(db, cfg) {
       return json(res, 200, result);
     }
 
+    // ---------- 图集用户图：查询（公开，多端同步读取） ----------
+    if (method === 'GET' && pathname === '/api/gallery') {
+      const mid = Number(q.get('model_id') || 0);
+      if (!mid) return json(res, 400, { error: '缺少 model_id' });
+      const rows = db.prepare('SELECT id, model_id, url, created_at FROM gallery WHERE model_id = ? ORDER BY id').all(mid);
+      return json(res, 200, { items: rows });
+    }
+
     // ---------- 存储芯片库：查询与筛选（公开） ----------
     if (method === 'GET' && pathname === '/api/chips/meta') {
       return json(res, 200, chipMeta(db));
@@ -739,6 +747,8 @@ function createRouter(db, cfg) {
       ['POST', '/api/models/bulk'],
       ['POST', '/api/import'],
       ['POST', '/api/upload'],
+      ['POST', '/api/gallery'],
+      ['DELETE', /^\/api\/gallery\/\d+$/],
       ['PUT', /^\/api\/models\/\d+$/],
       ['PATCH', /^\/api\/models\/\d+$/],
       ['DELETE', /^\/api\/models\/\d+$/],
@@ -786,6 +796,45 @@ function createRouter(db, cfg) {
         if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
         fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
         return json(res, 201, { ok: true, url: '/uploads/' + fname, name: fname });
+      }
+
+      // ---------- 图集用户图上传：图片二进制 body + ?model_id=，OSS 优先 ----------
+      if (method === 'POST' && pathname === '/api/gallery') {
+        const mid = Number(q.get('model_id') || 0);
+        if (!mid) return json(res, 400, { error: '缺少 model_id' });
+        const ct = String(req.headers['content-type'] || '').toLowerCase().split(';')[0].trim();
+        const ext = EXT_BY_CT[ct];
+        if (!ext) return json(res, 400, { error: '仅支持图片文件（Content-Type 需为 image/*）' });
+        const buf = await readRawBody(req);
+        if (!buf || !buf.length) return json(res, 400, { error: '文件内容为空' });
+        const fname = `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        let url = null, storage = 'local';
+        if (oss.enabled()) {
+          const tmp = path.join(UPLOAD_DIR, '.tmp_' + fname);
+          try {
+            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+            fs.writeFileSync(tmp, buf);
+            try {
+              await oss.upload(tmp, fname);
+              url = '/uploads/' + fname; storage = 'oss';
+            } finally { try { fs.unlinkSync(tmp); } catch (_) {} }
+          } catch (e) { console.warn('[gallery] OSS 上传失败，回退本地：' + e.message); }
+        }
+        if (!url) {
+          if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+          fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
+          url = '/uploads/' + fname;
+        }
+        const info = db.prepare('INSERT INTO gallery (model_id, url) VALUES (?, ?)').run(mid, url);
+        return json(res, 201, { ok: true, id: Number(info.lastInsertRowid), url, storage });
+      }
+
+      // ---------- 图集用户图删除（仅删记录，OSS 文件保留） ----------
+      if (method === 'DELETE' && /^\/api\/gallery\/\d+$/.test(pathname)) {
+        const id = Number(pathname.split('/').pop());
+        const r = db.prepare('DELETE FROM gallery WHERE id = ?').run(id);
+        if (!r.changes) return json(res, 404, { error: 'not found' });
+        return json(res, 200, { ok: true, id });
       }
 
       // ---------- 收机记账：写入（需 API Key） ----------

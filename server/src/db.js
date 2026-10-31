@@ -145,6 +145,14 @@ function openDb() {
     CREATE INDEX IF NOT EXISTS idx_chips_rom ON storage_chips(rom_size);
     CREATE INDEX IF NOT EXISTS idx_chips_ram ON storage_chips(ram_size);
     CREATE INDEX IF NOT EXISTS idx_chips_pnp ON storage_chips(vendor_pnp);
+    -- 图集用户图（多端同步：客户端粘贴照片上传后记录于此，官方图仍走 models.images）
+    CREATE TABLE IF NOT EXISTS gallery (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      model_id INTEGER NOT NULL,
+      url TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_gallery_model ON gallery(model_id);
   `);
   // 老库迁移：补齐缺失列（images + 规格字段）
   const cols = db.prepare('PRAGMA table_info(models)').all();
